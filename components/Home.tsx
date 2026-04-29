@@ -12,6 +12,7 @@ type HomeItem = {
 };
 
 const MOST_USED_ITEMS: HomeItem[] = [
+  { id: 'profile', title: 'Profile', subtitle: 'Account & settings', route: 'settings' },
   { id: 'game', title: 'Game Hub', subtitle: 'Main gameplay', route: 'game' },
   { id: 'earn', title: 'Earn Tasks', subtitle: 'Complete activities', route: 'earn' },
   { id: 'services', title: 'Collection', subtitle: 'View assets', route: 'collection' },
@@ -21,6 +22,7 @@ const MOST_USED_ITEMS: HomeItem[] = [
 ];
 
 const FAVORITE_ITEMS: HomeItem[] = [
+  { id: 'fav-profile', title: 'Profile', subtitle: 'Account & settings', route: 'settings' },
   { id: 'fav-earn', title: 'Daily Rewards', subtitle: 'Top earning track', route: 'earn' },
   { id: 'fav-friends', title: 'Referrals', subtitle: 'Growth channel', route: 'friends' },
   { id: 'fav-collection', title: 'Collections', subtitle: 'Progress overview', route: 'collection' },
@@ -46,15 +48,23 @@ export default function Home({ setCurrentView }: HomeProps) {
     <div className="bg-black flex justify-center min-h-screen">
       <div className="w-full bg-black text-white flex flex-col max-w-xl pb-24">
         <div className="px-4 pt-4">
-          <div className="rounded-2xl border border-[#2c2f38] bg-[#12141a] p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border border-[#3d4046] bg-[#1f2330] flex items-center justify-center text-sm font-bold">
+          <button
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              setCurrentView('settings');
+            }}
+            className="w-full rounded-2xl border border-[#2c2f38] bg-[#12141a] p-3 flex items-center gap-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
+          >
+            <div className="w-10 h-10 rounded-full border border-[var(--ura-blue-medium)] bg-[#1f2330] flex items-center justify-center text-sm font-bold">
               {userTelegramName?.slice(0, 1)?.toUpperCase() || 'U'}
             </div>
-            <div className="min-w-0">
-              <p className="text-sm text-gray-400">URA Platform</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-400">URA Platform · Profile</p>
               <p className="font-semibold truncate">{userTelegramName || 'Citizen'}</p>
             </div>
-          </div>
+            <span className="text-[var(--ura-yellow)] text-sm font-semibold flex-shrink-0">Open</span>
+          </button>
 
           <div className="mt-4 rounded-2xl border border-[var(--ura-blue-medium)] bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] p-4 text-center">
             <p className="text-3xl font-black tracking-wide">PLAY, LEARN, EARN</p>
