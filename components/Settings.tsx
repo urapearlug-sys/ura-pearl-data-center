@@ -1,131 +1,384 @@
-// components/Settings.tsx
+// components/Settings.tsx — URA Platform profile with side navigation
 
-/**
- * This project was developed by Nikandr Surkov.
- * You may not use this code if you purchased it from any source other than the official website https://nikandr.com.
- * If you purchased it from the official website, you may use it for your own projects,
- * but you may not resell it or publish it publicly.
- * 
- * Website: https://nikandr.com
- * YouTube: https://www.youtube.com/@NikandrSurkov
- * Telegram: https://t.me/nikandr_s
- * Telegram channel for news/updates: https://t.me/clicker_game_news
- * GitHub: https://github.com/nikandr-surkov
- */
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useGameStore } from '@/utils/game-mechanics';
-import IceCubes from '@/icons/IceCubes';
 import { useToast } from '@/contexts/ToastContext';
 import Toggle from '@/components/Toggle';
 import { triggerHapticFeedback } from '@/utils/ui';
 
 interface SettingsProps {
-    setCurrentView: (view: string) => void;
+  setCurrentView: (view: string) => void;
 }
 
+type SidebarKey =
+  | 'profile'
+  | 'notifications'
+  | 'catalog'
+  | 'charter'
+  | 'settings'
+  | 'gamify'
+  | 'about';
+
+const SIDEBAR: { key: SidebarKey; label: string; icon: React.ReactNode }[] = [
+  {
+    key: 'profile',
+    label: 'Profile',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    ),
+  },
+  {
+    key: 'notifications',
+    label: 'Alerts',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+      </svg>
+    ),
+  },
+  {
+    key: 'catalog',
+    label: 'Catalog',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    ),
+  },
+  {
+    key: 'charter',
+    label: 'Charter',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <circle cx="12" cy="12" r="9" strokeWidth={1.5} />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" />
+      </svg>
+    ),
+  },
+  {
+    key: 'settings',
+    label: 'Settings',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+      </svg>
+    ),
+  },
+  {
+    key: 'gamify',
+    label: 'Gamify',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4H4v7h7V4zM4 13v7h7v-7H4zM13 4v7h7V4h-7zM13 20h7v-7h-7v7z" />
+      </svg>
+    ),
+  },
+  {
+    key: 'about',
+    label: 'About',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+];
+
 export default function Settings({ setCurrentView }: SettingsProps) {
-    const showToast = useToast();
-    const { pointsBalance } = useGameStore();
+  const showToast = useToast();
+  const { pointsBalance, userTelegramName } = useGameStore();
+  const [active, setActive] = useState<SidebarKey>('profile');
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
-    const [vibrationEnabled, setVibrationEnabled] = useState(true);
-    const [animationEnabled, setAnimationEnabled] = useState(true);
+  const [vibrationEnabled, setVibrationEnabled] = useState(true);
+  const [animationEnabled, setAnimationEnabled] = useState(true);
 
-    useEffect(() => {
-        const storedVibration = localStorage.getItem('vibrationEnabled');
-        const storedAnimation = localStorage.getItem('animationEnabled');
+  useEffect(() => {
+    const storedVibration = localStorage.getItem('vibrationEnabled');
+    const storedAnimation = localStorage.getItem('animationEnabled');
+    setVibrationEnabled(storedVibration !== 'false');
+    setAnimationEnabled(storedAnimation !== 'false');
+  }, []);
 
-        setVibrationEnabled(storedVibration !== 'false');
-        setAnimationEnabled(storedAnimation !== 'false');
-    }, []);
+  const displayName = (userTelegramName || 'Citizen').toUpperCase();
 
-    const handleVibrationToggle = () => {
-        const newValue = !vibrationEnabled;
-        if (vibrationEnabled) {
-            triggerHapticFeedback(window);
-        }
-        setVibrationEnabled(newValue);
-        localStorage.setItem('vibrationEnabled', newValue.toString());
-        showToast(newValue ? 'Vibration enabled' : 'Vibration disabled', 'success');
-    };
+  const goHome = () => {
+    triggerHapticFeedback(window);
+    setCurrentView('home');
+  };
 
-    const handleAnimationToggle = () => {
-        triggerHapticFeedback(window);
-        const newValue = !animationEnabled;
-        setAnimationEnabled(newValue);
-        localStorage.setItem('animationEnabled', newValue.toString());
-        showToast(newValue ? 'Animation enabled' : 'Animation disabled', 'success');
-    };
+  const toggleAccordion = (id: string) => {
+    triggerHapticFeedback(window);
+    setOpenAccordion((prev) => (prev === id ? null : id));
+  };
 
-    const handleBackToGame = () => {
-        triggerHapticFeedback(window);
-        setCurrentView('game');
-    };
-
+  const AccordionRow = ({ id, title }: { id: string; title: string }) => {
+    const open = openAccordion === id;
     return (
-        <div className="bg-black flex justify-center min-h-screen">
-            <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-                <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-                    <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
-                        <div className="px-4 pt-1 pb-24">
-                            <h1 className="text-2xl text-center mt-4">Settings</h1>
-
-                            <div className="bg-[#272a2f] rounded-lg p-4 mt-6">
-                                <div className="flex justify-between items-center mb-4">
-                                    <p>Touch vibration</p>
-                                    <Toggle enabled={vibrationEnabled} setEnabled={handleVibrationToggle} />
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Floating points animation</p>
-                                    <Toggle enabled={animationEnabled} setEnabled={handleAnimationToggle} />
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={() => {
-                                    triggerHapticFeedback(window);
-                                    if (typeof window !== 'undefined') window.sessionStorage.setItem('openHowToPlay', '1');
-                                    setCurrentView('game');
-                                }}
-                                className="w-full mt-4 flex items-center justify-between bg-[#272a2f] rounded-lg p-4 text-left"
-                            >
-                                <span className="text-white">How to play</span>
-                                <span className="text-2xl">📖</span>
-                            </button>
-
-                            <div className="mt-4">
-                                <p className="text-gray-400 text-sm mb-2">Legal</p>
-                                <div className="flex flex-col gap-2">
-                                    <Link
-                                        href="/clicker/privacy"
-                                        onClick={() => triggerHapticFeedback(window)}
-                                        className="flex items-center justify-between bg-[#272a2f] rounded-lg p-4 text-left"
-                                    >
-                                        <span className="text-white">Privacy Policy</span>
-                                        <span className="text-[#f3ba2f]">→</span>
-                                    </Link>
-                                    <Link
-                                        href="/clicker/terms"
-                                        onClick={() => triggerHapticFeedback(window)}
-                                        className="flex items-center justify-between bg-[#272a2f] rounded-lg p-4 text-left"
-                                    >
-                                        <span className="text-white">Terms of Service</span>
-                                        <span className="text-[#f3ba2f]">→</span>
-                                    </Link>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={handleBackToGame}
-                                className="mx-auto block mt-4 text-center text-[#f3ba2f]"
-                            >
-                                Back to Game
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <button
+        type="button"
+        onClick={() => toggleAccordion(id)}
+        className="w-full flex items-center justify-between px-4 py-3.5 rounded-lg bg-[#2a2d38] border border-[#3d4046] text-left text-white text-sm font-medium"
+      >
+        <span>{title}</span>
+        <span className="text-gray-400">{open ? '⌄' : '›'}</span>
+      </button>
     );
+  };
+
+  const renderMain = () => {
+    switch (active) {
+      case 'profile':
+        return (
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex items-start justify-between gap-3 mb-6">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-12 h-12 rounded-full border-2 border-[var(--ura-blue-medium)] flex items-center justify-center bg-[#1a1d26] flex-shrink-0">
+                  <svg className="w-7 h-7 text-[var(--ura-white)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <h1 className="text-base font-bold tracking-wide text-white truncate">{displayName}</h1>
+              </div>
+              <button
+                type="button"
+                onClick={() => showToast('Screen reader mode coming soon', 'success')}
+                className="p-2 rounded-lg border border-[#3d4046] text-[var(--ura-white)] flex-shrink-0"
+                aria-label="Accessibility"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                showToast('Verification flow will be available soon.', 'success');
+              }}
+              className="w-full flex items-center justify-between px-4 py-3.5 rounded-lg bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] text-white text-sm font-semibold mb-4 border border-[var(--ura-blue-medium)]/50"
+            >
+              <span>Verify URA account</span>
+              <span>›</span>
+            </button>
+
+            <div className="space-y-2 flex-1 overflow-y-auto no-scrollbar pb-4">
+              <AccordionRow id="personal" title="My personal details" />
+              {openAccordion === 'personal' && (
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                  Name and contact details will appear here once linked to your URA profile.
+                </div>
+              )}
+              <AccordionRow id="favorites" title="My favorites" />
+              {openAccordion === 'favorites' && (
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                  Saved services and shortcuts will show here.
+                </div>
+              )}
+              <AccordionRow id="addresses" title="My addresses" />
+              {openAccordion === 'addresses' && (
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                  No addresses on file yet.
+                </div>
+              )}
+              <AccordionRow id="receipts" title="My receipts" />
+              {openAccordion === 'receipts' && (
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                  Transaction history will appear here.
+                </div>
+              )}
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  showToast('Signed out of this session.', 'success');
+                  setCurrentView('home');
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#c44a52] text-white text-xs font-bold tracking-wide border border-[#a33d44]"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                LOG OUT
+              </button>
+            </div>
+          </div>
+        );
+
+      case 'notifications':
+        return (
+          <div>
+            <h2 className="text-lg font-bold text-white mb-2">Notifications</h2>
+            <p className="text-sm text-gray-400">No new notifications. URA announcements will appear here.</p>
+          </div>
+        );
+
+      case 'catalog':
+        return (
+          <div>
+            <h2 className="text-lg font-bold text-white mb-2">Service catalog</h2>
+            <p className="text-sm text-gray-400">Browse URA services and quick actions. Content coming soon.</p>
+          </div>
+        );
+
+      case 'charter':
+        return (
+          <div>
+            <h2 className="text-lg font-bold text-white mb-2">Government charter</h2>
+            <p className="text-sm text-gray-400">Service standards and citizen charter information will be published here.</p>
+          </div>
+        );
+
+      case 'settings':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-white">Settings</h2>
+            <div className="rounded-lg border border-[#3d4046] bg-[#2a2d38] p-4 space-y-4">
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-white">Touch vibration</p>
+                <Toggle
+                  enabled={vibrationEnabled}
+                  setEnabled={(newValue) => {
+                    if (newValue) triggerHapticFeedback(window);
+                    setVibrationEnabled(newValue);
+                    localStorage.setItem('vibrationEnabled', newValue.toString());
+                    showToast(newValue ? 'Vibration enabled' : 'Vibration disabled', 'success');
+                  }}
+                />
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-white">Floating points animation</p>
+                <Toggle
+                  enabled={animationEnabled}
+                  setEnabled={(newValue) => {
+                    triggerHapticFeedback(window);
+                    setAnimationEnabled(newValue);
+                    localStorage.setItem('animationEnabled', newValue.toString());
+                    showToast(newValue ? 'Animation enabled' : 'Animation disabled', 'success');
+                  }}
+                />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">Balance (ALM): {Math.floor(pointsBalance).toLocaleString()}</p>
+            <div>
+              <p className="text-gray-400 text-sm mb-2">Legal</p>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/clicker/privacy"
+                  onClick={() => triggerHapticFeedback(window)}
+                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+                >
+                  <span className="text-white text-sm">Privacy Policy</span>
+                  <span className="text-[var(--ura-yellow)]">→</span>
+                </Link>
+                <Link
+                  href="/clicker/terms"
+                  onClick={() => triggerHapticFeedback(window)}
+                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+                >
+                  <span className="text-white text-sm">Terms of Service</span>
+                  <span className="text-[var(--ura-yellow)]">→</span>
+                </Link>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                if (typeof window !== 'undefined') window.sessionStorage.setItem('openHowToPlay', '1');
+                setCurrentView('game');
+              }}
+              className="w-full flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+            >
+              <span className="text-white text-sm">How to play</span>
+              <span>📖</span>
+            </button>
+          </div>
+        );
+
+      case 'gamify':
+        return (
+          <div>
+            <h2 className="text-lg font-bold text-white mb-2">Gamify</h2>
+            <p className="text-sm text-gray-400 mb-4">Earn points and unlock rewards through URA learning modules.</p>
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setCurrentView('game');
+              }}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] text-white font-semibold text-sm"
+            >
+              Open game hub
+            </button>
+          </div>
+        );
+
+      case 'about':
+        return (
+          <div>
+            <h2 className="text-lg font-bold text-white mb-2">About URA Platform</h2>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Official Uganda Revenue Authority digital experience. Play, learn, and earn while understanding fiscal responsibility.
+            </p>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="bg-black flex justify-center min-h-screen text-white">
+      <div className="w-full max-w-xl flex min-h-screen">
+        <aside className="w-[76px] flex-shrink-0 bg-black border-r border-[#1f2228] flex flex-col items-center py-4 gap-1 z-20">
+          {SIDEBAR.map((item) => {
+            const isActive = active === item.key;
+            return (
+              <button
+                key={item.key}
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setActive(item.key);
+                }}
+                className={`flex flex-col items-center gap-1 w-full px-1 py-2 rounded-lg transition-colors ${
+                  isActive
+                    ? 'text-[var(--ura-yellow)] bg-[#14161c]'
+                    : 'text-[var(--ura-white)] text-opacity-80 hover:bg-[#14161c]'
+                }`}
+              >
+                <span className={isActive ? 'text-[var(--ura-yellow)]' : 'text-[var(--ura-white)]'}>{item.icon}</span>
+                <span className="text-[9px] leading-tight text-center font-medium px-0.5">{item.label}</span>
+              </button>
+            );
+          })}
+        </aside>
+
+        <div className="flex-1 flex flex-col min-w-0 ura-profile-main-bg">
+          <div className="flex items-center justify-between px-3 py-3 border-b border-[#2a2d38] bg-black/40 backdrop-blur-sm">
+            <button
+              type="button"
+              onClick={goHome}
+              className="text-sm font-semibold text-[var(--ura-yellow)]"
+            >
+              ← Home
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-5 pb-28">{renderMain()}</div>
+        </div>
+      </div>
+    </div>
+  );
 }

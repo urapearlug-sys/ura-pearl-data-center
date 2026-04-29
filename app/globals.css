@@ -194,6 +194,28 @@ html, body {
   animation: flower-fall linear infinite;
 }
 
+/* URA profile / dashboard: dark geometric background */
+.ura-profile-main-bg {
+  background-color: #0c0e12;
+  background-image:
+    linear-gradient(125deg, rgba(31, 63, 143, 0.14) 0%, transparent 42%),
+    linear-gradient(295deg, rgba(95, 168, 255, 0.08) 0%, transparent 48%),
+    repeating-linear-gradient(
+      -58deg,
+      transparent,
+      transparent 22px,
+      rgba(255, 255, 255, 0.028) 22px,
+      rgba(255, 255, 255, 0.028) 23px
+    ),
+    repeating-linear-gradient(
+      62deg,
+      transparent,
+      transparent 22px,
+      rgba(255, 255, 255, 0.02) 22px,
+      rgba(255, 255, 255, 0.02) 23px
+    );
+}
+
 /* Loading trail: 4 dots travel from "Loading" to right edge, grow and change color */
 .loading-trail {
   position: relative;
