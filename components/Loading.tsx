@@ -18,7 +18,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { botUrlQr, uraLanding } from '@/images';
-import IceCube from '@/icons/IceCube';
 import { calculateEnergyLimit, calculateLevelIndex, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechanics';
 import WebApp from '@twa-dev/sdk';
 import UAParser from 'ua-parser-js';
@@ -33,6 +32,7 @@ interface LoadingProps {
 }
 
 export default function Loading({ setIsInitialized, setCurrentView }: LoadingProps) {
+  const loadingDotDelays = [0, 0.35, 0.7, 1.05];
   const initializeState = useGameStore((state: GameState) => state.initializeState);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const openTimestampRef = useRef(Date.now());
@@ -176,7 +176,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
     if (isDataLoaded && hasAcceptedLegal()) {
       const currentTime = Date.now();
       const elapsedTime = currentTime - openTimestampRef.current;
-      const remainingTime = Math.max(3000 - elapsedTime, 0);
+      const remainingTime = Math.max(5500 - elapsedTime, 0);
 
       const timer = setTimeout(() => {
         setCurrentView('game');
@@ -307,12 +307,16 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
     <div className="relative h-screen w-full overflow-hidden bg-black">
       <Image src={uraLanding} alt="URA Landing" fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
       <div className="absolute inset-0 bg-black/35" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 text-center">
-        <h1 className="text-3xl font-bold mb-6">Loading URA PEARLS Platform</h1>
-        <div className="flex items-center gap-2" aria-label="Loading">
-          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:0ms]" />
-          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:150ms]" />
-          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:300ms]" />
+      <div className="absolute inset-0 flex flex-col items-center justify-end text-white px-4 text-center pb-28">
+        <h1 className="text-3xl font-bold leading-tight">Loading</h1>
+        <h2 className="text-3xl font-bold mb-5">URA PEARLS</h2>
+        <div className="w-full max-w-xs flex items-center gap-3" aria-label="Loading">
+          <span className="text-base font-semibold tracking-wide">Loading</span>
+          <div className="loading-trail flex-1">
+            {loadingDotDelays.map((delay) => (
+              <span key={delay} className="loading-trail-dot" style={{ animationDelay: `${delay}s` }} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

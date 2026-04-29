@@ -188,3 +188,48 @@ html, body {
 .flower-fall {
   animation: flower-fall linear infinite;
 }
+
+/* Loading trail: 4 dots travel from "Loading" to right edge, grow and change color */
+.loading-trail {
+  position: relative;
+  height: 16px;
+}
+
+.loading-trail-dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  transform: translate(0, -50%) scale(0.85);
+  background-color: #ffffff;
+  animation: loading-trail-move 1.8s linear infinite;
+}
+
+@keyframes loading-trail-move {
+  0% {
+    left: 0%;
+    transform: translate(0, -50%) scale(0.85);
+    background-color: #ffffff;
+    opacity: 0.95;
+  }
+  35% {
+    background-color: #5fa8ff; /* Medium blue */
+  }
+  65% {
+    background-color: #1f3f8f; /* Royal/Navy blue */
+  }
+  90% {
+    left: 100%;
+    transform: translate(-100%, -50%) scale(1.45);
+    background-color: #f3ba2f; /* Bright golden yellow */
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    transform: translate(-100%, -50%) scale(1.45);
+    background-color: #f3ba2f;
+    opacity: 0;
+  }
+}
