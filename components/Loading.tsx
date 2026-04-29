@@ -308,8 +308,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       <Image src={uraLanding} alt="URA Landing" fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
       <div className="absolute inset-0 bg-black/35" />
       <div className="absolute inset-0 flex flex-col items-center justify-end text-white px-4 text-center pb-28">
-        <h1 className="text-3xl font-bold leading-tight">Loading</h1>
-        <h2 className="text-3xl font-bold mb-5">URA PEARLS</h2>
         <div className="w-full max-w-xs flex items-center gap-3" aria-label="Loading">
           <span className="text-base font-semibold tracking-wide">Loading</span>
           <div className="loading-trail flex-1">
