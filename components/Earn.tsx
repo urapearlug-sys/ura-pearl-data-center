@@ -55,6 +55,12 @@ import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import { Task, LeaguesData } from '@/utils/types';
 
+interface EarnProps {
+  setCurrentView?: (view: string) => void;
+  openMoreDefault?: boolean;
+  initialTab?: string;
+}
+
 const useFetchTasks = (userTelegramInitData: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +87,7 @@ const useFetchTasks = (userTelegramInitData: string) => {
   return { tasks, setTasks, isLoading };
 };
 
-export default function Earn() {
+export default function Earn({ setCurrentView, openMoreDefault = false, initialTab = 'All' }: EarnProps) {
   const { userTelegramInitData, pointsBalance } = useGameStore();
   const { tasks, setTasks, isLoading } = useFetchTasks(userTelegramInitData);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -118,7 +124,18 @@ export default function Earn() {
   const [showTeamMemberDashboardId, setShowTeamMemberDashboardId] = useState<string | null>(null);
   const [showGlobalTasks, setShowGlobalTasks] = useState(false);
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('All');
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
+  useEffect(() => {
+    if (openMoreDefault) {
+      setShowMoreMenu(true);
+    }
+  }, [openMoreDefault]);
 
   const ownedTeams = useMemo(() => myTeams.filter((t) => t.isCreator), [myTeams]);
   const memberTeam = useMemo(() => myTeams.find((t) => !t.isCreator), [myTeams]);
@@ -221,6 +238,18 @@ export default function Earn() {
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
                   Balance: {formatNumber(Math.floor(pointsBalance))} ALM
                 </p>
+                <div className="flex justify-center mb-5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      setShowMoreMenu(true);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
+                  >
+                    More
+                  </button>
+                </div>
 
                 <div className="flex flex-wrap gap-3 mb-6">
                   <button
@@ -952,6 +981,47 @@ export default function Earn() {
           myTeams={myTeams}
           myLeagues={leaguesData?.customLeagues?.map((cl) => ({ id: cl.id, name: cl.name, isCreator: cl.isCreator })) ?? []}
         />
+      )}
+      {showMoreMenu && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70">
+          <div className="w-full max-w-xl rounded-t-3xl bg-[#1d2025] border-t border-[#3d4046] p-4 pb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">More</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setShowMoreMenu(false);
+                }}
+                className="text-gray-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { name: 'Game', view: 'game' },
+                { name: 'Mine', view: 'mine' },
+                { name: 'Collection', view: 'collection' },
+                { name: 'Friends', view: 'friends' },
+                { name: 'Airdrop', view: 'airdrop' },
+              ].map((item) => (
+                <button
+                  key={item.view}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowMoreMenu(false);
+                    setCurrentView?.(item.view);
+                  }}
+                  className="rounded-xl border border-[#3d4046] bg-[#272a2f] py-3 text-white font-semibold hover:border-[#f3ba2f] transition-colors"
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

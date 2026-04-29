@@ -19,8 +19,7 @@ import Image, { StaticImageData } from 'next/image';
 import Mine from '@/icons/Mine';
 import Friends from '@/icons/Friends';
 import Coins from '@/icons/Coins';
-import { iceToken, baseGift, collection, game } from '@/images';
-import Rocket from '@/icons/Rocket';
+import { collection, game } from '@/images';
 import { FC } from 'react';
 import { IconProps } from '@/utils/types';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -33,12 +32,11 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { name: 'Game', image: game, view: 'game' },
-    { name: 'Mine', icon: Mine, view: 'mine' },
-    { name: 'Collection', image: collection, view: 'collection' },
-    { name: 'Friends', icon: Friends, view: 'friends' },
+    { name: 'Home', image: game, view: 'home' },
+    { name: 'Eearn', icon: Mine, view: 'eearn' },
+    { name: 'Services', image: collection, view: 'services' },
     { name: 'Earn', icon: Coins, view: 'earn' },
-    { name: 'Airdrop', image: iceToken, view: 'airdrop' },
+    { name: 'Guild', icon: Friends, view: 'guild' },
 ];
 
 interface NavigationProps {

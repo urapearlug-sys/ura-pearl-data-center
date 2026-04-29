@@ -62,6 +62,7 @@ function ClickerPage() {
         }
 
         switch (currentView) {
+            case 'home':
             case 'game':
                 return <Game
                     currentView={currentView}
@@ -78,8 +79,14 @@ function ClickerPage() {
                 return <Mine setCurrentView={setCurrentView} />;
             case 'friends':
                 return <Friends />;
+            case 'eearn':
+                return <Earn setCurrentView={setCurrentView} />;
+            case 'services':
+                return <Earn setCurrentView={setCurrentView} openMoreDefault />;
+            case 'guild':
+                return <Earn setCurrentView={setCurrentView} initialTab="Leagues" />;
             case 'earn':
-                return <Earn />;
+                return <Earn setCurrentView={setCurrentView} />;
             case 'airdrop':
                 return <Airdrop />;
             case 'collection':
