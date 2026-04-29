@@ -28,6 +28,17 @@ import Copy from '@/icons/Copy';
 import { useToast } from '@/contexts/ToastContext';
 import { initUtils } from '@telegram-apps/sdk';
 
+const DEFAULT_BOT_USERNAME = 'URAPearlsBot';
+const DEFAULT_WEBAPP_NAME = 'urapearls';
+const REFERRAL_PREFIX = 'ref_';
+
+function getInviteTarget() {
+  const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || DEFAULT_BOT_USERNAME;
+  const fromChannelLink = process.env.NEXT_PUBLIC_CHANNEL_LINK?.match(/t\.me\/[^/]+\/([^/?#]+)/i)?.[1];
+  const webAppName = fromChannelLink || DEFAULT_WEBAPP_NAME;
+  return { botUsername, webAppName };
+}
+
 interface Referral {
   id: string;
   telegramId: string;
@@ -84,8 +95,7 @@ export default function Friends() {
 
   const handleCopyInviteLink = useCallback(async () => {
     triggerHapticFeedback(window);
-    const botUsername = 'AfroLumens_bot';
-    const webAppName = 'Afrolumen';
+    const { botUsername, webAppName } = getInviteTarget();
     // Prefer Telegram SDK so the link always has the inviter's ID (initData parse can fail)
     let userTelegramId: string | null = null;
     if (typeof window !== 'undefined') {
@@ -101,7 +111,7 @@ export default function Friends() {
       showToast('Could not get your user ID. Open the app from Telegram and try again.', 'error');
       return;
     }
-    const inviteLink = `https://t.me/${botUsername}/${webAppName}?startapp=kentId${userTelegramId}`;
+    const inviteLink = `https://t.me/${botUsername}/${webAppName}?startapp=${REFERRAL_PREFIX}${userTelegramId}`;
 
     navigator.clipboard.writeText(inviteLink)
       .then(() => {
@@ -114,8 +124,7 @@ export default function Friends() {
   }, [userTelegramInitData, showToast]);
 
   const handleInviteFriend = useCallback(async () => {
-    const botUsername = 'AfroLumens_bot';
-    const webAppName = 'Afrolumen';
+    const { botUsername, webAppName } = getInviteTarget();
     let userTelegramId: string | null = null;
     if (typeof window !== 'undefined') {
       try {
@@ -130,7 +139,7 @@ export default function Friends() {
       showToast('Could not get your user ID. Open the app from Telegram and try again.', 'error');
       return;
     }
-    const inviteLink = `https://t.me/${botUsername}/${webAppName}?startapp=kentId${userTelegramId}`;
+    const inviteLink = `https://t.me/${botUsername}/${webAppName}?startapp=${REFERRAL_PREFIX}${userTelegramId}`;
     const shareText = `Light is earned, not given—value flows to effort. Tap & earn Lumen (Energy Units) to power up our shared future. Play & Earn! 💡🚀`;
 
     triggerHapticFeedback(window);

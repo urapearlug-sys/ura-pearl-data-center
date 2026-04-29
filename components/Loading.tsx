@@ -61,7 +61,10 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         }
       }
 
-      const referrerTelegramId = startParam ? String(startParam).replace(/^kentId/i, '').trim() || null : null;
+      const normalizedStartParam = startParam ? String(startParam).trim() : '';
+      const referrerTelegramId = normalizedStartParam
+        ? normalizedStartParam.replace(/^(kentId|ref_)/i, '').trim() || null
+        : null;
 
       if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
         initData = "temp";
