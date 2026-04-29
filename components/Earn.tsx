@@ -59,6 +59,7 @@ interface EarnProps {
   setCurrentView?: (view: string) => void;
   openMoreDefault?: boolean;
   initialTab?: string;
+  minimalOnly?: boolean;
 }
 
 const useFetchTasks = (userTelegramInitData: string) => {
@@ -87,7 +88,7 @@ const useFetchTasks = (userTelegramInitData: string) => {
   return { tasks, setTasks, isLoading };
 };
 
-export default function Earn({ setCurrentView, openMoreDefault = false, initialTab = 'All' }: EarnProps) {
+export default function Earn({ setCurrentView, openMoreDefault = false, initialTab = 'All', minimalOnly = false }: EarnProps) {
   const { userTelegramInitData, pointsBalance } = useGameStore();
   const { tasks, setTasks, isLoading } = useFetchTasks(userTelegramInitData);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -223,6 +224,74 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
+
+  if (minimalOnly) {
+    return (
+      <div className="bg-black flex justify-center min-h-screen">
+        <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
+          <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
+            <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+              <div className="px-4 pt-6 pb-24">
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      setShowMoreMenu(true);
+                    }}
+                    className="px-6 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
+                  >
+                    More
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {showMoreMenu && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70">
+            <div className="w-full max-w-xl rounded-t-3xl bg-[#1d2025] border-t border-[#3d4046] p-4 pb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-white">More</h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowMoreMenu(false);
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
+                  Close
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { name: 'Game', view: 'game' },
+                  { name: 'Mine', view: 'mine' },
+                  { name: 'Collection', view: 'collection' },
+                  { name: 'Friends', view: 'friends' },
+                  { name: 'Airdrop', view: 'airdrop' },
+                ].map((item) => (
+                  <button
+                    key={item.view}
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      setShowMoreMenu(false);
+                      setCurrentView?.(item.view);
+                    }}
+                    className="rounded-xl border border-[#3d4046] bg-[#272a2f] py-3 text-white font-semibold hover:border-[#f3ba2f] transition-colors"
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black flex justify-center min-h-screen">

@@ -43,6 +43,10 @@ import { PointSynchronizer } from '@/components/PointSynchronizer';
 import Settings from '@/components/Settings';
 import Collection from '@/components/Collection';
 
+function EmptyPrimaryPage() {
+    return <div className="bg-black min-h-screen" />;
+}
+
 function ClickerPage() {
     useExitFullscreenWhenOpenedViaOpenButton();
     const [currentView, setCurrentViewState] = useState<string>('loading');
@@ -63,6 +67,7 @@ function ClickerPage() {
 
         switch (currentView) {
             case 'home':
+                return <EmptyPrimaryPage />;
             case 'game':
                 return <Game
                     currentView={currentView}
@@ -80,13 +85,13 @@ function ClickerPage() {
             case 'friends':
                 return <Friends />;
             case 'eearn':
-                return <Earn setCurrentView={setCurrentView} />;
+                return <EmptyPrimaryPage />;
             case 'services':
-                return <Earn setCurrentView={setCurrentView} openMoreDefault />;
+                return <EmptyPrimaryPage />;
             case 'guild':
-                return <Earn setCurrentView={setCurrentView} initialTab="Leagues" />;
+                return <EmptyPrimaryPage />;
             case 'earn':
-                return <Earn setCurrentView={setCurrentView} />;
+                return <Earn setCurrentView={setCurrentView} minimalOnly />;
             case 'airdrop':
                 return <Airdrop />;
             case 'collection':
