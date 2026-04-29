@@ -42,6 +42,7 @@ import { AutoIncrement } from '@/components/AutoIncrement';
 import { PointSynchronizer } from '@/components/PointSynchronizer';
 import Settings from '@/components/Settings';
 import Collection from '@/components/Collection';
+import Home from '@/components/Home';
 
 function EmptyPrimaryPage() {
     return <div className="bg-black min-h-screen" />;
@@ -69,7 +70,7 @@ function ClickerPage() {
 
         switch (currentView) {
             case 'home':
-                return <EmptyPrimaryPage />;
+                return <Home setCurrentView={setCurrentView} />;
             case 'game':
                 return <Game
                     currentView={currentView}

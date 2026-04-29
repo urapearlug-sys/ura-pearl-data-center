@@ -22,6 +22,11 @@ html, body {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  /* URA primary palette (from loading circles) */
+  --ura-white: #ffffff;
+  --ura-blue-medium: #5fa8ff;
+  --ura-blue-dark: #1f3f8f;
+  --ura-yellow: #f3ba2f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -203,7 +208,7 @@ html, body {
   height: 8px;
   border-radius: 9999px;
   transform: translate(0, -50%) scale(0.85);
-  background-color: #ffffff;
+  background-color: var(--ura-white);
   animation: loading-trail-move 1.8s linear infinite;
 }
 
@@ -211,25 +216,25 @@ html, body {
   0% {
     left: 0%;
     transform: translate(0, -50%) scale(0.85);
-    background-color: #ffffff;
+    background-color: var(--ura-white);
     opacity: 0.95;
   }
   35% {
-    background-color: #5fa8ff; /* Medium blue */
+    background-color: var(--ura-blue-medium);
   }
   65% {
-    background-color: #1f3f8f; /* Royal/Navy blue */
+    background-color: var(--ura-blue-dark);
   }
   90% {
     left: 100%;
     transform: translate(-100%, -50%) scale(1.45);
-    background-color: #f3ba2f; /* Bright golden yellow */
+    background-color: var(--ura-yellow);
     opacity: 1;
   }
   100% {
     left: 100%;
     transform: translate(-100%, -50%) scale(1.45);
-    background-color: #f3ba2f;
+    background-color: var(--ura-yellow);
     opacity: 0;
   }
 }
