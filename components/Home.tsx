@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { defaultProfileAvatar } from '@/images';
+import { defaultProfileAvatar, uraFiscalFunBanner } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
 import { triggerHapticFeedback } from '@/utils/ui';
 
@@ -14,7 +14,6 @@ type HomeItem = {
 };
 
 const MOST_USED_ITEMS: HomeItem[] = [
-  { id: 'profile', title: 'Profile', subtitle: 'Account & settings', route: 'settings' },
   { id: 'game', title: 'Game Hub', subtitle: 'Main gameplay', route: 'game' },
   { id: 'earn', title: 'Earn Tasks', subtitle: 'Complete activities', route: 'earn' },
   { id: 'services', title: 'Collection', subtitle: 'View assets', route: 'collection' },
@@ -24,7 +23,6 @@ const MOST_USED_ITEMS: HomeItem[] = [
 ];
 
 const FAVORITE_ITEMS: HomeItem[] = [
-  { id: 'fav-profile', title: 'Profile', subtitle: 'Account & settings', route: 'settings' },
   { id: 'fav-earn', title: 'Daily Rewards', subtitle: 'Top earning track', route: 'earn' },
   { id: 'fav-friends', title: 'Referrals', subtitle: 'Growth channel', route: 'friends' },
   { id: 'fav-collection', title: 'Collections', subtitle: 'Progress overview', route: 'collection' },
@@ -67,9 +65,16 @@ export default function Home({ setCurrentView }: HomeProps) {
             </div>
           </button>
 
-          <div className="mt-4 rounded-2xl border border-[var(--ura-blue-medium)] bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] p-4 text-center">
-            <p className="text-3xl font-black tracking-wide">PLAY, LEARN, EARN</p>
-            <p className="text-sm text-blue-100 mt-1">Fiscal fun for URA Platform services</p>
+          <div className="mt-4 rounded-2xl overflow-hidden border border-[#2c2f38] bg-[#f5f0e8]">
+            <Image
+              src={uraFiscalFunBanner}
+              alt="Fiscal Fun — Uganda Revenue Authority"
+              width={1024}
+              height={682}
+              className="w-full h-auto object-cover"
+              sizes="(max-width: 576px) 100vw, 576px"
+              priority
+            />
           </div>
 
           <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
