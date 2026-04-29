@@ -16,7 +16,7 @@
 'use client'
 
 import Image from 'next/image';
-import { mainCharacter } from '@/images';
+import { uraLanding } from '@/images';
 import IceCube from '@/icons/IceCube';
 import Link from 'next/link';
 
@@ -26,16 +26,7 @@ export default function Home() {
       <div className="w-full max-w-xl text-white flex flex-col items-center">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-            <Image
-              src={mainCharacter}
-              alt="Main Character"
-              fill
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center',
-                transform: 'scale(1.05) translateY(10%)'
-              }}
-            />
+            <Image src={uraLanding} alt="URA Landing" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
           </div>
         </div>
         

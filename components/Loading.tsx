@@ -17,7 +17,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { botUrlQr, mainCharacter } from '@/images';
+import { botUrlQr, uraLanding } from '@/images';
 import IceCube from '@/icons/IceCube';
 import { calculateEnergyLimit, calculateLevelIndex, calculatePointsPerClick, calculateProfitPerHour, GameState, InitialGameState, useGameStore } from '@/utils/game-mechanics';
 import WebApp from '@twa-dev/sdk';
@@ -253,16 +253,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         <div className="w-full max-w-xl text-white flex flex-col items-center text-center">
           <div className="w-64 h-64 rounded-full circle-outer p-2 mb-6">
             <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-              <Image
-                src={mainCharacter}
-                alt="Main Character"
-                fill
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  transform: 'scale(1.05) translateY(10%)'
-                }}
-              />
+              <Image src={uraLanding} alt="URA Landing" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
             </div>
           </div>
           <h1 className="text-2xl font-bold mb-2">Unable to load</h1>
@@ -317,16 +308,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       <div className="w-full max-w-xl text-white flex flex-col items-center">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-            <Image
-              src={mainCharacter}
-              alt="Main Character"
-              fill
-              style={{
-                objectFit: 'cover',
-                objectPosition: 'center',
-                transform: 'scale(1.05) translateY(10%)'
-              }}
-            />
+            <Image src={uraLanding} alt="URA Landing" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
           </div>
         </div>
 

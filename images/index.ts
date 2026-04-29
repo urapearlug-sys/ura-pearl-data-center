@@ -65,6 +65,7 @@ import paidTrophy2 from "./paid-trophy2.png";
 import botUrlQr from "./bot-url-qr.png";
 import announcements from "./Announcements.png";
 import roketicon from "./roketicon.gif";
+import uraLanding from "./ura-landing.png";
 
 
 export {
@@ -107,6 +108,7 @@ export {
     botUrlQr,
     announcements,
     roketicon,
+    uraLanding,
     blockchain,
     afrolumens,
     mitroplus,
