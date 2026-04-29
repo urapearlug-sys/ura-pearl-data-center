@@ -304,20 +304,15 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   }
 
   return (
-    <div className="bg-[#1d2025] flex justify-center items-center h-screen">
-      <div className="w-full max-w-xl text-white flex flex-col items-center">
-        <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
-          <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
-            <Image src={uraLanding} alt="URA Landing" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
-          </div>
-        </div>
-
-        <h1 className="text-3xl font-bold mb-4">Loading AfroLumens</h1>
-
-        <div className="flex items-center space-x-2">
-          <IceCube className="w-8 h-8 animate-pulse" />
-          <IceCube className="w-8 h-8 animate-pulse delay-100" />
-          <IceCube className="w-8 h-8 animate-pulse delay-200" />
+    <div className="relative h-screen w-full overflow-hidden bg-black">
+      <Image src={uraLanding} alt="URA Landing" fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
+      <div className="absolute inset-0 bg-black/35" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4 text-center">
+        <h1 className="text-3xl font-bold mb-6">Loading URA PEARLS Platform</h1>
+        <div className="flex items-center gap-2" aria-label="Loading">
+          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:0ms]" />
+          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:150ms]" />
+          <span className="h-3 w-3 rounded-full bg-[#f3ba2f] animate-bounce [animation-delay:300ms]" />
         </div>
       </div>
     </div>
