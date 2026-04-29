@@ -179,7 +179,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       const remainingTime = Math.max(5500 - elapsedTime, 0);
 
       const timer = setTimeout(() => {
-        setCurrentView('game');
+        setCurrentView('home');
         setIsInitialized(true);
       }, remainingTime);
 
@@ -235,7 +235,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
             onClick={() => {
               triggerHapticFeedback(window);
               setLegalAccepted();
-              setCurrentView('game');
+              setCurrentView('home');
               setIsInitialized(true);
             }}
             className="w-full max-w-xs py-4 rounded-xl bg-gradient-to-r from-[#f3ba2f] to-amber-500 text-black font-bold"

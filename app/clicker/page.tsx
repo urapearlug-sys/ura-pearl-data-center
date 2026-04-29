@@ -47,6 +47,8 @@ function EmptyPrimaryPage() {
     return <div className="bg-black min-h-screen" />;
 }
 
+const MORE_VIEWS = new Set(['game', 'mine', 'collection', 'friends', 'airdrop']);
+
 function ClickerPage() {
     useExitFullscreenWhenOpenedViaOpenButton();
     const [currentView, setCurrentViewState] = useState<string>('loading');
@@ -97,10 +99,7 @@ function ClickerPage() {
             case 'collection':
                 return <Collection setCurrentView={setCurrentView} />;
             default:
-                return <Game
-                    currentView={currentView}
-                    setCurrentView={setCurrentView}
-                />;
+                return <EmptyPrimaryPage />;
         }
     }, [currentView, isInitialized]);
 
@@ -114,6 +113,15 @@ function ClickerPage() {
                 </>
             }
             {renderCurrentView()}
+            {isInitialized && MORE_VIEWS.has(currentView) && (
+                <button
+                    type="button"
+                    onClick={() => setCurrentView('earn')}
+                    className="fixed top-4 left-4 z-50 rounded-lg bg-black/65 border border-[#3d4046] px-3 py-1.5 text-sm font-semibold text-white"
+                >
+                    ← Back
+                </button>
+            )}
             {isInitialized && currentView !== 'loading' && (
                 <Navigation
                     currentView={currentView}
