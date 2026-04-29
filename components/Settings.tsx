@@ -3,7 +3,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { defaultProfileAvatar } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import Toggle from '@/components/Toggle';
@@ -138,10 +140,8 @@ export default function Settings({ setCurrentView }: SettingsProps) {
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex items-start justify-between gap-3 mb-6">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-12 h-12 rounded-full border-2 border-[var(--ura-blue-medium)] flex items-center justify-center bg-[#1a1d26] flex-shrink-0">
-                  <svg className="w-7 h-7 text-[var(--ura-white)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                <div className="w-12 h-12 rounded-full border-2 border-[var(--ura-blue-medium)] overflow-hidden bg-[#1a1d26] flex-shrink-0 relative">
+                  <Image src={defaultProfileAvatar} alt="Profile" fill className="object-cover" sizes="48px" />
                 </div>
                 <h1 className="text-base font-bold tracking-wide text-white truncate">{displayName}</h1>
               </div>

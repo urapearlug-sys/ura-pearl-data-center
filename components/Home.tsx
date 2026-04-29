@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
+import { defaultProfileAvatar } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
 import { triggerHapticFeedback } from '@/utils/ui';
 
@@ -56,14 +58,13 @@ export default function Home({ setCurrentView }: HomeProps) {
             }}
             className="w-full rounded-2xl border border-[#2c2f38] bg-[#12141a] p-3 flex items-center gap-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
           >
-            <div className="w-10 h-10 rounded-full border border-[var(--ura-blue-medium)] bg-[#1f2330] flex items-center justify-center text-sm font-bold">
-              {userTelegramName?.slice(0, 1)?.toUpperCase() || 'U'}
+            <div className="w-10 h-10 rounded-full border border-[var(--ura-blue-medium)] overflow-hidden bg-[#1f2330] flex-shrink-0 relative">
+              <Image src={defaultProfileAvatar} alt="Profile" fill className="object-cover" sizes="40px" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm text-gray-400">URA Platform · Profile</p>
               <p className="font-semibold truncate">{userTelegramName || 'Citizen'}</p>
             </div>
-            <span className="text-[var(--ura-yellow)] text-sm font-semibold flex-shrink-0">Open</span>
           </button>
 
           <div className="mt-4 rounded-2xl border border-[var(--ura-blue-medium)] bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] p-4 text-center">

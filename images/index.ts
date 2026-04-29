@@ -66,6 +66,7 @@ import botUrlQr from "./bot-url-qr.png";
 import announcements from "./Announcements.png";
 import roketicon from "./roketicon.gif";
 import uraLanding from "./ura-landing.png";
+import defaultProfileAvatar from "./default-profile-avatar.png";
 
 
 export {
@@ -109,6 +110,7 @@ export {
     announcements,
     roketicon,
     uraLanding,
+    defaultProfileAvatar,
     blockchain,
     afrolumens,
     mitroplus,
