@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "master": true,
+      "deploy-afrolumens-v1": true,
+      "fix/update-referral-links": true
+    }
+  },
+  "ignoreCommand": "exit 1",
+  "crons": []
+}
