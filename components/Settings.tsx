@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { defaultProfileAvatar } from '@/images';
+import { defaultProfileAvatar, uraDailyPearlCoins } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import Toggle from '@/components/Toggle';
@@ -168,6 +168,30 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               <span>Verify URA account</span>
               <span>›</span>
             </button>
+
+            <div className="rounded-lg bg-[#1a1d26] border border-[#2d2f38] p-3 mb-4">
+              <h3 className="text-sm font-bold text-white mb-2">PEARL CATEGORIES</h3>
+              <div className="grid grid-cols-3 gap-2 mb-2">
+                {[
+                  { label: 'White', color: 'text-slate-200' },
+                  { label: 'Blue', color: 'text-[#5fa8ff]' },
+                  { label: 'Goldish', color: 'text-[var(--ura-yellow)]' },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-md border border-[#2d2f38] bg-[#12141a] p-1.5 text-center">
+                    <Image src={uraDailyPearlCoins} alt={`${item.label} pearl`} width={28} height={28} className="mx-auto object-contain" />
+                    <p className={`text-[10px] mt-1 font-semibold ${item.color}`}>{item.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-1.5 text-[11px] text-gray-300 leading-relaxed">
+                <p><span className="text-white font-semibold">White</span> — no approval needed (activities like Karibu Daily, Quiz, and similar tasks).</p>
+                <p><span className="text-[#5fa8ff] font-semibold">Blue</span> — earned from report-type activities and requires URA admin approval.</p>
+                <p><span className="text-[var(--ura-yellow)] font-semibold">Goldish</span> — approved pearls, ready for withdrawal or transfer.</p>
+              </div>
+              <p className="text-[11px] text-gray-400 mt-2">
+                Conversion rules: <span className="text-white">50 White = 1 Goldish</span> · <span className="text-white">25 Blue = 1 Goldish</span>
+              </p>
+            </div>
 
             <div className="space-y-2 flex-1 overflow-y-auto no-scrollbar pb-4">
               <AccordionRow id="personal" title="My personal details" />

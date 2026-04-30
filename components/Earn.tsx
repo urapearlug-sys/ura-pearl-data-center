@@ -21,7 +21,7 @@ import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { ACTIVITY_TAB_CATEGORIES } from '@/utils/consts';
 import { capitalizeFirstLetter, formatNumber, triggerHapticFeedback } from '@/utils/ui';
-import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift } from '@/images';
+import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift, uraDailyPearlCoins } from '@/images';
 import TaskPopup from './popups/TaskPopup';
 import DailyLoginPopup from './popups/DailyLoginPopup';
 import DailyCipherPopup from './popups/DailyCipherPopup';
@@ -127,6 +127,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [whitePearlInput, setWhitePearlInput] = useState<string>('50');
+  const [bluePearlInput, setBluePearlInput] = useState<string>('25');
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -224,6 +226,74 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
+  const whitePearls = Math.max(0, Math.floor(Number(whitePearlInput) || 0));
+  const bluePearls = Math.max(0, Math.floor(Number(bluePearlInput) || 0));
+  const whiteToGoldish = Math.floor(whitePearls / 50);
+  const blueToGoldish = Math.floor(bluePearls / 25);
+  const totalGoldish = whiteToGoldish + blueToGoldish;
+
+  const pearlConverterCard = (
+    <div className="rounded-2xl border border-[#3d4046] bg-[#1a1c22] p-4">
+      <h2 className="text-base font-bold text-white">Pearl Converter</h2>
+      <p className="text-xs text-gray-400 mt-1">Use sample values to estimate Goldish output.</p>
+
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {[
+          { label: 'White', accent: 'text-slate-200' },
+          { label: 'Blue', accent: 'text-[#5fa8ff]' },
+          { label: 'Goldish', accent: 'text-[var(--ura-yellow)]' },
+        ].map((item) => (
+          <div key={item.label} className="rounded-xl border border-[#2d2f38] bg-[#12141a] p-2 text-center">
+            <Image src={uraDailyPearlCoins} alt={`${item.label} pearl`} width={42} height={42} className="mx-auto h-10 w-10 object-contain" />
+            <p className={`text-[11px] font-semibold mt-1 ${item.accent}`}>{item.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <label className="rounded-lg border border-[#2d2f38] bg-[#12141a] p-2">
+          <span className="text-[11px] text-gray-400">White pearls</span>
+          <input
+            type="number"
+            min={0}
+            value={whitePearlInput}
+            onChange={(e) => setWhitePearlInput(e.target.value)}
+            className="mt-1 w-full bg-transparent text-white text-sm outline-none"
+          />
+        </label>
+        <label className="rounded-lg border border-[#2d2f38] bg-[#12141a] p-2">
+          <span className="text-[11px] text-gray-400">Blue pearls</span>
+          <input
+            type="number"
+            min={0}
+            value={bluePearlInput}
+            onChange={(e) => setBluePearlInput(e.target.value)}
+            className="mt-1 w-full bg-transparent text-white text-sm outline-none"
+          />
+        </label>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-[#2d2f38] bg-[#12141a] px-3 py-2 text-xs text-gray-300">
+        <p>White conversion: <span className="text-white font-semibold">{whiteToGoldish}</span> Goldish ({whitePearls} / 50)</p>
+        <p>Blue conversion: <span className="text-white font-semibold">{blueToGoldish}</span> Goldish ({bluePearls} / 25)</p>
+        <p className="mt-1 text-[var(--ura-yellow)] font-semibold">Total estimated Goldish: {totalGoldish}</p>
+      </div>
+    </div>
+  );
+
+  const pearlCategoryCard = (
+    <div className="mt-3 rounded-2xl border border-[#3d4046] bg-[#1a1c22] p-4">
+      <h2 className="text-sm font-bold text-white">PEARL CATEGORIES</h2>
+      <div className="mt-2 space-y-2 text-xs text-gray-300">
+        <p><span className="text-white font-semibold">White</span> — no approval needed (activities like Karibu Daily, Quiz, and similar tasks).</p>
+        <p><span className="text-[#5fa8ff] font-semibold">Blue</span> — earned from report-type activities and requires URA admin approval.</p>
+        <p><span className="text-[var(--ura-yellow)] font-semibold">Goldish</span> — approved pearls, ready for withdrawal or transfer.</p>
+      </div>
+      <p className="mt-2 text-[11px] text-gray-400">
+        Conversion rules: <span className="text-white">50 White = 1 Goldish</span> · <span className="text-white">25 Blue = 1 Goldish</span>
+      </p>
+    </div>
+  );
 
   if (minimalOnly) {
     return (
@@ -232,7 +302,9 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
             <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
               <div className="px-4 pt-6 pb-24">
-                <div className="flex justify-center">
+                {pearlConverterCard}
+                {pearlCategoryCard}
+                <div className="flex justify-center mt-4">
                   <button
                     type="button"
                     onClick={() => {
@@ -307,23 +379,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
                   Balance: {formatNumber(Math.floor(pointsBalance))} ALM
                 </p>
-                <div className="mb-5 rounded-2xl border border-[#3d4046] bg-[#1a1c22] p-4">
-                  <h2 className="text-base font-bold text-white">Pearl Converter</h2>
-                  <p className="text-xs text-gray-400 mt-1">
-                    White pearls auto-convert when enough approved volume is available.
-                  </p>
-                  <div className="mt-3 grid grid-cols-1 gap-2 text-xs">
-                    <div className="rounded-lg border border-[#2d2f38] bg-[#12141a] px-3 py-2 text-gray-300">
-                      <span className="font-semibold text-white">50 White</span> = <span className="font-semibold text-[var(--ura-yellow)]">1 Goldish</span>
-                    </div>
-                    <div className="rounded-lg border border-[#2d2f38] bg-[#12141a] px-3 py-2 text-gray-300">
-                      <span className="font-semibold text-[#5fa8ff]">25 Blue</span> = <span className="font-semibold text-[var(--ura-yellow)]">1 Goldish</span> (after admin approval)
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-gray-500 mt-2">
-                    Goldish pearls are withdrawable. Goldish can be converted back to White; White and Goldish can be transferred between users.
-                  </p>
-                </div>
+                <div className="mb-5">{pearlConverterCard}</div>
+                {pearlCategoryCard}
                 <div className="flex justify-center mb-5">
                   <button
                     type="button"
