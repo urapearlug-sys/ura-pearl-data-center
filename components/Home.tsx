@@ -142,7 +142,7 @@ export default function Home({ setCurrentView }: HomeProps) {
 
             <div className="rounded-xl border border-[#2d2f38] bg-[#151821] p-3">
               <div className="min-w-0">
-                <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">URA Tresurely Counter</h3>
+                <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">Total PEARLS</h3>
                 <div className="mt-2 flex items-center gap-2">
                   <Image
                     src={uraTreasuryCounter}
