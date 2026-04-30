@@ -60,7 +60,6 @@ export default function Home({ setCurrentView }: HomeProps) {
 
   const levelIndex = useMemo(() => calculateLevelIndex(points), [points]);
   const pearlsDisplay = Math.floor(points).toLocaleString();
-  const levelName = LEVELS[Math.min(levelIndex, LEVELS.length - 1)]?.name ?? 'Baobab';
   const rankStep = Math.min(levelIndex + 1, LEVELS.length);
   const rankTotal = LEVELS.length;
   const ranks = useMemo(
@@ -77,17 +76,8 @@ export default function Home({ setCurrentView }: HomeProps) {
     const normalized = (rankStep - 1) / (rankTotal - 1);
     return Math.max(0, Math.min(3, Math.floor(normalized * 4)));
   }, [rankStep, rankTotal]);
-
-  const levelProgressPct = useMemo(() => {
-    const cur = LEVELS[levelIndex];
-    const next = LEVELS[levelIndex + 1];
-    if (!cur) return 100;
-    if (!next) return 100;
-    const span = next.minPoints - cur.minPoints;
-    if (span <= 0) return 100;
-    const p = ((points - cur.minPoints) / span) * 100;
-    return Math.max(0, Math.min(100, p));
-  }, [levelIndex, points]);
+  const rankTierName = ranks[userRankIndex].name;
+  const rankStepDisplay = userRankIndex + 1;
 
   useEffect(() => {
     const loadPearls = async () => {
@@ -168,39 +158,19 @@ export default function Home({ setCurrentView }: HomeProps) {
                   />
                   <span className="text-2xl font-bold text-white tabular-nums tracking-tight">{pearlsDisplay}</span>
                 </div>
-                <p className="mt-1.5 text-xs">
-                  <span className="text-slate-400">{levelName}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowRanksPopup(true);
+                  }}
+                  className="mt-1.5 w-full text-left text-xs rounded-lg border border-transparent px-0 py-0.5 hover:border-[#3a3d46] hover:bg-[#12141a]/80 transition-colors"
+                >
+                  <span className="text-slate-400">{rankTierName}</span>
                   <span className="text-gray-600 mx-1">·</span>
-                  <span className="text-white font-medium tabular-nums">{rankStep}</span>
-                  <span className="text-gray-500 tabular-nums"> / {rankTotal}</span>
-                </p>
-                <div className="mt-2">
-                  <div className="flex justify-between items-center text-[10px] text-gray-500 mb-0.5">
-                    <span>Rank progress</span>
-                    <div className="flex items-center gap-2">
-                      <span>{Math.round(levelProgressPct)}%</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          triggerHapticFeedback(window);
-                          setShowRanksPopup(true);
-                        }}
-                        className="rounded-full border border-[#3a3d46] px-2 py-0.5 text-[10px] font-semibold text-gray-300 hover:text-white hover:border-[#5fa8ff] transition-colors"
-                      >
-                        Ranks
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-gray-400 mb-1">
-                    Current: <span className="text-white font-semibold">{ranks[userRankIndex].color} - {ranks[userRankIndex].name}</span>
-                  </p>
-                  <div className="h-1.5 rounded-full bg-[#2a2d38] overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] transition-[width] duration-300"
-                      style={{ width: `${levelProgressPct}%` }}
-                    />
-                  </div>
-                </div>
+                  <span className="text-white font-medium tabular-nums">{rankStepDisplay}</span>
+                  <span className="text-gray-500 tabular-nums"> / 4</span>
+                </button>
                 <div className="mt-3 border-t border-[#2a2d38] pt-3 space-y-2">
                   {[
                     { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks', image: pearlWhite },
@@ -293,7 +263,7 @@ export default function Home({ setCurrentView }: HomeProps) {
               </button>
             </div>
             <p className="mt-1 text-xs text-gray-400">
-              Current status: <span className="text-white font-semibold">{ranks[userRankIndex].color} - {ranks[userRankIndex].name}</span>
+              Current status: <span className="text-white font-semibold">{ranks[userRankIndex].name}</span>
             </p>
 
             <div className="mt-3 space-y-2">
