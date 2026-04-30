@@ -1,0 +1,56 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/utils/prisma';
+import { resolveUserFromInitData } from '@/utils/pearls';
+
+export async function POST(req: Request) {
+  const body = await req.json().catch(() => ({}));
+  const { initData } = body as { initData?: string };
+  if (!initData) {
+    return NextResponse.json({ error: 'Missing initData' }, { status: 400 });
+  }
+
+  const user = await resolveUserFromInitData(initData);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+
+  const [recentAudits, recentActivities, recentWithdrawals, recentTransfers] = await Promise.all([
+    prisma.pearlAudit.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      take: 25,
+    }),
+    prisma.pearlActivity.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      take: 25,
+    }),
+    prisma.pearlWithdrawal.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      take: 25,
+    }),
+    prisma.pearlTransfer.findMany({
+      where: { OR: [{ senderId: user.id }, { recipientId: user.id }] },
+      orderBy: { createdAt: 'desc' },
+      take: 25,
+      include: {
+        sender: { select: { telegramId: true, name: true } },
+        recipient: { select: { telegramId: true, name: true } },
+      },
+    }),
+  ]);
+
+  return NextResponse.json({
+    balances: {
+      white: user.whitePearls,
+      bluePending: user.bluePearlsPending,
+      blueApprovedTotal: user.bluePearlsApprovedTotal,
+      goldish: user.goldishPearls,
+    },
+    recentAudits,
+    recentActivities,
+    recentWithdrawals,
+    recentTransfers,
+  });
+}

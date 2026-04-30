@@ -117,6 +117,18 @@ model User {
   leagueAnnouncements LeagueAnnouncement[]
   leagueOpinions      LeagueOpinion[]
   leagueOpinionVotes  LeagueOpinionVote[]
+
+  // Pearls economy
+  whitePearls              Float @default(0)
+  bluePearlsPending        Float @default(0)
+  bluePearlsApprovedTotal  Float @default(0)
+  goldishPearls            Float @default(0)
+  pearlActivities          PearlActivity[]
+  pearlConversions         PearlConversion[]
+  pearlWithdrawals         PearlWithdrawal[]
+  pearlAudits              PearlAudit[]
+  pearlTransfersSent       PearlTransfer[] @relation("PearlTransferSender")
+  pearlTransfersReceived   PearlTransfer[] @relation("PearlTransferRecipient")
 }
 
 model Transfer {
@@ -909,4 +921,107 @@ model MilestoneBanner {
   isActive  Boolean  @default(false)  // Only one should be active at a time for the main screen
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum PearlType {
+  WHITE
+  BLUE
+  GOLDISH
+}
+
+enum PearlActivityStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PearlAuditEventType {
+  EARN_WHITE
+  EARN_BLUE_PENDING
+  APPROVE_BLUE
+  REJECT_BLUE
+  CONVERT_WHITE_TO_GOLDISH
+  CONVERT_BLUE_TO_GOLDISH
+  CONVERT_GOLDISH_TO_WHITE
+  TRANSFER_OUT_WHITE
+  TRANSFER_IN_WHITE
+  TRANSFER_OUT_GOLDISH
+  TRANSFER_IN_GOLDISH
+  WITHDRAW_REQUEST
+  WITHDRAW_APPROVED
+  WITHDRAW_REJECTED
+}
+
+enum PearlWithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+model PearlActivity {
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  user                 User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String              @db.ObjectId
+  sourceKey            String              // e.g. "karibu_daily", "whistle_blower"
+  sourceLabel          String
+  pearlType            PearlType
+  amount               Float
+  status               PearlActivityStatus @default(PENDING)
+  approvedByAdmin      Boolean             @default(false)
+  approvedAt           DateTime?
+  approvedByAdminLabel String?
+  rejectionReason      String?
+  convertedGoldish     Float               @default(0)
+  createdAt            DateTime            @default(now())
+}
+
+model PearlConversion {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String    @db.ObjectId
+  fromType       PearlType
+  toType         PearlType
+  fromAmount     Float
+  toAmount       Float
+  trigger        String    // "auto_admin_approval" | "user_request" | "admin_manual"
+  referenceId    String?   @db.ObjectId // optional link to PearlActivity / withdrawal / transfer
+  createdAt      DateTime  @default(now())
+}
+
+model PearlTransfer {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  sender        User      @relation("PearlTransferSender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId      String    @db.ObjectId
+  recipient     User      @relation("PearlTransferRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  recipientId   String    @db.ObjectId
+  pearlType     PearlType
+  amount        Float
+  note          String?
+  createdAt     DateTime  @default(now())
+}
+
+model PearlWithdrawal {
+  id            String                @id @default(auto()) @map("_id") @db.ObjectId
+  user          User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String                @db.ObjectId
+  goldishAmount Float
+  cashAmount    Float?                // optional computed payout value if exchange rate is set externally
+  status        PearlWithdrawalStatus @default(PENDING)
+  reviewedAt    DateTime?
+  reviewedBy    String?
+  rejectionReason String?
+  paidAt        DateTime?
+  createdAt     DateTime              @default(now())
+}
+
+model PearlAudit {
+  id            String             @id @default(auto()) @map("_id") @db.ObjectId
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String             @db.ObjectId
+  eventType     PearlAuditEventType
+  pearlType     PearlType?
+  amount        Float?
+  meta          Json?
+  createdAt     DateTime           @default(now())
 }

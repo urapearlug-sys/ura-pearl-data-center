@@ -307,6 +307,23 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
                   Balance: {formatNumber(Math.floor(pointsBalance))} ALM
                 </p>
+                <div className="mb-5 rounded-2xl border border-[#3d4046] bg-[#1a1c22] p-4">
+                  <h2 className="text-base font-bold text-white">Pearl Converter</h2>
+                  <p className="text-xs text-gray-400 mt-1">
+                    White pearls auto-convert when enough approved volume is available.
+                  </p>
+                  <div className="mt-3 grid grid-cols-1 gap-2 text-xs">
+                    <div className="rounded-lg border border-[#2d2f38] bg-[#12141a] px-3 py-2 text-gray-300">
+                      <span className="font-semibold text-white">50 White</span> = <span className="font-semibold text-[var(--ura-yellow)]">1 Goldish</span>
+                    </div>
+                    <div className="rounded-lg border border-[#2d2f38] bg-[#12141a] px-3 py-2 text-gray-300">
+                      <span className="font-semibold text-[#5fa8ff]">25 Blue</span> = <span className="font-semibold text-[var(--ura-yellow)]">1 Goldish</span> (after admin approval)
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-gray-500 mt-2">
+                    Goldish pearls are withdrawable. Goldish can be converted back to White; White and Goldish can be transferred between users.
+                  </p>
+                </div>
                 <div className="flex justify-center mb-5">
                   <button
                     type="button"

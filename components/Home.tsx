@@ -14,30 +14,32 @@ type ActionItem = {
   id: string;
   title: string;
   subtitle?: string;
+  pearlType?: 'white' | 'blue';
   /** 'earn' | 'game' etc., or null for coming-soon toast */
   route?: string;
 };
 
 const ACTION_BY_TAB: Record<ActionTab, ActionItem[]> = {
   play: [
-    { id: 'quiz', title: 'URA Quiz', subtitle: 'Test your knowledge', route: 'earn' },
-    { id: 'receipt', title: 'Receipt Rush', subtitle: 'Speed challenge' },
-    { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'Quick facts' },
-    { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Rankings', route: 'game' },
-    { id: 'karibu', title: 'Karibu Daily', subtitle: 'Daily rewards', route: 'earn' },
+    { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn' },
+    { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
+    { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white' },
+    { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game' },
+    { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn' },
   ],
   learn: [
     {
       id: 'social-earn',
       title: 'Earn activities',
-      subtitle: 'Social media engagement',
+      subtitle: 'White pearls · no approval',
+      pearlType: 'white',
       route: 'earn',
     },
-    { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'Scheduled learning sessions' },
+    { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white' },
   ],
   earn: [
-    { id: 'voice', title: 'Voice reports', subtitle: 'Submit audio updates' },
-    { id: 'whistle', title: 'Whistle blower', subtitle: 'Confidential reporting' },
+    { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
+    { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
   ],
 };
 
@@ -152,6 +154,23 @@ export default function Home({ setCurrentView }: HomeProps) {
                 </div>
               </div>
             </div>
+            <div className="mt-3 rounded-xl border border-[#2d2f38] bg-[#151821] p-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-400">Pearl Categories</h4>
+              <div className="mt-2 space-y-2 text-xs">
+                <p className="text-gray-300">
+                  <span className="font-semibold text-white">White</span> — no approval needed (activities like Karibu Daily, Quiz, and similar tasks).
+                </p>
+                <p className="text-gray-300">
+                  <span className="font-semibold text-[#5fa8ff]">Blue</span> — earned from report-type activities and requires URA admin approval.
+                </p>
+                <p className="text-gray-300">
+                  <span className="font-semibold text-[var(--ura-yellow)]">Goldish</span> — approved pearls, ready for withdrawal or transfer.
+                </p>
+              </div>
+              <div className="mt-2 rounded-lg bg-[#12141a] border border-[#2a2d38] px-2.5 py-2 text-[11px] text-gray-400">
+                Conversion rules: <span className="text-white">50 White = 1 Goldish</span> · <span className="text-white">25 Blue = 1 Goldish</span>
+              </div>
+            </div>
 
             <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-3 gap-1">
               {(
@@ -188,6 +207,19 @@ export default function Home({ setCurrentView }: HomeProps) {
                   <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
                   {item.subtitle ? (
                     <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p>
+                  ) : null}
+                  {item.pearlType ? (
+                    <p className="mt-1 text-[11px]">
+                      <span
+                        className={
+                          item.pearlType === 'white'
+                            ? 'text-slate-300'
+                            : 'text-[#5fa8ff]'
+                        }
+                      >
+                        {item.pearlType === 'white' ? 'White pearl activity' : 'Blue pearl activity'}
+                      </span>
+                    </p>
                   ) : null}
                 </button>
               ))}

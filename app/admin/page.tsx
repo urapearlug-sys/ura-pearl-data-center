@@ -15,17 +15,24 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const AdminPanel = () => {
     const router = useRouter();
+    const [showMore, setShowMore] = useState(false);
 
     // When landing on dashboard (leaving a protected section), clear item password so re-entry asks again
     useEffect(() => {
         fetch('/api/admin/clear-item-session', { method: 'POST', credentials: 'include' }).catch(() => {});
     }, []);
+
+    const pearlSections = [
+        { title: 'Pearls Overview', path: '/admin/pearls', description: 'Track White, Blue, and Goldish balances, conversion rates, and category totals' },
+        { title: 'Pearls Approval Queue', path: '/admin/pearls', description: 'Approve/reject Blue-pearl activities and auto-convert approved volume to Goldish pearls' },
+        { title: 'Pearls History & Transfers', path: '/admin/pearls', description: 'Audit conversion history, withdrawals, and White/Goldish user-to-user transfers' },
+    ];
 
     const adminSections = [
         { title: 'Account Management', path: '/admin/accounts', description: 'Delete, reset, freeze, hide, and manage user accounts (select users in table, then use actions)' },
@@ -60,16 +67,31 @@ const AdminPanel = () => {
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-4xl font-bold text-[#f3ba2f]">Admin Panel</h1>
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        className="text-gray-400 hover:text-white text-sm"
-                    >
-                        Log out
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setShowMore((prev) => !prev)}
+                            className="text-sm px-4 py-2 rounded-lg bg-[#272a2f] hover:bg-[#3a3d42] transition-colors"
+                        >
+                            {showMore ? 'Hide More' : 'More'}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="text-gray-400 hover:text-white text-sm"
+                        >
+                            Log out
+                        </button>
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <h2 className="text-xl font-semibold text-white">Pearls Management</h2>
+                    <p className="text-sm text-gray-400 mt-1">
+                        White = no approval, Blue = approval required, Goldish = approved/withdrawable pearls.
+                    </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {adminSections.map((section) => (
+                    {pearlSections.map((section) => (
                         <div
                             key={section.path}
                             className="bg-[#272a2f] rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
@@ -86,6 +108,34 @@ const AdminPanel = () => {
                         </div>
                     ))}
                 </div>
+                {showMore && (
+                    <>
+                        <div className="mt-10 mb-3">
+                            <h2 className="text-xl font-semibold text-white">More Admin Features</h2>
+                            <p className="text-sm text-gray-400 mt-1">
+                                Existing administration cards moved here for cleaner panel navigation.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {adminSections.map((section) => (
+                                <div
+                                    key={section.path}
+                                    className="bg-[#272a2f] rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
+                                    onClick={() => router.push(section.path)}
+                                >
+                                    <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
+                                    <p className="text-gray-400 mb-4">{section.description}</p>
+                                    <Link
+                                        href={section.path}
+                                        className="inline-block bg-[#f3ba2f] text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
+                                    >
+                                        Go to {section.title}
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
