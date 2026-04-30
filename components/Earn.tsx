@@ -28,6 +28,7 @@ import DailyCipherPopup from './popups/DailyCipherPopup';
 import DailyComboPopup from './popups/DailyComboPopup';
 import MiniGamesPopup from './popups/MiniGamesPopup';
 import MiniGamesHubPopup from './popups/MiniGamesHubPopup';
+import LuckySpinPopup from './popups/LuckySpinPopup';
 import WeeklyEventPopup from './popups/WeeklyEventPopup';
 import DonationPopup from './popups/DonationPopup';
 import CreateLeaguePopup from './popups/CreateLeaguePopup';
@@ -98,6 +99,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [showDailyCombo, setShowDailyCombo] = useState(false);
   const [showMiniGames, setShowMiniGames] = useState(false);
   const [showMiniGamesHub, setShowMiniGamesHub] = useState(false);
+  const [showLuckySpin, setShowLuckySpin] = useState(false);
   const [showWeeklyEvent, setShowWeeklyEvent] = useState(false);
   const [showDonation, setShowDonation] = useState(false);
   const [leaguesData, setLeaguesData] = useState<LeaguesData | null>(null);
@@ -129,6 +131,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
+  const [earnFeatureTab, setEarnFeatureTab] = useState<'play' | 'learn' | 'earn'>('play');
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -226,6 +229,75 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
+  const earnFeatureCards: Record<'play' | 'learn' | 'earn', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
+    play: [
+      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => setShowMitrolabsQuiz(true) },
+      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => setActiveTab('All') },
+      { id: 'true-false', title: 'True or False - Uganda tax edition', subtitle: 'Tax knowledge challenge', onClick: () => setActiveTab('All') },
+      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView?.('game') },
+      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => setShowDailyLogin(true) },
+    ],
+    learn: [
+      { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => setActiveTab('All') },
+      { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => setShowWeeklyEvent(true) },
+      { id: 'mini-games', title: 'Mini games', subtitle: 'Open mini games hub', onClick: () => setShowMiniGamesHub(true) },
+      { id: 'decode', title: 'Decode', subtitle: 'Cipher challenge mode', onClick: () => setShowDailyCipher(true) },
+      { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => setShowLuckySpin(true) },
+    ],
+    earn: [
+      { id: 'voice-reports', title: 'Voice reports', subtitle: 'Approval-required blue pearls', onClick: () => setActiveTab('All') },
+      { id: 'whistle-blower', title: 'Whistle blower', subtitle: 'Protected reporting tasks', onClick: () => setActiveTab('All') },
+    ],
+  };
+  const renderEarnFeatureLayout = () => (
+    <div className="rounded-xl border border-[#2d2f38] bg-[#11141d] p-2">
+      <div className="grid grid-cols-3 gap-2">
+        {[
+          { key: 'play' as const, label: 'Play' },
+          { key: 'learn' as const, label: 'Learn' },
+          { key: 'earn' as const, label: 'Earn' },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              setEarnFeatureTab(tab.key);
+            }}
+            className={`rounded-lg py-2 text-sm font-semibold transition-colors ${
+              earnFeatureTab === tab.key
+                ? 'bg-[var(--ura-blue-dark)] text-white'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="mt-3 space-y-2">
+        {earnFeatureCards[earnFeatureTab].map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              item.onClick();
+            }}
+            className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
+              earnFeatureTab === 'play'
+                ? 'border-[var(--ura-blue-medium)]/60 bg-[var(--ura-blue-dark)]/20 hover:border-[var(--ura-blue-medium)]'
+                : earnFeatureTab === 'learn'
+                ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
+                : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
+            }`}
+          >
+            <p className="text-sm font-bold text-white">{item.title}</p>
+            <p className="text-xs text-gray-300 mt-1">{item.subtitle}</p>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   if (minimalOnly) {
     return (
@@ -259,6 +331,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                   <Wallet setCurrentView={setCurrentView ?? (() => {})} embedded />
                 ) : (
                   <>
+                    {renderEarnFeatureLayout()}
+
                     <div className="flex justify-center mt-4">
                       <button
                         type="button"
@@ -349,127 +423,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                   </button>
                 </div>
 
-                <div className="flex flex-wrap gap-3 mb-6">
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowDailyLogin(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-[#f3ba2f]/15 to-amber-500/20 border border-amber-500/40 hover:from-amber-500/25 hover:to-amber-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-amber-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-amber-500/50">
-                      <Image src={dailyReward} alt="Karibu Daily" width={28} height={28} className="rounded-lg" />
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Karibu Daily</span>
-                      <span className="text-xs text-amber-200/90">Asante Rewards</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowDailyCipher(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-cyan-500/20 via-cyan-500/15 to-cyan-500/20 border border-cyan-500/40 hover:from-cyan-500/25 hover:to-cyan-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-cyan-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-cyan-500/50">
-                      <Image src={dailyCipher} alt="Decode" width={28} height={28} className="rounded-lg" />
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Decode</span>
-                      <span className="text-xs text-cyan-200/90">Dot – Dash challenge</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowDailyCombo(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-violet-500/20 via-violet-500/15 to-violet-500/20 border border-violet-500/40 hover:from-violet-500/25 hover:to-violet-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-violet-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-violet-500/50">
-                      <Image src={dailyCombo} alt="Matrix" width={28} height={28} className="rounded-lg" />
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Matrix</span>
-                      <span className="text-xs text-violet-200/90">Pick 3 cards</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMiniGames(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-emerald-500/15 to-emerald-500/20 border border-emerald-500/40 hover:from-emerald-500/25 hover:to-emerald-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-emerald-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-emerald-500/50">
-                      <span className="text-2xl" aria-hidden>🔐</span>
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Daily Pattern</span>
-                      <span className="text-xs text-emerald-200/90">Draw the pattern</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowWeeklyEvent(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-rose-500/20 via-rose-500/15 to-rose-500/20 border border-rose-500/40 hover:from-rose-500/25 hover:to-rose-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-rose-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-rose-500/50">
-                      <Image src={baseGift} alt="Weekly Event" width={28} height={28} className="rounded-lg" />
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Weekly Event</span>
-                      <span className="text-xs text-rose-200/90">Challenge & leaderboard</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowDonation(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-teal-500/20 via-emerald-500/15 to-teal-500/20 border border-teal-500/40 hover:from-teal-500/25 hover:to-teal-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-teal-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-teal-500/50">
-                      <span className="text-2xl" aria-hidden>❤️</span>
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Donation Center</span>
-                      <span className="text-xs text-teal-200/90">Donate PEARLS for charity</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMiniGamesHub(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-indigo-500/20 via-purple-500/15 to-indigo-500/20 border border-indigo-500/40 hover:from-indigo-500/25 hover:to-indigo-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-indigo-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-indigo-500/50">
-                      <span className="text-2xl" aria-hidden>🎮</span>
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">More</span>
-                      <span className="text-xs text-indigo-200/90">Mini games hub</span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMitrolabsQuiz(true);
-                    }}
-                    className="flex-1 min-w-[140px] flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border border-amber-500/40 hover:from-amber-500/25 hover:to-amber-500/25 active:scale-[0.99] transition-all duration-200 shadow-lg shadow-amber-500/10"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center flex-shrink-0 ring-2 ring-amber-500/50">
-                      <span className="text-2xl" aria-hidden>📝</span>
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-base font-bold text-white block">Mitroplus Quiz</span>
-                      <span className="text-xs text-amber-200/90">Answer & earn PEARLS</span>
-                    </div>
-                  </button>
+                <div className="mb-6">
+                  {renderEarnFeatureLayout()}
                 </div>
 
                 {/* Activities section – tabbed list (scroll down to see) */}
@@ -862,6 +817,9 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       )}
       {showMiniGamesHub && (
         <MiniGamesHubPopup onClose={() => setShowMiniGamesHub(false)} />
+      )}
+      {showLuckySpin && (
+        <LuckySpinPopup onClose={() => setShowLuckySpin(false)} />
       )}
       {showMitrolabsQuiz && (
         <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
