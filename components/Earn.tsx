@@ -54,6 +54,7 @@ import TeamMemberDashboardPopup from './popups/TeamMemberDashboardPopup';
 import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import { Task, LeaguesData } from '@/utils/types';
+import Wallet from './Wallet';
 
 interface EarnProps {
   setCurrentView?: (view: string) => void;
@@ -127,6 +128,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
   const [whitePearlInput, setWhitePearlInput] = useState<string>('50');
   const [bluePearlInput, setBluePearlInput] = useState<string>('25');
 
@@ -302,20 +304,47 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
             <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
               <div className="px-4 pt-6 pb-24">
-                {pearlConverterCard}
-                {pearlCategoryCard}
-                <div className="flex justify-center mt-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMoreMenu(true);
-                    }}
-                    className="px-6 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
-                  >
-                    More
-                  </button>
+                <div className="mb-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
+                  {[
+                    { key: 'earn' as const, label: 'Earn' },
+                    { key: 'wallet' as const, label: 'Wallet' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => {
+                        triggerHapticFeedback(window);
+                        setEarnMainTab(tab.key);
+                      }}
+                      className={`py-2 rounded-lg text-sm font-semibold transition-colors ${
+                        earnMainTab === tab.key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
                 </div>
+
+                {earnMainTab === 'wallet' ? (
+                  <Wallet setCurrentView={setCurrentView ?? (() => {})} embedded />
+                ) : (
+                  <>
+                    {pearlConverterCard}
+                    {pearlCategoryCard}
+                    <div className="flex justify-center mt-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          triggerHapticFeedback(window);
+                          setShowMoreMenu(true);
+                        }}
+                        className="px-6 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
+                      >
+                        More
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

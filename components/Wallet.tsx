@@ -9,11 +9,12 @@ import { useToast } from '@/contexts/ToastContext';
 
 interface WalletProps {
   setCurrentView: (view: string) => void;
+  embedded?: boolean;
 }
 
 type PearlType = 'white' | 'goldish';
 
-export default function Wallet({ setCurrentView }: WalletProps) {
+export default function Wallet({ setCurrentView, embedded = false }: WalletProps) {
   const showToast = useToast();
   const { userTelegramInitData } = useGameStore();
 
@@ -188,9 +189,9 @@ export default function Wallet({ setCurrentView }: WalletProps) {
   };
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white flex flex-col max-w-xl pb-24">
-        <div className="px-4 pt-4 space-y-4">
+    <div className={embedded ? '' : 'bg-black flex justify-center min-h-screen'}>
+      <div className={embedded ? 'w-full text-white flex flex-col' : 'w-full bg-black text-white flex flex-col max-w-xl pb-24'}>
+        <div className={embedded ? 'space-y-4' : 'px-4 pt-4 space-y-4'}>
           <h1 className="text-2xl font-bold text-center">My Assets</h1>
 
           <button
