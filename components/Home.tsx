@@ -164,14 +164,16 @@ export default function Home({ setCurrentView }: HomeProps) {
                     triggerHapticFeedback(window);
                     setShowRanksPopup(true);
                   }}
-                  className="mt-1.5 w-full text-left text-xs rounded-lg border border-transparent px-0 py-0.5 hover:border-[#3a3d46] hover:bg-[#12141a]/80 transition-colors"
+                  aria-label={`Rank: ${rankTierName}, step ${rankStepDisplay} of 4. Tap for details.`}
+                  className="mt-1.5 w-full text-left text-xs bg-transparent border-0 p-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ura-yellow)]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#151821] rounded-sm transition-colors hover:opacity-95 active:opacity-85"
                 >
-                  <span className="text-slate-400">{rankTierName}</span>
+                  <span className="text-[var(--ura-yellow)] font-semibold underline-offset-2 decoration-[var(--ura-yellow)]/40 hover:underline">{rankTierName}</span>
                   <span className="text-gray-600 mx-1">·</span>
                   <span className="text-white font-medium tabular-nums">{rankStepDisplay}</span>
                   <span className="text-gray-500 tabular-nums"> / 4</span>
+                  <span className="ml-1.5 text-[10px] font-normal text-gray-500">Tap for details</span>
                 </button>
-                <div className="mt-3 border-t border-[#2a2d38] pt-3 space-y-2">
+                <div className="mt-4 space-y-2">
                   {[
                     { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks', image: pearlWhite },
                     { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks', image: pearlBlue },
