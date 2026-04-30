@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { MITROLABS_QUIZ_REWARD_POINTS } from '@/utils/consts';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 export const dynamic = 'force-dynamic';
 
@@ -94,23 +95,24 @@ export async function POST(req: Request) {
     const completionBonus = allCorrect ? (settings?.completionBonusPoints ?? 0) : 0;
     const pointsToAward = pointsFromQuestions + completionBonus;
 
-    await prisma.$transaction([
-      prisma.userQuizAttempt.create({
+    await prisma.$transaction(async (tx) => {
+      await tx.userQuizAttempt.create({
         data: {
           userId: dbUser.id,
           correctCount,
           totalCount,
           pointsAwarded: pointsToAward,
         },
-      }),
-      prisma.user.update({
+      });
+      await tx.user.update({
         where: { id: dbUser.id },
         data: {
           points: { increment: pointsToAward },
           pointsBalance: { increment: pointsToAward },
         },
-      }),
-    ]);
+      });
+      await creditWhitePearlsInstant(tx, dbUser.id, pointsToAward, 'quiz_daily', 'Learn · Quiz');
+    });
 
     return NextResponse.json({
       success: true,

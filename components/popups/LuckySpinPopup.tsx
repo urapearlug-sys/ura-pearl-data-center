@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 
 interface LuckySpinPopupProps {
@@ -47,6 +48,7 @@ export default function LuckySpinPopup({ onClose, onSuccess, claimedToday }: Luc
         incrementPoints(reward);
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
+        notifyPearlBalancesRefresh();
         setTimeout(() => {
           setResult({ reward });
           showToast(`You won +${formatNumber(reward)} PEARLS!`, 'success');

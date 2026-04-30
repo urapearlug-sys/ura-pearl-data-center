@@ -1,6 +1,6 @@
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
-import { PearlAuditEventType, PearlType, Prisma } from '@prisma/client';
+import { PearlActivityStatus, PearlAuditEventType, PearlType, Prisma } from '@prisma/client';
 
 export const WHITE_TO_GOLDISH_RATE = 50;
 export const BLUE_TO_GOLDISH_RATE = 25;
@@ -31,6 +31,42 @@ export async function createPearlAudit(
       amount: params.amount,
       meta: params.meta,
     },
+  });
+}
+
+/** Server-side instant white pearl credit: same ledger as POST /api/pearls/activity (white). Call inside the same DB transaction as PEARLS points. */
+export async function creditWhitePearlsInstant(
+  tx: Prisma.TransactionClient,
+  userId: string,
+  amount: number,
+  sourceKey: string,
+  sourceLabel: string
+) {
+  const amt = Math.floor(Number(amount));
+  if (!Number.isFinite(amt) || amt <= 0) return;
+
+  await tx.pearlActivity.create({
+    data: {
+      userId,
+      sourceKey,
+      sourceLabel,
+      pearlType: PearlType.WHITE,
+      amount: amt,
+      status: PearlActivityStatus.APPROVED,
+      approvedByAdmin: true,
+      approvedAt: new Date(),
+    },
+  });
+  await tx.user.update({
+    where: { id: userId },
+    data: { whitePearls: { increment: amt } },
+  });
+  await createPearlAudit(tx, {
+    userId,
+    eventType: PearlAuditEventType.EARN_WHITE,
+    pearlType: PearlType.WHITE,
+    amount: amt,
+    meta: { sourceKey, sourceLabel },
   });
 }
 

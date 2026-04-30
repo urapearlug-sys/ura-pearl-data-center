@@ -11,6 +11,7 @@ import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { DAILY_CIPHER_MAX_ATTEMPTS, DAILY_CIPHER_REWARD } from '@/utils/consts';
 import { morseToWord, normalizeMorseInput } from '@/utils/morse';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 function getStartOfDayUTC(d: Date): Date {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
@@ -185,26 +186,28 @@ export async function POST(req: Request) {
   }
 
   // Correct! Grant reward and mark claimed
-  const updated = await prisma.$transaction([
-    prisma.user.update({
+  const updated = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.update({
       where: { id: dbUser.id },
       data: {
         points: { increment: DAILY_CIPHER_REWARD },
         pointsBalance: { increment: DAILY_CIPHER_REWARD },
       },
-    }),
-    prisma.userDailyCipherAttempt.update({
+    });
+    await creditWhitePearlsInstant(tx, dbUser.id, DAILY_CIPHER_REWARD, 'daily_cipher', 'Daily Cipher');
+    await tx.userDailyCipherAttempt.update({
       where: { id: attempt.id },
       data: { claimedAt: new Date(), attemptsUsed: attempt.attemptsUsed + 1 },
-    }),
-  ]);
+    });
+    return u;
+  });
 
   return NextResponse.json({
     success: true,
     claimed: true,
     reward: DAILY_CIPHER_REWARD,
-    points: updated[0].points,
-    pointsBalance: updated[0].pointsBalance,
+    points: updated.points,
+    pointsBalance: updated.pointsBalance,
     message: `Correct! +${DAILY_CIPHER_REWARD.toLocaleString()} PEARLS`,
   });
 }

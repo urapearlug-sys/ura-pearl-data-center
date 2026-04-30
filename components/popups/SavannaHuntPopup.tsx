@@ -9,6 +9,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { MINI_GAMES } from '@/utils/consts';
 import IceCube from '@/icons/IceCube';
@@ -191,6 +192,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setClaimedReward(data.reward);
         showToast(`+${formatNumber(data.reward)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
       } else if (data.sessionsLeft != null) {
         setSessionsLeft(data.sessionsLeft);
         if (data.message) showToast(data.message, 'error');

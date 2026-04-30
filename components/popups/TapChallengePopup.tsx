@@ -11,6 +11,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { MINI_GAMES, TAP_CHALLENGE_MAX_ATTEMPTS } from '@/utils/consts';
 
@@ -119,6 +120,7 @@ export default function TapChallengePopup({ onClose, onSuccess }: TapChallengePo
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
         onSuccess?.();
         onClose();
       } else {

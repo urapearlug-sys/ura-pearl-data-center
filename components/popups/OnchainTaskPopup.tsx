@@ -23,6 +23,7 @@ import { useTonConnectUI } from '@tonconnect/ui-react';
 import { useToast } from '@/contexts/ToastContext';
 import { Address, beginCell, fromNano, toNano } from '@ton/core';
 import { useGameStore } from '@/utils/game-mechanics';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 
 interface OnchainTask {
     id: string;
@@ -109,6 +110,7 @@ const OnchainTaskPopup: React.FC<OnchainTaskPopupProps> = React.memo(({ task, on
                 const updatedTask = { ...task, isCompleted: true };
                 onUpdate(updatedTask);
                 showToast(data.message || 'Task completed successfully!', 'success');
+                notifyPearlBalancesRefresh();
                 onClose(); // Close the popup after successful completion
             } else {
                 // Show the error message from the server

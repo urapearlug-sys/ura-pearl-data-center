@@ -10,6 +10,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 
 interface TierConfig {
@@ -83,6 +84,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
       if (data.points != null) setPoints(data.points);
       if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
       showToast(`+${formatNumber(data.reward)} PEARLS!`, 'success');
+      notifyPearlBalancesRefresh();
       fetchData();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');

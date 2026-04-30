@@ -9,6 +9,7 @@ import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { trackWeeklyTaskComplete } from '@/utils/weekly-event-tracker';
 import { addActivityPoints } from '@/utils/league-points';
 import { LEAGUE_POINTS } from '@/utils/consts';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 interface RedeemCodeRequestBody {
   initData: string;
@@ -92,6 +93,8 @@ export async function POST(req: Request) {
         },
         select: { points: true, pointsBalance: true },
       });
+
+      await creditWhitePearlsInstant(tx, dbUser.id, task.points, `task_redeem:${task.id}`, task.title);
 
       return {
         success: true,

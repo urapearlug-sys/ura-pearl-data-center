@@ -8,6 +8,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { MINI_GAMES } from '@/utils/consts';
 import {
@@ -207,6 +208,7 @@ export default function DrumsOfTheBaobabPopup({ onClose, onSuccess }: DrumsOfThe
         setPointsBalance(data.pointsBalance);
         if (data.points != null) setPoints(data.points);
         showToast(data.message ?? `+${formatNumber(data.reward)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
         onSuccess?.();
         onClose();
       } else {

@@ -6,6 +6,7 @@ import { pearlBlue, pearlGolden, pearlWhite, uraTreasuryCounter } from '@/images
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
+import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 
 interface WalletProps {
   setCurrentView: (view: string) => void;
@@ -79,7 +80,12 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
   };
 
   useEffect(() => {
-    loadWallet();
+    void loadWallet();
+    const onRefresh = () => {
+      void loadWallet();
+    };
+    window.addEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
+    return () => window.removeEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userTelegramInitData]);
 

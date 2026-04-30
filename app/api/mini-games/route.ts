@@ -15,6 +15,7 @@ const SAVANNA_MAX_SESSIONS = (MINI_GAMES.savanna_hunt as { maxSessionsPerDay?: n
 import { addActivityPoints } from '@/utils/league-points';
 import { getTodayPattern, patternsMatch, getDailyPatternEnabled, getTodayPatternReward } from '@/utils/daily-pattern';
 import { getComboMultiplier, type InnovationTier, type SpiritRarity } from '@/utils/drums-baobab-cards';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 function getStartOfDayUTC(d: Date): Date {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
@@ -218,24 +219,26 @@ export async function POST(req: Request) {
         sessionsLeft: Math.max(0, SAVANNA_MAX_SESSIONS - sessionsUsedAfter),
       }, { status: 200 });
     }
-    const updated = await prisma.$transaction([
-      prisma.user.update({
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const u = await tx.user.update({
         where: { id: dbUser.id },
         data: { points: { increment: reward }, pointsBalance: { increment: reward } },
-      }),
-      prisma.userMiniGameAttempt.update({
+      });
+      await creditWhitePearlsInstant(tx, dbUser.id, reward, 'mini_game_savanna_hunt', 'Savanna Hunt');
+      await tx.userMiniGameAttempt.update({
         where: { id: attempt.id },
         data: { attemptsUsed: sessionsUsedAfter, claimedAt: new Date() },
-      }),
-    ]);
+      });
+      return u;
+    });
     await addActivityPoints(prisma, dbUser.id, LEAGUE_POINTS.miniGameWin);
     return NextResponse.json({
       success: true,
       claimed: true,
       reward,
       finalScore: Math.max(0, Math.floor(Number(body.finalScore) ?? 0)),
-      points: updated[0].points,
-      pointsBalance: updated[0].pointsBalance,
+      points: updatedUser.points,
+      pointsBalance: updatedUser.pointsBalance,
       sessionsLeft: Math.max(0, SAVANNA_MAX_SESSIONS - sessionsUsedAfter),
       message: `+${reward.toLocaleString()} PEARLS!`,
     });
@@ -258,27 +261,29 @@ export async function POST(req: Request) {
       }, { status: 200 });
     }
 
-    const updated = await prisma.$transaction([
-      prisma.user.update({
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const u = await tx.user.update({
         where: { id: dbUser.id },
         data: {
           points: { increment: reward },
           pointsBalance: { increment: reward },
         },
-      }),
-      prisma.userMiniGameAttempt.update({
+      });
+      await creditWhitePearlsInstant(tx, dbUser.id, reward, 'mini_game_tap_challenge', 'Umeme Run');
+      await tx.userMiniGameAttempt.update({
         where: { id: attempt.id },
         data: { claimedAt: new Date(), attemptsUsed: afterUsed },
-      }),
-    ]);
+      });
+      return u;
+    });
     await addActivityPoints(prisma, dbUser.id, LEAGUE_POINTS.miniGameWin);
 
     return NextResponse.json({
       success: true,
       claimed: true,
       reward,
-      points: updated[0].points,
-      pointsBalance: updated[0].pointsBalance,
+      points: updatedUser.points,
+      pointsBalance: updatedUser.pointsBalance,
       message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
@@ -290,23 +295,25 @@ export async function POST(req: Request) {
         message: 'Need at least 50% accuracy to claim.',
       }, { status: 200 });
     }
-    const updated = await prisma.$transaction([
-      prisma.user.update({
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const u = await tx.user.update({
         where: { id: dbUser.id },
         data: { points: { increment: reward }, pointsBalance: { increment: reward } },
-      }),
-      prisma.userMiniGameAttempt.update({
+      });
+      await creditWhitePearlsInstant(tx, dbUser.id, reward, 'mini_game_drums_baobab', 'Drums & Baobab');
+      await tx.userMiniGameAttempt.update({
         where: { id: attempt.id },
         data: { claimedAt: new Date() },
-      }),
-    ]);
+      });
+      return u;
+    });
     await addActivityPoints(prisma, dbUser.id, LEAGUE_POINTS.miniGameWin);
     return NextResponse.json({
       success: true,
       claimed: true,
       reward,
-      points: updated[0].points,
-      pointsBalance: updated[0].pointsBalance,
+      points: updatedUser.points,
+      pointsBalance: updatedUser.pointsBalance,
       message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
@@ -318,23 +325,25 @@ export async function POST(req: Request) {
         message: 'Wrong pattern. Try again tomorrow for a new pattern.',
       }, { status: 200 });
     }
-    const updated = await prisma.$transaction([
-      prisma.user.update({
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const u = await tx.user.update({
         where: { id: dbUser.id },
         data: { points: { increment: reward }, pointsBalance: { increment: reward } },
-      }),
-      prisma.userMiniGameAttempt.update({
+      });
+      await creditWhitePearlsInstant(tx, dbUser.id, reward, 'mini_game_pattern_dots', 'Pattern dots');
+      await tx.userMiniGameAttempt.update({
         where: { id: attempt.id },
         data: { claimedAt: new Date() },
-      }),
-    ]);
+      });
+      return u;
+    });
     await addActivityPoints(prisma, dbUser.id, LEAGUE_POINTS.miniGameWin);
     return NextResponse.json({
       success: true,
       claimed: true,
       reward,
-      points: updated[0].points,
-      pointsBalance: updated[0].pointsBalance,
+      points: updatedUser.points,
+      pointsBalance: updatedUser.pointsBalance,
       message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
@@ -346,19 +355,21 @@ export async function POST(req: Request) {
     }, { status: 200 });
   }
 
-  const updated = await prisma.$transaction([
-    prisma.user.update({
+  const updatedUser = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.update({
       where: { id: dbUser.id },
       data: {
         points: { increment: reward },
         pointsBalance: { increment: reward },
       },
-    }),
-    prisma.userMiniGameAttempt.update({
+    });
+    await creditWhitePearlsInstant(tx, dbUser.id, reward, 'mini_game_lucky_spin', 'Lucky Spin');
+    await tx.userMiniGameAttempt.update({
       where: { id: attempt.id },
       data: { claimedAt: new Date() },
-    }),
-  ]);
+    });
+    return u;
+  });
   await addActivityPoints(prisma, dbUser.id, LEAGUE_POINTS.miniGameWin);
 
   return NextResponse.json({
@@ -366,8 +377,8 @@ export async function POST(req: Request) {
     claimed: true,
     reward,
     segmentIndex: segmentIndex,
-    points: updated[0].points,
-    pointsBalance: updated[0].pointsBalance,
+    points: updatedUser.points,
+    pointsBalance: updatedUser.pointsBalance,
     message: `+${reward.toLocaleString()} PEARLS!`,
   });
 }

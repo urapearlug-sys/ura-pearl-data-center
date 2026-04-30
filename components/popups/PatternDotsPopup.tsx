@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { MINI_GAMES, PATTERN_DOTS_REWARD, PATTERN_GRID_SIZE, PATTERN_MIN_DOTS, PATTERN_MAX_DOTS } from '@/utils/consts';
 
@@ -127,6 +128,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setResult('success');
         showToast(`+${formatNumber(awarded)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
         onSuccess?.();
         return;
       }

@@ -20,6 +20,7 @@ import Image from 'next/image';
 import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { getTaskImageSrc } from '@/images';
 import { useHydration } from '@/utils/useHydration';
 import { TASK_WAIT_TIME } from '@/utils/consts';
@@ -169,6 +170,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
           incrementPoints(reward);
         }
         showToast(data.message || 'Task completed successfully!', 'success');
+        notifyPearlBalancesRefresh();
       } else {
         if (localTask.type === 'REFERRAL' && data.currentReferrals !== undefined && data.requiredReferrals !== undefined) {
           const remainingReferrals = data.requiredReferrals - data.currentReferrals;

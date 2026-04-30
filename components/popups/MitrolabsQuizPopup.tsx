@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 
 const QUIZ_TIME_SECONDS = 60;
@@ -150,6 +151,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
         if (data.pointsAwarded > 0) {
           incrementPoints(data.pointsAwarded);
           showToast(`+${formatNumber(data.pointsAwarded)} PEARLS!`, 'success');
+          notifyPearlBalancesRefresh();
         }
       }
     } catch (e) {

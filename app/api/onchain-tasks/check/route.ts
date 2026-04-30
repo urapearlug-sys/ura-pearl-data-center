@@ -17,6 +17,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { trackWeeklyTaskComplete } from '@/utils/weekly-event-tracker';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 import { getHttpEndpoint } from '@orbs-network/ton-access';
 import { Address, TonClient } from '@ton/ton';
 
@@ -258,6 +259,8 @@ export async function POST(req: Request) {
                     pointsBalance: { increment: task.points },
                 },
             });
+
+            await creditWhitePearlsInstant(prisma, dbUser.id, task.points, `onchain_task:${task.id}`, 'On-chain NFT task');
 
             return {
                 success: true,

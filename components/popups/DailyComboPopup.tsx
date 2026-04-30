@@ -8,6 +8,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { dailyCombo, imageMap } from '@/images';
 import { DAILY_COMBO_MAX_ATTEMPTS } from '@/utils/consts';
@@ -96,6 +97,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
         setStatus((s) => s ? { ...s, claimed: true, attemptsLeft: 0 } : s);
         setSelected([]);
         showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
       } else {
         setStatus((s) => s ? { ...s, attemptsLeft: data.attemptsLeft ?? s.attemptsLeft } : s);
         showToast(data.message || data.error || 'Wrong combo', 'error');

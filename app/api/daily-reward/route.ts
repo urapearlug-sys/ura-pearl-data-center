@@ -18,6 +18,7 @@ import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { DAILY_REWARDS, LEAGUE_POINTS } from '@/utils/consts';
 import { addActivityPoints } from '@/utils/league-points';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 const MAX_RETRIES = 3;
@@ -168,6 +169,8 @@ export async function POST(req: Request) {
             dailyRewardStreakDay: nextStreakDay,
           },
         });
+
+        await creditWhitePearlsInstant(tx, dbUser.id, pointsToAdd, 'daily_login', 'Karibu Daily');
 
         return {
           points: updated.points,

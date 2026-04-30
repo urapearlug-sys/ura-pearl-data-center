@@ -22,6 +22,7 @@ import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { dailyReward } from '@/images';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 
 export interface DailyRewardStatus {
   canClaimToday: boolean;
@@ -80,6 +81,7 @@ export default function DailyLoginPopup({ onClose }: DailyLoginPopupProps) {
       if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
       if (data.status) setStatus(data.status);
       showToast(`+${formatNumber(data.claimedReward)} PEARLS claimed!`, 'success');
+      notifyPearlBalancesRefresh();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');
     } finally {

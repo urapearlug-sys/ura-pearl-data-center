@@ -19,6 +19,7 @@ import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { trackWeeklyTaskComplete } from '@/utils/weekly-event-tracker';
 import { addActivityPoints } from '@/utils/league-points';
 import { LEAGUE_POINTS } from '@/utils/consts';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 interface CheckTelegramTaskRequestBody {
     initData: string;
@@ -175,6 +176,8 @@ export async function POST(req: Request) {
                 },
                 select: { points: true, pointsBalance: true },
             });
+
+            await creditWhitePearlsInstant(prisma, dbUser.id, task.points, `task_telegram:${task.id}`, task.title);
 
             return {
                 success: true,

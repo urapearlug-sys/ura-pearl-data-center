@@ -7,6 +7,7 @@ import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
+import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 
 type ActionTab = 'play' | 'learn' | 'earn';
 
@@ -98,6 +99,11 @@ export default function Home({ setCurrentView }: HomeProps) {
       }
     };
     loadPearls();
+    const onRefresh = () => {
+      void loadPearls();
+    };
+    window.addEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
+    return () => window.removeEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
   }, [userTelegramInitData]);
 
   const handleAction = (item: ActionItem) => {

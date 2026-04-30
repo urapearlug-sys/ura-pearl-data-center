@@ -11,6 +11,7 @@ import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { getWeekKey, getWeekStartEnd } from '@/utils/week-utils';
 import { WEEKLY_EVENT_DEFAULT_TIERS } from '@/utils/consts';
+import { creditWhitePearlsInstant } from '@/utils/pearls';
 
 interface TierConfig {
   taps: number;
@@ -235,19 +236,27 @@ export async function POST(req: Request) {
   const tierFieldNames = ['claimedTier1', 'claimedTier2', 'claimedTier3', 'claimedTier4', 'claimedTier5', 'claimedTier6', 'claimedTier7', 'claimedTier8', 'claimedTier9', 'claimedTier10', 'claimedTier11', 'claimedTier12', 'claimedTier13', 'claimedTier14', 'claimedTier15', 'claimedTier16'] as const;
   const updateField = { [tierFieldNames[tierIndex]]: true };
 
-  const [updatedUser] = await prisma.$transaction([
-    prisma.user.update({
+  const updatedUser = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.update({
       where: { id: dbUser.id },
       data: {
         points: { increment: t.reward },
         pointsBalance: { increment: t.reward },
       },
-    }),
-    prisma.userWeeklyProgress.update({
+    });
+    await creditWhitePearlsInstant(
+      tx,
+      dbUser.id,
+      t.reward,
+      `weekly_event_tier_${tierIndex + 1}`,
+      `Weekly event · Tier ${tierIndex + 1}`
+    );
+    await tx.userWeeklyProgress.update({
       where: { id: progress.id },
       data: updateField,
-    }),
-  ]);
+    });
+    return u;
+  });
 
   return NextResponse.json({
     success: true,

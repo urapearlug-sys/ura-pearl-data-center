@@ -12,6 +12,7 @@ import Image from 'next/image';
 import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { useToast } from '@/contexts/ToastContext';
 import { dailyCipher } from '@/images';
 import { DAILY_CIPHER_MAX_ATTEMPTS } from '@/utils/consts';
@@ -110,6 +111,7 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setStatus((s) => s ? { ...s, claimed: true, attemptsLeft: 0 } : s);
         showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
+        notifyPearlBalancesRefresh();
         setPattern('');
       } else {
         setStatus((s) => s ? { ...s, attemptsLeft: data.attemptsLeft ?? s.attemptsLeft } : s);
