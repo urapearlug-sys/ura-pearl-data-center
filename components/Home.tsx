@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { defaultProfileAvatar, uraFiscalFunBanner } from '@/images';
-import { useGameStore } from '@/utils/game-mechanics';
+import { defaultProfileAvatar, uraDailyPearlCoins, uraFiscalFunBanner } from '@/images';
+import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
+import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -47,9 +48,26 @@ interface HomeProps {
 export default function Home({ setCurrentView }: HomeProps) {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<ActionTab>('play');
-  const { userTelegramName } = useGameStore();
+  const { userTelegramName, points } = useGameStore();
 
   const actionItems = useMemo(() => ACTION_BY_TAB[activeTab], [activeTab]);
+
+  const levelIndex = useMemo(() => calculateLevelIndex(points), [points]);
+  const pearlsDisplay = Math.floor(points).toLocaleString();
+  const levelName = LEVELS[Math.min(levelIndex, LEVELS.length - 1)]?.name ?? 'Baobab';
+  const rankStep = Math.min(levelIndex + 1, LEVELS.length);
+  const rankTotal = LEVELS.length;
+
+  const levelProgressPct = useMemo(() => {
+    const cur = LEVELS[levelIndex];
+    const next = LEVELS[levelIndex + 1];
+    if (!cur) return 100;
+    if (!next) return 100;
+    const span = next.minPoints - cur.minPoints;
+    if (span <= 0) return 100;
+    const p = ((points - cur.minPoints) / span) * 100;
+    return Math.max(0, Math.min(100, p));
+  }, [levelIndex, points]);
 
   const handleAction = (item: ActionItem) => {
     triggerHapticFeedback(window);
@@ -120,27 +138,41 @@ export default function Home({ setCurrentView }: HomeProps) {
               ))}
             </div>
 
-            <div className="mt-4 rounded-2xl border border-[#2c2f38] bg-gradient-to-br from-[#1a1d26] via-[#151a22] to-[#0f1320] overflow-hidden">
-              <div className="px-4 pt-4 pb-2 border-b border-[#2d2f38]">
-                <h3 className="text-base font-bold text-[var(--ura-yellow)]">URA Daily Pearl</h3>
-                <p className="text-xs text-gray-400 mt-0.5">Your daily insight — artwork coming soon</p>
-              </div>
-              <div className="relative aspect-[16/9] w-full bg-[#0c0e12] flex items-center justify-center">
-                <div
-                  className="absolute inset-0 opacity-40"
-                  style={{
-                    backgroundImage: `radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 45%),
-                      radial-gradient(circle at 70% 55%, rgba(243,186,47,0.12) 0%, transparent 40%),
-                      radial-gradient(circle at 50% 80%, rgba(95,168,255,0.1) 0%, transparent 35%)`,
-                  }}
-                />
-                <div className="relative z-10 flex flex-col items-center gap-2 px-6 text-center">
-                  <span className="text-4xl" aria-hidden>
-                    ⚪
-                  </span>
-                  <p className="text-sm text-gray-400 max-w-xs">
-                    Pearl image will appear here when you provide the asset.
-                  </p>
+            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#151821] p-3 flex gap-3">
+              <div
+                className="w-11 h-11 flex-shrink-0 rounded-lg border border-dashed border-[#3d4046] bg-[#12141a]"
+                aria-label="Daily Pearl icon (coming soon)"
+              />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">URA Daily Pearl</h3>
+                <p className="text-[11px] text-gray-500 mt-0.5">Pearls accumulated (total ALM)</p>
+                <div className="mt-2 flex items-center gap-2">
+                  <Image
+                    src={uraDailyPearlCoins}
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="h-10 w-10 flex-shrink-0 object-contain"
+                  />
+                  <span className="text-2xl font-bold text-white tabular-nums tracking-tight">{pearlsDisplay}</span>
+                </div>
+                <p className="mt-1.5 text-xs">
+                  <span className="text-slate-400">{levelName}</span>
+                  <span className="text-gray-600 mx-1">·</span>
+                  <span className="text-white font-medium tabular-nums">{rankStep}</span>
+                  <span className="text-gray-500 tabular-nums"> / {rankTotal}</span>
+                </p>
+                <div className="mt-2">
+                  <div className="flex justify-between text-[10px] text-gray-500 mb-0.5">
+                    <span>Rank progress</span>
+                    <span>{Math.round(levelProgressPct)}%</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-[#2a2d38] overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] transition-[width] duration-300"
+                      style={{ width: `${levelProgressPct}%` }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

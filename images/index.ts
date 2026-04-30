@@ -68,6 +68,7 @@ import roketicon from "./roketicon.gif";
 import uraLanding from "./ura-landing.png";
 import defaultProfileAvatar from "./default-profile-avatar.png";
 import uraFiscalFunBanner from "./ura-fiscal-fun-banner.png";
+import uraDailyPearlCoins from "./ura-daily-pearl-coins.png";
 
 
 export {
@@ -113,6 +114,7 @@ export {
     uraLanding,
     defaultProfileAvatar,
     uraFiscalFunBanner,
+    uraDailyPearlCoins,
     blockchain,
     afrolumens,
     mitroplus,
