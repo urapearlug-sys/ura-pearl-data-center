@@ -114,31 +114,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           <section className="mt-6" aria-label="Action Center">
             <h2 className="text-lg font-bold text-white tracking-tight mb-3">Action Center</h2>
 
-            <div className="rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-3 gap-1">
-              {(
-                [
-                  { key: 'play' as const, label: 'Play' },
-                  { key: 'learn' as const, label: 'Learn' },
-                  { key: 'earn' as const, label: 'Earn' },
-                ] as const
-              ).map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    setActiveTab(key);
-                  }}
-                  className={`py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                    activeTab === key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#151821] p-3 flex gap-3">
+            <div className="rounded-xl border border-[#2d2f38] bg-[#151821] p-3 flex gap-3">
               <div
                 className="w-11 h-11 flex-shrink-0 rounded-lg border border-dashed border-[#3d4046] bg-[#12141a]"
                 aria-label="Daily Pearl icon (coming soon)"
@@ -175,6 +151,30 @@ export default function Home({ setCurrentView }: HomeProps) {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-3 gap-1">
+              {(
+                [
+                  { key: 'play' as const, label: 'Play' },
+                  { key: 'learn' as const, label: 'Learn' },
+                  { key: 'earn' as const, label: 'Earn' },
+                ] as const
+              ).map(({ key, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setActiveTab(key);
+                  }}
+                  className={`py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                    activeTab === key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
             <div className="mt-4 space-y-2">
