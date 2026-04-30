@@ -27,6 +27,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
   const [convertFromType, setConvertFromType] = useState<'white' | 'blue'>('white');
   const [convertFromAmount, setConvertFromAmount] = useState('50');
   const [converting, setConverting] = useState(false);
+  const [exchangeMode, setExchangeMode] = useState<'buy' | 'sell' | 'convert'>('convert');
 
   const [withdrawAmount, setWithdrawAmount] = useState('1');
   const [withdrawing, setWithdrawing] = useState(false);
@@ -47,6 +48,13 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
     if (convertFromType === 'white') return convertInput >= 1 && convertInput <= white;
     return convertInput >= 1 && convertInput <= bluePending;
   }, [convertFromType, convertInput, white, bluePending]);
+  const convertFromBalance = convertFromType === 'white' ? white : bluePending;
+  const convertToBalance = convertFromType === 'white' ? bluePending : white;
+  const tradeInput = Math.max(0, Math.floor(Number(convertFromAmount) || 0));
+  const buyWhiteOutput = tradeInput * 50;
+  const sellGoldenOutput = Math.floor(tradeInput / 50);
+  const canBuy = tradeInput >= 1 && tradeInput <= golden;
+  const canSell = tradeInput >= 50 && tradeInput <= white;
 
   const loadWallet = async () => {
     if (!userTelegramInitData) return;
@@ -108,6 +116,52 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
       await loadWallet();
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Swap failed', 'error');
+    } finally {
+      setConverting(false);
+    }
+  };
+
+  const handleBuy = async () => {
+    if (!userTelegramInitData || !canBuy) return;
+    setConverting(true);
+    try {
+      const res = await fetch('/api/pearls/buy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          initData: userTelegramInitData,
+          goldishAmount: tradeInput,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Buy failed');
+      showToast('Buy successful', 'success');
+      await loadWallet();
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Buy failed', 'error');
+    } finally {
+      setConverting(false);
+    }
+  };
+
+  const handleSell = async () => {
+    if (!userTelegramInitData || !canSell) return;
+    setConverting(true);
+    try {
+      const res = await fetch('/api/pearls/sell', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          initData: userTelegramInitData,
+          whiteAmount: tradeInput,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Sell failed');
+      showToast('Sell successful', 'success');
+      await loadWallet();
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Sell failed', 'error');
     } finally {
       setConverting(false);
     }
@@ -259,38 +313,137 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             ))}
           </section>
 
-          <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-4">
-            <h2 className="text-base font-bold">Swap</h2>
-            <div className="grid grid-cols-2 gap-2 mt-2">
-              <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2">
-                <span className="text-[11px] text-gray-400">From</span>
-                <select
-                  value={convertFromType}
-                  onChange={(e) => setConvertFromType(e.target.value as 'white' | 'blue')}
-                  className="mt-1 w-full bg-transparent text-sm outline-none"
+          <section className="rounded-2xl border border-[#2d2f38] bg-[#050608] p-4">
+            <div className="rounded-full border border-[#1f2227] bg-[#0f1115] p-1 grid grid-cols-3 gap-1">
+              {([
+                { key: 'buy' as const, label: 'Buy' },
+                { key: 'sell' as const, label: 'Sell' },
+                { key: 'convert' as const, label: 'Convert' },
+              ]).map((mode) => (
+                <button
+                  key={mode.key}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setExchangeMode(mode.key);
+                  }}
+                  className={`rounded-full py-1.5 text-sm font-semibold transition-colors ${
+                    exchangeMode === mode.key ? 'bg-[#2a2d34] text-white' : 'text-gray-500'
+                  }`}
                 >
-                  <option value="white" className="bg-[#1f2229]">White Pearl</option>
-                  <option value="blue" className="bg-[#1f2229]">Blue Pearl</option>
-                </select>
-              </label>
-              <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2">
-                <span className="text-[11px] text-gray-400">Amount</span>
-                <input
-                  type="number"
-                  min={0}
-                  value={convertFromAmount}
-                  onChange={(e) => setConvertFromAmount(e.target.value)}
-                  className="mt-1 w-full bg-transparent text-sm outline-none"
-                />
-              </label>
+                  {mode.label}
+                </button>
+              ))}
             </div>
-            <p className="text-sm mt-2 text-gray-300">
-              To: <span className="font-semibold text-white">{convertFromType === 'white' ? 'Blue Pearl' : 'White Pearl'}</span>
-            </p>
-            <p className="text-lg font-bold tabular-nums">{convertOutput.toLocaleString()}</p>
-            <p className="text-[11px] text-gray-400">
-              Rate: 1 {convertFromType === 'white' ? 'White' : 'Blue'} = 1 {convertFromType === 'white' ? 'Blue' : 'White'}
-            </p>
+
+            <div className="mt-6 text-center">
+              <p className="text-6xl font-semibold tracking-tight tabular-nums">{tradeInput.toLocaleString()}</p>
+              <p className="mt-1 text-sm text-emerald-400">~0 USD</p>
+            </div>
+
+            {exchangeMode === 'convert' ? (
+              <div className="mt-5 rounded-2xl border border-[#1f2227] bg-[#0f1115] divide-y divide-[#22252d] overflow-hidden">
+                <div className="p-3 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-white">Convert</p>
+                    <select
+                      value={convertFromType}
+                      onChange={(e) => setConvertFromType(e.target.value as 'white' | 'blue')}
+                      className="mt-0.5 bg-transparent text-xs text-gray-400 outline-none"
+                    >
+                      <option value="white" className="bg-[#1f2229]">White Pearl</option>
+                      <option value="blue" className="bg-[#1f2229]">Blue Pearl</option>
+                    </select>
+                  </div>
+                  <div className="text-right">
+                    <input
+                      type="number"
+                      min={0}
+                      value={convertFromAmount}
+                      onChange={(e) => setConvertFromAmount(e.target.value)}
+                      className="w-28 bg-transparent text-right text-lg font-semibold outline-none"
+                    />
+                    <p className="text-xs text-gray-400 mt-0.5">Available {convertFromBalance.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="p-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-white">To</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{convertFromType === 'white' ? 'Blue Pearl' : 'White Pearl'}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-semibold tabular-nums">{convertOutput.toLocaleString()}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Balance {convertToBalance.toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-5 rounded-2xl border border-[#1f2227] bg-[#0f1115] divide-y divide-[#22252d] overflow-hidden">
+                <div className="p-3 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-white">{exchangeMode === 'buy' ? 'Spend' : 'Sell'}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{exchangeMode === 'buy' ? 'Golden Pearl' : 'White Pearl'}</p>
+                  </div>
+                  <div className="text-right">
+                    <input
+                      type="number"
+                      min={0}
+                      value={convertFromAmount}
+                      onChange={(e) => setConvertFromAmount(e.target.value)}
+                      className="w-28 bg-transparent text-right text-lg font-semibold outline-none"
+                    />
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Available {(exchangeMode === 'buy' ? golden : white).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="p-3 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-white">Receive</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{exchangeMode === 'buy' ? 'White Pearl' : 'Golden Pearl'}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-semibold tabular-nums">
+                      {(exchangeMode === 'buy' ? buyWhiteOutput : sellGoldenOutput).toLocaleString()}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Rate {exchangeMode === 'buy' ? '1 Golden = 50 White' : '50 White = 1 Golden'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={exchangeMode === 'convert' ? handleConvert : exchangeMode === 'buy' ? handleBuy : handleSell}
+              disabled={
+                converting ||
+                (exchangeMode === 'convert' && !canConvert) ||
+                (exchangeMode === 'buy' && !canBuy) ||
+                (exchangeMode === 'sell' && !canSell)
+              }
+              className="mt-4 w-full rounded-full bg-[#0e1014] border border-[#1f2227] py-3 text-base font-semibold text-gray-300 disabled:opacity-50"
+            >
+              {converting
+                ? 'Processing...'
+                : exchangeMode === 'convert'
+                ? 'Preview'
+                : exchangeMode === 'buy'
+                ? 'Buy Now'
+                : 'Sell Now'}
+            </button>
+            {exchangeMode === 'convert' ? (
+              <p className="mt-2 text-[11px] text-gray-500 text-center">
+                Rate: 1 {convertFromType === 'white' ? 'White' : 'Blue'} = 1 {convertFromType === 'white' ? 'Blue' : 'White'}
+              </p>
+            ) : (
+              <p className="mt-2 text-[11px] text-gray-500 text-center">
+                {exchangeMode === 'buy'
+                  ? 'Buy converts Golden pearls into White pearls.'
+                  : 'Sell converts White pearls into Golden pearls.'}
+              </p>
+            )}
           </section>
 
           <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-4">
