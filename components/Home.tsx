@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { defaultProfileAvatar, uraDailyPearlCoins, uraFiscalFunBanner } from '@/images';
+import { defaultProfileAvatar, uraDailyPearlCoins, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -54,8 +54,6 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [whitePearls, setWhitePearls] = useState(0);
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
-  const [converterFromType, setConverterFromType] = useState<'white' | 'blue'>('white');
-  const [converterFromAmount, setConverterFromAmount] = useState<string>('50');
 
   const actionItems = useMemo(() => ACTION_BY_TAB[activeTab], [activeTab]);
 
@@ -96,10 +94,6 @@ export default function Home({ setCurrentView }: HomeProps) {
     };
     loadPearls();
   }, [userTelegramInitData]);
-
-  const fromAmountNum = Math.max(0, Math.floor(Number(converterFromAmount) || 0));
-  const converterRate = converterFromType === 'white' ? 50 : 25;
-  const converterToGoldish = Math.floor(fromAmountNum / converterRate);
 
   const handleAction = (item: ActionItem) => {
     triggerHapticFeedback(window);
@@ -146,21 +140,16 @@ export default function Home({ setCurrentView }: HomeProps) {
           <section className="mt-6" aria-label="Action Center">
             <h2 className="text-lg font-bold text-white tracking-tight mb-3">Action Center</h2>
 
-            <div className="rounded-xl border border-[#2d2f38] bg-[#151821] p-3 flex gap-3">
-              <div
-                className="w-11 h-11 flex-shrink-0 rounded-lg border border-dashed border-[#3d4046] bg-[#12141a]"
-                aria-label="Daily Pearl icon (coming soon)"
-              />
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">URA Daily Pearl</h3>
-                <p className="text-[11px] text-gray-500 mt-0.5">Pearls accumulated (total ALM)</p>
+            <div className="rounded-xl border border-[#2d2f38] bg-[#151821] p-3">
+              <div className="min-w-0">
+                <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">URA Tresurely Counter</h3>
                 <div className="mt-2 flex items-center gap-2">
                   <Image
-                    src={uraDailyPearlCoins}
+                    src={uraTreasuryCounter}
                     alt=""
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 flex-shrink-0 object-contain"
+                    width={56}
+                    height={56}
+                    className="h-14 w-14 flex-shrink-0 object-contain"
                   />
                   <span className="text-2xl font-bold text-white tabular-nums tracking-tight">{pearlsDisplay}</span>
                 </div>
@@ -186,7 +175,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                   {[
                     { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks' },
                     { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks' },
-                    { key: 'goldish', label: 'Goldish pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls' },
+                    { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls' },
                   ].map((item) => (
                     <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 flex items-center gap-2">
                       <Image src={uraDailyPearlCoins} alt={item.label} width={28} height={28} className="h-7 w-7 object-contain flex-shrink-0" />
@@ -197,45 +186,6 @@ export default function Home({ setCurrentView }: HomeProps) {
                       <p className="text-sm font-bold text-white tabular-nums">{item.value.toLocaleString()}</p>
                     </div>
                   ))}
-                </div>
-
-                <div className="mt-3 border-t border-[#2a2d38] pt-3">
-                  <h4 className="text-xs font-semibold text-white uppercase tracking-wide">Converter</h4>
-                  <div className="mt-2 grid grid-cols-2 gap-2">
-                    <label className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2">
-                      <span className="text-[10px] text-gray-500 uppercase">From</span>
-                      <select
-                        value={converterFromType}
-                        onChange={(e) => setConverterFromType(e.target.value as 'white' | 'blue')}
-                        className="mt-1 w-full bg-transparent text-xs text-white outline-none"
-                      >
-                        <option value="white" className="bg-[#12141a]">White pearl</option>
-                        <option value="blue" className="bg-[#12141a]">Blue pearl</option>
-                      </select>
-                    </label>
-                    <label className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2">
-                      <span className="text-[10px] text-gray-500 uppercase">Amount</span>
-                      <input
-                        type="number"
-                        min={0}
-                        value={converterFromAmount}
-                        onChange={(e) => setConverterFromAmount(e.target.value)}
-                        className="mt-1 w-full bg-transparent text-xs text-white outline-none"
-                      />
-                    </label>
-                  </div>
-                  <div className="mt-2 rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 text-xs">
-                    <p className="text-gray-400">
-                      To:
-                      <span className="text-[var(--ura-yellow)] font-semibold"> Goldish pearl</span>
-                    </p>
-                    <p className="text-white font-semibold tabular-nums mt-0.5">
-                      {converterToGoldish.toLocaleString()} Goldish
-                    </p>
-                    <p className="text-[10px] text-gray-500 mt-0.5">
-                      Rate: {converterRate} {converterFromType === 'white' ? 'White' : 'Blue'} = 1 Goldish
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
