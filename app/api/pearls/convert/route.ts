@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PearlAuditEventType, PearlType } from '@prisma/client';
 import prisma from '@/utils/prisma';
-import { createPearlAudit, resolveUserFromInitData, convertWhiteToGoldish } from '@/utils/pearls';
+import { WHITE_TO_GOLDISH_RATE, createPearlAudit, resolveUserFromInitData } from '@/utils/pearls';
 
 type ConversionType = 'white_to_goldish' | 'goldish_to_white';
 
@@ -20,8 +20,15 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
 
   if (conversionType === 'white_to_goldish') {
-    const conversion = convertWhiteToGoldish(user.whitePearls);
-    if (conversion.goldish <= 0) {
+    const requestedWhiteAmount = Number.isFinite(Number(amount)) && Number(amount) > 0
+      ? Math.floor(Number(amount))
+      : Math.floor(user.whitePearls);
+    if (requestedWhiteAmount <= 0 || user.whitePearls < requestedWhiteAmount) {
+      return NextResponse.json({ error: 'Insufficient white pearls' }, { status: 400 });
+    }
+    const whiteConsumed = Math.floor(requestedWhiteAmount / WHITE_TO_GOLDISH_RATE) * WHITE_TO_GOLDISH_RATE;
+    const goldish = Math.floor(whiteConsumed / WHITE_TO_GOLDISH_RATE);
+    if (goldish <= 0) {
       return NextResponse.json({ error: 'Not enough white pearls. Need 50 white for 1 goldish.' }, { status: 400 });
     }
 
@@ -29,8 +36,8 @@ export async function POST(req: Request) {
       await tx.user.update({
         where: { id: user.id },
         data: {
-          whitePearls: { decrement: conversion.whiteConsumed },
-          goldishPearls: { increment: conversion.goldish },
+          whitePearls: { decrement: whiteConsumed },
+          goldishPearls: { increment: goldish },
         },
       });
       await tx.pearlConversion.create({
@@ -38,23 +45,23 @@ export async function POST(req: Request) {
           userId: user.id,
           fromType: PearlType.WHITE,
           toType: PearlType.GOLDISH,
-          fromAmount: conversion.whiteConsumed,
-          toAmount: conversion.goldish,
+          fromAmount: whiteConsumed,
+          toAmount: goldish,
           trigger: 'user_request',
         },
       });
       await createPearlAudit(tx, {
         userId: user.id,
         eventType: PearlAuditEventType.CONVERT_WHITE_TO_GOLDISH,
-        amount: conversion.goldish,
+        amount: goldish,
         pearlType: PearlType.GOLDISH,
-        meta: { whiteConsumed: conversion.whiteConsumed },
+        meta: { whiteConsumed },
       });
     });
 
     return NextResponse.json({
       success: true,
-      conversion: { from: 'WHITE', to: 'GOLDISH', fromAmount: conversion.whiteConsumed, toAmount: conversion.goldish },
+      conversion: { from: 'WHITE', to: 'GOLDISH', fromAmount: whiteConsumed, toAmount: goldish },
     });
   }
 
