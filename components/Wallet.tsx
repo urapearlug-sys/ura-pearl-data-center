@@ -35,6 +35,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
   const [sendPearlType, setSendPearlType] = useState<PearlType>('white');
   const [sendAmount, setSendAmount] = useState('1');
   const [sending, setSending] = useState(false);
+  const [transferTab, setTransferTab] = useState<'send' | 'receive' | 'history' | 'recent'>('send');
 
   const [myTelegramId, setMyTelegramId] = useState('');
 
@@ -185,6 +186,13 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
     }
   };
 
+  const transferTabs: Array<{ key: 'send' | 'receive' | 'history' | 'recent'; label: string }> = [
+    { key: 'send', label: 'Send' },
+    { key: 'receive', label: 'Receive' },
+    { key: 'history', label: 'My History' },
+    { key: 'recent', label: 'Recent' },
+  ];
+
   return (
     <div className={embedded ? '' : 'bg-black flex justify-center min-h-screen'}>
       <div className={embedded ? 'w-full text-white flex flex-col' : 'w-full bg-black text-white flex flex-col max-w-xl pb-24'}>
@@ -251,7 +259,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             ))}
           </section>
 
-          <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-3">
+          <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-4">
             <h2 className="text-base font-bold">Swap</h2>
             <div className="grid grid-cols-2 gap-2 mt-2">
               <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2">
@@ -285,61 +293,124 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             </p>
           </section>
 
-          <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-3">
-            <h2 className="text-base font-bold">Send / Receive (Telegram ID)</h2>
-            <div className="grid grid-cols-2 gap-2 mt-2">
-              <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2 col-span-2">
-                <span className="text-[11px] text-gray-400">Recipient Telegram ID</span>
-                <input
-                  type="text"
-                  value={sendRecipientTelegramId}
-                  onChange={(e) => setSendRecipientTelegramId(e.target.value)}
-                  className="mt-1 w-full bg-transparent text-sm outline-none"
-                  placeholder="e.g. 123456789"
-                />
-              </label>
-              <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2">
-                <span className="text-[11px] text-gray-400">Pearl Type</span>
-                <select
-                  value={sendPearlType}
-                  onChange={(e) => setSendPearlType(e.target.value as PearlType)}
-                  className="mt-1 w-full bg-transparent text-sm outline-none"
+          <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-4">
+            <h2 className="text-3xl font-bold leading-tight">Send & Receive ALM</h2>
+
+            <div className="mt-4 rounded-2xl border border-[#2d2f38] bg-[#171b24] p-1 grid grid-cols-4 gap-1">
+              {transferTabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setTransferTab(tab.key);
+                  }}
+                  className={`rounded-xl py-2.5 text-sm font-semibold transition-colors ${
+                    transferTab === tab.key
+                      ? 'bg-[#f3ba2f] text-black'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
                 >
-                  <option value="white" className="bg-[#1f2229]">White Pearl</option>
-                  <option value="goldish" className="bg-[#1f2229]">Golden Pearl</option>
-                </select>
-              </label>
-              <label className="rounded-xl border border-[#3a3d42] bg-[#1f2229] p-2">
-                <span className="text-[11px] text-gray-400">Amount</span>
-                <input
-                  type="number"
-                  min={0}
-                  value={sendAmount}
-                  onChange={(e) => setSendAmount(e.target.value)}
-                  className="mt-1 w-full bg-transparent text-sm outline-none"
-                />
-              </label>
+                  {tab.label}
+                </button>
+              ))}
             </div>
-            <div className="mt-2 flex gap-2">
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={sending}
-                className="flex-1 rounded-xl bg-[#5fa8ff] py-2 text-sm font-semibold disabled:opacity-60"
-              >
-                {sending ? 'Sending...' : 'Send'}
-              </button>
-              <button
-                type="button"
-                onClick={onCopyReceiveId}
-                className="flex-1 rounded-xl border border-[#5fa8ff] py-2 text-sm font-semibold text-[#9fc9ff]"
-              >
-                Receive (Copy My ID)
-              </button>
+
+            <div className="mt-4 rounded-2xl border border-[#2d2f38] bg-[#222731] p-4">
+              {transferTab === 'send' && (
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-4xl md:text-[34px] font-semibold text-[#a2a8b3] leading-none">Recipient Telegram ID</p>
+                    <div className="mt-3 rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
+                      <input
+                        type="text"
+                        value={sendRecipientTelegramId}
+                        onChange={(e) => setSendRecipientTelegramId(e.target.value)}
+                        className="w-full bg-transparent text-[38px] leading-none font-semibold text-[#aab1bc] outline-none"
+                        placeholder="e.g. 123456789"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-4xl md:text-[34px] font-semibold text-[#a2a8b3] leading-none">Amount (ALM)</p>
+                    <div className="mt-3 rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
+                      <input
+                        type="number"
+                        min={1}
+                        value={sendAmount}
+                        onChange={(e) => setSendAmount(e.target.value)}
+                        className="w-full bg-transparent text-[38px] leading-none font-semibold text-[#aab1bc] outline-none"
+                        placeholder="500.00K - 10.00M"
+                      />
+                    </div>
+                    <p className="text-xl text-gray-400 mt-2">Min 1 ALM. Send by Telegram ID.</p>
+                  </div>
+
+                  <label className="block rounded-xl border border-[#3a3d42] bg-[#1f2229] p-3">
+                    <span className="text-sm text-gray-400">Asset</span>
+                    <select
+                      value={sendPearlType}
+                      onChange={(e) => setSendPearlType(e.target.value as PearlType)}
+                      className="mt-1 w-full bg-transparent text-lg outline-none"
+                    >
+                      <option value="white" className="bg-[#1f2229]">White Pearl</option>
+                      <option value="goldish" className="bg-[#1f2229]">Golden Pearl</option>
+                    </select>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={handleSend}
+                    disabled={sending}
+                    className="w-full rounded-2xl bg-[#f3ba2f] text-black py-3 text-lg font-semibold disabled:opacity-60"
+                  >
+                    {sending ? 'Sending...' : 'Send Now'}
+                  </button>
+                </div>
+              )}
+
+              {transferTab === 'receive' && (
+                <div className="space-y-3">
+                  <p className="text-xl text-gray-300">Receive using your Telegram ID.</p>
+                  <div className="rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
+                    <p className="text-sm text-gray-400">Your Telegram ID</p>
+                    <p className="text-3xl font-semibold mt-1">{myTelegramId || 'Not detected yet'}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={onCopyReceiveId}
+                    className="w-full rounded-2xl border border-[#5fa8ff] py-3 text-lg font-semibold text-[#9fc9ff]"
+                  >
+                    Copy Telegram ID
+                  </button>
+                </div>
+              )}
+
+              {transferTab === 'history' && (
+                <div className="space-y-2">
+                  {history.map((h) => (
+                    <div key={h.id} className="text-sm rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 flex items-center justify-between gap-2">
+                      <span className="text-gray-300 truncate">{h.eventType || 'EVENT'}</span>
+                      <span className="text-white tabular-nums">{Math.floor(h.amount || 0)}</span>
+                    </div>
+                  ))}
+                  {history.length === 0 && <p className="text-sm text-gray-400">No history yet.</p>}
+                </div>
+              )}
+
+              {transferTab === 'recent' && (
+                <div className="space-y-2">
+                  {history.slice(0, 5).map((h) => (
+                    <div key={h.id} className="text-sm rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 flex items-center justify-between gap-2">
+                      <span className="text-gray-300 truncate">{h.eventType || 'EVENT'}</span>
+                      <span className="text-white tabular-nums">{Math.floor(h.amount || 0)}</span>
+                    </div>
+                  ))}
+                  {history.length === 0 && <p className="text-sm text-gray-400">No recent records.</p>}
+                </div>
+              )}
             </div>
-            <p className="text-[11px] text-gray-400 mt-2">
-              Your Telegram ID: <span className="text-white">{myTelegramId || 'Not detected yet'}</span>
-            </p>
           </section>
 
           <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-3">
