@@ -50,6 +50,7 @@ interface HomeProps {
 export default function Home({ setCurrentView }: HomeProps) {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<ActionTab>('play');
+  const [showRanksPopup, setShowRanksPopup] = useState(false);
   const { userTelegramName, points, userTelegramInitData } = useGameStore();
   const [whitePearls, setWhitePearls] = useState(0);
   const [bluePearls, setBluePearls] = useState(0);
@@ -62,6 +63,20 @@ export default function Home({ setCurrentView }: HomeProps) {
   const levelName = LEVELS[Math.min(levelIndex, LEVELS.length - 1)]?.name ?? 'Baobab';
   const rankStep = Math.min(levelIndex + 1, LEVELS.length);
   const rankTotal = LEVELS.length;
+  const ranks = useMemo(
+    () => [
+      { id: 0, color: 'White', name: 'Novice', tone: 'border-slate-300/40 bg-slate-100/5' },
+      { id: 1, color: 'Silver', name: 'Citizen', tone: 'border-gray-300/40 bg-gray-100/5' },
+      { id: 2, color: 'Blue', name: 'Patriot', tone: 'border-[#5fa8ff]/50 bg-[#5fa8ff]/10' },
+      { id: 3, color: 'Gold', name: 'Guardian', tone: 'border-[var(--ura-yellow)]/50 bg-[var(--ura-yellow)]/10' },
+    ],
+    []
+  );
+  const userRankIndex = useMemo(() => {
+    if (rankTotal <= 1) return 0;
+    const normalized = (rankStep - 1) / (rankTotal - 1);
+    return Math.max(0, Math.min(3, Math.floor(normalized * 4)));
+  }, [rankStep, rankTotal]);
 
   const levelProgressPct = useMemo(() => {
     const cur = LEVELS[levelIndex];
@@ -160,10 +175,25 @@ export default function Home({ setCurrentView }: HomeProps) {
                   <span className="text-gray-500 tabular-nums"> / {rankTotal}</span>
                 </p>
                 <div className="mt-2">
-                  <div className="flex justify-between text-[10px] text-gray-500 mb-0.5">
+                  <div className="flex justify-between items-center text-[10px] text-gray-500 mb-0.5">
                     <span>Rank progress</span>
-                    <span>{Math.round(levelProgressPct)}%</span>
+                    <div className="flex items-center gap-2">
+                      <span>{Math.round(levelProgressPct)}%</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          triggerHapticFeedback(window);
+                          setShowRanksPopup(true);
+                        }}
+                        className="rounded-full border border-[#3a3d46] px-2 py-0.5 text-[10px] font-semibold text-gray-300 hover:text-white hover:border-[#5fa8ff] transition-colors"
+                      >
+                        Ranks
+                      </button>
+                    </div>
                   </div>
+                  <p className="text-[10px] text-gray-400 mb-1">
+                    Current: <span className="text-white font-semibold">{ranks[userRankIndex].color} - {ranks[userRankIndex].name}</span>
+                  </p>
                   <div className="h-1.5 rounded-full bg-[#2a2d38] overflow-hidden">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-[var(--ura-blue-dark)] to-[var(--ura-blue-medium)] transition-[width] duration-300"
@@ -245,6 +275,50 @@ export default function Home({ setCurrentView }: HomeProps) {
           </section>
         </div>
       </div>
+
+      {showRanksPopup && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[1px] p-4 flex items-center justify-center">
+          <div className="w-full max-w-md rounded-2xl border border-[#2d2f38] bg-[#13161d] p-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-white">Ranks</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setShowRanksPopup(false);
+                }}
+                className="text-sm text-gray-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+            <p className="mt-1 text-xs text-gray-400">
+              Current status: <span className="text-white font-semibold">{ranks[userRankIndex].color} - {ranks[userRankIndex].name}</span>
+            </p>
+
+            <div className="mt-3 space-y-2">
+              {ranks.map((rank) => {
+                const isCurrent = rank.id === userRankIndex;
+                return (
+                  <div
+                    key={rank.id}
+                    className={`rounded-xl border px-3 py-2 ${rank.tone} ${isCurrent ? 'ring-1 ring-[var(--ura-yellow)]' : ''}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-white">{rank.color} - {rank.name}</p>
+                      {isCurrent ? (
+                        <span className="text-[10px] font-bold rounded-full px-2 py-0.5 bg-[var(--ura-yellow)] text-black">CURRENT</span>
+                      ) : (
+                        <span className="text-[10px] text-gray-400">Locked</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
