@@ -126,7 +126,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setResult('success');
-        showToast(`+${formatNumber(awarded)} ALM!`, 'success');
+        showToast(`+${formatNumber(awarded)} PEARLS!`, 'success');
         onSuccess?.();
         return;
       }
@@ -149,7 +149,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
       <div className="flex-shrink-0 flex justify-between items-center p-4 border-b border-[#272a2f]">
         <div>
           <h2 className="text-xl font-bold text-white">{config.name}</h2>
-          <p className="text-sm text-gray-400">Draw the correct pattern (4–12 dots). Reward: +{formatNumber(displayReward)} ALM once per day.</p>
+          <p className="text-sm text-gray-400">Draw the correct pattern (4–12 dots). Reward: +{formatNumber(displayReward)} PEARLS once per day.</p>
         </div>
         <button onClick={handleClose} className="text-gray-400 hover:text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors" aria-label="Close">
           ×
@@ -165,7 +165,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
         ) : result === 'success' ? (
           <div className="text-center">
             <p className="text-[#f3ba2f] font-bold text-2xl">Correct!</p>
-            <p className="text-white text-lg mt-2">+{formatNumber(displayReward)} ALM</p>
+            <p className="text-white text-lg mt-2">+{formatNumber(displayReward)} PEARLS</p>
           </div>
         ) : (
           <>

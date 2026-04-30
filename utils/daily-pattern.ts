@@ -69,7 +69,7 @@ export async function getTodayPattern(): Promise<string> {
   return pattern;
 }
 
-/** Get today's reward (ALM) for the pattern game. Null in DB = default 1M. */
+/** Get today's reward (PEARLS) for the pattern game. Null in DB = default 1M. */
 export async function getTodayPatternReward(): Promise<number> {
   const now = new Date();
   const today = getStartOfDayUTC(now);

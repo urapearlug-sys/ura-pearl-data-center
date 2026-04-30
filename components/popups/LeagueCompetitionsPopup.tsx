@@ -5,8 +5,8 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { formatNumber } from '@/utils/ui';
 import {
-  LEAGUE_CHALLENGE_MIN_TARGET_ALM,
-  LEAGUE_CHALLENGE_MAX_TARGET_ALM,
+  LEAGUE_CHALLENGE_MIN_TARGET_PEARLS,
+  LEAGUE_CHALLENGE_MAX_TARGET_PEARLS,
   LEAGUE_CHALLENGE_MIN_STAKE,
   LEAGUE_CHALLENGE_MAX_STAKE,
   LEAGUE_CHALLENGE_MIN_DAYS,
@@ -146,11 +146,11 @@ export default function LeagueCompetitionsPopup({
   const handleContribute = async (id: string) => {
     const amt = Math.floor(Number(contributeAmount));
     if (!Number.isFinite(amt) || amt <= 0) {
-      showToast('Enter a valid ALM amount', 'error');
+      showToast('Enter a valid PEARLS amount', 'error');
       return;
     }
     if (amt > Math.floor(userBalance)) {
-      showToast('Insufficient ALM balance', 'error');
+      showToast('Insufficient PEARLS balance', 'error');
       return;
     }
     triggerHapticFeedback(window);
@@ -166,7 +166,7 @@ export default function LeagueCompetitionsPopup({
         showToast(data.error || 'Contribute failed', 'error');
         return;
       }
-      showToast(`Added ${formatNumber(amt)} ALM to prize pool!`, 'success');
+      showToast(`Added ${formatNumber(amt)} PEARLS to prize pool!`, 'success');
       setContributeAmount('');
       if (detail && detail.id === id) fetchDetail(id);
       fetchList();
@@ -213,7 +213,7 @@ export default function LeagueCompetitionsPopup({
           {view === 'list' && (
             <>
               <p className="text-sm text-gray-400 mb-4">
-                Challenge another league: first to hit the target ALM (or highest at the end) wins the prize pool. Spectators can add to the pool.
+                Challenge another league: first to hit the target PEARLS (or highest at the end) wins the prize pool. Spectators can add to the pool.
               </p>
               <div className="flex justify-end mb-4">
                 <button
@@ -249,7 +249,7 @@ export default function LeagueCompetitionsPopup({
                                     {c.creatorLeague.name} vs {c.opponentLeague.name}
                                   </p>
                                   <p className="text-xs text-gray-400 mt-0.5">
-                                    Target {formatNumber(c.targetAlm)} ALM · {c.durationDays}d · Prize pool {formatNumber(c.prizePool)} ALM
+                                    Target {formatNumber(c.targetAlm)} PEARLS · {c.durationDays}d · Prize pool {formatNumber(c.prizePool)} PEARLS
                                   </p>
                                   <p className="text-xs text-amber-400 mt-0.5">{formatTimeLeft(c.endAt)}</p>
                                 </div>
@@ -278,7 +278,7 @@ export default function LeagueCompetitionsPopup({
                                     {c.creatorLeague.name} vs {c.opponentLeague.name}
                                   </p>
                                   <p className="text-xs text-gray-400 mt-0.5">
-                                    Target {formatNumber(c.targetAlm)} ALM · Stake {formatNumber(c.stakePerLeague)} ALM each
+                                    Target {formatNumber(c.targetAlm)} PEARLS · Stake {formatNumber(c.stakePerLeague)} PEARLS each
                                   </p>
                                   {c.isMine && (
                                     <p className="text-xs text-violet-300 mt-0.5">You’re in one of these leagues</p>
@@ -343,12 +343,12 @@ export default function LeagueCompetitionsPopup({
                       {detail.creatorLeague.name} vs {detail.opponentLeague.name}
                     </p>
                     <p className="text-sm text-gray-400 text-center mt-1">
-                      First to {formatNumber(detail.targetAlm)} ALM in {detail.durationDays} day{detail.durationDays !== 1 ? 's' : ''} — or highest at the end wins
+                      First to {formatNumber(detail.targetAlm)} PEARLS in {detail.durationDays} day{detail.durationDays !== 1 ? 's' : ''} — or highest at the end wins
                     </p>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-amber-400 font-semibold">Prize pool</span>
-                    <span className="text-white font-bold">{formatNumber(detail.prizePool)} ALM</span>
+                    <span className="text-white font-bold">{formatNumber(detail.prizePool)} PEARLS</span>
                   </div>
                   {detail.status === 'active' && detail.endAt && (
                     <p className="text-sm text-gray-400">Time left: {formatTimeLeft(detail.endAt)}</p>
@@ -364,7 +364,7 @@ export default function LeagueCompetitionsPopup({
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-gray-400">{detail.creatorLeague.name}</span>
                         <span className="text-white">
-                          {formatNumber(detail.creatorProgress)} / {formatNumber(detail.targetAlm)} ALM
+                          {formatNumber(detail.creatorProgress)} / {formatNumber(detail.targetAlm)} PEARLS
                         </span>
                       </div>
                       <div className="h-2 rounded-full bg-[#1a1c22] overflow-hidden">
@@ -381,7 +381,7 @@ export default function LeagueCompetitionsPopup({
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-gray-400">{detail.opponentLeague.name}</span>
                         <span className="text-white">
-                          {formatNumber(detail.opponentProgress)} / {formatNumber(detail.targetAlm)} ALM
+                          {formatNumber(detail.opponentProgress)} / {formatNumber(detail.targetAlm)} PEARLS
                         </span>
                       </div>
                       <div className="h-2 rounded-full bg-[#1a1c22] overflow-hidden">
@@ -415,7 +415,7 @@ export default function LeagueCompetitionsPopup({
                         <input
                           type="number"
                           min={1}
-                          placeholder="ALM amount"
+                          placeholder="PEARLS amount"
                           value={contributeAmount}
                           onChange={(e) => setContributeAmount(e.target.value)}
                           className="flex-1 px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white placeholder-gray-500"
@@ -497,8 +497,8 @@ function CreateChallengeForm({
       onError('Select your league and enter opponent invite code');
       return;
     }
-    if (!Number.isFinite(target) || target < LEAGUE_CHALLENGE_MIN_TARGET_ALM || target > LEAGUE_CHALLENGE_MAX_TARGET_ALM) {
-      onError(`Target ALM must be between ${formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_ALM)} and ${formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_ALM)}`);
+    if (!Number.isFinite(target) || target < LEAGUE_CHALLENGE_MIN_TARGET_PEARLS || target > LEAGUE_CHALLENGE_MAX_TARGET_PEARLS) {
+      onError(`Target PEARLS must be between ${formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} and ${formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)}`);
       return;
     }
     if (!Number.isFinite(stake) || stake < LEAGUE_CHALLENGE_MIN_STAKE || stake > LEAGUE_CHALLENGE_MAX_STAKE) {
@@ -510,7 +510,7 @@ function CreateChallengeForm({
       return;
     }
     if (stake > Math.floor(userBalance)) {
-      onError('Insufficient ALM for stake');
+      onError('Insufficient PEARLS for stake');
       return;
     }
     triggerHapticFeedback(window);
@@ -544,7 +544,7 @@ function CreateChallengeForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <p className="text-sm text-gray-400">
-        Your league stakes ALM; the other league’s creator must accept and lock the same stake. First to reach the target (or highest at the end) wins the full prize pool.
+        Your league stakes PEARLS; the other league’s creator must accept and lock the same stake. First to reach the target (or highest at the end) wins the full prize pool.
       </p>
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-1">Your league (challenger)</label>
@@ -575,21 +575,21 @@ function CreateChallengeForm({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Target ALM (first to reach wins, or highest at end)</label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Target PEARLS (first to reach wins, or highest at end)</label>
         <input
           type="number"
-          min={LEAGUE_CHALLENGE_MIN_TARGET_ALM}
-          max={LEAGUE_CHALLENGE_MAX_TARGET_ALM}
+          min={LEAGUE_CHALLENGE_MIN_TARGET_PEARLS}
+          max={LEAGUE_CHALLENGE_MAX_TARGET_PEARLS}
           value={targetAlm}
           onChange={(e) => setTargetAlm(e.target.value)}
           className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
         />
         <p className="text-xs text-gray-500 mt-0.5">
-          {formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_ALM)} – {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_ALM)}
+          {formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} – {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)}
         </p>
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Stake per league (ALM) — you lock this now</label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">Stake per league (PEARLS) — you lock this now</label>
         <input
           type="number"
           min={LEAGUE_CHALLENGE_MIN_STAKE}
@@ -598,7 +598,7 @@ function CreateChallengeForm({
           onChange={(e) => setStakePerLeague(e.target.value)}
           className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
         />
-        <p className="text-xs text-gray-500 mt-0.5">Your balance: {formatNumber(Math.floor(userBalance))} ALM</p>
+        <p className="text-xs text-gray-500 mt-0.5">Your balance: {formatNumber(Math.floor(userBalance))} PEARLS</p>
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-300 mb-1">Duration (days)</label>

@@ -29,7 +29,7 @@ export default function CreateTeamPopup({ onClose, onCreate, onSuccess, userBala
       return;
     }
     if (!canAfford) {
-      showToast(`Commitment is ${formatNumber(TEAM_CREATION_FEE)} ALM. Your balance is insufficient.`, 'error');
+      showToast(`Commitment is ${formatNumber(TEAM_CREATION_FEE)} PEARLS. Your balance is insufficient.`, 'error');
       return;
     }
     if (!agreedToTerms) {
@@ -69,10 +69,10 @@ export default function CreateTeamPopup({ onClose, onCreate, onSuccess, userBala
           {!created ? (
             <>
               <p className="text-sm text-amber-200/90 mb-3">
-                Commitment: <strong className="text-white">{formatNumber(TEAM_CREATION_FEE)} ALM</strong> (1M ALM; transferred to fees). Team size: {TEAM_MIN_MEMBERS}–{TEAM_MAX_MEMBERS} members. Only teams can create leagues (10M ALM).
+                Commitment: <strong className="text-white">{formatNumber(TEAM_CREATION_FEE)} PEARLS</strong> (1M PEARLS; transferred to fees). Team size: {TEAM_MIN_MEMBERS}–{TEAM_MAX_MEMBERS} members. Only teams can create leagues (10M PEARLS).
               </p>
               {userBalance != null && (
-                <p className="text-sm text-gray-400 mb-2">Your balance: {formatNumber(Math.floor(userBalance))} ALM</p>
+                <p className="text-sm text-gray-400 mb-2">Your balance: {formatNumber(Math.floor(userBalance))} PEARLS</p>
               )}
               <label className="block text-sm text-gray-400 mb-2">Team name</label>
               <input

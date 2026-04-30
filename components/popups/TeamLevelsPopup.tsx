@@ -33,13 +33,13 @@ export default function TeamLevelsPopup({ onClose }: TeamLevelsPopupProps) {
           </p>
           <ul className="space-y-3 text-sm text-gray-300">
             <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
-              <strong className="text-white">Create team</strong> – 1,000,000 ALM commitment (team is lower rank than league). You get an invite code to share so others can join your team.
+              <strong className="text-white">Create team</strong> – 1,000,000 PEARLS commitment (team is lower rank than league). You get an invite code to share so others can join your team.
             </li>
             <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
               <strong className="text-white">Join team</strong> – Enter the team invite code (no fee). Get the code from the person who created the team, or use Browse teams to discover teams.
             </li>
             <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
-              <strong className="text-white">Create league</strong> – Only a team can create a league (10M ALM). Create a team first, then use it to create a league.
+              <strong className="text-white">Create league</strong> – Only a team can create a league (10M PEARLS). Create a team first, then use it to create a league.
             </li>
             <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
               <strong className="text-white">League levels</strong> – Leagues use tiers (Bronze to Legend). Tap &quot;League levels&quot; in the Leagues tab to see all tiers.

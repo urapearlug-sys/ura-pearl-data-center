@@ -78,17 +78,17 @@ export async function POST(req: Request) {
   const amt = Number(amount);
   if (!Number.isFinite(amt) || amt < MARKETPLACE_MIN_LISTING) {
     return NextResponse.json(
-      { error: `Minimum listing is ${MARKETPLACE_MIN_LISTING.toLocaleString()} ALM` },
+      { error: `Minimum listing is ${MARKETPLACE_MIN_LISTING.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
 
   const priceTon = Number(priceInTon);
   if (!Number.isFinite(priceTon) || priceTon <= 0) {
-    return NextResponse.json({ error: 'Enter a valid price in TON (e.g. 0.001 per 1000 ALM)' }, { status: 400 });
+    return NextResponse.json({ error: 'Enter a valid price in TON (e.g. 0.001 per 1000 PEARLS)' }, { status: 400 });
   }
 
-  // priceInTon = TON per 1000 ALM → pricePerUnit = TON per 1 ALM
+  // priceInTon = TON per 1000 PEARLS → pricePerUnit = TON per 1 PEARLS
   const pricePerUnit = priceTon / 1000;
 
   const amountToLock = Math.floor(amt);

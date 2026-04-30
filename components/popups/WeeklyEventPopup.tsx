@@ -82,7 +82,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
       incrementPoints(data.reward);
       if (data.points != null) setPoints(data.points);
       if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
-      showToast(`+${formatNumber(data.reward)} ALM!`, 'success');
+      showToast(`+${formatNumber(data.reward)} PEARLS!`, 'success');
       fetchData();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');
@@ -126,7 +126,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
                   <span>{formatNumber(progress.taps)} taps</span>
                   <span>{progress.tasksCompleted} tasks</span>
                   <span>{referralsThisWeek} new referrals</span>
-                  <span>{formatNumber(Math.floor(progress.pointsEarned))} ALM earned</span>
+                  <span>{formatNumber(Math.floor(progress.pointsEarned))} PEARLS earned</span>
                 </div>
                 <p className="text-xs text-gray-500 mt-2">Referrals = users who joined this week via your link (existing referrals don’t count)</p>
               </div>
@@ -150,7 +150,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
                         <p className="text-sm text-gray-400">
                           {t.taps.toLocaleString()} taps + {t.tasks} tasks
                           {refsRequired > 0 && <> + {refsRequired} new refs</>}
-                          {' → '}<span className="text-[#f3ba2f]">{formatNumber(t.reward)} ALM</span>
+                          {' → '}<span className="text-[#f3ba2f]">{formatNumber(t.reward)} PEARLS</span>
                         </p>
                       </div>
                       <div>

@@ -4,19 +4,19 @@
  */
 
 /** Short one-paragraph summary for both teams and leagues (copyable). */
-export const TEAMS_LEAGUES_SHORT_SUMMARY = `Teams and Leagues are in-app groups where you earn Team Points (TP) and League Points (LP) from activities (login, tasks, referrals, etc.). You can create a team by paying a commitment fee (ALM); only teams can create leagues (higher fee). You may join one team (by invite code or request; owner approves). Leagues are joined by team or by user request (creator approves). Points and rankings are for fun and in-app rewards only; no real-world value or guarantees. By creating or joining you agree to the full Teams & Leagues Terms.`;
+export const TEAMS_LEAGUES_SHORT_SUMMARY = `Teams and Leagues are in-app groups where you earn Team Points (TP) and League Points (LP) from activities (login, tasks, referrals, etc.). You can create a team by paying a commitment fee (PEARLS); only teams can create leagues (higher fee). You may join one team (by invite code or request; owner approves). Leagues are joined by team or by user request (creator approves). Points and rankings are for fun and in-app rewards only; no real-world value or guarantees. By creating or joining you agree to the full Teams & Leagues Terms.`;
 
 /** Operational summary: how teams and leagues work (copyable). */
 export const TEAMS_LEAGUES_OPERATIONAL_SUMMARY = `HOW TEAMS AND LEAGUES OPERATE
 
 — Teams —
-• A team is created by a user (creator) who pays a one-time commitment fee in ALM; the fee goes to the platform fees collection.
+• A team is created by a user (creator) who pays a one-time commitment fee in PEARLS; the fee goes to the platform fees collection.
 • The creator gets an invite code to share. Others can join by entering that code (Join team) or by requesting to join from Browse teams; the creator approves or denies requests.
 • Each user can only be in one team at a time. If you join another team (by code or approved request), you leave your previous team.
 • Team members earn Team Points (TP) from activities (daily login, tasks, referrals, etc.). The creator can post announcements and run team-vs-team challenges.
 
 — Leagues —
-• Only a team can create a league. The team creator pays a league creation fee in ALM (higher than team fee); the fee goes to the platform fees collection.
+• Only a team can create a league. The team creator pays a league creation fee in PEARLS (higher than team fee); the fee goes to the platform fees collection.
 • Leagues run in weekly cycles. Teams or users can join via invite code or by requesting to join from Browse leagues; the league creator approves or denies.
 • Members in a league earn both TP and League Points (LP); LP is used for tier rankings (Bronze up to Legend). Top performers in a tier get promoted, bottom demoted each week.
 • League creators can run league-vs-league challenges, post announcements, and manage join requests.
@@ -34,7 +34,7 @@ By creating a team or league, or by requesting or completing join to a team or l
 Teams and Leagues are in-app features for grouping users and tracking Team Points (TP) and League Points (LP). Points, tiers, rankings, and any in-app rewards have no real-world value, no cash value, and no guarantee of future benefits. The platform may change or discontinue features with reasonable notice.
 
 3. Creating a team or league
-• Team creation requires payment of the published commitment fee in ALM; league creation requires the published fee and can only be done by a team (via its creator). Fees are non-refundable and are transferred to the platform’s fees collection as stated in the app.
+• Team creation requires payment of the published commitment fee in PEARLS; league creation requires the published fee and can only be done by a team (via its creator). Fees are non-refundable and are transferred to the platform’s fees collection as stated in the app.
 • You are responsible for the name and conduct of your team or league. You must not use names or content that are illegal, misleading, or abusive. The platform may remove or rename content that violates its policies.
 
 4. Joining a team or league

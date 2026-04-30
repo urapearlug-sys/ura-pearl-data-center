@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { uraDailyPearlCoins, uraTreasuryCounter } from '@/images';
+import { pearlBlue, pearlGolden, pearlWhite, uraTreasuryCounter } from '@/images';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
@@ -242,13 +242,13 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
           <section className="space-y-2">
             <h2 className="text-lg font-bold">Balances</h2>
             {[
-              { code: 'WHITE', name: 'White Pearl', value: white },
-              { code: 'BLUE', name: 'Blue Pearl (Pending)', value: bluePending },
-              { code: 'GOLDEN', name: 'Golden Pearl', value: golden },
+              { code: 'WHITE', name: 'White Pearl', value: white, image: pearlWhite },
+              { code: 'BLUE', name: 'Blue Pearl (Pending)', value: bluePending, image: pearlBlue },
+              { code: 'GOLDEN', name: 'Golden Pearl', value: golden, image: pearlGolden },
             ].map((item) => (
               <div key={item.code} className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] px-3 py-3 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <Image src={uraDailyPearlCoins} alt={item.name} width={40} height={40} className="h-10 w-10 object-contain" />
+                  <Image src={item.image} alt={item.name} width={40} height={40} className="h-10 w-10 object-contain" />
                   <div className="min-w-0">
                     <p className="font-semibold">{item.code}</p>
                     <p className="text-sm text-gray-400 truncate">{item.name}</p>
@@ -294,7 +294,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
           </section>
 
           <section className="rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] p-4">
-            <h2 className="text-3xl font-bold leading-tight">Send & Receive ALM</h2>
+            <h2 className="text-3xl font-bold leading-tight">Send & Receive PEARLS</h2>
 
             <div className="mt-4 rounded-2xl border border-[#2d2f38] bg-[#171b24] p-1 grid grid-cols-4 gap-1">
               {transferTabs.map((tab) => (
@@ -333,7 +333,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                   </div>
 
                   <div>
-                    <p className="text-lg font-semibold text-[#b0b6c2]">Amount (ALM)</p>
+                    <p className="text-lg font-semibold text-[#b0b6c2]">Amount (PEARLS)</p>
                     <div className="mt-3 rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
                       <input
                         type="number"
@@ -344,12 +344,18 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                         placeholder="500.00K - 10.00M"
                       />
                     </div>
-                    <p className="text-sm text-gray-400 mt-2">Min 1 ALM. Send by Telegram ID.</p>
+                    <p className="text-sm text-gray-400 mt-2">Min 1 PEARL. Send by Telegram ID.</p>
                   </div>
 
                   <label className="block rounded-xl border border-[#3a3d42] bg-[#1f2229] p-3">
                     <span className="inline-flex items-center">
-                      <Image src={uraDailyPearlCoins} alt="Asset" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+                      <Image
+                        src={sendPearlType === 'white' ? pearlWhite : pearlGolden}
+                        alt="Asset"
+                        width={18}
+                        height={18}
+                        className="h-[18px] w-[18px] object-contain"
+                      />
                     </span>
                     <select
                       value={sendPearlType}

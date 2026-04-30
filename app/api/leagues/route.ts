@@ -204,7 +204,7 @@ export async function POST(req: Request) {
   const balance = dbUser.pointsBalance ?? 0;
   if (balance < LEAGUE_CREATION_FEE) {
     return NextResponse.json(
-      { error: `League creation requires a commitment fee of ${LEAGUE_CREATION_FEE.toLocaleString()} ALM. Your balance: ${Math.floor(balance).toLocaleString()} ALM.` },
+      { error: `League creation requires a commitment fee of ${LEAGUE_CREATION_FEE.toLocaleString()} PEARLS. Your balance: ${Math.floor(balance).toLocaleString()} PEARLS.` },
       { status: 400 }
     );
   }

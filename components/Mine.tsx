@@ -136,8 +136,8 @@ export default function Mine({ setCurrentView }: MineProps) {
                                 onClick={() => { triggerHapticFeedback(window); setShowStaking(true); }}
                                 className="w-full mt-6 py-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 font-bold flex flex-col items-center justify-center gap-1"
                             >
-                                Stake ALM & Earn Reward
-                                <span className="text-xs font-normal text-emerald-300/80">Stake ALM for 1 week+ or claim your staked ALM</span>
+                                Stake PEARLS & Earn Reward
+                                <span className="text-xs font-normal text-emerald-300/80">Stake PEARLS for 1 week+ or claim your staked PEARLS</span>
                             </button>
 
                             <div className="bg-[#272a2f] rounded-lg p-4 mt-6 flex items-start">

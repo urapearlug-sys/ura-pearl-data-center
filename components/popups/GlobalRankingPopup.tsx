@@ -240,7 +240,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
       </div>
       <div className="text-right shrink-0">
         <div className="text-[#f3ba2f] font-bold">{formatNumber(user.points)}</div>
-        <div className="text-xs text-gray-400">ALM</div>
+        <div className="text-xs text-gray-400">PEARLS</div>
       </div>
     </button>
   );
@@ -395,7 +395,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               {/* Points */}
               <div className="text-right shrink-0">
                 <div className="text-[#f3ba2f] font-bold">{formatNumber(myRankData.points)}</div>
-                <div className="text-xs text-gray-400">ALM</div>
+                <div className="text-xs text-gray-400">PEARLS</div>
               </div>
             </div>
           ) : (
@@ -461,13 +461,13 @@ export default function GlobalRankingPopup({ onClose }: Props) {
                 <div className="bg-[#1d2025] p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Total Points</div>
                   <div className="text-lg font-bold text-[#f3ba2f]">
-                    {formatNumber(selectedUser.points)} ALM
+                    {formatNumber(selectedUser.points)} PEARLS
                   </div>
                 </div>
                 <div className="bg-[#1d2025] p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Balance</div>
                   <div className="text-lg font-bold text-white">
-                    {formatNumber(selectedUser.pointsBalance)} ALM
+                    {formatNumber(selectedUser.pointsBalance)} PEARLS
                   </div>
                 </div>
               </div>
@@ -557,7 +557,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               <div className="bg-[#1d2025] p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Referral Earnings</div>
                 <div className="text-lg font-bold text-green-400">
-                  +{formatNumber(selectedUser.referralPointsEarned)} ALM
+                  +{formatNumber(selectedUser.referralPointsEarned)} PEARLS
                 </div>
               </div>
 
@@ -566,7 +566,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
                 <div className="bg-[#1d2025] p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Donated to charity</div>
                   <div className="text-lg font-bold text-amber-400">
-                    {formatNumber(selectedUser.totalDonatedPoints)} ALM
+                    {formatNumber(selectedUser.totalDonatedPoints)} PEARLS
                   </div>
                 </div>
               )}

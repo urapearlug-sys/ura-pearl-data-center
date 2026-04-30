@@ -134,7 +134,7 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
           {progressLoading ? (
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-[#1d2025] p-3 rounded-lg text-center animate-pulse">
-                <div className="text-xs text-gray-400">Total ALM</div>
+                <div className="text-xs text-gray-400">Total PEARLS</div>
                 <div className="text-sm font-bold text-gray-500">…</div>
               </div>
               <div className="bg-[#1d2025] p-3 rounded-lg text-center animate-pulse">
@@ -145,7 +145,7 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
           ) : (
             <div className="grid grid-cols-2 gap-2">
               <div className="bg-[#1d2025] p-3 rounded-lg text-center">
-                <div className="text-xs text-gray-400">Total ALM</div>
+                <div className="text-xs text-gray-400">Total PEARLS</div>
                 <div className="text-sm font-bold text-[#f3ba2f]">{formatNumber(Math.floor(displayPoints))}</div>
               </div>
               <div className="bg-[#1d2025] p-3 rounded-lg text-center">
@@ -155,11 +155,11 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
             </div>
           )}
 
-          {/* Progress to next level (ALM only; taps no longer required) */}
+          {/* Progress to next level (PEARLS only; taps no longer required) */}
           {nextLevel && (
             <div className="bg-[#1d2025] p-4 rounded-lg space-y-2">
               <p className="text-sm font-medium text-white">To reach {nextLevel.name}</p>
-              <p className="text-xs text-gray-400">{formatNumber(pointsLeft)} ALM left</p>
+              <p className="text-xs text-gray-400">{formatNumber(pointsLeft)} PEARLS left</p>
               <div className="h-2 bg-[#43433b] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-[width]"
@@ -177,10 +177,10 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
             </div>
           )}
 
-          {/* Levels table (ALM only for progression) */}
+          {/* Levels table (PEARLS only for progression) */}
           <div className="bg-[#1d2025] rounded-lg overflow-hidden">
             <p className="text-sm font-medium text-white px-3 py-2 border-b border-gray-700">
-              All levels (by ALM)
+              All levels (by PEARLS)
             </p>
             <div className="overflow-x-auto max-h-64 overflow-y-auto">
               <table className="w-full text-left text-sm">
@@ -188,7 +188,7 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
                   <tr className="text-gray-400 border-b border-gray-700">
                     <th className="px-2 py-2 w-8">#</th>
                     <th className="px-2 py-2">Level</th>
-                    <th className="px-2 py-2 text-right">Min ALM</th>
+                    <th className="px-2 py-2 text-right">Min PEARLS</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -95,7 +95,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setStatus((s) => s ? { ...s, claimed: true, attemptsLeft: 0 } : s);
         setSelected([]);
-        showToast(data.message || `+${formatNumber(data.reward)} ALM!`, 'success');
+        showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
       } else {
         setStatus((s) => s ? { ...s, attemptsLeft: data.attemptsLeft ?? s.attemptsLeft } : s);
         showToast(data.message || data.error || 'Wrong combo', 'error');
@@ -134,7 +134,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Matrix</h2>
-              <p className="text-xs text-gray-400">Pick today’s 3 cards in order · +{formatNumber(status?.reward ?? 500000)} ALM</p>
+              <p className="text-xs text-gray-400">Pick today’s 3 cards in order · +{formatNumber(status?.reward ?? 500000)} PEARLS</p>
             </div>
           </div>
           <button type="button" onClick={handleClose} className="text-gray-400 hover:text-white text-2xl w-8 h-8">
@@ -157,7 +157,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
             <>
               <div className="flex justify-between text-sm">
                 <span className="text-amber-400">Attempts left: {status.attemptsLeft}/{DAILY_COMBO_MAX_ATTEMPTS}</span>
-                <span className="text-[#f3ba2f]">+{formatNumber(status.reward)} ALM</span>
+                <span className="text-[#f3ba2f]">+{formatNumber(status.reward)} PEARLS</span>
               </div>
 
               <div className="bg-[#272a2f] rounded-xl p-3 min-h-[52px] border border-[#3d4046]">

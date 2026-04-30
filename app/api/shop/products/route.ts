@@ -108,7 +108,7 @@ export async function POST(req: Request) {
   }
   const price = Number(priceAlm);
   if (!Number.isFinite(price) || price < 1) {
-    return NextResponse.json({ error: 'Valid price in ALM is required' }, { status: 400 });
+    return NextResponse.json({ error: 'Valid price in PEARLS is required' }, { status: 400 });
   }
   const urls = Array.isArray(imageUrls) ? imageUrls.filter((u: unknown) => typeof u === 'string') : [];
   if (urls.length < MIN_IMAGES) {

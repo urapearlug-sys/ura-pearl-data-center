@@ -285,7 +285,7 @@ export default function Airdrop() {
                                 </div>
                                 <h1 className="text-2xl text-center mb-2">Airdrop & Market</h1>
                                 <p className="text-gray-300 text-center mb-4 font-normal">
-                                    {section === 'airdrop' ? 'Complete challenges to qualify for the Airdrop. Connect wallet and view rankings.' : 'P2P coming soon. Shop: list products and sell for ALM.'}
+                                    {section === 'airdrop' ? 'Complete challenges to qualify for the Airdrop. Connect wallet and view rankings.' : 'P2P coming soon. Shop: list products and sell for PEARLS.'}
                                 </p>
 
                                 <div className="flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-6">
@@ -317,7 +317,7 @@ export default function Airdrop() {
                                                 <div className="flex items-center justify-between">
                                                     <div>
                                                         <div className="text-lg font-semibold text-white">P2P</div>
-                                                        <div className="text-gray-400 text-sm">Trade ALM for TON with others</div>
+                                                        <div className="text-gray-400 text-sm">Trade PEARLS for TON with others</div>
                                                     </div>
                                                     <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-1 rounded">Coming soon</span>
                                                 </div>
@@ -331,7 +331,7 @@ export default function Airdrop() {
                                                     <div className="flex items-center justify-between">
                                                         <div>
                                                             <div className="text-lg font-semibold text-[#f3ba2f]">Shop (Match 2 Earn)</div>
-                                                            <div className="text-gray-400 text-sm">List products, sell for ALM</div>
+                                                            <div className="text-gray-400 text-sm">List products, sell for PEARLS</div>
                                                         </div>
                                                         <Angle size={24} className="text-[#f3ba2f]" />
                                                     </div>

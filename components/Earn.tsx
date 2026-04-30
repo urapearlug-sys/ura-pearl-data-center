@@ -332,9 +332,9 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 <div className="flex justify-center mb-4">
                   <IceCube className="w-24 h-24 mx-auto" />
                 </div>
-                <h1 className="text-2xl text-center mb-2">Earn More ALM</h1>
+                <h1 className="text-2xl text-center mb-2">Earn More PEARLS</h1>
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
-                  Balance: {formatNumber(Math.floor(pointsBalance))} ALM
+                  Balance: {formatNumber(Math.floor(pointsBalance))} PEARLS
                 </p>
                 <div className="flex justify-center mb-5">
                   <button
@@ -437,7 +437,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                     </div>
                     <div className="text-left min-w-0">
                       <span className="text-base font-bold text-white block">Donation Center</span>
-                      <span className="text-xs text-teal-200/90">Donate ALM for charity</span>
+                      <span className="text-xs text-teal-200/90">Donate PEARLS for charity</span>
                     </div>
                   </button>
                   <button
@@ -467,7 +467,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                     </div>
                     <div className="text-left min-w-0">
                       <span className="text-base font-bold text-white block">Mitroplus Quiz</span>
-                      <span className="text-xs text-amber-200/90">Answer & earn ALM</span>
+                      <span className="text-xs text-amber-200/90">Answer & earn PEARLS</span>
                     </div>
                   </button>
                 </div>
@@ -609,7 +609,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0">
                                         <p className="font-bold text-white">Create team</p>
-                                        <p className="text-xs text-sky-200/90">1M ALM · Required for leagues</p>
+                                        <p className="text-xs text-sky-200/90">1M PEARLS · Required for leagues</p>
                                       </div>
                                     </button>
                                     <button
@@ -657,7 +657,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0 flex-1">
                                         <p className="font-bold text-white">Team vs Team</p>
-                                        <p className="text-sm text-cyan-200/90">Challenge another team · First to target ALM wins prize</p>
+                                        <p className="text-sm text-cyan-200/90">Challenge another team · First to target PEARLS wins prize</p>
                                       </div>
                                       <span className="text-gray-400">→</span>
                                     </button>
@@ -676,7 +676,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                                       <span className="text-2xl">➕</span>
                                       <div className="min-w-0">
                                         <p className="font-bold text-white">Create league</p>
-                                        <p className="text-xs text-emerald-200/90">10M ALM · Need a team</p>
+                                        <p className="text-xs text-emerald-200/90">10M PEARLS · Need a team</p>
                                       </div>
                                     </button>
                                     <button
@@ -729,7 +729,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                                       <span className="text-2xl">⚔️</span>
                                       <div className="min-w-0 flex-1">
                                         <p className="font-bold text-white">League Competition</p>
-                                        <p className="text-sm text-amber-200/90">Teams competing · First to target ALM wins prize</p>
+                                        <p className="text-sm text-amber-200/90">Teams competing · First to target PEARLS wins prize</p>
                                       </div>
                                       <span className="text-gray-400">→</span>
                                     </button>

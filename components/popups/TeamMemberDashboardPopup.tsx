@@ -270,7 +270,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
                   {tasksAvailable.map((c) => (
                     <li key={c.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
                       <p className="text-white text-sm font-medium">{c.creatorTeamName} vs {c.opponentTeamName ?? 'TBD'}</p>
-                      <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} ALM · Prize: {formatNumber(c.prizePool)} ALM · Status: {c.status}</p>
+                      <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} PEARLS · Prize: {formatNumber(c.prizePool)} PEARLS · Status: {c.status}</p>
                       {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ends: {new Date(c.endsAt).toLocaleString()}</p>}
                     </li>
                   ))}
@@ -286,7 +286,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
                   {tasksCompleted.map((c) => (
                     <li key={c.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
                       <p className="text-white text-sm font-medium">{c.creatorTeamName} vs {c.opponentTeamName ?? '—'}</p>
-                      <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} ALM · Prize: {formatNumber(c.prizePool)} ALM</p>
+                      <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} PEARLS · Prize: {formatNumber(c.prizePool)} PEARLS</p>
                       {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ended: {new Date(c.endsAt).toLocaleString()}</p>}
                     </li>
                   ))}

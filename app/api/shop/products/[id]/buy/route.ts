@@ -1,4 +1,4 @@
-// app/api/shop/products/[id]/buy/route.ts – buy product with ALM
+// app/api/shop/products/[id]/buy/route.ts – buy product with PEARLS
 
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
@@ -54,7 +54,7 @@ export async function POST(
   const balance = buyer.pointsBalance ?? 0;
   if (balance < priceAlm) {
     return NextResponse.json(
-      { error: 'Insufficient ALM balance', required: priceAlm, balance: Math.floor(balance) },
+      { error: 'Insufficient PEARLS balance', required: priceAlm, balance: Math.floor(balance) },
       { status: 400 }
     );
   }
@@ -83,7 +83,7 @@ export async function POST(
 
   return NextResponse.json({
     success: true,
-    message: 'Purchase complete. ALM has been transferred to the seller.',
+    message: 'Purchase complete. PEARLS has been transferred to the seller.',
     newBalance: Math.floor(balance - priceAlm),
   });
 }

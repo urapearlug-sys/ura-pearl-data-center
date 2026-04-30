@@ -150,7 +150,7 @@ export default function LeagueManagementPage() {
               ← Back to Admin
             </Link>
             <h1 className="text-3xl font-bold text-[#f3ba2f]">League Management</h1>
-            <p className="text-gray-400 text-sm mt-1">Add, edit, delete teams and leagues. Donate ALM to team creators. Add or remove teams from leagues.</p>
+            <p className="text-gray-400 text-sm mt-1">Add, edit, delete teams and leagues. Donate PEARLS to team creators. Add or remove teams from leagues.</p>
           </div>
         </div>
 
@@ -419,7 +419,7 @@ function AddTeamModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <div className="bg-[#272a2f] rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-4">Add team</h2>
-        <p className="text-gray-400 text-sm mb-4">Team will be created for the selected user (no ALM fee). Creator is auto-joined.</p>
+        <p className="text-gray-400 text-sm mb-4">Team will be created for the selected user (no PEARLS fee). Creator is auto-joined.</p>
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Search user (name or Telegram ID)</label>
@@ -511,7 +511,7 @@ function AddLeagueModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <div className="bg-[#272a2f] rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-4">Add league</h2>
-        <p className="text-gray-400 text-sm mb-4">League will be created with the selected team as creator (no ALM fee).</p>
+        <p className="text-gray-400 text-sm mb-4">League will be created with the selected team as creator (no PEARLS fee).</p>
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Search user (creator)</label>
@@ -585,12 +585,12 @@ function DonateModal({ team, onClose, onSubmit }: { team: TeamRow; onClose: () =
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
       <div className="bg-[#272a2f] rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-2">Donate to team</h2>
-        <p className="text-gray-400 text-sm mb-4">ALM will be added to the team creator&apos;s balance: {team.creatorName || team.creatorTelegramId}</p>
+        <p className="text-gray-400 text-sm mb-4">PEARLS will be added to the team creator&apos;s balance: {team.creatorName || team.creatorTelegramId}</p>
         <input
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          placeholder="Amount ALM"
+          placeholder="Amount PEARLS"
           className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white mb-4"
         />
         <div className="flex gap-2">

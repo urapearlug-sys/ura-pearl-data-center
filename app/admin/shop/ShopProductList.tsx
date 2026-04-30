@@ -55,7 +55,7 @@ export function ShopProductList(props: {
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-semibold text-white">{p.title}</h3>
               <p className="text-gray-400 text-sm mt-1 line-clamp-2">{p.description}</p>
-              <p className="font-bold mt-2" style={{ color: ACCENT_YELLOW }}>{p.priceAlm.toLocaleString()} ALM</p>
+              <p className="font-bold mt-2" style={{ color: ACCENT_YELLOW }}>{p.priceAlm.toLocaleString()} PEARLS</p>
               <p className="text-gray-500 text-sm">Seller: {p.sellerName} (TG: {p.sellerTelegramId})</p>
               <p className="text-gray-500 text-xs mt-1">
                 {new Date(p.createdAt).toLocaleString()} | Status: <span className={p.status === 'approved' ? 'text-green-400' : p.status === 'rejected' ? 'text-red-400' : 'text-amber-400'}>{p.status}</span>

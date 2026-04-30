@@ -79,7 +79,7 @@ export default function DailyLoginPopup({ onClose }: DailyLoginPopupProps) {
       if (data.points != null) setPoints(data.points);
       if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
       if (data.status) setStatus(data.status);
-      showToast(`+${formatNumber(data.claimedReward)} ALM claimed!`, 'success');
+      showToast(`+${formatNumber(data.claimedReward)} PEARLS claimed!`, 'success');
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');
     } finally {

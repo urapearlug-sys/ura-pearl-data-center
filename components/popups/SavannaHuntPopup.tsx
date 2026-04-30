@@ -190,7 +190,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setClaimedReward(data.reward);
-        showToast(`+${formatNumber(data.reward)} ALM!`, 'success');
+        showToast(`+${formatNumber(data.reward)} PEARLS!`, 'success');
       } else if (data.sessionsLeft != null) {
         setSessionsLeft(data.sessionsLeft);
         if (data.message) showToast(data.message, 'error');
@@ -376,7 +376,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
             <span className="text-3xl drop-shadow-lg" aria-hidden>🦒</span>
             <div>
               <h1 className="text-xl font-bold text-amber-50 tracking-tight">Savanna Hunt</h1>
-              <p className="text-xs text-amber-200/70">3D-style · Tap targets · Earn ALM</p>
+              <p className="text-xs text-amber-200/70">3D-style · Tap targets · Earn PEARLS</p>
             </div>
           </div>
           <button type="button" onClick={handleClose} className="p-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 text-xl" aria-label="Close">&times;</button>
@@ -401,7 +401,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
           </section>
           <section className="rounded-2xl bg-[#12141a] border border-amber-900/40 p-4 shadow-xl">
             <h2 className="text-sm font-semibold text-amber-200 uppercase tracking-wider mb-2">Rewards</h2>
-            <p className="text-sm text-gray-400">One session = {DURATION_SEC}s. Score → ALM (max {formatNumber(config.maxReward ?? 40000)}/session). Min {MIN_SCORE} pts to claim. <strong className="text-amber-200">{sessionsLeft != null ? `${sessionsLeft} sessions` : '…'} left today</strong>.</p>
+            <p className="text-sm text-gray-400">One session = {DURATION_SEC}s. Score → PEARLS (max {formatNumber(config.maxReward ?? 40000)}/session). Min {MIN_SCORE} pts to claim. <strong className="text-amber-200">{sessionsLeft != null ? `${sessionsLeft} sessions` : '…'} left today</strong>.</p>
           </section>
         </div>
         <div className="p-4 border-t border-amber-900/40 bg-[#0f1115]/95 flex gap-3">
@@ -585,7 +585,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
         {claimedReward != null ? (
           <div className="mt-8 flex items-center gap-3 px-5 py-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 shadow-lg">
             <IceCube className="w-8 h-8 text-emerald-400 shrink-0" />
-            <span className="font-bold text-emerald-300 text-lg">+{formatNumber(claimedReward)} ALM claimed</span>
+            <span className="font-bold text-emerald-300 text-lg">+{formatNumber(claimedReward)} PEARLS claimed</span>
           </div>
         ) : isSubmitting ? (
           <p className="mt-8 text-amber-200/90">Claiming reward…</p>

@@ -126,7 +126,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
     if (!inviteTaskId || !initData) return;
     const stake = Number(inviteStake.replace(/\D/g, ''));
     if (!Number.isFinite(stake) || stake < GLOBAL_TASK_MIN_STAKE || stake > GLOBAL_TASK_MAX_STAKE) {
-      showToast(`Stake ${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)} ALM`, 'error');
+      showToast(`Stake ${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)} PEARLS`, 'error');
       return;
     }
     const task = templates.find((t) => t.id === inviteTaskId);
@@ -175,7 +175,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
     if (!acceptChallengeId || !initData) return;
     const stake = Number(acceptStake.replace(/\D/g, ''));
     if (!Number.isFinite(stake) || stake < GLOBAL_TASK_MIN_STAKE || stake > GLOBAL_TASK_MAX_STAKE) {
-      showToast(`Stake ${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)} ALM`, 'error');
+      showToast(`Stake ${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)} PEARLS`, 'error');
       return;
     }
     setAccepting(true);
@@ -208,7 +208,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <p className="px-4 py-2 text-sm text-gray-400 shrink-0">
-          Invite another team or league. When they accept, both stake ALM; first to reach target in time wins. Management adds 30% to the pool.
+          Invite another team or league. When they accept, both stake PEARLS; first to reach target in time wins. Management adds 30% to the pool.
         </p>
         <div className="flex border-b border-[#3d4046] px-2 shrink-0">
           <button type="button" onClick={() => { setTab('browse'); setInviteTaskId(null); setAcceptChallengeId(null); }} className={`px-4 py-2 text-sm font-medium ${tab === 'browse' ? 'border-b-2 border-[#f3ba2f] text-[#f3ba2f]' : 'text-gray-400'}`}>
@@ -283,7 +283,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
                 </>
               )}
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Your stake (ALM)</label>
+                <label className="block text-sm text-gray-400 mb-1">Your stake (PEARLS)</label>
                 <input type="text" value={inviteStake} onChange={(e) => setInviteStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500" />
               </div>
               <div className="flex gap-2">
@@ -295,7 +295,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
             <div className="space-y-3 py-2">
               <p className="text-white font-medium">Accept and stake to start</p>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Your stake (ALM)</label>
+                <label className="block text-sm text-gray-400 mb-1">Your stake (PEARLS)</label>
                 <input type="text" value={acceptStake} onChange={(e) => setAcceptStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500" />
               </div>
               <div className="flex gap-2">

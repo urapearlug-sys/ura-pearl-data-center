@@ -1,5 +1,5 @@
 /**
- * Send ALM – P2P transfer to another user by Telegram ID
+ * Send PEARLS – P2P transfer to another user by Telegram ID
  * POST: { initData, recipientTelegramId, amount }
  */
 
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
   // Prevent self-transfer
   if (recipientIdStr === senderTelegramId) {
-    return NextResponse.json({ error: 'Cannot send ALM to yourself' }, { status: 400 });
+    return NextResponse.json({ error: 'Cannot send PEARLS to yourself' }, { status: 400 });
   }
 
   const amt = Math.floor(Number(amount));
@@ -50,14 +50,14 @@ export async function POST(req: Request) {
 
   if (amt < TRANSFER_MIN) {
     return NextResponse.json(
-      { error: `Minimum transfer is ${TRANSFER_MIN.toLocaleString()} ALM` },
+      { error: `Minimum transfer is ${TRANSFER_MIN.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
 
   if (amt > TRANSFER_MAX) {
     return NextResponse.json(
-      { error: `Maximum transfer per transaction is ${TRANSFER_MAX.toLocaleString()} ALM` },
+      { error: `Maximum transfer per transaction is ${TRANSFER_MAX.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
@@ -87,7 +87,7 @@ export async function POST(req: Request) {
   const netAmount = amt - fee;
 
   if (dbSender.pointsBalance < amt) {
-    return NextResponse.json({ error: 'Insufficient ALM balance' }, { status: 400 });
+    return NextResponse.json({ error: 'Insufficient PEARLS balance' }, { status: 400 });
   }
 
   const todayStart = startOfDayUTC(new Date());
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
   if (totalSentToday + amt > TRANSFER_DAILY_LIMIT) {
     return NextResponse.json(
       {
-        error: `Daily limit exceeded. You can send ${(TRANSFER_DAILY_LIMIT - totalSentToday).toLocaleString()} ALM more today.`,
+        error: `Daily limit exceeded. You can send ${(TRANSFER_DAILY_LIMIT - totalSentToday).toLocaleString()} PEARLS more today.`,
       },
       { status: 400 }
     );

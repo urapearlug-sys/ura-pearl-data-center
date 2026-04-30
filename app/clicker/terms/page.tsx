@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">2. Description of Service</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          AfroLumens is a Telegram Mini App that allows you to earn in-app points (ALM) by tapping, completing tasks, referring friends, staking, and playing mini-games. ALM and other in-app rewards have no guaranteed real-world value unless otherwise stated in the app or by the operator. We may add, change, or discontinue features at any time.
+          AfroLumens is a Telegram Mini App that allows you to earn in-app points (PEARLS) by tapping, completing tasks, referring friends, staking, and playing mini-games. PEARLS and other in-app rewards have no guaranteed real-world value unless otherwise stated in the app or by the operator. We may add, change, or discontinue features at any time.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">3. Eligibility and Account</h2>
@@ -50,7 +50,7 @@ export default function TermsOfServicePage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">5. In-App Points and Rewards</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          ALM and other in-app rewards are granted at our discretion and may be changed or discontinued. Unless we explicitly state otherwise in the app, they are for in-app use only and do not constitute a promise of real-world payment. Staking, airdrops, Lumina ID, and wallet-related features may be subject to additional terms and eligibility rules.
+          PEARLS and other in-app rewards are granted at our discretion and may be changed or discontinued. Unless we explicitly state otherwise in the app, they are for in-app use only and do not constitute a promise of real-world payment. Staking, airdrops, Lumina ID, and wallet-related features may be subject to additional terms and eligibility rules.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">6. Referrals and Tasks</h2>

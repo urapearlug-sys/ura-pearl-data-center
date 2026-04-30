@@ -92,7 +92,7 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
                         </>
                     }
                     <div className="flex-1 text-center">
-                        <p className="text-xs text-[#85827d] font-medium whitespace-nowrap overflow-hidden text-ellipsis">ALM per hour</p>
+                        <p className="text-xs text-[#85827d] font-medium whitespace-nowrap overflow-hidden text-ellipsis">PEARLS per hour</p>
                         <div className="flex items-center justify-center space-x-1">
                             <IceCubes size={20} />
                             <p className="text-sm">+{formatNumber(profitPerHour)}</p>

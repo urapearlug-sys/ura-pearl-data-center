@@ -34,7 +34,7 @@ export async function POST(
   const creatorStake = Number(rawStake);
   if (!Number.isFinite(creatorStake) || creatorStake < GLOBAL_TASK_MIN_STAKE || creatorStake > GLOBAL_TASK_MAX_STAKE) {
     return NextResponse.json(
-      { error: `Stake must be ${GLOBAL_TASK_MIN_STAKE.toLocaleString()}–${GLOBAL_TASK_MAX_STAKE.toLocaleString()} ALM` },
+      { error: `Stake must be ${GLOBAL_TASK_MIN_STAKE.toLocaleString()}–${GLOBAL_TASK_MAX_STAKE.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
@@ -68,7 +68,7 @@ export async function POST(
   }
 
   const balance = dbUser.pointsBalance ?? 0;
-  if (balance < creatorStake) return NextResponse.json({ error: 'Insufficient ALM balance' }, { status: 400 });
+  if (balance < creatorStake) return NextResponse.json({ error: 'Insufficient PEARLS balance' }, { status: 400 });
 
   const challenge = await prisma.globalTaskChallenge.create({
     data: {

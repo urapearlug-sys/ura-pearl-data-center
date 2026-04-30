@@ -1,6 +1,6 @@
 // app/api/marketplace/buy/route.ts
 /**
- * Buy ALM from a listing – pay with TON (buyer sends TON on-chain, then we credit ALM)
+ * Buy PEARLS from a listing – pay with TON (buyer sends TON on-chain, then we credit PEARLS)
  */
 
 import { NextResponse } from 'next/server';
@@ -55,12 +55,12 @@ export async function POST(req: Request) {
   const buyAmount = Math.floor(amount);
   if (buyAmount > listing.remainingAmount) {
     return NextResponse.json(
-      { error: `Max available: ${listing.remainingAmount.toLocaleString()} ALM` },
+      { error: `Max available: ${listing.remainingAmount.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
 
-  // TON: buyer already sent TON on-chain via TonConnect; we credit ALM
+  // TON: buyer already sent TON on-chain via TonConnect; we credit PEARLS
   const tonPaid = buyAmount * listing.pricePerUnit;
   const fee = 0;
   const sellerReceivedTon = tonPaid;

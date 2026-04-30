@@ -4,14 +4,14 @@ import React from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 
 const SECTIONS = [
-  { id: 'tap', label: 'Tap to Earn', icon: '💰', body: 'Tap to collect ALM. Use energy to tap; it refills over time. Keep tapping to earn more and progress.' },
-  { id: 'earn', label: 'Earn & Boost', icon: '⛏️', body: 'Mine upgrades: Energy, Multi Tap, and more. Spend ALM in the Mine to earn more per tap and boost your hourly profit.' },
-  { id: 'profit', label: 'Profit per Hour', icon: '⏰', body: 'Offline earnings up to 3 hours. Your Mine keeps producing ALM when you\'re away. Come back to collect and keep earning.' },
-  { id: 'level', label: 'Level Up', icon: '📈', body: 'ALM and taps count toward your level and leaderboard rank. Level up to unlock better earning potential and climb the ranks.' },
+  { id: 'tap', label: 'Tap to Earn', icon: '💰', body: 'Tap to collect PEARLS. Use energy to tap; it refills over time. Keep tapping to earn more and progress.' },
+  { id: 'earn', label: 'Earn & Boost', icon: '⛏️', body: 'Mine upgrades: Energy, Multi Tap, and more. Spend PEARLS in the Mine to earn more per tap and boost your hourly profit.' },
+  { id: 'profit', label: 'Profit per Hour', icon: '⏰', body: 'Offline earnings up to 3 hours. Your Mine keeps producing PEARLS when you\'re away. Come back to collect and keep earning.' },
+  { id: 'level', label: 'Level Up', icon: '📈', body: 'PEARLS and taps count toward your level and leaderboard rank. Level up to unlock better earning potential and climb the ranks.' },
   { id: 'friends', label: 'Friends', icon: '👥', body: 'Invite friends and earn referral bonuses. Share your link from the Friends tab; when they join, you both get rewards.' },
-  { id: 'staking', label: 'Stake ALM', icon: '🪙', body: 'Lock ALM for at least 1 week. When the stake unlocks, claim your principal plus bonus. Stake from the Mine screen.' },
-  { id: 'tasks', label: 'Tasks & Earn', icon: '📋', body: 'Earn tab tasks: videos, channels, Zoom code, and more. Complete tasks to earn ALM without tapping.' },
-  { id: 'minigames', label: 'Mini Games', icon: '🎮', body: 'Umeme Run, Lucky Spin, and daily rewards. Play from the main screen to win extra ALM once per day per game.' },
+  { id: 'staking', label: 'Stake PEARLS', icon: '🪙', body: 'Lock PEARLS for at least 1 week. When the stake unlocks, claim your principal plus bonus. Stake from the Mine screen.' },
+  { id: 'tasks', label: 'Tasks & Earn', icon: '📋', body: 'Earn tab tasks: videos, channels, Zoom code, and more. Complete tasks to earn PEARLS without tapping.' },
+  { id: 'minigames', label: 'Mini Games', icon: '🎮', body: 'Umeme Run, Lucky Spin, and daily rewards. Play from the main screen to win extra PEARLS once per day per game.' },
   { id: 'rewards', label: 'Rewards', icon: '💸', body: 'Season rewards, Lumina ID, wallet and airdrops. Stay active to qualify; connect your wallet when Lumina ID and airdrop payments are available.' },
 ] as const;
 

@@ -1,6 +1,6 @@
 // components/Marketplace.tsx
 /**
- * P2P Marketplace – sell ALM for TON, buy ALM with TON (TonConnect).
+ * P2P Marketplace – sell PEARLS for TON, buy PEARLS with TON (TonConnect).
  */
 
 'use client';
@@ -119,12 +119,12 @@ export function MarketplaceSection() {
     }
     const amt = Math.floor(Number(sellAmount));
     if (!Number.isFinite(amt) || amt < MARKETPLACE_MIN_LISTING) {
-      showToast(`Min ${MARKETPLACE_MIN_LISTING.toLocaleString()} ALM`, 'error');
+      showToast(`Min ${MARKETPLACE_MIN_LISTING.toLocaleString()} PEARLS`, 'error');
       return;
     }
     const priceTon = Number(sellPriceTon);
     if (!Number.isFinite(priceTon) || priceTon <= 0) {
-      showToast('Enter price in TON (e.g. 0.001 per 1000 ALM)', 'error');
+      showToast('Enter price in TON (e.g. 0.001 per 1000 PEARLS)', 'error');
       return;
     }
     setIsCreating(true);
@@ -212,7 +212,7 @@ export function MarketplaceSection() {
       });
       const data = await res.json();
       if (data.success) {
-        showToast(`Bought ${formatNumber(data.amount)} ALM`, 'success');
+        showToast(`Bought ${formatNumber(data.amount)} PEARLS`, 'success');
         setBuyListingId('');
         setBuyAmount('');
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
@@ -240,13 +240,13 @@ export function MarketplaceSection() {
                     <p className="text-gray-400 text-xs">Available</p>
                     <p className="text-[#f3ba2f] font-bold flex items-center justify-center gap-1">
                       <IceCube className="w-5 h-5" />
-                      {formatNumber(pointsBalance ?? 0)} ALM
+                      {formatNumber(pointsBalance ?? 0)} PEARLS
                     </p>
                   </div>
                   <div className="w-px h-10 bg-[#3d4046]" />
                   <div className="text-center">
                     <p className="text-gray-400 text-xs">In listings</p>
-                    <p className="text-amber-400/90 font-bold">{formatNumber(pointsInMarketplace)} ALM</p>
+                    <p className="text-amber-400/90 font-bold">{formatNumber(pointsInMarketplace)} PEARLS</p>
                   </div>
                 </div>
 
@@ -270,10 +270,10 @@ export function MarketplaceSection() {
                 <div className="mb-6 p-4 rounded-xl bg-[#272a2f]/80 border border-amber-500/30">
                   <p className="text-amber-400/90 font-semibold text-sm mb-2">How it works</p>
                   <p className="text-gray-300 text-xs leading-relaxed mb-2">
-                    <span className="text-white font-medium">Sell:</span> Connect TON wallet (Airdrop tab) → set amount ALM and price (TON per 1000 ALM) → List for TON → ALM is escrowed until sold or cancelled.
+                    <span className="text-white font-medium">Sell:</span> Connect TON wallet (Airdrop tab) → set amount PEARLS and price (TON per 1000 PEARLS) → List for TON → PEARLS is escrowed until sold or cancelled.
                   </p>
                   <p className="text-gray-300 text-xs leading-relaxed">
-                    <span className="text-white font-medium">Buy:</span> Connect TON wallet → choose listing → enter ALM amount → Pay TON → TonConnect sends TON to seller → you receive ALM.
+                    <span className="text-white font-medium">Buy:</span> Connect TON wallet → choose listing → enter PEARLS amount → Pay TON → TonConnect sends TON to seller → you receive PEARLS.
                   </p>
                 </div>
 
@@ -296,10 +296,10 @@ export function MarketplaceSection() {
                               className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046]"
                             >
                               <div className="flex justify-between items-start mb-2">
-                                <span className="text-white font-semibold">{formatNumber(l.amount)} ALM</span>
+                                <span className="text-white font-semibold">{formatNumber(l.amount)} PEARLS</span>
                                 <span className="text-gray-400 text-sm">{l.sellerName}</span>
                               </div>
-                              <p className="text-gray-400 text-xs mb-3">{tonPer1k} TON per 1000 ALM</p>
+                              <p className="text-gray-400 text-xs mb-3">{tonPer1k} TON per 1000 PEARLS</p>
                               {buyListingId === l.id ? (
                                 <div className="flex gap-2 items-center">
                                   <input
@@ -308,7 +308,7 @@ export function MarketplaceSection() {
                                     max={l.amount}
                                     value={buyAmount}
                                     onChange={(e) => setBuyAmount(e.target.value)}
-                                    placeholder="Amount ALM"
+                                    placeholder="Amount PEARLS"
                                     className="flex-1 rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
                                   />
                                   <button
@@ -343,12 +343,12 @@ export function MarketplaceSection() {
 
                 {tab === 'sell' && (
                   <>
-                    <p className="text-gray-400 text-sm mb-2">List ALM for TON. Connect TON wallet in Airdrop tab to receive payments.</p>
+                    <p className="text-gray-400 text-sm mb-2">List PEARLS for TON. Connect TON wallet in Airdrop tab to receive payments.</p>
                     {!tonWalletAddress && (
                       <p className="text-amber-400/90 text-sm mb-3">Connect your TON wallet in the Airdrop tab first.</p>
                     )}
                     <div className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046] mb-4">
-                      <label className="block text-gray-400 text-sm mb-2">Amount to sell (ALM)</label>
+                      <label className="block text-gray-400 text-sm mb-2">Amount to sell (PEARLS)</label>
                       <input
                         type="number"
                         min={MARKETPLACE_MIN_LISTING}
@@ -357,7 +357,7 @@ export function MarketplaceSection() {
                         placeholder={MARKETPLACE_MIN_LISTING.toLocaleString()}
                         className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-4 py-3 text-white mb-3"
                       />
-                      <label className="block text-gray-400 text-sm mb-2">Price (TON per 1000 ALM)</label>
+                      <label className="block text-gray-400 text-sm mb-2">Price (TON per 1000 PEARLS)</label>
                       <input
                         type="number"
                         min={0.0001}
@@ -367,7 +367,7 @@ export function MarketplaceSection() {
                         placeholder="0.001"
                         className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-4 py-3 text-white mb-3"
                       />
-                      <p className="text-gray-400 text-xs mb-3">Min {MARKETPLACE_MIN_LISTING.toLocaleString()} ALM. You receive TON to your connected wallet.</p>
+                      <p className="text-gray-400 text-xs mb-3">Min {MARKETPLACE_MIN_LISTING.toLocaleString()} PEARLS. You receive TON to your connected wallet.</p>
                       <button
                         onClick={handleCreateListing}
                         disabled={isCreating || !tonWalletAddress || !sellAmount || !sellPriceTon || Number(sellAmount) < MARKETPLACE_MIN_LISTING || Number(sellPriceTon) <= 0}
@@ -392,7 +392,7 @@ export function MarketplaceSection() {
                           <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-[#272a2f] border border-[#3d4046]">
                             <div>
                               <span className="text-[#f3ba2f] font-semibold">{formatNumber(l.remainingAmount)}</span>
-                              <span className="text-gray-400 text-sm"> / {formatNumber(l.amount)} ALM</span>
+                              <span className="text-gray-400 text-sm"> / {formatNumber(l.amount)} PEARLS</span>
                               <span className="ml-2 text-xs text-gray-500">{l.status}</span>
                             </div>
                             {l.status === 'active' && l.remainingAmount > 0 && (
@@ -414,8 +414,8 @@ export function MarketplaceSection() {
                       <div className="space-y-2">
                         {myTrades.map((t) => (
                           <div key={t.id} className="p-3 rounded-xl bg-[#272a2f] border border-[#3d4046]">
-                            <span className="text-emerald-400 font-semibold">+{formatNumber(t.amount)} ALM</span>
-                            <span className="text-gray-400 text-sm"> (paid {t.currency === 'ton' ? `${Number(t.amountPaid).toFixed(4)} TON` : `${formatNumber(t.amountPaid)} ALM`})</span>
+                            <span className="text-emerald-400 font-semibold">+{formatNumber(t.amount)} PEARLS</span>
+                            <span className="text-gray-400 text-sm"> (paid {t.currency === 'ton' ? `${Number(t.amountPaid).toFixed(4)} TON` : `${formatNumber(t.amountPaid)} PEARLS`})</span>
                             <p className="text-gray-500 text-xs mt-1">{new Date(t.createdAt).toLocaleString()}</p>
                           </div>
                         ))}

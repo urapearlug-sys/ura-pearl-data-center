@@ -58,7 +58,7 @@ export default function LeagueChallengesPopup({ onClose, initData, onCreateChall
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <div className="p-4 flex flex-col gap-3 shrink-0">
-          <p className="text-sm text-gray-400">Under League Competition you see <strong className="text-white">teams that are competing</strong> with each other. Leagues can compete with more than one league as long as they meet the challenge requirements (target, stake, duration). First to reach the target ALM (or highest at the end) wins the prize pool. Anyone can add to the prize pool.</p>
+          <p className="text-sm text-gray-400">Under League Competition you see <strong className="text-white">teams that are competing</strong> with each other. Leagues can compete with more than one league as long as they meet the challenge requirements (target, stake, duration). First to reach the target PEARLS (or highest at the end) wins the prize pool. Anyone can add to the prize pool.</p>
           <button
             type="button"
             onClick={() => { triggerHapticFeedback(window); onCreateChallenge(); }}
@@ -90,7 +90,7 @@ export default function LeagueChallengesPopup({ onClose, initData, onCreateChall
                             : '—'}
                         </p>
                         <p className="text-xs text-gray-400 mt-0.5">
-                          Target: {formatNumber(c.targetAlm)} ALM · {c.durationDays}d · Prize: {formatNumber(c.prizePool)} ALM
+                          Target: {formatNumber(c.targetAlm)} PEARLS · {c.durationDays}d · Prize: {formatNumber(c.prizePool)} PEARLS
                           {c.contributionCount > 0 && ` · ${c.contributionCount} contribution(s)`}
                         </p>
                         <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${

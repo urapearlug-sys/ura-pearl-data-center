@@ -161,11 +161,11 @@ export default function AdminFeesCollection() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-[#272a2f] rounded-xl p-5">
             <p className="text-gray-400 text-sm">Current wallet balance</p>
-            <p className="text-2xl font-bold text-[#f3ba2f]">{formatNumber(feeRecipient.pointsBalance)} ALM</p>
+            <p className="text-2xl font-bold text-[#f3ba2f]">{formatNumber(feeRecipient.pointsBalance)} PEARLS</p>
           </div>
           <div className="bg-[#272a2f] rounded-xl p-5">
             <p className="text-gray-400 text-sm">Total received (fees + donations + upgrades)</p>
-            <p className="text-2xl font-bold text-white">{formatNumber(totalAmount)} ALM</p>
+            <p className="text-2xl font-bold text-white">{formatNumber(totalAmount)} PEARLS</p>
           </div>
           <div className="bg-[#272a2f] rounded-xl p-5">
             <p className="text-gray-400 text-sm">Number of transactions</p>
@@ -194,7 +194,7 @@ export default function AdminFeesCollection() {
         {/* Tab summary */}
         <div className="bg-[#272a2f] rounded-xl p-5 mb-6">
           <p className="text-gray-400 text-sm">
-            {TABS.find((t) => t.id === activeTab)?.label} — {tabTransactions.length} transaction{tabTransactions.length !== 1 ? 's' : ''}, {formatNumber(tabAmount)} ALM
+            {TABS.find((t) => t.id === activeTab)?.label} — {tabTransactions.length} transaction{tabTransactions.length !== 1 ? 's' : ''}, {formatNumber(tabAmount)} PEARLS
           </p>
         </div>
 
@@ -210,7 +210,7 @@ export default function AdminFeesCollection() {
                   <tr className="border-b border-[#3d4046]">
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Date</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium text-right">Count</th>
-                    <th className="pb-3 text-gray-400 font-medium text-right">Amount (ALM)</th>
+                    <th className="pb-3 text-gray-400 font-medium text-right">Amount (PEARLS)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -241,7 +241,7 @@ export default function AdminFeesCollection() {
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Type</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium">From</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Telegram ID</th>
-                    <th className="pb-3 text-gray-400 font-medium text-right">Amount (ALM)</th>
+                    <th className="pb-3 text-gray-400 font-medium text-right">Amount (PEARLS)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -275,7 +275,7 @@ export default function AdminFeesCollection() {
         </div>
 
         <p className="text-gray-500 text-sm mt-4">
-          Types: <strong>transfer_fee</strong> = P2P send fee; <strong>donation</strong> = charity donation; <strong>multitap</strong> / <strong>mine</strong> / <strong>energy limit</strong> = upgrade payment; <strong>team_commitment</strong> = team creation (1M ALM); <strong>league_commitment</strong> = league creation (10M ALM).
+          Types: <strong>transfer_fee</strong> = P2P send fee; <strong>donation</strong> = charity donation; <strong>multitap</strong> / <strong>mine</strong> / <strong>energy limit</strong> = upgrade payment; <strong>team_commitment</strong> = team creation (1M PEARLS); <strong>league_commitment</strong> = league creation (10M PEARLS).
         </p>
       </div>
     </div>

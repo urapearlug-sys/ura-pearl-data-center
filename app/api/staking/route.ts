@@ -117,7 +117,7 @@ export async function POST(req: Request) {
     if (stake.claimedAt != null) {
       return NextResponse.json({
         error: 'Already claimed',
-        message: 'This stake was already claimed. If you did not receive your ALM, please contact support.',
+        message: 'This stake was already claimed. If you did not receive your PEARLS, please contact support.',
       }, { status: 400 });
     }
 
@@ -133,7 +133,7 @@ export async function POST(req: Request) {
 
     const bonusPercent = getBonusPercentForDuration(stake.duration, stake.bonusPercent);
     const { bonusAmount, totalReturn } = computeStakeReturn(principal, bonusPercent);
-    // Balance gets principal + bonus; Total ALM (points) gets only the profit (bonus)
+    // Balance gets principal + bonus; Total PEARLS (points) gets only the profit (bonus)
     const amountToBalance = totalReturn;
     const amountToTotalAlm = bonusAmount;
 
@@ -163,7 +163,7 @@ export async function POST(req: Request) {
       if (current?.claimedAt != null) {
         return NextResponse.json({
           error: 'Already claimed',
-          message: 'This stake was already claimed. If you did not receive your ALM, contact support or ask admin to reset the claim.',
+          message: 'This stake was already claimed. If you did not receive your PEARLS, contact support or ask admin to reset the claim.',
         }, { status: 400 });
       }
       console.error('[staking/claim] raw update matched 0 rows', { stakeId: stake.id, userId: dbUser.id, updateResult });
@@ -191,7 +191,7 @@ export async function POST(req: Request) {
   if (action === 'stake') {
     if (STAKING_NEW_STAKES_DISABLED) {
       return NextResponse.json(
-        { error: 'Staking is temporarily unavailable. You can only claim existing staked ALM.' },
+        { error: 'Staking is temporarily unavailable. You can only claim existing staked PEARLS.' },
         { status: 503 }
       );
     }
@@ -205,7 +205,7 @@ export async function POST(req: Request) {
 
     const minAmount = (config as { minAmount?: number }).minAmount ?? 1_000;
     if (!Number.isFinite(amt) || amt < minAmount) {
-      return NextResponse.json({ error: `Minimum for ${config.label} is ${minAmount.toLocaleString()} ALM` }, { status: 400 });
+      return NextResponse.json({ error: `Minimum for ${config.label} is ${minAmount.toLocaleString()} PEARLS` }, { status: 400 });
     }
 
     const amountToLock = Math.floor(amt);

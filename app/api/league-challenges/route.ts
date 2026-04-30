@@ -10,8 +10,8 @@ import { validateTelegramWebAppData } from '@/utils/server-checks';
 import {
   LEAGUE_CHALLENGE_MIN_STAKE,
   LEAGUE_CHALLENGE_MAX_STAKE,
-  LEAGUE_CHALLENGE_MIN_TARGET_ALM,
-  LEAGUE_CHALLENGE_MAX_TARGET_ALM,
+  LEAGUE_CHALLENGE_MIN_TARGET_PEARLS,
+  LEAGUE_CHALLENGE_MAX_TARGET_PEARLS,
   LEAGUE_CHALLENGE_MIN_DAYS,
   LEAGUE_CHALLENGE_MAX_DAYS,
 } from '@/utils/consts';
@@ -82,14 +82,14 @@ export async function POST(req: Request) {
   const days = Math.floor(Number(durationDays));
   const stake = Math.floor(Number(stakePerLeague));
 
-  if (!Number.isFinite(target) || target < LEAGUE_CHALLENGE_MIN_TARGET_ALM || target > LEAGUE_CHALLENGE_MAX_TARGET_ALM) {
-    return NextResponse.json({ error: `Target ALM must be between ${LEAGUE_CHALLENGE_MIN_TARGET_ALM.toLocaleString()} and ${LEAGUE_CHALLENGE_MAX_TARGET_ALM.toLocaleString()}` }, { status: 400 });
+  if (!Number.isFinite(target) || target < LEAGUE_CHALLENGE_MIN_TARGET_PEARLS || target > LEAGUE_CHALLENGE_MAX_TARGET_PEARLS) {
+    return NextResponse.json({ error: `Target PEARLS must be between ${LEAGUE_CHALLENGE_MIN_TARGET_PEARLS.toLocaleString()} and ${LEAGUE_CHALLENGE_MAX_TARGET_PEARLS.toLocaleString()}` }, { status: 400 });
   }
   if (!Number.isFinite(days) || days < LEAGUE_CHALLENGE_MIN_DAYS || days > LEAGUE_CHALLENGE_MAX_DAYS) {
     return NextResponse.json({ error: `Duration must be ${LEAGUE_CHALLENGE_MIN_DAYS}-${LEAGUE_CHALLENGE_MAX_DAYS} days` }, { status: 400 });
   }
   if (!Number.isFinite(stake) || stake < LEAGUE_CHALLENGE_MIN_STAKE || stake > LEAGUE_CHALLENGE_MAX_STAKE) {
-    return NextResponse.json({ error: `Stake per league must be ${LEAGUE_CHALLENGE_MIN_STAKE.toLocaleString()} - ${LEAGUE_CHALLENGE_MAX_STAKE.toLocaleString()} ALM` }, { status: 400 });
+    return NextResponse.json({ error: `Stake per league must be ${LEAGUE_CHALLENGE_MIN_STAKE.toLocaleString()} - ${LEAGUE_CHALLENGE_MAX_STAKE.toLocaleString()} PEARLS` }, { status: 400 });
   }
 
   const { validatedData, user } = validateTelegramWebAppData(initData);
@@ -111,7 +111,7 @@ export async function POST(req: Request) {
   if (creatorLeagueId === opponentLeagueId) return NextResponse.json({ error: 'Cannot challenge your own league' }, { status: 400 });
 
   if ((dbUser.pointsBalance ?? 0) < stake) {
-    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} ALM.` }, { status: 400 });
+    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} PEARLS.` }, { status: 400 });
   }
 
   const initialPrizePool = stake * 2;

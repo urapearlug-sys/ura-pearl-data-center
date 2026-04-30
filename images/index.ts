@@ -70,6 +70,9 @@ import defaultProfileAvatar from "./default-profile-avatar.png";
 import uraFiscalFunBanner from "./ura-fiscal-fun-banner.png";
 import uraDailyPearlCoins from "./ura-daily-pearl-coins.png";
 import uraTreasuryCounter from "./ura-treasury-counter.png";
+import pearlWhite from "./pearl-white.png";
+import pearlBlue from "./pearl-blue.png";
+import pearlGolden from "./pearl-golden.png";
 
 
 export {
@@ -117,6 +120,9 @@ export {
     uraFiscalFunBanner,
     uraDailyPearlCoins,
     uraTreasuryCounter,
+    pearlWhite,
+    pearlBlue,
+    pearlGolden,
     blockchain,
     afrolumens,
     mitroplus,

@@ -1,5 +1,5 @@
 /**
- * Teams: users can create teams (1M ALM commitment). Only teams can create leagues.
+ * Teams: users can create teams (1M PEARLS commitment). Only teams can create leagues.
  * GET: list my teams (where I'm creator or member)
  * POST: create team (body: { initData, name }) -> id, name, inviteCode
  */
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
   if (balance < TEAM_CREATION_FEE) {
     return NextResponse.json(
       {
-        error: `Team creation requires a commitment of ${TEAM_CREATION_FEE.toLocaleString()} ALM. Your balance: ${Math.floor(balance).toLocaleString()} ALM.`,
+        error: `Team creation requires a commitment of ${TEAM_CREATION_FEE.toLocaleString()} PEARLS. Your balance: ${Math.floor(balance).toLocaleString()} PEARLS.`,
       },
       { status: 400 }
     );

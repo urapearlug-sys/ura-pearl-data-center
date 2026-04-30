@@ -138,7 +138,7 @@ function GlobalTasksMainContent(props: {
                       </p>
                     </div>
                     <div className="text-right text-sm">
-                      <p>Prize: {formatNumber(c.prizePool)} ALM (incl. {formatNumber(c.managementBonusAmount)} 30% bonus)</p>
+                      <p>Prize: {formatNumber(c.prizePool)} PEARLS (incl. {formatNumber(c.managementBonusAmount)} 30% bonus)</p>
                       <p className="text-gray-400">Stakes: {formatNumber(c.creatorStake)} + {formatNumber(c.opponentStake)}</p>
                     </div>
                   </div>
@@ -185,7 +185,7 @@ function GlobalTasksMainContent(props: {
                         disabled={!!actioningId}
                         className="px-3 py-2 bg-emerald-600 rounded-lg text-sm font-medium disabled:opacity-50"
                       >
-                        Redeem ({formatNumber(c.prizePool)} ALM)
+                        Redeem ({formatNumber(c.prizePool)} PEARLS)
                       </button>
                     </div>
                   )}

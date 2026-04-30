@@ -49,7 +49,7 @@ export default function LuckySpinPopup({ onClose, onSuccess, claimedToday }: Luc
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setTimeout(() => {
           setResult({ reward });
-          showToast(`You won +${formatNumber(reward)} ALM!`, 'success');
+          showToast(`You won +${formatNumber(reward)} PEARLS!`, 'success');
           onSuccess?.(reward);
           setIsSpinning(false);
         }, 2500);
@@ -97,7 +97,7 @@ export default function LuckySpinPopup({ onClose, onSuccess, claimedToday }: Luc
       {/* Win notification – prominent after rolling */}
       {result && (
         <div className="flex-shrink-0 text-center px-4 py-3 mb-1">
-          <p className="text-xl font-bold text-[#f3ba2f]">You won +{formatNumber(result.reward)} ALM!</p>
+          <p className="text-xl font-bold text-[#f3ba2f]">You won +{formatNumber(result.reward)} PEARLS!</p>
           <p className="text-gray-400 text-sm mt-1">Added to your balance.</p>
         </div>
       )}

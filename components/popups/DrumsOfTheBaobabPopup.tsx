@@ -206,7 +206,7 @@ export default function DrumsOfTheBaobabPopup({ onClose, onSuccess }: DrumsOfThe
       if (data.success && data.pointsBalance != null) {
         setPointsBalance(data.pointsBalance);
         if (data.points != null) setPoints(data.points);
-        showToast(data.message ?? `+${formatNumber(data.reward)} ALM!`, 'success');
+        showToast(data.message ?? `+${formatNumber(data.reward)} PEARLS!`, 'success');
         onSuccess?.();
         onClose();
       } else {
@@ -245,21 +245,21 @@ export default function DrumsOfTheBaobabPopup({ onClose, onSuccess }: DrumsOfThe
             {canClaim && (
               <div className="rounded-xl bg-[#0d0a06]/60 border border-amber-500/20 p-3 mb-4 text-left">
                 <p className="text-xs font-semibold text-amber-400/90 uppercase tracking-wider mb-2">Reward breakdown</p>
-                <p className="text-amber-200/90 text-sm flex justify-between"><span>Base ({accuracy}%)</span><span>{formatNumber(Math.round(baseFromAccuracy))} ALM</span></p>
+                <p className="text-amber-200/90 text-sm flex justify-between"><span>Base ({accuracy}%)</span><span>{formatNumber(Math.round(baseFromAccuracy))} PEARLS</span></p>
                 {comboBonus > 0 && (
                   <p className="text-amber-300/90 text-sm flex justify-between mt-1">
-                    <span>Innovation combo bonus</span><span>+{formatNumber(comboBonus)} ALM</span>
+                    <span>Innovation combo bonus</span><span>+{formatNumber(comboBonus)} PEARLS</span>
                   </p>
                 )}
                 <p className="text-amber-100 font-semibold text-base flex justify-between mt-2 pt-2 border-t border-amber-500/20">
-                  <span>Total</span><span>+{formatNumber(reward)} ALM</span>
+                  <span>Total</span><span>+{formatNumber(reward)} PEARLS</span>
                 </p>
                 <p className="text-[10px] text-amber-400/60 mt-2">Spirit ({SPIRIT_CARD[spiritRarity].label}) · Innovation ({INNOVATION_CARD[innovationTier].label})</p>
               </div>
             )}
             {canClaim ? (
               <>
-                <p className="text-amber-100 font-semibold text-lg mb-4">+{formatNumber(reward)} ALM</p>
+                <p className="text-amber-100 font-semibold text-lg mb-4">+{formatNumber(reward)} PEARLS</p>
                 <button
                   type="button"
                   onClick={handleClaim}

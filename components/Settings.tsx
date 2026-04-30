@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { defaultProfileAvatar, uraDailyPearlCoins } from '@/images';
+import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite } from '@/images';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import Toggle from '@/components/Toggle';
@@ -173,12 +173,12 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               <h3 className="text-sm font-bold text-white mb-2">PEARL CATEGORIES</h3>
               <div className="grid grid-cols-3 gap-2 mb-2">
                 {[
-                  { label: 'White', color: 'text-slate-200' },
-                  { label: 'Blue', color: 'text-[#5fa8ff]' },
-                  { label: 'Goldish', color: 'text-[var(--ura-yellow)]' },
+                  { label: 'White', color: 'text-slate-200', image: pearlWhite },
+                  { label: 'Blue', color: 'text-[#5fa8ff]', image: pearlBlue },
+                  { label: 'Goldish', color: 'text-[var(--ura-yellow)]', image: pearlGolden },
                 ].map((item) => (
                   <div key={item.label} className="rounded-md border border-[#2d2f38] bg-[#12141a] p-1.5 text-center">
-                    <Image src={uraDailyPearlCoins} alt={`${item.label} pearl`} width={28} height={28} className="mx-auto object-contain" />
+                    <Image src={item.image} alt={`${item.label} pearl`} width={28} height={28} className="mx-auto object-contain" />
                     <p className={`text-[10px] mt-1 font-semibold ${item.color}`}>{item.label}</p>
                   </div>
                 ))}
@@ -293,7 +293,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                 />
               </div>
             </div>
-            <p className="text-xs text-gray-500">Balance (ALM): {Math.floor(pointsBalance).toLocaleString()}</p>
+            <p className="text-xs text-gray-500">Balance (PEARLS): {Math.floor(pointsBalance).toLocaleString()}</p>
             <div>
               <p className="text-gray-400 text-sm mb-2">Legal</p>
               <div className="flex flex-col gap-2">

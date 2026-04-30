@@ -56,7 +56,7 @@ export default function TeamChallengesPopup({ onClose, initData, onCreateChallen
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <div className="p-4 flex flex-col gap-3 shrink-0">
-          <p className="text-sm text-gray-400">Challenge another team: first to reach the target ALM (or highest at the end) wins the prize pool. Anyone can add to the prize pool.</p>
+          <p className="text-sm text-gray-400">Challenge another team: first to reach the target PEARLS (or highest at the end) wins the prize pool. Anyone can add to the prize pool.</p>
           <button
             type="button"
             onClick={() => { triggerHapticFeedback(window); onCreateChallenge(); }}
@@ -83,7 +83,7 @@ export default function TeamChallengesPopup({ onClose, initData, onCreateChallen
                       <div className="min-w-0">
                         <p className="font-medium text-white truncate">{c.creatorTeamName} vs {c.opponentTeamName ?? '…'}</p>
                         <p className="text-xs text-gray-400 mt-0.5">
-                          Target: {formatNumber(c.targetAlm)} ALM · {c.durationDays}d · Prize: {formatNumber(c.prizePool)} ALM
+                          Target: {formatNumber(c.targetAlm)} PEARLS · {c.durationDays}d · Prize: {formatNumber(c.prizePool)} PEARLS
                           {c.contributionCount > 0 && ` · ${c.contributionCount} contribution(s)`}
                         </p>
                         <span className={`inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium ${

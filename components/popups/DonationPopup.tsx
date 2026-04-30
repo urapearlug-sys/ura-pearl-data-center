@@ -57,7 +57,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
       setPointsBalance(data.pointsBalance);
       if (typeof data.totalDonatedPoints === 'number') setTotalDonatedPoints(data.totalDonatedPoints);
       setAmount('');
-      showToast(`Thank you! You donated ${formatNumber(amt)} ALM to charity.`, 'success');
+      showToast(`Thank you! You donated ${formatNumber(amt)} PEARLS to charity.`, 'success');
       onClose();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Donation failed', 'error');
@@ -77,7 +77,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
         <div className="px-5 pt-6 pb-4 flex justify-between items-start flex-shrink-0">
           <div>
             <h2 className="text-xl font-bold text-white">Donation Center</h2>
-            <p className="text-sm text-gray-400">Donate ALM for charity</p>
+            <p className="text-sm text-gray-400">Donate PEARLS for charity</p>
           </div>
           <button onClick={handleClose} className="text-gray-400 hover:text-white text-2xl w-8 h-8">&times;</button>
         </div>
@@ -102,7 +102,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder={`Min ${formatNumber(DONATION_MIN)} ALM`}
+              placeholder={`Min ${formatNumber(DONATION_MIN)} PEARLS`}
               className="w-full bg-[#272a2f] rounded-lg px-4 py-3 text-white placeholder-gray-500"
               min={DONATION_MIN}
             />
@@ -129,7 +129,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
                 <div key={`donor-${i}-${d.totalDonatedPoints}-${String(d.name).slice(0, 20)}`} className="flex justify-between items-center py-2 px-3 rounded-lg bg-[#1d2025]">
                   <span className="text-white font-medium truncate">{d.name}</span>
                   <span className="text-[#f3ba2f] font-semibold text-sm whitespace-nowrap ml-2">
-                    {formatNumber(Number(d.totalDonatedPoints) || 0)} ALM
+                    {formatNumber(Number(d.totalDonatedPoints) || 0)} PEARLS
                   </span>
                 </div>
               ))}

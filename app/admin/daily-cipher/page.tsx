@@ -161,7 +161,7 @@ export default function AdminDailyCipher() {
                     type="text"
                     value={editWord}
                     onChange={(e) => setEditWord(e.target.value)}
-                    placeholder="e.g. ALM"
+                    placeholder="e.g. PEARLS"
                     className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-32"
                   />
                 </div>
@@ -195,7 +195,7 @@ export default function AdminDailyCipher() {
                 <textarea
                   value={bulkWords}
                   onChange={(e) => setBulkWords(e.target.value)}
-                  placeholder="ALM, COIN, TAP, MINE, REWARD..."
+                  placeholder="PEARLS, COIN, TAP, MINE, REWARD..."
                   rows={3}
                   className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-none"
                 />

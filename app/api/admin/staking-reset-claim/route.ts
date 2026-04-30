@@ -1,6 +1,6 @@
 /**
  * Admin: Reset stake "claimed" state so the user can claim again.
- * Use for users who see "Already claimed" but never received their staked ALM (e.g. stuck during maintenance).
+ * Use for users who see "Already claimed" but never received their staked PEARLS (e.g. stuck during maintenance).
  * POST { stakeId: string } – reset one stake.
  * POST { bulk: true, confirm: "RESET_ALL_CLAIMED" } – reset all stakes that have claimedAt set (one-time recovery).
  */
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      message: 'Claim reset. The user can now claim their staked ALM again (staked amount only).',
+      message: 'Claim reset. The user can now claim their staked PEARLS again (staked amount only).',
       stakeId,
       amountLocked: stake.amountLocked,
     });

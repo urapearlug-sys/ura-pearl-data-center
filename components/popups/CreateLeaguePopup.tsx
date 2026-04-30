@@ -46,7 +46,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
       return;
     }
     if (!canAfford) {
-      showToast(`Commitment fee is ${formatNumber(LEAGUE_CREATION_FEE)} ALM. Your balance is insufficient.`, 'error');
+      showToast(`Commitment fee is ${formatNumber(LEAGUE_CREATION_FEE)} PEARLS. Your balance is insufficient.`, 'error');
       return;
     }
     if (!agreedToTerms) {
@@ -85,7 +85,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
         <div className="p-4 pb-8">
           {noTeamYet ? (
             <>
-              <p className="text-gray-300 text-sm mb-4">Only <strong className="text-white">teams</strong> can create leagues. Create a team first (1M ALM), then create a league with that team (10M ALM).</p>
+              <p className="text-gray-300 text-sm mb-4">Only <strong className="text-white">teams</strong> can create leagues. Create a team first (1M PEARLS), then create a league with that team (10M PEARLS).</p>
               <div className="flex gap-3">
                 <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="flex-1 py-3 rounded-xl bg-[#272a2f] text-gray-300 font-medium">Close</button>
                 <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); onOpenCreateTeam?.(); }} className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold">Create team</button>
@@ -94,10 +94,10 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
           ) : !created ? (
             <>
               <p className="text-sm text-amber-200/90 mb-3">
-                Commitment fee: <strong className="text-white">{formatNumber(LEAGUE_CREATION_FEE)} ALM</strong> (only teams can create leagues)
+                Commitment fee: <strong className="text-white">{formatNumber(LEAGUE_CREATION_FEE)} PEARLS</strong> (only teams can create leagues)
               </p>
               {userBalance != null && (
-                <p className="text-sm text-gray-400 mb-2">Your balance: {formatNumber(Math.floor(userBalance))} ALM</p>
+                <p className="text-sm text-gray-400 mb-2">Your balance: {formatNumber(Math.floor(userBalance))} PEARLS</p>
               )}
               {teams.length > 1 && (
                 <>

@@ -109,7 +109,7 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setStatus((s) => s ? { ...s, claimed: true, attemptsLeft: 0 } : s);
-        showToast(data.message || `+${formatNumber(data.reward)} ALM!`, 'success');
+        showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
         setPattern('');
       } else {
         setStatus((s) => s ? { ...s, attemptsLeft: data.attemptsLeft ?? s.attemptsLeft } : s);

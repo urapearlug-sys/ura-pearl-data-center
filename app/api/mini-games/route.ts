@@ -237,7 +237,7 @@ export async function POST(req: Request) {
       points: updated[0].points,
       pointsBalance: updated[0].pointsBalance,
       sessionsLeft: Math.max(0, SAVANNA_MAX_SESSIONS - sessionsUsedAfter),
-      message: `+${reward.toLocaleString()} ALM!`,
+      message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
 
@@ -279,7 +279,7 @@ export async function POST(req: Request) {
       reward,
       points: updated[0].points,
       pointsBalance: updated[0].pointsBalance,
-      message: `+${reward.toLocaleString()} ALM!`,
+      message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
 
@@ -307,7 +307,7 @@ export async function POST(req: Request) {
       reward,
       points: updated[0].points,
       pointsBalance: updated[0].pointsBalance,
-      message: `+${reward.toLocaleString()} ALM!`,
+      message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
 
@@ -335,7 +335,7 @@ export async function POST(req: Request) {
       reward,
       points: updated[0].points,
       pointsBalance: updated[0].pointsBalance,
-      message: `+${reward.toLocaleString()} ALM!`,
+      message: `+${reward.toLocaleString()} PEARLS!`,
     });
   }
 
@@ -368,6 +368,6 @@ export async function POST(req: Request) {
     segmentIndex: segmentIndex,
     points: updated[0].points,
     pointsBalance: updated[0].pointsBalance,
-    message: `+${reward.toLocaleString()} ALM!`,
+    message: `+${reward.toLocaleString()} PEARLS!`,
   });
 }

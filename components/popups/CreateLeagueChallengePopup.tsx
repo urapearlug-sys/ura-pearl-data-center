@@ -7,8 +7,8 @@ import { formatNumber } from '@/utils/ui';
 import {
   LEAGUE_CHALLENGE_MIN_STAKE,
   LEAGUE_CHALLENGE_MAX_STAKE,
-  LEAGUE_CHALLENGE_MIN_TARGET_ALM,
-  LEAGUE_CHALLENGE_MAX_TARGET_ALM,
+  LEAGUE_CHALLENGE_MIN_TARGET_PEARLS,
+  LEAGUE_CHALLENGE_MAX_TARGET_PEARLS,
   LEAGUE_CHALLENGE_MIN_DAYS,
   LEAGUE_CHALLENGE_MAX_DAYS,
 } from '@/utils/consts';
@@ -97,8 +97,8 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
     const target = Math.floor(targetAlm);
     const days = Math.floor(durationDays);
     const stake = Math.floor(stakePerLeague);
-    if (target < LEAGUE_CHALLENGE_MIN_TARGET_ALM || target > LEAGUE_CHALLENGE_MAX_TARGET_ALM) {
-      showToast(`Target must be ${formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_ALM)} - ${formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_ALM)} ALM`, 'error');
+    if (target < LEAGUE_CHALLENGE_MIN_TARGET_PEARLS || target > LEAGUE_CHALLENGE_MAX_TARGET_PEARLS) {
+      showToast(`Target must be ${formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} - ${formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)} PEARLS`, 'error');
       return;
     }
     if (days < LEAGUE_CHALLENGE_MIN_DAYS || days > LEAGUE_CHALLENGE_MAX_DAYS) {
@@ -106,7 +106,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
       return;
     }
     if (stake < LEAGUE_CHALLENGE_MIN_STAKE || stake > LEAGUE_CHALLENGE_MAX_STAKE) {
-      showToast(`Stake must be ${formatNumber(LEAGUE_CHALLENGE_MIN_STAKE)} - ${formatNumber(LEAGUE_CHALLENGE_MAX_STAKE)} ALM`, 'error');
+      showToast(`Stake must be ${formatNumber(LEAGUE_CHALLENGE_MIN_STAKE)} - ${formatNumber(LEAGUE_CHALLENGE_MAX_STAKE)} PEARLS`, 'error');
       return;
     }
     triggerHapticFeedback(window);
@@ -130,7 +130,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <p className="text-sm text-gray-400">Your league (you must be creator) stakes ALM. Opponent league creator must accept and stake the same to start. First to reach the target (or highest at the end) wins the full prize pool.</p>
+          <p className="text-sm text-gray-400">Your league (you must be creator) stakes PEARLS. Opponent league creator must accept and stake the same to start. First to reach the target (or highest at the end) wins the full prize pool.</p>
 
           <div>
             <label className="block text-sm text-gray-400 mb-1">Your league</label>
@@ -161,16 +161,16 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Target ALM (first to reach wins, or highest at end)</label>
+            <label className="block text-sm text-gray-400 mb-1">Target PEARLS (first to reach wins, or highest at end)</label>
             <input
               type="number"
-              min={LEAGUE_CHALLENGE_MIN_TARGET_ALM}
-              max={LEAGUE_CHALLENGE_MAX_TARGET_ALM}
+              min={LEAGUE_CHALLENGE_MIN_TARGET_PEARLS}
+              max={LEAGUE_CHALLENGE_MAX_TARGET_PEARLS}
               value={targetAlm}
               onChange={(e) => setTargetAlm(Number(e.target.value))}
               className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
             />
-            <p className="text-xs text-gray-500 mt-0.5">{formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_ALM)} - {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_ALM)} ALM</p>
+            <p className="text-xs text-gray-500 mt-0.5">{formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} - {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)} PEARLS</p>
           </div>
 
           <div>
@@ -186,7 +186,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
           </div>
 
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Stake per league (ALM) – you pay this now; opponent pays on accept</label>
+            <label className="block text-sm text-gray-400 mb-1">Stake per league (PEARLS) – you pay this now; opponent pays on accept</label>
             <input
               type="number"
               min={LEAGUE_CHALLENGE_MIN_STAKE}
@@ -195,7 +195,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
               onChange={(e) => setStakePerLeague(Number(e.target.value))}
               className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
             />
-            <p className="text-xs text-gray-500 mt-0.5">Prize pool = {formatNumber(stakePerLeague * 2)} ALM (others can add more)</p>
+            <p className="text-xs text-gray-500 mt-0.5">Prize pool = {formatNumber(stakePerLeague * 2)} PEARLS (others can add more)</p>
           </div>
 
           <div className="flex gap-3 pt-2">

@@ -270,7 +270,7 @@ export default function LeagueManagementDashboardPopup({ leagueId, leagueName, o
                         <p className="text-xs text-gray-400">Progress (since start): <span className="text-sky-300">{c.creatorProgress.toLocaleString()}</span> vs <span className="text-amber-300">{c.opponentProgress.toLocaleString()}</span></p>
                         {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ends: {new Date(c.endsAt).toLocaleString()}</p>}
                         {c.status === 'completed' && (c.winnerTeamId || c.winnerLeagueId) && (
-                          <p className="text-xs text-emerald-400 mt-1">Winner decided · Prize pool: {c.prizePool?.toLocaleString() ?? '—'} ALM</p>
+                          <p className="text-xs text-emerald-400 mt-1">Winner decided · Prize pool: {c.prizePool?.toLocaleString() ?? '—'} PEARLS</p>
                         )}
                       </div>
                     )}

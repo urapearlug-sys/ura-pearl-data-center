@@ -85,12 +85,12 @@ export const LEAGUE_CHAMPIONSHIP_WEEKS = 8;
 export const LEAGUE_CHAMPIONSHIP_TOP = 100;
 export const LEAGUE_CUSTOM_MAX_MEMBERS = 50;
 export const LEAGUE_INVITE_CODE_LENGTH = 8;
-/** ALM commitment required to create a team (1M ALM; team is lower rank than league; recorded as team_commitment) */
+/** PEARLS commitment required to create a team (1M PEARLS; team is lower rank than league; recorded as team_commitment) */
 export const TEAM_CREATION_FEE = 1_000_000;
 /** Team size: total members = creator + members. Min 2 (creator + 1 member), max 7. */
 export const TEAM_MIN_MEMBERS = 2;
 export const TEAM_MAX_MEMBERS = 7;
-/** ALM commitment required to create a league (10M ALM; only teams can create leagues; recorded as league_commitment) */
+/** PEARLS commitment required to create a league (10M PEARLS; only teams can create leagues; recorded as league_commitment) */
 export const LEAGUE_CREATION_FEE = 10_000_000;
 /** League members get 2× base as LP for the same activity (e.g. 10 TP → 10 TP + 20 LP) */
 export const LEAGUE_POINTS_MULTIPLIER = 2;
@@ -100,8 +100,8 @@ export const MIN_TEAMS_FOR_LEAGUE_TASK = 2;
 // League Competition (league vs league) challenges
 export const LEAGUE_CHALLENGE_MIN_STAKE = 1_000_000;
 export const LEAGUE_CHALLENGE_MAX_STAKE = 500_000_000;
-export const LEAGUE_CHALLENGE_MIN_TARGET_ALM = 10_000_000;
-export const LEAGUE_CHALLENGE_MAX_TARGET_ALM = 1_000_000_000;
+export const LEAGUE_CHALLENGE_MIN_TARGET_PEARLS = 10_000_000;
+export const LEAGUE_CHALLENGE_MAX_TARGET_PEARLS = 1_000_000_000;
 export const LEAGUE_CHALLENGE_MIN_DAYS = 1;
 export const LEAGUE_CHALLENGE_MAX_DAYS = 14;
 export const LEAGUE_CHALLENGE_MIN_CONTRIBUTION = 100_000;
@@ -109,8 +109,8 @@ export const LEAGUE_CHALLENGE_MIN_CONTRIBUTION = 100_000;
 // Team vs Team challenges (same ranges as league)
 export const TEAM_CHALLENGE_MIN_STAKE = 1_000_000;
 export const TEAM_CHALLENGE_MAX_STAKE = 500_000_000;
-export const TEAM_CHALLENGE_MIN_TARGET_ALM = 10_000_000;
-export const TEAM_CHALLENGE_MAX_TARGET_ALM = 1_000_000_000;
+export const TEAM_CHALLENGE_MIN_TARGET_PEARLS = 10_000_000;
+export const TEAM_CHALLENGE_MAX_TARGET_PEARLS = 1_000_000_000;
 export const TEAM_CHALLENGE_MIN_DAYS = 1;
 export const TEAM_CHALLENGE_MAX_DAYS = 14;
 export const TEAM_CHALLENGE_MIN_CONTRIBUTION = 100_000;
@@ -122,11 +122,11 @@ export const GLOBAL_TASK_MAX_DURATION_DAYS = 20;
 
 // Daily Cipher
 export const DAILY_CIPHER_MAX_ATTEMPTS = 3;
-export const DAILY_CIPHER_REWARD = 500000; // ALM points for solving (Decode)
+export const DAILY_CIPHER_REWARD = 500000; // PEARLS points for solving (Decode)
 
 // Daily Combo (Matrix)
 export const DAILY_COMBO_MAX_ATTEMPTS = 3;
-export const DAILY_COMBO_REWARD = 500000; // ALM for correct 3-card combo
+export const DAILY_COMBO_REWARD = 500000; // PEARLS for correct 3-card combo
 
 // Staking - minimum period 1 week (7d); packages with min amount each (max 25%, max 6 months)
 export const STAKING_PACKAGES = [
@@ -209,21 +209,21 @@ export const PATTERN_MAX_DOTS = 12;
 export const REFERRAL_BONUS_BASE = 5000;
 export const REFERRAL_BONUS_PREMIUM = 25000;
 
-/** Quiz: default ALM reward (admin can set per-question points and completion bonus) */
+/** Quiz: default PEARLS reward (admin can set per-question points and completion bonus) */
 export const MITROLABS_QUIZ_REWARD_POINTS = 10_000;
 /** Max multiple-choice options per question (2–4) */
 export const MITROLABS_QUIZ_MAX_OPTIONS = 4;
 
 // Marketplace (points-only now; pay with money coming later)
 export const MARKETPLACE_FEE_PERCENT = 2; // seller pays 2% fee
-export const MARKETPLACE_MIN_LISTING = 1000; // min ALM per listing
+export const MARKETPLACE_MIN_LISTING = 1000; // min PEARLS per listing
 
-// P2P Transfers (Send/Receive ALM)
-export const DONATION_MIN = 100_000; // 100k ALM minimum per charity donation
+// P2P Transfers (Send/Receive PEARLS)
+export const DONATION_MIN = 100_000; // 100k PEARLS minimum per charity donation
 
-export const TRANSFER_MIN = 500_000; // 500k ALM minimum per transfer
-export const TRANSFER_MAX = 10_000_000; // 10M ALM maximum per transfer
-export const TRANSFER_DAILY_LIMIT = 50_000_000; // 50M ALM daily sending limit per user
+export const TRANSFER_MIN = 500_000; // 500k PEARLS minimum per transfer
+export const TRANSFER_MAX = 10_000_000; // 10M PEARLS maximum per transfer
+export const TRANSFER_DAILY_LIMIT = 50_000_000; // 50M PEARLS daily sending limit per user
 export const TRANSFER_FEE_PERCENT = 5.5;
 export const TRANSFER_FEE_RECIPIENT_TELEGRAM_ID = '5930935506';
 

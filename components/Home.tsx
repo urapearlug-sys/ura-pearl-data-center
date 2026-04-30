@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { defaultProfileAvatar, uraDailyPearlCoins, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
+import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -173,12 +173,12 @@ export default function Home({ setCurrentView }: HomeProps) {
                 </div>
                 <div className="mt-3 border-t border-[#2a2d38] pt-3 space-y-2">
                   {[
-                    { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks' },
-                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks' },
-                    { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls' },
+                    { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks', image: pearlWhite },
+                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks', image: pearlBlue },
+                    { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls', image: pearlGolden },
                   ].map((item) => (
                     <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 flex items-center gap-2">
-                      <Image src={uraDailyPearlCoins} alt={item.label} width={28} height={28} className="h-7 w-7 object-contain flex-shrink-0" />
+                      <Image src={item.image} alt={item.label} width={28} height={28} className="h-7 w-7 object-contain flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <p className={`text-xs font-semibold ${item.color}`}>{item.label}</p>
                         <p className="text-[10px] text-gray-500 truncate">{item.hint}</p>

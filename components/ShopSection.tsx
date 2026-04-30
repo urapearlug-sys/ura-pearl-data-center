@@ -1,4 +1,4 @@
-// components/ShopSection.tsx – Shop (Match 2 Earn): browse products, list product, my listings, buy with ALM
+// components/ShopSection.tsx – Shop (Match 2 Earn): browse products, list product, my listings, buy with PEARLS
 
 'use client';
 
@@ -108,7 +108,7 @@ export default function ShopSection({
       });
       const data = await res.json();
       if (res.ok) {
-        showToast('Purchase complete! ALM transferred to seller.', 'success');
+        showToast('Purchase complete! PEARLS transferred to seller.', 'success');
         if (typeof data.newBalance === 'number') setPointsBalance(data.newBalance);
         setSelectedProduct(null);
         fetchProducts();
@@ -177,7 +177,7 @@ export default function ShopSection({
       return;
     }
     if (!Number.isFinite(price) || price < 1) {
-      showToast('Enter a valid price (ALM)', 'error');
+      showToast('Enter a valid price (PEARLS)', 'error');
       return;
     }
     if (listForm.imageUrls.length < MIN_IMAGES) {
@@ -277,7 +277,7 @@ export default function ShopSection({
                     <p className="font-semibold text-white truncate text-sm">{p.title}</p>
                     <p className="text-[#f3ba2f] font-bold flex items-center gap-1">
                       <IceCube className="w-4 h-4" />
-                      {formatNumber(p.priceAlm)} ALM
+                      {formatNumber(p.priceAlm)} PEARLS
                     </p>
                   </div>
                 </button>
@@ -293,7 +293,7 @@ export default function ShopSection({
             <div className="py-8 text-center text-gray-400">Loading…</div>
           ) : myProducts.length === 0 ? (
             <div className="py-12 text-center text-gray-400 rounded-xl bg-[#272a2f] border border-[#3d4046]">
-              You have no listings. List a product to sell for ALM.
+              You have no listings. List a product to sell for PEARLS.
             </div>
           ) : (
             <div className="space-y-3">
@@ -314,7 +314,7 @@ export default function ShopSection({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-white truncate">{p.title}</p>
-                    <p className="text-[#f3ba2f] font-bold text-sm">{formatNumber(p.priceAlm)} ALM</p>
+                    <p className="text-[#f3ba2f] font-bold text-sm">{formatNumber(p.priceAlm)} PEARLS</p>
                     <span
                       className={`text-xs ${
                         p.status === 'approved' ? 'text-green-400' : p.status === 'rejected' ? 'text-red-400' : 'text-amber-400'
@@ -333,7 +333,7 @@ export default function ShopSection({
 
       {tab === 'list' && (
         <div className="space-y-4 rounded-xl bg-[#272a2f] border border-[#3d4046] p-4">
-          <p className="text-sm text-gray-400">List your product. After admin approval it will appear in the shop. Price in ALM.</p>
+          <p className="text-sm text-gray-400">List your product. After admin approval it will appear in the shop. Price in PEARLS.</p>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
             <input
@@ -355,7 +355,7 @@ export default function ShopSection({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Price (ALM)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Price (PEARLS)</label>
             <input
               type="number"
               min={1}
@@ -454,19 +454,19 @@ export default function ShopSection({
               <div className="flex items-center justify-between">
                 <span className="text-[#f3ba2f] font-bold flex items-center gap-1">
                   <IceCube className="w-5 h-5" />
-                  {formatNumber(selectedProduct.priceAlm)} ALM
+                  {formatNumber(selectedProduct.priceAlm)} PEARLS
                 </span>
                 <span className="text-gray-400 text-sm">by {selectedProduct.sellerName}</span>
               </div>
               <div className="flex gap-2 items-center pt-2">
-                <span className="text-gray-400 text-sm">Your balance: {formatNumber(Math.floor(pointsBalance ?? 0))} ALM</span>
+                <span className="text-gray-400 text-sm">Your balance: {formatNumber(Math.floor(pointsBalance ?? 0))} PEARLS</span>
                 <button
                   type="button"
                   onClick={handleBuy}
                   disabled={buying || (pointsBalance ?? 0) < selectedProduct.priceAlm}
                   className="flex-1 bg-[#f3ba2f] text-black font-bold py-3 rounded-xl disabled:opacity-50"
                 >
-                  {buying ? 'Processing…' : 'Buy with ALM'}
+                  {buying ? 'Processing…' : 'Buy with PEARLS'}
                 </button>
               </div>
             </div>

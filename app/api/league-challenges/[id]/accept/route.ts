@@ -38,7 +38,7 @@ export async function POST(
 
   const stake = challenge.stakePerLeague;
   if ((dbUser.pointsBalance ?? 0) < stake) {
-    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} ALM.` }, { status: 400 });
+    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} PEARLS.` }, { status: 400 });
   }
 
   const startsAt = new Date();
@@ -90,6 +90,6 @@ export async function POST(
     success: true,
     startsAt: startsAt.toISOString(),
     endsAt: endsAt.toISOString(),
-    message: 'Challenge started! First league to reach the target ALM (or highest at the end) wins the prize pool.',
+    message: 'Challenge started! First league to reach the target PEARLS (or highest at the end) wins the prize pool.',
   });
 }

@@ -39,7 +39,7 @@ async function getOrCreateTodayCipher(): Promise<{ word: string; hint: string | 
     cipher = await prisma.dailyCipher.create({
       data: {
         date: today,
-        word: 'ALM',
+        word: 'PEARLS',
         hint: '3 letters, your token',
         isOverride: false,
       },
@@ -205,6 +205,6 @@ export async function POST(req: Request) {
     reward: DAILY_CIPHER_REWARD,
     points: updated[0].points,
     pointsBalance: updated[0].pointsBalance,
-    message: `Correct! +${DAILY_CIPHER_REWARD.toLocaleString()} ALM`,
+    message: `Correct! +${DAILY_CIPHER_REWARD.toLocaleString()} PEARLS`,
   });
 }

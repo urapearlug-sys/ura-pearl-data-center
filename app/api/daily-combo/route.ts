@@ -194,6 +194,6 @@ export async function POST(req: Request) {
     reward: DAILY_COMBO_REWARD,
     points: updated[0].points,
     pointsBalance: updated[0].pointsBalance,
-    message: `Correct! +${DAILY_COMBO_REWARD.toLocaleString()} ALM`,
+    message: `Correct! +${DAILY_COMBO_REWARD.toLocaleString()} PEARLS`,
   });
 }

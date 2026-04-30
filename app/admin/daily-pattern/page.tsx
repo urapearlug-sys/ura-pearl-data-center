@@ -118,7 +118,7 @@ export default function AdminDailyPatternPage() {
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">Daily Pattern</h1>
         <p className="text-gray-400 mb-6">
-          Today&apos;s correct pattern for the 12-dot minigame (Earn → Daily Pattern). Today&apos;s reward: {reward.toLocaleString()} ALM. Pattern rotates automatically each day (UTC).
+          Today&apos;s correct pattern for the 12-dot minigame (Earn → Daily Pattern). Today&apos;s reward: {reward.toLocaleString()} PEARLS. Pattern rotates automatically each day (UTC).
         </p>
 
         {loading ? (
@@ -152,13 +152,13 @@ export default function AdminDailyPatternPage() {
 
             <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
               <h2 className="text-lg font-semibold mb-2">Today&apos;s pattern (UTC)</h2>
-              <p className="text-sm text-gray-400 mb-3">Sequence: {patternDisplay || '—'} · Reward: {reward.toLocaleString()} ALM</p>
+              <p className="text-sm text-gray-400 mb-3">Sequence: {patternDisplay || '—'} · Reward: {reward.toLocaleString()} PEARLS</p>
               <PatternGrid pattern={pattern} />
             </div>
 
             <div className="bg-[#272a2f] p-6 rounded-xl">
               <h2 className="text-lg font-semibold mb-2">Override for today</h2>
-              <p className="text-sm text-gray-400 mb-3">Set any pattern ({PATTERN_MIN_DOTS}–{PATTERN_MAX_DOTS} dots, indices 0–{PATTERN_GRID_SIZE - 1}) and optional reward (ALM). Leave reward empty to keep default.</p>
+              <p className="text-sm text-gray-400 mb-3">Set any pattern ({PATTERN_MIN_DOTS}–{PATTERN_MAX_DOTS} dots, indices 0–{PATTERN_GRID_SIZE - 1}) and optional reward (PEARLS). Leave reward empty to keep default.</p>
               <form onSubmit={handleSetOverride} className="space-y-3">
                 <div className="flex gap-2 flex-wrap">
                   <input
@@ -174,7 +174,7 @@ export default function AdminDailyPatternPage() {
                     step={1000}
                     value={rewardInput}
                     onChange={(e) => setRewardInput(e.target.value)}
-                    placeholder="Reward (ALM)"
+                    placeholder="Reward (PEARLS)"
                     className="w-36 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
                   />
                 </div>

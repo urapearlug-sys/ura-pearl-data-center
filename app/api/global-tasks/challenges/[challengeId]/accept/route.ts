@@ -22,7 +22,7 @@ export async function POST(
   const opponentStake = Number(rawStake);
   if (!Number.isFinite(opponentStake) || opponentStake < GLOBAL_TASK_MIN_STAKE || opponentStake > GLOBAL_TASK_MAX_STAKE) {
     return NextResponse.json(
-      { error: `Stake must be ${GLOBAL_TASK_MIN_STAKE.toLocaleString()}–${GLOBAL_TASK_MAX_STAKE.toLocaleString()} ALM` },
+      { error: `Stake must be ${GLOBAL_TASK_MIN_STAKE.toLocaleString()}–${GLOBAL_TASK_MAX_STAKE.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }
@@ -59,7 +59,7 @@ export async function POST(
   }
 
   const balance = dbUser.pointsBalance ?? 0;
-  if (balance < opponentStake) return NextResponse.json({ error: 'Insufficient ALM balance' }, { status: 400 });
+  if (balance < opponentStake) return NextResponse.json({ error: 'Insufficient PEARLS balance' }, { status: 400 });
 
   const creatorMetric = await getProgressForTask(
     prisma,

@@ -1,5 +1,5 @@
 /**
- * POST: add ALM to team challenge prize pool (anyone can contribute). Body: { initData, amount }
+ * POST: add PEARLS to team challenge prize pool (anyone can contribute). Body: { initData, amount }
  */
 
 import { NextResponse } from 'next/server';
@@ -18,7 +18,7 @@ export async function POST(
 
   const amt = Math.floor(Number(amount));
   if (!Number.isFinite(amt) || amt < TEAM_CHALLENGE_MIN_CONTRIBUTION) {
-    return NextResponse.json({ error: `Minimum contribution is ${TEAM_CHALLENGE_MIN_CONTRIBUTION.toLocaleString()} ALM` }, { status: 400 });
+    return NextResponse.json({ error: `Minimum contribution is ${TEAM_CHALLENGE_MIN_CONTRIBUTION.toLocaleString()} PEARLS` }, { status: 400 });
   }
 
   const { validatedData, user } = validateTelegramWebAppData(initData);

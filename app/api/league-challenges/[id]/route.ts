@@ -138,7 +138,7 @@ async function resolveChallenge(prisma: typeof import('@/utils/prisma').default,
 
   const winnerIds = winnerLeagueId === c.creatorLeagueId ? creatorIds : opponentIds;
 
-  // Refund stake to the winning league's stake-payer(s) first (they put up the ALM to start the challenge)
+  // Refund stake to the winning league's stake-payer(s) first (they put up the PEARLS to start the challenge)
   const winnerStakes = await prisma.leagueChallengeStake.findMany({
     where: { challengeId, leagueId: winnerLeagueId },
   });

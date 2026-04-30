@@ -10,7 +10,7 @@ import { MITROLABS_QUIZ_REWARD_POINTS } from '@/utils/consts';
 
 export const dynamic = 'force-dynamic';
 
-/** Legacy DB may have 10 instead of 10k; use 10k ALM per question when stored value is under 1000. */
+/** Legacy DB may have 10 instead of 10k; use 10k PEARLS per question when stored value is under 1000. */
 function effectivePointsPerQuestion(storedPoints: number | null | undefined): number {
   const p = storedPoints ?? 0;
   return p >= 1000 ? p : MITROLABS_QUIZ_REWARD_POINTS;

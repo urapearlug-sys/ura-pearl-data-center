@@ -322,7 +322,7 @@ export default function AdminQuizPage() {
   };
 
   const handleResetAllQuizAttempts = async () => {
-    if (!confirm('Delete all quiz attempts? Everyone will be able to take today\'s quiz again and earn 10k ALM per correct answer.')) return;
+    if (!confirm('Delete all quiz attempts? Everyone will be able to take today\'s quiz again and earn 10k PEARLS per correct answer.')) return;
     setResettingAttempts(true);
     try {
       const res = await fetch('/api/admin/quiz', {
@@ -375,13 +375,13 @@ export default function AdminQuizPage() {
               {resettingAttempts ? 'Resetting…' : 'Reset all quiz attempts'}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Run &quot;Load&quot; once. Use &quot;Set 5 random&quot; daily or anytime; toggle Active on individual questions to override. &quot;Reset all quiz attempts&quot; lets everyone take today&apos;s quiz again (10k ALM per correct answer).</p>
+          <p className="text-xs text-gray-500 mt-2">Run &quot;Load&quot; once. Use &quot;Set 5 random&quot; daily or anytime; toggle Active on individual questions to override. &quot;Reset all quiz attempts&quot; lets everyone take today&apos;s quiz again (10k PEARLS per correct answer).</p>
         </div>
 
         {/* Completion bonus */}
         <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
           <h2 className="text-lg font-semibold mb-2">Completion bonus (all correct)</h2>
-          <p className="text-sm text-gray-400 mb-3">Extra ALM awarded when the user gets every question right.</p>
+          <p className="text-sm text-gray-400 mb-3">Extra PEARLS awarded when the user gets every question right.</p>
           <div className="flex gap-2 items-center">
             <input
               type="number"
@@ -390,7 +390,7 @@ export default function AdminQuizPage() {
               onChange={(e) => setCompletionBonusPoints(Number(e.target.value) || 0)}
               className="w-32 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
             />
-            <span className="text-gray-400">ALM</span>
+            <span className="text-gray-400">PEARLS</span>
             <button type="button" onClick={handleSaveCompletionBonus} disabled={submitting} className="px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">Save</button>
           </div>
         </div>
@@ -467,7 +467,7 @@ export default function AdminQuizPage() {
             </div>
             <div className="flex flex-wrap gap-4 items-center">
               <label className="flex items-center gap-2">
-                <span className="text-sm text-gray-400">Points (ALM) for correct:</span>
+                <span className="text-sm text-gray-400">Points (PEARLS) for correct:</span>
                 <input type="number" min={0} value={formPoints} onChange={(e) => setFormPoints(Number(e.target.value) || 0)} className="w-24 bg-[#1d2025] border border-[#3d4046] rounded px-2 py-1 text-white" />
               </label>
               <label className="flex items-center gap-2">
@@ -515,7 +515,7 @@ export default function AdminQuizPage() {
                           <div className="min-w-0 flex-1">
                             <p className="font-medium text-white">{q.questionText}</p>
                             <p className="text-sm text-gray-400 mt-1">
-                              {(q.points ?? 0)} ALM · {(q.options?.length ?? 0)} options · Correct #{q.correctIndex + 1} · Order {q.order} · {q.isActive ? 'Active' : 'Inactive'}
+                              {(q.points ?? 0)} PEARLS · {(q.options?.length ?? 0)} options · Correct #{q.correctIndex + 1} · Order {q.order} · {q.isActive ? 'Active' : 'Inactive'}
                             </p>
                           </div>
                           <div className="flex gap-2 items-center">

@@ -23,7 +23,7 @@ async function main() {
   // Seed default Daily Cipher word pool (Hybrid mode auto-selection)
   const existingWords = await prisma.cipherWord.count();
   if (existingWords === 0) {
-    const defaultCipherWords = ['ALM', 'COIN', 'TAP', 'MINE', 'REWARD', 'GAME', 'CRYPTO', 'TOKEN', 'TRADE', 'MOON', 'FARM', 'DEAL', 'GOLD', 'VAULT', 'LUCK', 'WINS', 'FAME', 'LAMP', 'BEAM', 'GLOW', 'SHINE', 'SPARK', 'FLAME', 'ICE', 'FIRE', 'WATER'];
+    const defaultCipherWords = ['PEARLS', 'COIN', 'TAP', 'MINE', 'REWARD', 'GAME', 'CRYPTO', 'TOKEN', 'TRADE', 'MOON', 'FARM', 'DEAL', 'GOLD', 'VAULT', 'LUCK', 'WINS', 'FAME', 'LAMP', 'BEAM', 'GLOW', 'SHINE', 'SPARK', 'FLAME', 'ICE', 'FIRE', 'WATER'];
     for (let i = 0; i < defaultCipherWords.length; i++) {
       await prisma.cipherWord.create({ data: { word: defaultCipherWords[i], order: i } });
     }

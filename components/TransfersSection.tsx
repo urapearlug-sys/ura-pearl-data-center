@@ -1,5 +1,5 @@
 /**
- * TransfersSection – Send ALM, Receive ALM, My History, Recent Activity
+ * TransfersSection – Send PEARLS, Receive PEARLS, My History, Recent Activity
  */
 
 'use client';
@@ -104,7 +104,7 @@ export default function TransfersSection({ userTelegramInitData, onTransferSucce
       return;
     }
     if (!Number.isFinite(amt) || amt < TRANSFER_MIN || amt > TRANSFER_MAX) {
-      showToast(`${formatNumber(TRANSFER_MIN)} - ${formatNumber(TRANSFER_MAX)} ALM per transfer`, 'error');
+      showToast(`${formatNumber(TRANSFER_MIN)} - ${formatNumber(TRANSFER_MAX)} PEARLS per transfer`, 'error');
       return;
     }
     if (amt > pointsBalance) {
@@ -125,7 +125,7 @@ export default function TransfersSection({ userTelegramInitData, onTransferSucce
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast(`Sent ${formatNumber(amt)} ALM to ${data.transfer?.recipientName ?? 'recipient'}`, 'success');
+        showToast(`Sent ${formatNumber(amt)} PEARLS to ${data.transfer?.recipientName ?? 'recipient'}`, 'success');
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
         setRecipientTelegramId('');
         setAmount('');
@@ -147,7 +147,7 @@ export default function TransfersSection({ userTelegramInitData, onTransferSucce
       triggerHapticFeedback(window);
       navigator.clipboard.writeText(myTelegramId);
       setCopied(true);
-      showToast('Telegram ID copied! Share it so others can send you ALM.', 'success');
+      showToast('Telegram ID copied! Share it so others can send you PEARLS.', 'success');
       setTimeout(() => setCopied(false), 2000);
     }
   };

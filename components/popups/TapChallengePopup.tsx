@@ -118,7 +118,7 @@ export default function TapChallengePopup({ onClose, onSuccess }: TapChallengePo
         incrementPoints(data.reward);
         if (data.points != null) setPoints(data.points);
         if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
-        showToast(data.message || `+${formatNumber(data.reward)} ALM!`, 'success');
+        showToast(data.message || `+${formatNumber(data.reward)} PEARLS!`, 'success');
         onSuccess?.();
         onClose();
       } else {
@@ -180,7 +180,7 @@ export default function TapChallengePopup({ onClose, onSuccess }: TapChallengePo
                 <p className="text-gray-300 mb-2">Tap {TARGET} times in {config.timeSeconds} seconds</p>
                 <p className="text-[#f3ba2f] flex items-center justify-center gap-1">
                   <IceCube className="w-6 h-6" />
-                  +{formatNumber(config.reward)} ALM
+                  +{formatNumber(config.reward)} PEARLS
                 </p>
                 {attemptsLeft != null && (
                   <p className="text-amber-400 text-sm mt-2">Attempts left: {attemptsLeft}/{TAP_CHALLENGE_MAX_ATTEMPTS}</p>

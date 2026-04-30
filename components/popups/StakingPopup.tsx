@@ -106,7 +106,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
       if (!res.ok) throw new Error(data.error || 'Stake failed');
       setPointsBalance(data.pointsBalance);
       setStakeAmount('');
-      showToast(`Staked ${formatNumber(amt)} ALM for ${durationConfig?.label}. +${formatNumber(bonusAmount)} bonus when unlocked!`, 'success');
+      showToast(`Staked ${formatNumber(amt)} PEARLS for ${durationConfig?.label}. +${formatNumber(bonusAmount)} bonus when unlocked!`, 'success');
       fetchStakes();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Stake failed', 'error');
@@ -137,7 +137,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
       incrementPoints(data.reward);
       if (data.points != null) setPoints(data.points);
       if (data.pointsBalance != null) setPointsBalance(data.pointsBalance);
-      showToast(`+${formatNumber(data.reward)} ALM claimed!`, 'success');
+      showToast(`+${formatNumber(data.reward)} PEARLS claimed!`, 'success');
       fetchStakes();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');
@@ -159,7 +159,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
       <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start flex-shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-white">Stake ALM</h2>
+            <h2 className="text-xl font-bold text-white">Stake PEARLS</h2>
             <p className="text-sm text-gray-400">Lock points, earn bonus on unlock</p>
           </div>
           <button onClick={handleClose} className="text-gray-400 hover:text-white text-2xl w-8 h-8">&times;</button>
@@ -177,7 +177,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
           </div>
 
           <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
-            <h3 className="text-base font-bold text-emerald-400 mb-3">Stake ALM</h3>
+            <h3 className="text-base font-bold text-emerald-400 mb-3">Stake PEARLS</h3>
             <p className="text-sm text-gray-400 mb-3">Minimum lock period is 1 week. Choose amount and duration.</p>
             <div className="flex flex-wrap gap-2 mb-3">
               {STAKING_PACKAGES.map((pkg) => (
@@ -186,7 +186,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                   type="button"
                   onClick={() => setSelectedDuration(pkg.id)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${selectedDuration === pkg.id ? 'bg-emerald-500 text-white' : 'bg-[#3d4046] text-gray-300 hover:bg-[#4d5056]'}`}
-                  title={`Min ${formatNumber(pkg.minAmount)} ALM`}
+                  title={`Min ${formatNumber(pkg.minAmount)} PEARLS`}
                 >
                   {pkg.label} (min {formatNumber(pkg.minAmount)})
                 </button>
@@ -196,7 +196,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
               <input
                 type="number"
                 min={minAmountForPackage}
-                placeholder={`Min ${formatNumber(minAmountForPackage)} ALM`}
+                placeholder={`Min ${formatNumber(minAmountForPackage)} PEARLS`}
                 value={stakeAmount}
                 onChange={(e) => setStakeAmount(e.target.value)}
                 className="flex-1 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
@@ -207,12 +207,12 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                 disabled={isStaking || !stakeAmount || Number(stakeAmount) < minAmountForPackage || Number(stakeAmount) > pointsBalance}
                 className="px-4 py-2 rounded-lg bg-emerald-500 text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-600"
               >
-                {isStaking ? '...' : 'Stake ALM'}
+                {isStaking ? '...' : 'Stake PEARLS'}
               </button>
             </div>
             {durationConfig && Number(stakeAmount) >= minAmountForPackage && (
               <p className="text-sm text-gray-400">
-                +{formatNumber(bonusAmount)} ALM bonus ({durationConfig.bonusPercent}%) → you receive {formatNumber(totalReturn)} ALM when unlocked.
+                +{formatNumber(bonusAmount)} PEARLS bonus ({durationConfig.bonusPercent}%) → you receive {formatNumber(totalReturn)} PEARLS when unlocked.
               </p>
             )}
           </div>
@@ -226,7 +226,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                   return (
                     <div key={s.id} className="bg-[#272a2f] rounded-xl p-4 flex justify-between items-center">
                       <div>
-                        <p className="text-white font-bold">{formatNumber(s.amountLocked)} ALM</p>
+                        <p className="text-white font-bold">{formatNumber(s.amountLocked)} PEARLS</p>
                         <p className="text-sm text-gray-400">
                           {isReady ? (
                             <span className="text-emerald-400">Ready to claim</span>
@@ -237,14 +237,14 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                       </div>
                       <div className="text-right">
                         <p className="text-sm text-gray-400">You receive</p>
-                        <p className="text-[#f3ba2f] font-bold">{formatNumber(s.totalReturn)} ALM</p>
+                        <p className="text-[#f3ba2f] font-bold">{formatNumber(s.totalReturn)} PEARLS</p>
                         {isReady ? (
                           <button
                             onClick={() => handleClaim(s.id)}
                             disabled={claimingId === s.id}
                             className="mt-1 px-4 py-1.5 rounded-lg bg-emerald-500 text-white text-sm font-bold disabled:opacity-50"
                           >
-                            {claimingId === s.id ? '...' : `Claim ${formatNumber(s.totalReturn)} ALM`}
+                            {claimingId === s.id ? '...' : `Claim ${formatNumber(s.totalReturn)} PEARLS`}
                           </button>
                         ) : null}
                       </div>
@@ -261,7 +261,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
               <div className="space-y-2">
                 {claimedStakes.slice(0, 5).map((s) => (
                   <div key={s.id} className="bg-[#272a2f]/60 rounded-xl p-3 flex justify-between items-center opacity-75">
-                    <span className="text-gray-400">{formatNumber(s.amountLocked)} ALM</span>
+                    <span className="text-gray-400">{formatNumber(s.amountLocked)} PEARLS</span>
                     <span className="text-emerald-500 text-sm">Claimed</span>
                   </div>
                 ))}

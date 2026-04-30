@@ -106,7 +106,7 @@ export default function StakingAuditPage() {
   };
 
   const resetAllClaimed = () => {
-    if (!confirm(`Reset ALL ${claimedStakes.length} claimed stakes? Every affected user will be able to claim again. Only use if many users are stuck with "Already claimed" and never received ALM.`)) return;
+    if (!confirm(`Reset ALL ${claimedStakes.length} claimed stakes? Every affected user will be able to claim again. Only use if many users are stuck with "Already claimed" and never received PEARLS.`)) return;
     const confirmText = prompt('Type RESET_ALL_CLAIMED to confirm bulk reset:');
     if (confirmText !== 'RESET_ALL_CLAIMED') {
       alert('Cancelled.');
@@ -140,8 +140,8 @@ export default function StakingAuditPage() {
         <div className="mb-6 p-4 rounded-lg bg-[#272a2f] border border-[#3d4046]">
           <p className="text-white font-medium mb-1">How do users claim their rewards?</p>
           <ul className="text-gray-400 text-sm space-y-1 list-disc list-inside">
-            <li><strong className="text-emerald-400">Claimed? = No</strong> → They claim from the app: open the game, go to <strong>Mine</strong>, tap &quot;Lock ALM &amp; Earn Bonus&quot;, then in the popup tap <strong>Claim X ALM</strong> on each unlocked stake. No admin action needed.</li>
-            <li><strong className="text-amber-400">Claimed? = Yes</strong> → If the user never received their ALM (e.g. stuck during maintenance), use the section below to <strong>Reset claim</strong> so they can claim again from the app.</li>
+            <li><strong className="text-emerald-400">Claimed? = No</strong> → They claim from the app: open the game, go to <strong>Mine</strong>, tap &quot;Lock PEARLS &amp; Earn Bonus&quot;, then in the popup tap <strong>Claim X PEARLS</strong> on each unlocked stake. No admin action needed.</li>
+            <li><strong className="text-amber-400">Claimed? = Yes</strong> → If the user never received their PEARLS (e.g. stuck during maintenance), use the section below to <strong>Reset claim</strong> so they can claim again from the app.</li>
           </ul>
         </div>
         {loadError && (
@@ -159,7 +159,7 @@ export default function StakingAuditPage() {
         {activeStakes.length > 0 && (
           <>
             <h2 className="text-xl font-semibold text-emerald-400 mb-3">Accounts with active staking (unclaimed)</h2>
-            <p className="text-gray-400 mb-3">These users have stakes that are not yet claimed. They can claim from the app (Mine → Lock ALM &amp; Earn Bonus → Claim).</p>
+            <p className="text-gray-400 mb-3">These users have stakes that are not yet claimed. They can claim from the app (Mine → Lock PEARLS &amp; Earn Bonus → Claim).</p>
             <div className="overflow-x-auto mb-10">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -235,7 +235,7 @@ export default function StakingAuditPage() {
           <>
             <h2 className="text-xl font-semibold text-emerald-400 mb-3 mt-10">Stakes marked as claimed (reset only if user had not yet claimed)</h2>
             <p className="text-gray-400 mb-3">
-              This table shows only stakes that are <strong>marked as claimed</strong> in the DB. Use reset <strong>only for users who had staked but had not yet claimed</strong> when the service was stopped and never received their ALM—they will then be able to claim (staked amount only). Do not reset for users who already received their payout.
+              This table shows only stakes that are <strong>marked as claimed</strong> in the DB. Use reset <strong>only for users who had staked but had not yet claimed</strong> when the service was stopped and never received their PEARLS—they will then be able to claim (staked amount only). Do not reset for users who already received their payout.
             </p>
             <button
               type="button"

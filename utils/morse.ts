@@ -18,7 +18,7 @@ const MORSE_TO_LETTER: Record<string, string> = Object.fromEntries(
   Object.entries(LETTER_TO_MORSE).map(([k, v]) => [v, k])
 );
 
-/** Convert word (e.g. "ALM") to Morse pattern with spaces (e.g. ".- .-.. --") */
+/** Convert word (e.g. "PEARLS") to Morse pattern with spaces (e.g. ".- .-.. --") */
 export function wordToMorse(word: string): string {
   return word
     .toUpperCase()
@@ -29,7 +29,7 @@ export function wordToMorse(word: string): string {
     .join(' ');
 }
 
-/** Convert Morse pattern (e.g. ".- .-.. --" or ". - . .-.. --") to word (e.g. "ALM") */
+/** Convert Morse pattern (e.g. ".- .-.. --" or ". - . .-.. --") to word (e.g. "PEARLS") */
 export function morseToWord(morse: string): string {
   const parts = morse.trim().split(/\s+/).filter(Boolean);
   return parts

@@ -1,5 +1,5 @@
 /**
- * Donation center – donate ALM points for charity
+ * Donation center – donate PEARLS points for charity
  * POST: { initData, amount } – deduct from balance, create donation, update totalDonatedPoints
  * GET: ?initData=... – return user's totalDonatedPoints (for UI)
  */
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
   const amt = Math.floor(Number(amount));
   if (!Number.isFinite(amt) || amt < DONATION_MIN) {
     return NextResponse.json(
-      { error: `Minimum donation is ${DONATION_MIN.toLocaleString()} ALM` },
+      { error: `Minimum donation is ${DONATION_MIN.toLocaleString()} PEARLS` },
       { status: 400 }
     );
   }

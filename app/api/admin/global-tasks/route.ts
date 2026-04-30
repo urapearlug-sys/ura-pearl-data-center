@@ -182,7 +182,7 @@ export async function POST(req: Request) {
             data: { redeemedAt: new Date() },
           }),
         ]);
-        return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} ALM to league creator (no teams in league)` });
+        return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} PEARLS to league creator (no teams in league)` });
       }
       const perTeam = prizePool / teams.length;
       const updates = teams.map((lt) =>
@@ -198,7 +198,7 @@ export async function POST(req: Request) {
           data: { redeemedAt: new Date() },
         }),
       ]);
-      return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} ALM to ${teams.length} teams in winning league` });
+      return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} PEARLS to ${teams.length} teams in winning league` });
     }
 
     if (challenge.winnerTeamId) {
@@ -214,7 +214,7 @@ export async function POST(req: Request) {
           data: { redeemedAt: new Date() },
         }),
       ]);
-      return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} ALM to winning team creator` });
+      return NextResponse.json({ success: true, message: `Paid ${prizePool.toLocaleString()} PEARLS to winning team creator` });
     }
 
     return NextResponse.json({ error: 'No winner set' }, { status: 400 });

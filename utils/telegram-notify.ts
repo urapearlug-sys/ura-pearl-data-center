@@ -1,6 +1,6 @@
 /**
  * Telegram Bot API – send messages to users
- * Used for optional notifications (e.g. Send/Receive ALM)
+ * Used for optional notifications (e.g. Send/Receive PEARLS)
  */
 
 /** One inline button (under the message). Use url for links, or callback_data for bot handling. */
@@ -156,7 +156,7 @@ export async function deleteTelegramMessage(chatId: string, messageId: number): 
 }
 
 /**
- * Notify sender and recipient about an ALM transfer.
+ * Notify sender and recipient about an PEARLS transfer.
  * Runs asynchronously and does not block the response.
  * Failures are logged but do not affect the transfer.
  */
@@ -169,8 +169,8 @@ export function notifyTransfer(
 ): void {
   const formattedAmount = amount.toLocaleString();
 
-  const senderMessage = `✅ You sent <b>${formattedAmount} ALM</b> to ${escapeHtml(recipientName)}.`;
-  const recipientMessage = `🎉 You received <b>${formattedAmount} ALM</b> from ${escapeHtml(senderName)}.`;
+  const senderMessage = `✅ You sent <b>${formattedAmount} PEARLS</b> to ${escapeHtml(recipientName)}.`;
+  const recipientMessage = `🎉 You received <b>${formattedAmount} PEARLS</b> from ${escapeHtml(senderName)}.`;
 
   // Fire-and-forget: don't await, don't block the response
   Promise.all([
@@ -200,7 +200,7 @@ export function broadcastDonationToUsers(
   if (telegramIds.length === 0) return;
   const formattedAmount = amount.toLocaleString();
   const safeName = escapeHtml(donorName.trim() || 'Someone');
-  const text = `❤️ <b>${safeName}</b> donated <b>${formattedAmount} ALM</b> to charity.`;
+  const text = `❤️ <b>${safeName}</b> donated <b>${formattedAmount} PEARLS</b> to charity.`;
 
   const BATCH_SIZE = 25;
   const delayMs = 1100;

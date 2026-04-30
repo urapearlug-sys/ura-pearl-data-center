@@ -1,5 +1,5 @@
 /**
- * TransfersSectionView – presentational UI for Send/Receive ALM
+ * TransfersSectionView – presentational UI for Send/Receive PEARLS
  * Uses React.createElement to avoid SWC JSX parser bug
  */
 
@@ -48,8 +48,8 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
         ? React.createElement(
             'div',
             { className: 'rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-sm' },
-            React.createElement('p', { className: 'text-gray-400' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', React.createElement('span', { className: 'text-[#f3ba2f]' }, formatNumber(Math.floor((Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' ALM')),
-            React.createElement('p', { className: 'text-gray-300 mt-0.5' }, 'Recipient gets: ', React.createElement('span', { className: 'text-emerald-400' }, formatNumber(Math.floor(Number(props.amount) - (Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' ALM'))
+            React.createElement('p', { className: 'text-gray-400' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', React.createElement('span', { className: 'text-[#f3ba2f]' }, formatNumber(Math.floor((Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' PEARLS')),
+            React.createElement('p', { className: 'text-gray-300 mt-0.5' }, 'Recipient gets: ', React.createElement('span', { className: 'text-emerald-400' }, formatNumber(Math.floor(Number(props.amount) - (Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' PEARLS'))
           )
         : null;
     sendTab = React.createElement(
@@ -70,7 +70,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
       React.createElement(
         'div',
         null,
-        React.createElement('label', { className: 'block text-gray-400 text-sm mb-2' }, 'Amount (ALM)'),
+        React.createElement('label', { className: 'block text-gray-400 text-sm mb-2' }, 'Amount (PEARLS)'),
         React.createElement('input', {
           type: 'number',
           value: props.amount,
@@ -82,12 +82,12 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
         })
       ),
       feeBlock,
-      React.createElement('p', { className: 'text-gray-400 text-xs' }, 'Min ', formatNumber(TRANSFER_MIN), ' ALM, max ', formatNumber(TRANSFER_MAX), ' ALM. Daily limit: 50M ALM.'),
+      React.createElement('p', { className: 'text-gray-400 text-xs' }, 'Min ', formatNumber(TRANSFER_MIN), ' PEARLS, max ', formatNumber(TRANSFER_MAX), ' PEARLS. Daily limit: 50M PEARLS.'),
       React.createElement('button', {
         onClick: props.onSend,
         disabled: props.isSending || !props.recipientTelegramId.trim() || !props.amount,
         className: 'w-full py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed',
-      }, props.isSending ? 'Sending...' : 'Send ALM')
+      }, props.isSending ? 'Sending...' : 'Send PEARLS')
     );
   }
 
@@ -96,7 +96,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
     receiveTab = React.createElement(
       'div',
       { className: 'bg-[#272a2f] rounded-xl p-4' },
-      React.createElement('p', { className: 'text-gray-400 text-sm mb-3' }, 'Share your Telegram ID so others can send you ALM.'),
+      React.createElement('p', { className: 'text-gray-400 text-sm mb-3' }, 'Share your Telegram ID so others can send you PEARLS.'),
       React.createElement(
         'button',
         { onClick: props.onCopyTelegramId, className: 'w-full flex items-center justify-between py-3 px-4 bg-[#1d2025] rounded-lg border border-[#3d4046]' },
@@ -129,14 +129,14 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
                 React.createElement(
                   'div',
                   null,
-                  React.createElement('span', { className: t.type === 'sent' ? 'text-rose-400' : 'text-emerald-400' }, t.type === 'sent' ? '-' : '+', formatNumber(t.amount), ' ALM'),
+                  React.createElement('span', { className: t.type === 'sent' ? 'text-rose-400' : 'text-emerald-400' }, t.type === 'sent' ? '-' : '+', formatNumber(t.amount), ' PEARLS'),
                   React.createElement('span', { className: 'text-gray-400 text-sm ml-2' }, t.isDonation ? (t.type === 'sent' ? 'Donation to Treasury' : 'Donation from ' + t.otherName) : (t.type === 'sent' ? 'to' : 'from') + ' ' + t.otherName)
                 ),
                 React.createElement('span', { className: 'text-gray-500 text-xs' }, formatDate(t.createdAt))
               ),
               t.isDonation
                 ? React.createElement('p', { className: 'text-amber-400/80 text-xs mt-1 ml-0' }, 'Charity donation')
-                : React.createElement('p', { className: 'text-gray-500 text-xs mt-1 ml-0' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', formatNumber(t.feeAmount ?? 0), ' ALM')
+                : React.createElement('p', { className: 'text-gray-500 text-xs mt-1 ml-0' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', formatNumber(t.feeAmount ?? 0), ' PEARLS')
             )
           )
         )
@@ -170,14 +170,14 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
                   'div',
                   { className: 'flex items-center gap-2' },
                   React.createElement(IceCube, { className: 'w-5 h-5 text-[#f3ba2f] flex-shrink-0' }),
-                  React.createElement('span', { className: 'text-white font-medium' }, formatNumber(t.amount), ' ALM'),
+                  React.createElement('span', { className: 'text-white font-medium' }, formatNumber(t.amount), ' PEARLS'),
                   React.createElement('span', { className: 'text-gray-400 text-sm truncate' }, t.isDonation ? `${t.senderName} donated to Treasury` : `${t.senderName} → ${t.recipientName}`)
                 ),
                 React.createElement('span', { className: 'text-gray-500 text-xs flex-shrink-0' }, formatDate(t.createdAt))
               ),
               t.isDonation
                 ? React.createElement('p', { className: 'text-amber-400/80 text-xs mt-1 ml-0' }, 'Charity donation')
-                : React.createElement('p', { className: 'text-gray-500 text-xs mt-1 ml-0' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', formatNumber(t.feeAmount ?? 0), ' ALM')
+                : React.createElement('p', { className: 'text-gray-500 text-xs mt-1 ml-0' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', formatNumber(t.feeAmount ?? 0), ' PEARLS')
             )
           )
         )
@@ -188,7 +188,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
   return React.createElement(
     TransfersSectionRoot,
     { className: 'mb-6' },
-    React.createElement('h2', { className: 'text-base mt-8 mb-4' }, 'Send & Receive ALM'),
+    React.createElement('h2', { className: 'text-base mt-8 mb-4' }, 'Send & Receive PEARLS'),
     tabsRow,
     sendTab,
     receiveTab,

@@ -169,7 +169,7 @@ export async function POST(req: Request) {
           where: { id: team.creatorId },
           data: { pointsBalance: { increment: amt } },
         });
-        return NextResponse.json({ success: true, message: `Added ${amt} ALM to team creator ${team.creator.name ?? team.creatorId}` });
+        return NextResponse.json({ success: true, message: `Added ${amt} PEARLS to team creator ${team.creator.name ?? team.creatorId}` });
       }
 
       case 'addTeamToLeague': {

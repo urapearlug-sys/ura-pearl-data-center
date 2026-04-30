@@ -84,7 +84,7 @@ export default function LeagueChallengeDetailPopup({ challengeId, onClose, initD
   const handleContribute = async () => {
     const amt = Math.floor(Number(contributeAmount));
     if (!Number.isFinite(amt) || amt < LEAGUE_CHALLENGE_MIN_CONTRIBUTION) {
-      showToast(`Minimum contribution is ${LEAGUE_CHALLENGE_MIN_CONTRIBUTION.toLocaleString()} ALM`, 'error');
+      showToast(`Minimum contribution is ${LEAGUE_CHALLENGE_MIN_CONTRIBUTION.toLocaleString()} PEARLS`, 'error');
       return;
     }
     triggerHapticFeedback(window);
@@ -97,7 +97,7 @@ export default function LeagueChallengeDetailPopup({ challengeId, onClose, initD
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || 'Failed');
-      showToast(`Added ${formatNumber(amt)} ALM to prize pool!`, 'success');
+      showToast(`Added ${formatNumber(amt)} PEARLS to prize pool!`, 'success');
       setContributeAmount('');
       fetchDetail();
     } catch (e) {
@@ -127,12 +127,12 @@ export default function LeagueChallengeDetailPopup({ challengeId, onClose, initD
           {(data.creatorTeamNames?.length || data.opponentTeamNames?.length) ? (
             <p className="text-sm text-sky-300/90">Teams competing: {(data.creatorTeamNames ?? []).join(', ')} vs {(data.opponentTeamNames ?? []).join(', ')}</p>
           ) : null}
-          <p className="text-sm text-gray-400">Target: {formatNumber(data.targetAlm)} ALM · {data.durationDays} day(s)</p>
-          <p className="text-[#f3ba2f] font-semibold">Prize pool: {formatNumber(data.prizePool)} ALM</p>
+          <p className="text-sm text-gray-400">Target: {formatNumber(data.targetAlm)} PEARLS · {data.durationDays} day(s)</p>
+          <p className="text-[#f3ba2f] font-semibold">Prize pool: {formatNumber(data.prizePool)} PEARLS</p>
 
           {data.status === 'pending' && data.canAccept && (
             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30">
-              <p className="text-amber-200 text-sm mb-2">You can accept this challenge (stake: {formatNumber(data.prizePool / 2)} ALM).</p>
+              <p className="text-amber-200 text-sm mb-2">You can accept this challenge (stake: {formatNumber(data.prizePool / 2)} PEARLS).</p>
               <button type="button" onClick={handleAccept} disabled={accepting} className="py-2 px-4 rounded-lg bg-amber-500 text-black font-bold disabled:opacity-50">{accepting ? 'Accepting…' : 'Accept challenge'}</button>
             </div>
           )}
@@ -145,14 +145,14 @@ export default function LeagueChallengeDetailPopup({ challengeId, onClose, initD
                 <div className="h-6 rounded-full bg-[#272a2f] overflow-hidden">
                   <div className="h-full bg-emerald-500/80 rounded-full transition-all" style={{ width: `${pct1}%` }} />
                 </div>
-                <p className="text-xs text-emerald-300 mt-0.5">{formatNumber(data.progressCreator.totalGrowth)} ALM · {data.progressCreator.participants} participants</p>
+                <p className="text-xs text-emerald-300 mt-0.5">{formatNumber(data.progressCreator.totalGrowth)} PEARLS · {data.progressCreator.participants} participants</p>
               </div>
               <div>
                 <p className="text-xs text-gray-400 mb-1">{data.opponentLeagueName ?? 'Opponent'}</p>
                 <div className="h-6 rounded-full bg-[#272a2f] overflow-hidden">
                   <div className="h-full bg-violet-500/80 rounded-full transition-all" style={{ width: `${pct2}%` }} />
                 </div>
-                <p className="text-xs text-violet-300 mt-0.5">{formatNumber(data.progressOpponent.totalGrowth)} ALM · {data.progressOpponent.participants} participants</p>
+                <p className="text-xs text-violet-300 mt-0.5">{formatNumber(data.progressOpponent.totalGrowth)} PEARLS · {data.progressOpponent.participants} participants</p>
               </div>
               <div className="pt-2">
                 <p className="text-sm text-gray-400 mb-2">Add to prize pool (anyone can contribute)</p>
@@ -180,7 +180,7 @@ export default function LeagueChallengeDetailPopup({ challengeId, onClose, initD
               <p className="text-sm font-semibold text-gray-400 mb-1">Recent contributions</p>
               <ul className="space-y-0.5 text-sm text-gray-300">
                 {data.recentContributions.map((c, i) => (
-                  <li key={i}>{c.userName}: +{formatNumber(c.amount)} ALM</li>
+                  <li key={i}>{c.userName}: +{formatNumber(c.amount)} PEARLS</li>
                 ))}
               </ul>
             </div>

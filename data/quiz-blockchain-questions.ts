@@ -1,6 +1,6 @@
 /**
  * Pool of ~100 blockchain/crypto quiz questions for admin to seed.
- * Each has branchName (maps to preset branches), points 10k ALM per question.
+ * Each has branchName (maps to preset branches), points 10k PEARLS per question.
  */
 
 export interface BlockchainQuizItem {

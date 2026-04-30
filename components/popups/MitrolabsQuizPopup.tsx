@@ -149,7 +149,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
         });
         if (data.pointsAwarded > 0) {
           incrementPoints(data.pointsAwarded);
-          showToast(`+${formatNumber(data.pointsAwarded)} ALM!`, 'success');
+          showToast(`+${formatNumber(data.pointsAwarded)} PEARLS!`, 'success');
         }
       }
     } catch (e) {
@@ -191,7 +191,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">Mitroplus Quiz</h2>
           <p className="text-gray-300 mb-2">You have already completed this Mitroplus Quiz.</p>
           {lastAttempt && (
-            <p className="text-gray-400 text-sm">Score: {lastAttempt.correctCount}/{lastAttempt.totalCount} · +{formatNumber(lastAttempt.pointsAwarded)} ALM claimed</p>
+            <p className="text-gray-400 text-sm">Score: {lastAttempt.correctCount}/{lastAttempt.totalCount} · +{formatNumber(lastAttempt.pointsAwarded)} PEARLS claimed</p>
           )}
           <button type="button" onClick={onClose} className="mt-8 px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
         </div>
@@ -214,25 +214,25 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">Mitroplus Quiz complete</h2>
           <p className="text-white text-lg mb-1">{result.correctCount} / {result.totalCount} correct</p>
           {noAnswersAttended && (
-            <p className="text-gray-400 text-sm mb-2">You didn&apos;t answer any question in time. 0 ALM.</p>
+            <p className="text-gray-400 text-sm mb-2">You didn&apos;t answer any question in time. 0 PEARLS.</p>
           )}
           {result.pointsAwarded > 0 && (
             <div className="mb-6 space-y-1">
-              <p className="text-emerald-400 font-semibold">+{formatNumber(result.pointsAwarded)} ALM added to your balance</p>
+              <p className="text-emerald-400 font-semibold">+{formatNumber(result.pointsAwarded)} PEARLS added to your balance</p>
               {showBreakdown && (
                 <div className="text-sm text-gray-400 mt-3 space-y-0.5">
                   {fromQuestions > 0 && (
-                    <p>From correct answers: +{formatNumber(fromQuestions)} ALM</p>
+                    <p>From correct answers: +{formatNumber(fromQuestions)} PEARLS</p>
                   )}
                   {bonus > 0 && (
-                    <p className="text-[#f3ba2f] font-medium">All correct bonus: +{formatNumber(bonus)} ALM</p>
+                    <p className="text-[#f3ba2f] font-medium">All correct bonus: +{formatNumber(bonus)} PEARLS</p>
                   )}
                 </div>
               )}
             </div>
           )}
           {!noAnswersAttended && result.pointsAwarded === 0 && result.totalCount > 0 && (
-            <p className="text-gray-400 text-sm mb-4">+0 ALM this time.</p>
+            <p className="text-gray-400 text-sm mb-4">+0 PEARLS this time.</p>
           )}
           <button type="button" onClick={onClose} className="px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
         </div>

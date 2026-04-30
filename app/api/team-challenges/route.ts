@@ -11,8 +11,8 @@ import { validateTelegramWebAppData } from '@/utils/server-checks';
 import {
   TEAM_CHALLENGE_MIN_STAKE,
   TEAM_CHALLENGE_MAX_STAKE,
-  TEAM_CHALLENGE_MIN_TARGET_ALM,
-  TEAM_CHALLENGE_MAX_TARGET_ALM,
+  TEAM_CHALLENGE_MIN_TARGET_PEARLS,
+  TEAM_CHALLENGE_MAX_TARGET_PEARLS,
   TEAM_CHALLENGE_MIN_DAYS,
   TEAM_CHALLENGE_MAX_DAYS,
 } from '@/utils/consts';
@@ -81,14 +81,14 @@ export async function POST(req: Request) {
   const days = Math.floor(Number(durationDays));
   const stake = Math.floor(Number(stakePerTeam ?? 0));
 
-  if (!Number.isFinite(target) || target < TEAM_CHALLENGE_MIN_TARGET_ALM || target > TEAM_CHALLENGE_MAX_TARGET_ALM) {
-    return NextResponse.json({ error: `Target ALM must be between ${TEAM_CHALLENGE_MIN_TARGET_ALM.toLocaleString()} and ${TEAM_CHALLENGE_MAX_TARGET_ALM.toLocaleString()}` }, { status: 400 });
+  if (!Number.isFinite(target) || target < TEAM_CHALLENGE_MIN_TARGET_PEARLS || target > TEAM_CHALLENGE_MAX_TARGET_PEARLS) {
+    return NextResponse.json({ error: `Target PEARLS must be between ${TEAM_CHALLENGE_MIN_TARGET_PEARLS.toLocaleString()} and ${TEAM_CHALLENGE_MAX_TARGET_PEARLS.toLocaleString()}` }, { status: 400 });
   }
   if (!Number.isFinite(days) || days < TEAM_CHALLENGE_MIN_DAYS || days > TEAM_CHALLENGE_MAX_DAYS) {
     return NextResponse.json({ error: `Duration must be ${TEAM_CHALLENGE_MIN_DAYS}-${TEAM_CHALLENGE_MAX_DAYS} days` }, { status: 400 });
   }
   if (!Number.isFinite(stake) || stake < TEAM_CHALLENGE_MIN_STAKE || stake > TEAM_CHALLENGE_MAX_STAKE) {
-    return NextResponse.json({ error: `Stake per team must be ${TEAM_CHALLENGE_MIN_STAKE.toLocaleString()} - ${TEAM_CHALLENGE_MAX_STAKE.toLocaleString()} ALM` }, { status: 400 });
+    return NextResponse.json({ error: `Stake per team must be ${TEAM_CHALLENGE_MIN_STAKE.toLocaleString()} - ${TEAM_CHALLENGE_MAX_STAKE.toLocaleString()} PEARLS` }, { status: 400 });
   }
 
   const { validatedData, user } = validateTelegramWebAppData(initData);
@@ -110,7 +110,7 @@ export async function POST(req: Request) {
   if (creatorTeamId === opponentTeamId) return NextResponse.json({ error: 'Cannot challenge your own team' }, { status: 400 });
 
   if ((dbUser.pointsBalance ?? 0) < stake) {
-    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} ALM.` }, { status: 400 });
+    return NextResponse.json({ error: `Insufficient balance. Stake is ${stake.toLocaleString()} PEARLS.` }, { status: 400 });
   }
 
   const initialPrizePool = stake * 2;

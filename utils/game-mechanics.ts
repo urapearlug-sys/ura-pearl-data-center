@@ -69,7 +69,7 @@ export interface GameState extends InitialGameState {
   setFrozenState: (isFrozen: boolean, suspensionReason: string | null) => void;
 }
 
-/** Level is based on total ALM (points) only; minTaps are not required. */
+/** Level is based on total PEARLS (points) only; minTaps are not required. */
 export const calculateLevelIndex = (points: number, _totalTaps?: number): number => {
   for (let i = LEVELS.length - 1; i >= 0; i--) {
     const level = LEVELS[i];
