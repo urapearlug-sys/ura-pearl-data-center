@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { defaultProfileAvatar, uraDailyPearlCoins, uraFiscalFunBanner } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
@@ -50,7 +50,12 @@ interface HomeProps {
 export default function Home({ setCurrentView }: HomeProps) {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<ActionTab>('play');
-  const { userTelegramName, points } = useGameStore();
+  const { userTelegramName, points, userTelegramInitData } = useGameStore();
+  const [whitePearls, setWhitePearls] = useState(0);
+  const [bluePearls, setBluePearls] = useState(0);
+  const [goldishPearls, setGoldishPearls] = useState(0);
+  const [converterFromType, setConverterFromType] = useState<'white' | 'blue'>('white');
+  const [converterFromAmount, setConverterFromAmount] = useState<string>('50');
 
   const actionItems = useMemo(() => ACTION_BY_TAB[activeTab], [activeTab]);
 
@@ -70,6 +75,31 @@ export default function Home({ setCurrentView }: HomeProps) {
     const p = ((points - cur.minPoints) / span) * 100;
     return Math.max(0, Math.min(100, p));
   }, [levelIndex, points]);
+
+  useEffect(() => {
+    const loadPearls = async () => {
+      if (!userTelegramInitData) return;
+      try {
+        const res = await fetch('/api/pearls/me', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData: userTelegramInitData }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        setWhitePearls(Math.floor(data?.balances?.white ?? 0));
+        setBluePearls(Math.floor(data?.balances?.bluePending ?? 0));
+        setGoldishPearls(Math.floor(data?.balances?.goldish ?? 0));
+      } catch {
+        // Keep UI responsive with zero fallback if pearls API is unavailable.
+      }
+    };
+    loadPearls();
+  }, [userTelegramInitData]);
+
+  const fromAmountNum = Math.max(0, Math.floor(Number(converterFromAmount) || 0));
+  const converterRate = converterFromType === 'white' ? 50 : 25;
+  const converterToGoldish = Math.floor(fromAmountNum / converterRate);
 
   const handleAction = (item: ActionItem) => {
     triggerHapticFeedback(window);
@@ -152,23 +182,61 @@ export default function Home({ setCurrentView }: HomeProps) {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="mt-3 rounded-xl border border-[#2d2f38] bg-[#151821] p-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-400">Pearl Categories</h4>
-              <div className="mt-2 space-y-2 text-xs">
-                <p className="text-gray-300">
-                  <span className="font-semibold text-white">White</span> — no approval needed (activities like Karibu Daily, Quiz, and similar tasks).
-                </p>
-                <p className="text-gray-300">
-                  <span className="font-semibold text-[#5fa8ff]">Blue</span> — earned from report-type activities and requires URA admin approval.
-                </p>
-                <p className="text-gray-300">
-                  <span className="font-semibold text-[var(--ura-yellow)]">Goldish</span> — approved pearls, ready for withdrawal or transfer.
-                </p>
-              </div>
-              <div className="mt-2 rounded-lg bg-[#12141a] border border-[#2a2d38] px-2.5 py-2 text-[11px] text-gray-400">
-                Conversion rules: <span className="text-white">50 White = 1 Goldish</span> · <span className="text-white">25 Blue = 1 Goldish</span>
+                <div className="mt-3 border-t border-[#2a2d38] pt-3 space-y-2">
+                  {[
+                    { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks' },
+                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks' },
+                    { key: 'goldish', label: 'Goldish pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls' },
+                  ].map((item) => (
+                    <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 flex items-center gap-2">
+                      <Image src={uraDailyPearlCoins} alt={item.label} width={28} height={28} className="h-7 w-7 object-contain flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className={`text-xs font-semibold ${item.color}`}>{item.label}</p>
+                        <p className="text-[10px] text-gray-500 truncate">{item.hint}</p>
+                      </div>
+                      <p className="text-sm font-bold text-white tabular-nums">{item.value.toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-3 border-t border-[#2a2d38] pt-3">
+                  <h4 className="text-xs font-semibold text-white uppercase tracking-wide">Converter</h4>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <label className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2">
+                      <span className="text-[10px] text-gray-500 uppercase">From</span>
+                      <select
+                        value={converterFromType}
+                        onChange={(e) => setConverterFromType(e.target.value as 'white' | 'blue')}
+                        className="mt-1 w-full bg-transparent text-xs text-white outline-none"
+                      >
+                        <option value="white" className="bg-[#12141a]">White pearl</option>
+                        <option value="blue" className="bg-[#12141a]">Blue pearl</option>
+                      </select>
+                    </label>
+                    <label className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2">
+                      <span className="text-[10px] text-gray-500 uppercase">Amount</span>
+                      <input
+                        type="number"
+                        min={0}
+                        value={converterFromAmount}
+                        onChange={(e) => setConverterFromAmount(e.target.value)}
+                        className="mt-1 w-full bg-transparent text-xs text-white outline-none"
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-2 rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 text-xs">
+                    <p className="text-gray-400">
+                      To:
+                      <span className="text-[var(--ura-yellow)] font-semibold"> Goldish pearl</span>
+                    </p>
+                    <p className="text-white font-semibold tabular-nums mt-0.5">
+                      {converterToGoldish.toLocaleString()} Goldish
+                    </p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">
+                      Rate: {converterRate} {converterFromType === 'white' ? 'White' : 'Blue'} = 1 Goldish
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
