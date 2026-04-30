@@ -73,6 +73,10 @@ import uraTreasuryCounter from "./ura-treasury-counter.png";
 import pearlWhite from "./pearl-white.png";
 import pearlBlue from "./pearl-blue.png";
 import pearlGolden from "./pearl-golden.png";
+import rankWhite from "./rank-white.png";
+import rankSilver from "./rank-silver.png";
+import rankBlue from "./rank-blue.png";
+import rankGold from "./rank-gold.png";
 
 
 export {
@@ -123,6 +127,10 @@ export {
     pearlWhite,
     pearlBlue,
     pearlGolden,
+    rankWhite,
+    rankSilver,
+    rankBlue,
+    rankGold,
     blockchain,
     afrolumens,
     mitroplus,

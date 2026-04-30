@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
+import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, rankBlue, rankGold, rankSilver, rankWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -65,10 +65,10 @@ export default function Home({ setCurrentView }: HomeProps) {
   const rankTotal = LEVELS.length;
   const ranks = useMemo(
     () => [
-      { id: 0, color: 'White', name: 'Novice', tone: 'border-slate-300/40 bg-slate-100/5' },
-      { id: 1, color: 'Silver', name: 'Citizen', tone: 'border-gray-300/40 bg-gray-100/5' },
-      { id: 2, color: 'Blue', name: 'Patriot', tone: 'border-[#5fa8ff]/50 bg-[#5fa8ff]/10' },
-      { id: 3, color: 'Gold', name: 'Guardian', tone: 'border-[var(--ura-yellow)]/50 bg-[var(--ura-yellow)]/10' },
+      { id: 0, color: 'White', name: 'Novice', tone: 'border-slate-300/40 bg-slate-100/5', image: rankWhite },
+      { id: 1, color: 'Silver', name: 'Citizen', tone: 'border-gray-300/40 bg-gray-100/5', image: rankSilver },
+      { id: 2, color: 'Blue', name: 'Patriot', tone: 'border-[#5fa8ff]/50 bg-[#5fa8ff]/10', image: rankBlue },
+      { id: 3, color: 'Gold', name: 'Guardian', tone: 'border-[var(--ura-yellow)]/50 bg-[var(--ura-yellow)]/10', image: rankGold },
     ],
     []
   );
@@ -304,13 +304,18 @@ export default function Home({ setCurrentView }: HomeProps) {
                     key={rank.id}
                     className={`rounded-xl border px-3 py-2 ${rank.tone} ${isCurrent ? 'ring-1 ring-[var(--ura-yellow)]' : ''}`}
                   >
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-white">{rank.color} - {rank.name}</p>
-                      {isCurrent ? (
-                        <span className="text-[10px] font-bold rounded-full px-2 py-0.5 bg-[var(--ura-yellow)] text-black">CURRENT</span>
-                      ) : (
-                        <span className="text-[10px] text-gray-400">Locked</span>
-                      )}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Image src={rank.image} alt={`${rank.color} rank`} width={28} height={28} className="h-7 w-7 rounded-md object-cover border border-[#3a3d46]" />
+                        <p className="text-sm font-semibold text-white truncate">{rank.color} - {rank.name}</p>
+                      </div>
+                      <div className="flex-shrink-0">
+                        {isCurrent ? (
+                          <span className="text-[10px] font-bold rounded-full px-2 py-0.5 bg-[var(--ura-yellow)] text-black">CURRENT</span>
+                        ) : (
+                          <span className="text-[10px] text-gray-400">Locked</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
