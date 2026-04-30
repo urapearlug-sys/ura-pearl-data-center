@@ -320,35 +320,37 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               {transferTab === 'send' && (
                 <div className="space-y-4">
                   <div>
-                    <p className="text-4xl md:text-[34px] font-semibold text-[#a2a8b3] leading-none">Recipient Telegram ID</p>
+                    <p className="text-lg font-semibold text-[#b0b6c2]">Recipient Telegram ID</p>
                     <div className="mt-3 rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
                       <input
                         type="text"
                         value={sendRecipientTelegramId}
                         onChange={(e) => setSendRecipientTelegramId(e.target.value)}
-                        className="w-full bg-transparent text-[38px] leading-none font-semibold text-[#aab1bc] outline-none"
+                        className="w-full bg-transparent text-xl font-semibold text-[#c0c6d0] outline-none"
                         placeholder="e.g. 123456789"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-4xl md:text-[34px] font-semibold text-[#a2a8b3] leading-none">Amount (ALM)</p>
+                    <p className="text-lg font-semibold text-[#b0b6c2]">Amount (ALM)</p>
                     <div className="mt-3 rounded-2xl border border-[#3c424f] bg-[#1a1f28] px-5 py-4">
                       <input
                         type="number"
                         min={1}
                         value={sendAmount}
                         onChange={(e) => setSendAmount(e.target.value)}
-                        className="w-full bg-transparent text-[38px] leading-none font-semibold text-[#aab1bc] outline-none"
+                        className="w-full bg-transparent text-xl font-semibold text-[#c0c6d0] outline-none"
                         placeholder="500.00K - 10.00M"
                       />
                     </div>
-                    <p className="text-xl text-gray-400 mt-2">Min 1 ALM. Send by Telegram ID.</p>
+                    <p className="text-sm text-gray-400 mt-2">Min 1 ALM. Send by Telegram ID.</p>
                   </div>
 
                   <label className="block rounded-xl border border-[#3a3d42] bg-[#1f2229] p-3">
-                    <span className="text-sm text-gray-400">Asset</span>
+                    <span className="inline-flex items-center">
+                      <Image src={uraDailyPearlCoins} alt="Asset" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+                    </span>
                     <select
                       value={sendPearlType}
                       onChange={(e) => setSendPearlType(e.target.value as PearlType)}
