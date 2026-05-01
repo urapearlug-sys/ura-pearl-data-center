@@ -9,40 +9,29 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 
-type ActionTab = 'play' | 'learn' | 'earn';
+type ActionCenterTab = 'most-used' | 'favorites';
 
 type ActionItem = {
   id: string;
   title: string;
   subtitle?: string;
   pearlType?: 'white' | 'blue';
+  group?: 'play' | 'learn' | 'earn';
   /** 'earn' | 'game' etc., or null for coming-soon toast */
   route?: string;
 };
 
-const ACTION_BY_TAB: Record<ActionTab, ActionItem[]> = {
-  play: [
-    { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn' },
-    { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
-    { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white' },
-    { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game' },
-    { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn' },
-  ],
-  learn: [
-    {
-      id: 'social-earn',
-      title: 'Earn activities',
-      subtitle: 'White pearls · no approval',
-      pearlType: 'white',
-      route: 'earn',
-    },
-    { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white' },
-  ],
-  earn: [
-    { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
-    { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue' },
-  ],
-};
+const ACTION_CATALOG: ActionItem[] = [
+  { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play' },
+  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'play' },
+  { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'play' },
+  { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game', group: 'play' },
+  { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play' },
+  { id: 'social-earn', title: 'Earn activities', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn' },
+  { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn' },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn' },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn' },
+];
 
 interface HomeProps {
   setCurrentView: (view: string) => void;
@@ -50,14 +39,62 @@ interface HomeProps {
 
 export default function Home({ setCurrentView }: HomeProps) {
   const showToast = useToast();
-  const [activeTab, setActiveTab] = useState<ActionTab>('play');
+  const [activeActionTab, setActiveActionTab] = useState<ActionCenterTab>('most-used');
+  const [showFavoritesManager, setShowFavoritesManager] = useState(false);
+  const [favoritesSearch, setFavoritesSearch] = useState('');
+  const [manualFavoriteTitle, setManualFavoriteTitle] = useState('');
+  const [manualFavoriteSubtitle, setManualFavoriteSubtitle] = useState('');
+  const [manualFavoriteRoute, setManualFavoriteRoute] = useState('');
+  const [visitCounts, setVisitCounts] = useState<Record<string, number>>({});
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
   const { userTelegramName, points, userTelegramInitData } = useGameStore();
   const [whitePearls, setWhitePearls] = useState(0);
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
 
-  const actionItems = useMemo(() => ACTION_BY_TAB[activeTab], [activeTab]);
+  const storagePrefix = useMemo(() => {
+    const fallback = 'anon';
+    if (!userTelegramInitData) return fallback;
+    try {
+      const rawUser = new URLSearchParams(userTelegramInitData).get('user');
+      if (!rawUser) return fallback;
+      const parsed = JSON.parse(decodeURIComponent(rawUser)) as { id?: string | number };
+      return String(parsed?.id ?? fallback);
+    } catch {
+      return fallback;
+    }
+  }, [userTelegramInitData]);
+  const visitsStorageKey = `ura:home:visits:${storagePrefix}`;
+  const favoritesStorageKey = `ura:home:favorites:${storagePrefix}`;
+  const customFavoritesStorageKey = `ura:home:favorites:custom:${storagePrefix}`;
+
+  const mostUsedItems = useMemo(() => {
+    const scored = ACTION_CATALOG.map((item, index) => ({
+      item,
+      score: visitCounts[item.id] ?? 0,
+      index,
+    })).sort((a, b) => (b.score - a.score) || (a.index - b.index));
+    return scored.slice(0, 6).map((x) => x.item);
+  }, [visitCounts]);
+
+  const favoriteItems = useMemo(() => {
+    const catalogById = new Map(ACTION_CATALOG.map((x) => [x.id, x]));
+    const pickedCatalog = favoriteIds.map((id) => catalogById.get(id)).filter((x): x is ActionItem => Boolean(x));
+    return [...pickedCatalog, ...customFavorites];
+  }, [favoriteIds, customFavorites]);
+
+  const displayedItems = useMemo(() => {
+    if (activeActionTab === 'favorites') return favoriteItems;
+    return mostUsedItems;
+  }, [activeActionTab, favoriteItems, mostUsedItems]);
+
+  const availableFavoriteOptions = useMemo(() => {
+    const q = favoritesSearch.trim().toLowerCase();
+    return ACTION_CATALOG.filter((item) => !favoriteIds.includes(item.id))
+      .filter((item) => !q || item.title.toLowerCase().includes(q) || (item.subtitle ?? '').toLowerCase().includes(q));
+  }, [favoritesSearch, favoriteIds]);
 
   const levelIndex = useMemo(() => calculateLevelIndex(points), [points]);
   const pearlsDisplay = Math.floor(points).toLocaleString();
@@ -106,13 +143,69 @@ export default function Home({ setCurrentView }: HomeProps) {
     return () => window.removeEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
   }, [userTelegramInitData]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const parsedVisits = JSON.parse(window.localStorage.getItem(visitsStorageKey) ?? '{}') as Record<string, number>;
+      setVisitCounts(parsedVisits);
+      const parsedFavorites = JSON.parse(window.localStorage.getItem(favoritesStorageKey) ?? '[]') as string[];
+      setFavoriteIds(Array.isArray(parsedFavorites) ? parsedFavorites : []);
+      const parsedCustom = JSON.parse(window.localStorage.getItem(customFavoritesStorageKey) ?? '[]') as ActionItem[];
+      setCustomFavorites(Array.isArray(parsedCustom) ? parsedCustom : []);
+    } catch {
+      setVisitCounts({});
+      setFavoriteIds([]);
+      setCustomFavorites([]);
+    }
+  }, [customFavoritesStorageKey, favoritesStorageKey, visitsStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(visitsStorageKey, JSON.stringify(visitCounts));
+  }, [visitCounts, visitsStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(favoritesStorageKey, JSON.stringify(favoriteIds));
+  }, [favoriteIds, favoritesStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(customFavoritesStorageKey, JSON.stringify(customFavorites));
+  }, [customFavorites, customFavoritesStorageKey]);
+
   const handleAction = (item: ActionItem) => {
     triggerHapticFeedback(window);
+    setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
     if (item.route) {
       setCurrentView(item.route);
       return;
     }
     showToast(`${item.title} — coming soon`, 'success');
+  };
+
+  const addCatalogFavorite = (id: string) => {
+    setFavoriteIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+  };
+
+  const removeCatalogFavorite = (id: string) => {
+    setFavoriteIds((prev) => prev.filter((x) => x !== id));
+  };
+
+  const addManualFavorite = () => {
+    const title = manualFavoriteTitle.trim();
+    if (!title) {
+      showToast('Add a title for your favorite', 'error');
+      return;
+    }
+    const route = manualFavoriteRoute.trim();
+    const subtitle = manualFavoriteSubtitle.trim();
+    const id = `manual:${Date.now()}`;
+    setCustomFavorites((prev) => [...prev, { id, title, subtitle: subtitle || undefined, route: route || undefined }]);
+    setManualFavoriteTitle('');
+    setManualFavoriteSubtitle('');
+    setManualFavoriteRoute('');
+    showToast('Favorite added', 'success');
   };
 
   return (
@@ -198,12 +291,11 @@ export default function Home({ setCurrentView }: HomeProps) {
               </div>
             </div>
 
-            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-3 gap-1">
+            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
               {(
                 [
-                  { key: 'play' as const, label: 'Play' },
-                  { key: 'learn' as const, label: 'Learn' },
-                  { key: 'earn' as const, label: 'Earn' },
+                  { key: 'most-used' as const, label: 'Most used' },
+                  { key: 'favorites' as const, label: 'Favorites' },
                 ] as const
               ).map(({ key, label }) => (
                 <button
@@ -211,10 +303,10 @@ export default function Home({ setCurrentView }: HomeProps) {
                   type="button"
                   onClick={() => {
                     triggerHapticFeedback(window);
-                    setActiveTab(key);
+                    setActiveActionTab(key);
                   }}
                   className={`py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                    activeTab === key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
+                    activeActionTab === key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
                   }`}
                 >
                   {label}
@@ -222,8 +314,23 @@ export default function Home({ setCurrentView }: HomeProps) {
               ))}
             </div>
 
+            {activeActionTab === 'favorites' ? (
+              <div className="mt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowFavoritesManager(true);
+                  }}
+                  className="w-full rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 text-sm font-semibold text-gray-200 hover:border-[var(--ura-yellow)] transition-colors"
+                >
+                  + Manage favorites
+                </button>
+              </div>
+            ) : null}
+
             <div className="mt-4 space-y-2">
-              {actionItems.map((item) => (
+              {displayedItems.map((item) => (
                 <button
                   key={item.id}
                   type="button"
@@ -233,6 +340,9 @@ export default function Home({ setCurrentView }: HomeProps) {
                   <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
                   {item.subtitle ? (
                     <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p>
+                  ) : null}
+                  {item.group ? (
+                    <p className="mt-1 text-[11px] text-gray-500 uppercase tracking-wide">{item.group}</p>
                   ) : null}
                   {item.pearlType ? (
                     <p className="mt-1 text-[11px]">
@@ -249,10 +359,127 @@ export default function Home({ setCurrentView }: HomeProps) {
                   ) : null}
                 </button>
               ))}
+              {displayedItems.length === 0 ? (
+                <div className="w-full rounded-xl border border-dashed border-[#2d2f38] bg-[#151821] px-4 py-3 text-left">
+                  <p className="font-semibold text-white text-sm">No favorites yet</p>
+                  <p className="text-xs text-gray-400 mt-1">Open “Manage favorites” to add items by search or manual entry.</p>
+                </div>
+              ) : null}
             </div>
           </section>
         </div>
       </div>
+
+      {showFavoritesManager && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[1px] p-4 flex items-end sm:items-center justify-center">
+          <div className="w-full max-w-md rounded-2xl border border-[#2d2f38] bg-[#13161d] p-4 max-h-[85vh] overflow-auto">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-white">Manage favorites</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setShowFavoritesManager(false);
+                }}
+                className="text-sm text-gray-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              <input
+                value={favoritesSearch}
+                onChange={(e) => setFavoritesSearch(e.target.value)}
+                placeholder="Search activities to add"
+                className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+              />
+              <div className="space-y-2">
+                {availableFavoriteOptions.slice(0, 8).map((item) => (
+                  <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-white truncate">{item.title}</p>
+                      {item.subtitle ? <p className="text-xs text-gray-400 truncate">{item.subtitle}</p> : null}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => addCatalogFavorite(item.id)}
+                      className="text-xs rounded-md border border-[#3a3f4d] px-2 py-1 text-gray-200 hover:border-[var(--ura-yellow)]"
+                    >
+                      Add
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4 border-t border-[#2a2f39] pt-3">
+              <p className="text-sm font-semibold text-white">Add manually</p>
+              <div className="mt-2 space-y-2">
+                <input
+                  value={manualFavoriteTitle}
+                  onChange={(e) => setManualFavoriteTitle(e.target.value)}
+                  placeholder="Title"
+                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                />
+                <input
+                  value={manualFavoriteSubtitle}
+                  onChange={(e) => setManualFavoriteSubtitle(e.target.value)}
+                  placeholder="Subtitle (optional)"
+                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                />
+                <input
+                  value={manualFavoriteRoute}
+                  onChange={(e) => setManualFavoriteRoute(e.target.value)}
+                  placeholder="Route (e.g. earn, game) optional"
+                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                />
+                <button
+                  type="button"
+                  onClick={addManualFavorite}
+                  className="w-full rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 text-sm font-semibold text-gray-100 hover:border-[var(--ura-yellow)]"
+                >
+                  Add manual favorite
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 border-t border-[#2a2f39] pt-3">
+              <p className="text-sm font-semibold text-white">Current favorites</p>
+              <div className="mt-2 space-y-2">
+                {favoriteIds.map((id) => {
+                  const item = ACTION_CATALOG.find((x) => x.id === id);
+                  if (!item) return null;
+                  return (
+                    <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                      <p className="text-sm text-white truncate">{item.title}</p>
+                      <button
+                        type="button"
+                        onClick={() => removeCatalogFavorite(item.id)}
+                        className="text-xs rounded-md border border-[#3a3f4d] px-2 py-1 text-gray-200 hover:border-red-400"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
+                {customFavorites.map((item) => (
+                  <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                    <p className="text-sm text-white truncate">{item.title}</p>
+                    <button
+                      type="button"
+                      onClick={() => setCustomFavorites((prev) => prev.filter((x) => x.id !== item.id))}
+                      className="text-xs rounded-md border border-[#3a3f4d] px-2 py-1 text-gray-200 hover:border-red-400"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showRanksPopup && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[1px] p-4 flex items-center justify-center">
