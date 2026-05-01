@@ -548,6 +548,16 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
             <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
               <div className="px-4 pt-6 pb-24">
+                <div className="flex justify-center mb-4">
+                  <Image
+                    src="/earn-rewards-icon.png"
+                    alt="Earn rewards and tasks"
+                    width={96}
+                    height={96}
+                    className="object-contain drop-shadow-md"
+                    priority
+                  />
+                </div>
                 <div className="mb-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
                   {[
                     { key: 'earn' as const, label: 'Earn' },
@@ -592,7 +602,14 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
             <div className="px-4 pt-1 pb-24">
               <div className="relative mt-4">
                 <div className="flex justify-center mb-4">
-                  <IceCube className="w-24 h-24 mx-auto" />
+                  <Image
+                    src="/earn-rewards-icon.png"
+                    alt="Earn rewards and tasks"
+                    width={96}
+                    height={96}
+                    className="object-contain mx-auto drop-shadow-md"
+                    priority
+                  />
                 </div>
                 <h1 className="text-2xl text-center mb-2">Earn More PEARLS</h1>
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
