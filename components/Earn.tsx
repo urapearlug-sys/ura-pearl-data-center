@@ -378,11 +378,14 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                         'repeating-conic-gradient(from -90deg, rgba(243,186,47,0.3) 0deg, rgba(243,186,47,0.3) 1deg, transparent 1deg, transparent 22.5deg)',
                     }}
                   />
-                  <div className="absolute inset-[34%] rounded-full border-2 border-[#f3ba2f]/70 bg-[#151003] text-center shadow-[0_0_25px_rgba(243,186,47,0.34)] flex items-center justify-center">
-                    <div>
-                      <p className="text-lg font-black text-[#f3ba2f] leading-none">PEARLS</p>
-                      <p className="text-[10px] font-semibold text-[#f3ba2f]/85 tracking-widest">HUB</p>
-                    </div>
+                  <div className="absolute inset-[34%] rounded-full border-2 border-[#f3ba2f]/70 bg-[#151003] text-center shadow-[0_0_25px_rgba(243,186,47,0.34)] flex items-center justify-center overflow-hidden">
+                    <Image
+                      src="/earn-ecosystem-hub.png"
+                      alt="URA Fiscal Fun"
+                      width={128}
+                      height={128}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   {playSubtabCards.ecosystem.map((item, idx, arr) => {
                     const appearance = playCardAppearance[item.id] ?? {
