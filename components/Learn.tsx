@@ -57,6 +57,17 @@ const CATEGORY_ICON_EMOJI: Record<string, string> = {
   'small-business': '🏪',
 };
 
+const GENERAL_ICON_EMOJI: Record<string, string> = {
+  'general-get-tin': '🆔',
+  'general-make-payment': '💳',
+  'general-file-return': '🧾',
+  'general-get-refund': '💸',
+  'general-efris': '📠',
+  'general-tax-incentives': '🎯',
+  'general-objection-appeals': '⚖️',
+  'general-whistle-blow': '📣',
+};
+
 export default function Learn() {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<'general' | 'tax-education'>('general');
@@ -178,8 +189,15 @@ export default function Learn() {
                   }}
                   className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 text-left hover:border-[#f3ba2f] transition-colors"
                 >
-                  <p className="text-[#16427f] text-sm font-semibold leading-snug">{item.title}</p>
-                  <p className="text-[#335f97] text-xs mt-1 leading-relaxed">{item.summary}</p>
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#dbe9ff] text-sm leading-none">
+                      {GENERAL_ICON_EMOJI[item.slug] ?? '🧭'}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[#16427f] text-sm font-semibold leading-snug">{item.title}</p>
+                      <p className="text-[#335f97] text-xs mt-1 leading-relaxed">{item.summary}</p>
+                    </div>
+                  </div>
                 </button>
               ))}
             </div>
