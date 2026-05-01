@@ -43,6 +43,7 @@ import { PointSynchronizer } from '@/components/PointSynchronizer';
 import Settings from '@/components/Settings';
 import Collection from '@/components/Collection';
 import Home from '@/components/Home';
+import Learn from '@/components/Learn';
 
 function EmptyPrimaryPage() {
     return <div className="bg-black min-h-screen" />;
@@ -88,7 +89,7 @@ function ClickerPage() {
             case 'friends':
                 return <Friends />;
             case 'eearn':
-                return <EmptyPrimaryPage />;
+                return <Learn />;
             case 'services':
                 return <EmptyPrimaryPage />;
             case 'guild':
