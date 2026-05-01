@@ -33,6 +33,7 @@ const FALLBACK_CATEGORIES: LearnCategory[] = LEARN_CATEGORY_DEFAULTS.map((x) => 
 
 export default function Learn() {
   const showToast = useToast();
+  const [activeTab, setActiveTab] = useState<'general' | 'tax-education'>('general');
   const [categories, setCategories] = useState<LearnCategory[]>(FALLBACK_CATEGORIES);
   const [loading, setLoading] = useState(true);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -78,7 +79,9 @@ export default function Learn() {
     <div className="bg-[#0f3c86] min-h-screen pb-24">
       <div className="px-4 pt-4">
         <h1 className="text-white text-2xl font-bold tracking-tight">Tax Education</h1>
-        <p className="text-blue-100 text-sm mt-1">Choose a sector card to open full-screen learning content.</p>
+        <p className="text-blue-100 text-sm mt-1">
+          Access URA guidance quickly through a clear general overview and sector-specific learning cards.
+        </p>
 
         <div className="mt-3 rounded-xl overflow-hidden border border-[#3f6db5]">
           <Image
@@ -91,27 +94,91 @@ export default function Learn() {
           />
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {categories.map((category) => (
+        <div className="mt-4 rounded-xl border border-[#3f6db5] bg-[#0f315f] p-1 grid grid-cols-2 gap-1">
+          {(
+            [
+              { key: 'general' as const, label: 'General' },
+              { key: 'tax-education' as const, label: 'Tax Education' },
+            ] as const
+          ).map((tab) => (
             <button
-              key={category.id}
+              key={tab.key}
               type="button"
               onClick={() => {
                 triggerHapticFeedback(window);
-                setSelectedCategoryId(category.id);
+                setActiveTab(tab.key);
               }}
-              className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-3 py-3 text-left hover:border-[#f3ba2f] transition-colors"
+              className={`py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                activeTab === tab.key ? 'bg-[#f4f8ff] text-[#123f78]' : 'text-blue-100'
+              }`}
             >
-              <div className="flex items-start gap-2">
-                <span className="mt-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-md bg-[#dbe9ff] text-[10px] font-bold uppercase text-[#204887]">
-                  {category.icon}
-                </span>
-                <p className="text-[#16427f] text-[15px] leading-tight font-semibold">{category.title}</p>
-              </div>
+              {tab.label}
             </button>
           ))}
         </div>
-        {loading ? <p className="mt-3 text-xs text-blue-100">Loading live learn content...</p> : null}
+
+        {activeTab === 'general' ? (
+          <div className="mt-4 space-y-3">
+            <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-4">
+              <h2 className="text-[#16427f] text-lg font-bold">General URA Services</h2>
+              <p className="text-[#335f97] text-sm mt-1 leading-relaxed">
+                Get key taxpayer services in one place: registration, payment, filing, compliance support, and refunds.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { title: 'Get a TIN', subtitle: 'Register and manage taxpayer identification' },
+                { title: 'Make a Payment', subtitle: 'Generate PRN and pay taxes securely' },
+                { title: 'File a Return', subtitle: 'Submit required tax returns online' },
+                { title: 'Get a Refund', subtitle: 'Track and request eligible refunds' },
+                { title: 'EFRIS', subtitle: 'Invoice and receipt issuance support' },
+                { title: 'Tax Incentives', subtitle: 'Guidance for exemptions and incentives' },
+                { title: 'Objection & Appeals', subtitle: 'Challenge assessments correctly' },
+                { title: 'Whistle Blow', subtitle: 'Report tax evasion safely' },
+              ].map((item) => (
+                <div key={item.title} className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3">
+                  <p className="text-[#16427f] text-sm font-semibold leading-snug">{item.title}</p>
+                  <p className="text-[#335f97] text-xs mt-1 leading-relaxed">{item.subtitle}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-4">
+              <h3 className="text-[#16427f] text-sm font-semibold">Support Channels</h3>
+              <div className="mt-2 grid grid-cols-1 gap-1 text-xs text-[#335f97]">
+                <p>Toll Free: 0800 117 000 / 0800 217 000</p>
+                <p>WhatsApp: 0772140000</p>
+                <p>Email: services@ura.go.ug</p>
+                <p>Headquarters: Nakawa Industrial Area, Kampala</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setSelectedCategoryId(category.id);
+                  }}
+                  className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-3 py-3 text-left hover:border-[#f3ba2f] transition-colors"
+                >
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-md bg-[#dbe9ff] text-[10px] font-bold uppercase text-[#204887]">
+                      {category.icon}
+                    </span>
+                    <p className="text-[#16427f] text-[15px] leading-tight font-semibold">{category.title}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+            {loading ? <p className="mt-3 text-xs text-blue-100">Loading live learn content...</p> : null}
+          </>
+        )}
       </div>
 
       {selectedCategory ? (
