@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, rankBlue, rankGold, rankSilver, rankWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
+import Image, { type StaticImageData } from 'next/image';
+import { dailyCipher, dailyCombo, dailyReward, defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, rankBlue, rankGold, rankSilver, rankWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -17,20 +17,21 @@ type ActionItem = {
   subtitle?: string;
   pearlType?: 'white' | 'blue';
   group?: 'play' | 'learn' | 'earn';
+  icon?: StaticImageData;
   /** 'earn' | 'game' etc., or null for coming-soon toast */
   route?: string;
 };
 
 const ACTION_CATALOG: ActionItem[] = [
-  { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play' },
-  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'play' },
-  { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'play' },
-  { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game', group: 'play' },
-  { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play' },
-  { id: 'social-earn', title: 'Earn activities', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn' },
-  { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn' },
-  { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn' },
-  { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn' },
+  { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
+  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'play', icon: dailyCombo },
+  { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'play', icon: dailyCipher },
+  { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game', group: 'play', icon: dailyCombo },
+  { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play', icon: dailyReward },
+  { id: 'social-earn', title: 'Earn activities', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn', icon: dailyReward },
+  { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn', icon: dailyCipher },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
 ];
 
 interface HomeProps {
@@ -75,7 +76,9 @@ export default function Home({ setCurrentView }: HomeProps) {
       item,
       score: visitCounts[item.id] ?? 0,
       index,
-    })).sort((a, b) => (b.score - a.score) || (a.index - b.index));
+    }))
+      .filter((x) => x.score > 0)
+      .sort((a, b) => (b.score - a.score) || (a.index - b.index));
     return scored.slice(0, 6).map((x) => x.item);
   }, [visitCounts]);
 
@@ -337,10 +340,21 @@ export default function Home({ setCurrentView }: HomeProps) {
                   onClick={() => handleAction(item)}
                   className="w-full rounded-xl border border-[#2d2f38] bg-[#151821] px-4 py-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
                 >
-                  <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
-                  {item.subtitle ? (
-                    <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p>
-                  ) : null}
+                  <div className="flex items-start gap-3">
+                    <div className="h-9 w-9 rounded-lg border border-[#2f3340] bg-[#0f1218] flex items-center justify-center overflow-hidden flex-shrink-0">
+                      {item.icon ? (
+                        <Image src={item.icon} alt="" width={24} height={24} className="h-6 w-6 object-contain" />
+                      ) : (
+                        <span className="text-xs font-bold text-gray-300">{item.title.slice(0, 1).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
+                      {item.subtitle ? (
+                        <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p>
+                      ) : null}
+                    </div>
+                  </div>
                   {item.group ? (
                     <p className="mt-1 text-[11px] text-gray-500 uppercase tracking-wide">{item.group}</p>
                   ) : null}
@@ -361,8 +375,12 @@ export default function Home({ setCurrentView }: HomeProps) {
               ))}
               {displayedItems.length === 0 ? (
                 <div className="w-full rounded-xl border border-dashed border-[#2d2f38] bg-[#151821] px-4 py-3 text-left">
-                  <p className="font-semibold text-white text-sm">No favorites yet</p>
-                  <p className="text-xs text-gray-400 mt-1">Open “Manage favorites” to add items by search or manual entry.</p>
+                  <p className="font-semibold text-white text-sm">{activeActionTab === 'most-used' ? 'No most-used items yet' : 'No favorites yet'}</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {activeActionTab === 'most-used'
+                      ? 'Use activities and your most visited options will appear here automatically.'
+                      : 'Open “Manage favorites” to add items by search or manual entry.'}
+                  </p>
                 </div>
               ) : null}
             </div>
