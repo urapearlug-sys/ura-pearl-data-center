@@ -277,12 +277,22 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView?.('airdrop') },
     ],
     ecosystem: [
-      { id: 'mini-games', title: 'Mini Games Hub', subtitle: 'Open all mini-games', onClick: () => setShowMiniGamesHub(true) },
-      { id: 'decode-ecosystem', title: 'Decode', subtitle: 'Cipher challenge mode', onClick: () => setShowDailyCipher(true) },
-      { id: 'matrix-ecosystem', title: 'Matrix', subtitle: 'Daily combo mode', onClick: () => setShowDailyCombo(true) },
-      { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => setShowLuckySpin(true) },
-      { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => setShowWeeklyEvent(true) },
-      { id: 'global-tasks-ecosystem', title: 'Global Joinable Tasks', subtitle: 'Cross-league and team challenges', onClick: () => setShowGlobalTasks(true) },
+      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => setActiveTab('All') },
+      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => setShowDailyCipher(true) },
+      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => setShowDailyCombo(true) },
+      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView?.('collection') },
+      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => setShowWeeklyEvent(true) },
+      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => setShowGlobalTasks(true) },
+      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => setShowMitrolabsQuiz(true) },
+      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => setActiveTab('All') },
+      { id: 'true-false', title: 'True or False - Uganda tax edition', subtitle: 'Tax knowledge challenge', onClick: () => setActiveTab('All') },
+      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView?.('game') },
+      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => setShowDailyLogin(true) },
+      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView?.('game') },
+      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView?.('mine') },
+      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView?.('collection') },
+      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', onClick: () => setCurrentView?.('friends') },
+      { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView?.('airdrop') },
     ],
   };
 
@@ -328,7 +338,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
         <div className="mt-2 grid grid-cols-3 gap-2">
           {[
             { key: 'highlights' as const, label: 'Highlights' },
-            { key: 'afrolumens' as const, label: 'Afro classics' },
+            { key: 'afrolumens' as const, label: 'Pearl Classic' },
             { key: 'ecosystem' as const, label: 'Ecosystem' },
           ].map((tab) => (
             <button
@@ -349,35 +359,142 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       ) : null}
       <div className="mt-3">
         {earnFeatureTab === 'play' ? (
-          <div className="grid grid-cols-2 gap-3">
-            {playSubtabCards[playFeatureSubTab].map((item) => {
-              const appearance = playCardAppearance[item.id] ?? {
-                tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
-                icon: '⭐',
-              };
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    item.onClick();
-                  }}
-                  className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
-                >
-                  <div className="flex items-start gap-2">
-                    <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
-                      {appearance.icon}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-                      <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+          playFeatureSubTab === 'ecosystem' ? (
+            <div className="rounded-3xl border border-[#f3ba2f]/45 bg-[radial-gradient(circle_at_center,_#2f2206_0%,_#161922_52%,_#0d1118_100%)] p-3 shadow-[0_0_35px_rgba(243,186,47,0.16)]">
+              <div className="mb-3 text-center">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#f3ba2f]/85">PEARLS Ecosystem</p>
+                <p className="text-[10px] text-[#dcbf76]">Unified experience for Highlights and Pearl Classic</p>
+              </div>
+              <div className="mb-4 flex justify-center">
+                <div className="relative aspect-square w-full max-w-[370px] rounded-full border border-[#f3ba2f]/45 bg-[radial-gradient(circle_at_center,_#302307_0%,_#161a23_58%,_#0d1118_100%)] shadow-[0_0_35px_rgba(243,186,47,0.18)]">
+                  <div className="absolute inset-[6%] rounded-full border border-[#f3ba2f]/30" />
+                  <div className="absolute inset-[18%] rounded-full border border-[#f3ba2f]/28" />
+                  <div className="absolute inset-[31%] rounded-full border border-[#f3ba2f]/25" />
+                  <div className="absolute inset-[44%] rounded-full border border-[#f3ba2f]/24" />
+                  <div
+                    className="absolute inset-[6%] rounded-full opacity-60"
+                    style={{
+                      backgroundImage:
+                        'repeating-conic-gradient(from -90deg, rgba(243,186,47,0.3) 0deg, rgba(243,186,47,0.3) 1deg, transparent 1deg, transparent 22.5deg)',
+                    }}
+                  />
+                  <div className="absolute inset-[34%] rounded-full border-2 border-[#f3ba2f]/70 bg-[#151003] text-center shadow-[0_0_25px_rgba(243,186,47,0.34)] flex items-center justify-center">
+                    <div>
+                      <p className="text-lg font-black text-[#f3ba2f] leading-none">PEARLS</p>
+                      <p className="text-[10px] font-semibold text-[#f3ba2f]/85 tracking-widest">HUB</p>
                     </div>
                   </div>
-                </button>
-              );
-            })}
-          </div>
+                  {playSubtabCards.ecosystem.map((item, idx, arr) => {
+                    const appearance = playCardAppearance[item.id] ?? {
+                      tone: 'from-[#3d300f] to-[#5d4612] border-[#f3ba2f]/55',
+                      icon: '⭐',
+                    };
+                    const angle = (-90 + (idx * 360) / arr.length) * (Math.PI / 180);
+                    const radius = idx % 2 === 0 ? 43 : 33;
+                    const labelRadius = radius + 11;
+                    const left = 50 + radius * Math.cos(angle);
+                    const top = 50 + radius * Math.sin(angle);
+                    const labelLeft = 50 + labelRadius * Math.cos(angle);
+                    const labelTop = 50 + labelRadius * Math.sin(angle);
+                    const shortLabel = item.title.length > 14 ? `${item.title.slice(0, 14)}…` : item.title;
+                    const normalizedAngle = ((-90 + (idx * 360) / arr.length) % 360 + 360) % 360;
+                    let labelTilt = 0;
+                    if (normalizedAngle >= 315 || normalizedAngle < 45) labelTilt = 12;
+                    else if (normalizedAngle < 135) labelTilt = 6;
+                    else if (normalizedAngle < 225) labelTilt = -12;
+                    else labelTilt = -6;
+                    return (
+                      <React.Fragment key={item.id}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            triggerHapticFeedback(window);
+                            item.onClick();
+                          }}
+                          className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border bg-gradient-to-br ${appearance.tone} h-14 w-14 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(243,186,47,0.18)] transition-transform hover:scale-105`}
+                          style={{ left: `${left}%`, top: `${top}%` }}
+                          title={item.title}
+                          aria-label={item.title}
+                        >
+                          {appearance.icon}
+                        </button>
+                        <div
+                          className="absolute max-w-[88px] rounded-full border border-[#f3ba2f]/30 bg-[#12161e]/82 px-2 py-0.5 text-center text-[9px] font-semibold leading-tight text-[#f6d88a] shadow-[0_0_8px_rgba(243,186,47,0.2)]"
+                          style={{
+                            left: `${labelLeft}%`,
+                            top: `${labelTop}%`,
+                            transform: `translate(-50%, -50%) rotate(${labelTilt}deg)`,
+                          }}
+                          aria-hidden
+                        >
+                          {shortLabel}
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {playSubtabCards.ecosystem.map((item) => {
+                  const appearance = playCardAppearance[item.id] ?? {
+                    tone: 'from-[#3d300f] to-[#5d4612] border-[#f3ba2f]/55',
+                    icon: '⭐',
+                  };
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        triggerHapticFeedback(window);
+                        item.onClick();
+                      }}
+                      className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="mt-0.5 inline-flex h-9 min-w-9 items-center justify-center rounded-lg bg-[#111621]/80 border border-[#f3ba2f]/35 text-lg">
+                          {appearance.icon}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-extrabold text-white leading-tight">{item.title}</p>
+                          <p className="text-xs text-[#f8e8bf]/95 mt-1 leading-snug">{item.subtitle}</p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {playSubtabCards[playFeatureSubTab].map((item) => {
+                const appearance = playCardAppearance[item.id] ?? {
+                  tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
+                  icon: '⭐',
+                };
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      item.onClick();
+                    }}
+                    className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+                        {appearance.icon}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
+                        <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )
         ) : (
           <div className="space-y-2">
             {earnFeatureCards[earnFeatureTab].map((item) => (
