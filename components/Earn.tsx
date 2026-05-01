@@ -230,6 +230,31 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
+  const playCardAppearance: Record<string, { tone: string; icon: string }> = {
+    tasks: { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '✅' },
+    decode: { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
+    matrix: { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
+    'collection-cards': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🗂️' },
+    'weekly-event': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎁' },
+    'global-joinable-tasks': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
+    'ura-quiz': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📝' },
+    'receipt-rush': { tone: 'from-[#17334d] to-[#234a6d] border-[#6eb4ff]/50', icon: '🧾' },
+    'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
+    leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
+    'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
+    'tap-arena': { tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50', icon: '🎮' },
+    'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
+    'pearls-collection': { tone: 'from-[#26345d] to-[#3a4a78] border-[#8ea3df]/45', icon: '🧊' },
+    'citizen-network': { tone: 'from-[#224b58] to-[#2a6170] border-[#71c9dd]/45', icon: '👥' },
+    'pearls-airdrop': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '🎈' },
+    'mini-games': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🕹️' },
+    'decode-ecosystem': { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
+    'matrix-ecosystem': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
+    'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
+    'tax-trivia-live': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎤' },
+    'global-tasks-ecosystem': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
+  };
+
   const playSubtabCards: Record<'highlights' | 'afrolumens' | 'ecosystem', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
     highlights: [
       { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => setActiveTab('All') },
@@ -322,27 +347,59 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           ))}
         </div>
       ) : null}
-      <div className="mt-3 space-y-2">
-        {(earnFeatureTab === 'play' ? playSubtabCards[playFeatureSubTab] : earnFeatureCards[earnFeatureTab]).map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => {
-              triggerHapticFeedback(window);
-              item.onClick();
-            }}
-            className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
-              earnFeatureTab === 'play'
-                ? 'border-[var(--ura-blue-medium)]/60 bg-[var(--ura-blue-dark)]/20 hover:border-[var(--ura-blue-medium)]'
-                : earnFeatureTab === 'learn'
-                ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
-                : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
-            }`}
-          >
-            <p className="text-sm font-bold text-white">{item.title}</p>
-            <p className="text-xs text-gray-300 mt-1">{item.subtitle}</p>
-          </button>
-        ))}
+      <div className="mt-3">
+        {earnFeatureTab === 'play' ? (
+          <div className="grid grid-cols-2 gap-3">
+            {playSubtabCards[playFeatureSubTab].map((item) => {
+              const appearance = playCardAppearance[item.id] ?? {
+                tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
+                icon: '⭐',
+              };
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    item.onClick();
+                  }}
+                  className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+                >
+                  <div className="flex items-start gap-2">
+                    <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+                      {appearance.icon}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
+                      <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {earnFeatureCards[earnFeatureTab].map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  item.onClick();
+                }}
+                className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
+                  earnFeatureTab === 'learn'
+                    ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
+                    : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
+                }`}
+              >
+                <p className="text-sm font-bold text-white">{item.title}</p>
+                <p className="text-xs text-gray-300 mt-1">{item.subtitle}</p>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
