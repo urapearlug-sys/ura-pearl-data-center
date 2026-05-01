@@ -348,10 +348,27 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 triggerHapticFeedback(window);
                 setPlayFeatureSubTab(tab.key);
               }}
-              className={`rounded-lg py-2 text-xs font-semibold transition-colors ${
-                playFeatureSubTab === tab.key ? 'bg-[#1e3d6e] text-white' : 'text-gray-400 hover:text-white'
+              className={`relative overflow-hidden rounded-xl border px-2 py-2.5 text-xs font-semibold tracking-wide transition-all duration-200 ${
+                playFeatureSubTab === tab.key
+                  ? tab.key === 'highlights'
+                    ? 'border-[#f3ba2f]/70 bg-gradient-to-r from-[#6a4f14] to-[#8b6718] text-[#fff4cf] shadow-[0_0_18px_rgba(243,186,47,0.28)]'
+                    : tab.key === 'afrolumens'
+                    ? 'border-[#3ad1a7]/65 bg-gradient-to-r from-[#185142] to-[#1f6b57] text-[#d8fff2] shadow-[0_0_18px_rgba(58,209,167,0.25)]'
+                    : 'border-[#5fb9ff]/70 bg-gradient-to-r from-[#193f67] to-[#215887] text-[#e3f3ff] shadow-[0_0_18px_rgba(95,185,255,0.28)]'
+                  : 'border-[#2f3442] bg-[#161a23] text-gray-300 hover:border-[#4a5263] hover:text-white hover:bg-[#1b2130]'
               }`}
             >
+              {playFeatureSubTab === tab.key && (
+                <span
+                  className={`pointer-events-none absolute left-1/2 top-0 h-[2px] w-10 -translate-x-1/2 rounded-full ${
+                    tab.key === 'highlights'
+                      ? 'bg-[#f3ba2f]'
+                      : tab.key === 'afrolumens'
+                      ? 'bg-[#3ad1a7]'
+                      : 'bg-[#5fb9ff]'
+                  }`}
+                />
+              )}
               {tab.label}
             </button>
           ))}
