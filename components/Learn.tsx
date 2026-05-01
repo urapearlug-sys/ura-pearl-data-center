@@ -12,9 +12,11 @@ type LearnCategory = {
   slug: string;
   title: string;
   icon: string;
+  section?: 'general' | 'tax-education';
   summary: string;
   topics: string[];
   lessons: Array<{ title: string; content: string }>;
+  operations?: string[];
   sortOrder?: number;
   enabled?: boolean;
 };
@@ -25,8 +27,10 @@ const FALLBACK_CATEGORIES: LearnCategory[] = LEARN_CATEGORY_DEFAULTS.map((x) => 
   title: x.title,
   icon: x.icon,
   summary: x.summary,
+  section: x.section ?? 'tax-education',
   topics: x.topics,
   lessons: x.lessons,
+  operations: x.operations ?? [],
   sortOrder: x.sortOrder,
   enabled: x.enabled ?? true,
 }));
@@ -37,6 +41,7 @@ export default function Learn() {
   const [categories, setCategories] = useState<LearnCategory[]>(FALLBACK_CATEGORIES);
   const [loading, setLoading] = useState(true);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedGeneralId, setSelectedGeneralId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -51,9 +56,11 @@ export default function Learn() {
           slug: String(x.slug ?? x.id ?? ''),
           title: String(x.title ?? 'Untitled'),
           icon: String(x.icon ?? 'i'),
+          section: (x.section === 'general' ? 'general' : 'tax-education') as 'general' | 'tax-education',
           summary: String(x.summary ?? ''),
           topics: Array.isArray(x.topics) ? x.topics.map((t: unknown) => String(t)) : [],
           lessons: Array.isArray(x.lessons) ? x.lessons.map((l: any) => ({ title: String(l?.title ?? 'Lesson'), content: String(l?.content ?? '') })) : [],
+          operations: Array.isArray(x.operations) ? x.operations.map((o: unknown) => String(o)) : [],
           sortOrder: Number(x.sortOrder ?? 0),
           enabled: x.enabled !== false,
         }));
@@ -73,6 +80,18 @@ export default function Learn() {
   const selectedCategory = useMemo(
     () => categories.find((x) => x.id === selectedCategoryId) ?? null,
     [categories, selectedCategoryId]
+  );
+  const generalServices = useMemo(
+    () => categories.filter((x) => (x.section ?? 'tax-education') === 'general').sort((a, b) => Number(a.sortOrder ?? 0) - Number(b.sortOrder ?? 0)),
+    [categories]
+  );
+  const taxEducationCategories = useMemo(
+    () => categories.filter((x) => (x.section ?? 'tax-education') !== 'general').sort((a, b) => Number(a.sortOrder ?? 0) - Number(b.sortOrder ?? 0)),
+    [categories]
+  );
+  const selectedGeneralService = useMemo(
+    () => generalServices.find((x) => x.id === selectedGeneralId) ?? null,
+    [generalServices, selectedGeneralId]
   );
 
   return (
@@ -127,20 +146,19 @@ export default function Learn() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              {[
-                { title: 'Get a TIN', subtitle: 'Register and manage taxpayer identification' },
-                { title: 'Make a Payment', subtitle: 'Generate PRN and pay taxes securely' },
-                { title: 'File a Return', subtitle: 'Submit required tax returns online' },
-                { title: 'Get a Refund', subtitle: 'Track and request eligible refunds' },
-                { title: 'EFRIS', subtitle: 'Invoice and receipt issuance support' },
-                { title: 'Tax Incentives', subtitle: 'Guidance for exemptions and incentives' },
-                { title: 'Objection & Appeals', subtitle: 'Challenge assessments correctly' },
-                { title: 'Whistle Blow', subtitle: 'Report tax evasion safely' },
-              ].map((item) => (
-                <div key={item.title} className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3">
+              {generalServices.map((item) => (
+                <button
+                  key={item.id || item.slug}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setSelectedGeneralId(item.id);
+                  }}
+                  className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 text-left hover:border-[#f3ba2f] transition-colors"
+                >
                   <p className="text-[#16427f] text-sm font-semibold leading-snug">{item.title}</p>
-                  <p className="text-[#335f97] text-xs mt-1 leading-relaxed">{item.subtitle}</p>
-                </div>
+                  <p className="text-[#335f97] text-xs mt-1 leading-relaxed">{item.summary}</p>
+                </button>
               ))}
             </div>
 
@@ -157,7 +175,7 @@ export default function Learn() {
         ) : (
           <>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {categories.map((category) => (
+              {taxEducationCategories.map((category) => (
                 <button
                   key={category.id}
                   type="button"
@@ -222,6 +240,50 @@ export default function Learn() {
                     <p className="text-sm font-semibold text-white">{lesson.title}</p>
                     <p className="mt-1 text-xs text-gray-300 leading-relaxed">{lesson.content}</p>
                   </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {selectedGeneralService ? (
+        <div className="fixed inset-0 z-50 bg-[#0b1220] text-white overflow-auto">
+          <div className="sticky top-0 bg-[#0b1220]/95 backdrop-blur border-b border-[#25324c] px-4 py-3 flex items-center justify-between">
+            <h2 className="font-bold text-lg">{selectedGeneralService.title}</h2>
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setSelectedGeneralId(null);
+              }}
+              className="rounded-lg border border-[#3b4a6b] px-3 py-1.5 text-sm text-gray-200 hover:border-[#f3ba2f]"
+            >
+              Close
+            </button>
+          </div>
+
+          <div className="px-4 py-4 space-y-4">
+            <div className="rounded-xl border border-[#2e3d5f] bg-[#141f35] p-4">
+              <p className="text-sm text-gray-200 leading-relaxed">{selectedGeneralService.summary}</p>
+            </div>
+
+            <div className="rounded-xl border border-[#2e3d5f] bg-[#141f35] p-4">
+              <h3 className="font-semibold text-white">Operations</h3>
+              <p className="text-xs text-gray-400 mt-1">Tap an operation below to begin workflow integration.</p>
+              <div className="mt-3 grid grid-cols-1 gap-2">
+                {(selectedGeneralService.operations?.length ? selectedGeneralService.operations : selectedGeneralService.topics).map((op) => (
+                  <button
+                    key={op}
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      showToast(`${op} — integration point ready`, 'success');
+                    }}
+                    className="rounded-lg border border-[#33476d] bg-[#0f1a2f] px-3 py-2 text-left text-sm text-gray-100 hover:border-[#f3ba2f]"
+                  >
+                    {op}
+                  </button>
                 ))}
               </div>
             </div>

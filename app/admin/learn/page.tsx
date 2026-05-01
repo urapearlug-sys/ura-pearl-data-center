@@ -9,9 +9,11 @@ type LearnCategoryRecord = {
   slug: string;
   title: string;
   icon: string;
+  section: 'general' | 'tax-education';
   summary: string;
   topics: string[];
   lessons: Array<{ title: string; content: string }>;
+  operations: string[];
   sortOrder: number;
   enabled: boolean;
 };
@@ -21,9 +23,11 @@ const emptyForm = {
   slug: '',
   title: '',
   icon: 'i',
+  section: 'tax-education' as 'general' | 'tax-education',
   summary: '',
   topicsText: '',
   lessonsText: '[\n  {\n    "title": "Lesson title",\n    "content": "Lesson content"\n  }\n]',
+  operationsText: '',
   sortOrder: 0,
   enabled: true,
 };
@@ -58,9 +62,11 @@ export default function AdminLearnPage() {
       slug: item.slug,
       title: item.title,
       icon: item.icon || 'i',
+      section: item.section ?? 'tax-education',
       summary: item.summary,
       topicsText: (item.topics ?? []).join(', '),
       lessonsText: JSON.stringify(item.lessons ?? [], null, 2),
+      operationsText: (item.operations ?? []).join(', '),
       sortOrder: item.sortOrder ?? 0,
       enabled: item.enabled !== false,
     });
@@ -99,9 +105,11 @@ export default function AdminLearnPage() {
         slug: form.slug.trim().toLowerCase(),
         title: form.title.trim(),
         icon: form.icon.trim().slice(0, 4) || 'i',
+        section: form.section,
         summary: form.summary.trim(),
         topics: parseTopics(form.topicsText),
         lessons,
+        operations: parseTopics(form.operationsText),
         sortOrder: Number(form.sortOrder) || 0,
         enabled: form.enabled,
       };
@@ -184,9 +192,14 @@ export default function AdminLearnPage() {
             <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Title" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
             <input value={form.icon} onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))} placeholder="Icon letters" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
             <input type="number" value={form.sortOrder} onChange={(e) => setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))} placeholder="Sort order" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
+            <select value={form.section} onChange={(e) => setForm((f) => ({ ...f, section: e.target.value as 'general' | 'tax-education' }))} className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2">
+              <option value="general">General tab</option>
+              <option value="tax-education">Tax Education tab</option>
+            </select>
           </div>
           <textarea value={form.summary} onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))} placeholder="Summary" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
           <textarea value={form.topicsText} onChange={(e) => setForm((f) => ({ ...f, topicsText: e.target.value }))} placeholder="Topics comma-separated" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
+          <textarea value={form.operationsText} onChange={(e) => setForm((f) => ({ ...f, operationsText: e.target.value }))} placeholder="Operations comma-separated (for General tab items)" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
           <textarea value={form.lessonsText} onChange={(e) => setForm((f) => ({ ...f, lessonsText: e.target.value }))} placeholder='Lessons JSON [{"title":"...","content":"..."}]' rows={8} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 font-mono text-xs" />
           <label className="mt-3 flex items-center gap-2 text-sm text-gray-300">
             <input type="checkbox" checked={form.enabled} onChange={(e) => setForm((f) => ({ ...f, enabled: e.target.checked }))} />
@@ -207,7 +220,7 @@ export default function AdminLearnPage() {
                 <div key={item.id} className="p-4 flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold">{item.title} <span className="text-xs text-gray-400">({item.slug})</span></p>
-                    <p className="text-xs text-gray-400 mt-1">Order {item.sortOrder} · {item.enabled ? 'Enabled' : 'Disabled'} · Topics {item.topics?.length ?? 0} · Lessons {item.lessons?.length ?? 0}</p>
+                    <p className="text-xs text-gray-400 mt-1">{item.section === 'general' ? 'General tab' : 'Tax Education tab'} · Order {item.sortOrder} · {item.enabled ? 'Enabled' : 'Disabled'} · Topics {item.topics?.length ?? 0} · Lessons {item.lessons?.length ?? 0} · Operations {item.operations?.length ?? 0}</p>
                   </div>
                   <div className="flex gap-2">
                     <button type="button" onClick={() => setEditing(item)} className="px-3 py-1 rounded bg-[#3d4046] hover:bg-[#4d5056] text-sm">Edit</button>

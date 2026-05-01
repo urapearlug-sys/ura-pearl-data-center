@@ -10,9 +10,11 @@ type RawDoc = {
   slug?: string;
   title?: string;
   icon?: string;
+  section?: string;
   summary?: string;
   topics?: unknown;
   lessons?: unknown;
+  operations?: unknown;
   sortOrder?: number;
   enabled?: boolean;
 };
@@ -23,11 +25,13 @@ function normalize(raw: RawDoc) {
     slug: String(raw.slug ?? ''),
     title: String(raw.title ?? ''),
     icon: String(raw.icon ?? 'i'),
+    section: String(raw.section ?? 'tax-education'),
     summary: String(raw.summary ?? ''),
     topics: Array.isArray(raw.topics) ? raw.topics.map((x) => String(x)) : [],
     lessons: Array.isArray(raw.lessons)
       ? raw.lessons.map((x: any) => ({ title: String(x?.title ?? ''), content: String(x?.content ?? '') }))
       : [],
+    operations: Array.isArray(raw.operations) ? raw.operations.map((x) => String(x)) : [],
     sortOrder: Number(raw.sortOrder ?? 0),
     enabled: raw.enabled !== false,
   };

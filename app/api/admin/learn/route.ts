@@ -11,9 +11,11 @@ type RawDoc = {
   slug?: string;
   title?: string;
   icon?: string;
+  section?: string;
   summary?: string;
   topics?: unknown;
   lessons?: unknown;
+  operations?: unknown;
   sortOrder?: number;
   enabled?: boolean;
 };
@@ -24,11 +26,13 @@ function normalize(raw: RawDoc) {
     slug: String(raw.slug ?? ''),
     title: String(raw.title ?? ''),
     icon: String(raw.icon ?? 'i'),
+    section: String(raw.section ?? 'tax-education'),
     summary: String(raw.summary ?? ''),
     topics: Array.isArray(raw.topics) ? raw.topics.map((x) => String(x)) : [],
     lessons: Array.isArray(raw.lessons)
       ? raw.lessons.map((x: any) => ({ title: String(x?.title ?? ''), content: String(x?.content ?? '') }))
       : [],
+    operations: Array.isArray(raw.operations) ? raw.operations.map((x) => String(x)) : [],
     sortOrder: Number(raw.sortOrder ?? 0),
     enabled: raw.enabled !== false,
   };
@@ -72,9 +76,11 @@ export async function POST(req: NextRequest) {
                   slug: item.slug,
                   title: item.title,
                   icon: item.icon,
+                  section: item.section ?? 'tax-education',
                   summary: item.summary,
                   topics: item.topics,
                   lessons: item.lessons,
+                  operations: item.operations ?? [],
                   sortOrder: item.sortOrder,
                   enabled: item.enabled ?? true,
                   createdAt: new Date(),
@@ -104,9 +110,11 @@ export async function POST(req: NextRequest) {
             slug,
             title,
             icon: String(body.icon ?? 'i').trim().slice(0, 4) || 'i',
+            section: body.section === 'general' ? 'general' : 'tax-education',
             summary,
             topics: Array.isArray(body.topics) ? body.topics.map((x: unknown) => String(x)) : [],
             lessons: Array.isArray(body.lessons) ? body.lessons : [],
+            operations: Array.isArray(body.operations) ? body.operations.map((x: unknown) => String(x)) : [],
             sortOrder: Number.isFinite(Number(body.sortOrder)) ? Number(body.sortOrder) : 0,
             enabled: body.enabled !== false,
             createdAt: new Date(),
@@ -130,9 +138,11 @@ export async function POST(req: NextRequest) {
       if (body.slug != null) patch.slug = String(body.slug).trim();
       if (body.title != null) patch.title = String(body.title).trim();
       if (body.icon != null) patch.icon = String(body.icon).trim().slice(0, 4);
+      if (body.section != null) patch.section = body.section === 'general' ? 'general' : 'tax-education';
       if (body.summary != null) patch.summary = String(body.summary).trim();
       if (Array.isArray(body.topics)) patch.topics = body.topics.map((x: unknown) => String(x));
       if (Array.isArray(body.lessons)) patch.lessons = body.lessons;
+      if (Array.isArray(body.operations)) patch.operations = body.operations.map((x: unknown) => String(x));
       if (Number.isFinite(Number(body.sortOrder))) patch.sortOrder = Number(body.sortOrder);
       if (typeof body.enabled === 'boolean') patch.enabled = body.enabled;
       const updateCommand: any = {
