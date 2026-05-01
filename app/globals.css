@@ -260,3 +260,33 @@ html, body {
     opacity: 0;
   }
 }
+
+/* Ecosystem radial dashboard: tap ripple + floating particles */
+@keyframes ecosystem-module-ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 16px rgba(56, 189, 248, 0);
+  }
+}
+
+.ecosystem-module-tap:active {
+  animation: ecosystem-module-ripple 0.45s ease-out;
+}
+
+@keyframes ecosystem-particle-float {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translateY(-6px);
+  }
+}
+
+.ecosystem-particle {
+  animation: ecosystem-particle-float 5s ease-in-out infinite;
+}

@@ -56,6 +56,8 @@ import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
+import { EcosystemRadialDashboard, type EcosystemBottomNavKey } from '@/components/ecosystem';
+import { consumeEarnBootstrap } from '@/utils/earn-bootstrap';
 
 interface EarnProps {
   setCurrentView?: (view: string) => void;
@@ -143,6 +145,23 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       setPlayFeatureSubTab('afrolumens');
     }
   }, [openMoreDefault]);
+
+  useEffect(() => {
+    const p = consumeEarnBootstrap();
+    if (!p) return;
+    if (p.earnFeatureTab) setEarnFeatureTab(p.earnFeatureTab);
+    if (p.playFeatureSubTab) setPlayFeatureSubTab(p.playFeatureSubTab);
+    if (p.activeTabAll) setActiveTab('All');
+    const open = () => {
+      if (p.openDailyCipher) setShowDailyCipher(true);
+      if (p.openDailyCombo) setShowDailyCombo(true);
+      if (p.openWeeklyEvent) setShowWeeklyEvent(true);
+      if (p.openGlobalTasks) setShowGlobalTasks(true);
+      if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
+      if (p.openDailyLogin) setShowDailyLogin(true);
+    };
+    requestAnimationFrame(open);
+  }, []);
 
   const ownedTeams = useMemo(() => myTeams.filter((t) => t.isCreator), [myTeams]);
   const memberTeam = useMemo(() => myTeams.find((t) => !t.isCreator), [myTeams]);
@@ -377,113 +396,41 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       <div className="mt-3">
         {earnFeatureTab === 'play' ? (
           playFeatureSubTab === 'ecosystem' ? (
-            <div className="rounded-3xl border border-[#f3ba2f]/45 bg-[radial-gradient(circle_at_center,_#2f2206_0%,_#161922_52%,_#0d1118_100%)] p-3 shadow-[0_0_35px_rgba(243,186,47,0.16)]">
-              <div className="mb-3 text-center">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#f3ba2f]/85">PEARLS Ecosystem</p>
-                <p className="text-[10px] text-[#dcbf76]">Unified experience for Highlights and Pearl Classic</p>
-              </div>
-              <div className="mb-4 flex justify-center">
-                <div className="relative aspect-square w-full max-w-[370px] rounded-full border border-[#f3ba2f]/45 bg-[radial-gradient(circle_at_center,_#302307_0%,_#161a23_58%,_#0d1118_100%)] shadow-[0_0_35px_rgba(243,186,47,0.18)]">
-                  <div className="absolute inset-[6%] rounded-full border border-[#f3ba2f]/30" />
-                  <div className="absolute inset-[18%] rounded-full border border-[#f3ba2f]/28" />
-                  <div className="absolute inset-[31%] rounded-full border border-[#f3ba2f]/25" />
-                  <div className="absolute inset-[44%] rounded-full border border-[#f3ba2f]/24" />
-                  <div
-                    className="absolute inset-[6%] rounded-full opacity-60"
-                    style={{
-                      backgroundImage:
-                        'repeating-conic-gradient(from -90deg, rgba(243,186,47,0.3) 0deg, rgba(243,186,47,0.3) 1deg, transparent 1deg, transparent 22.5deg)',
-                    }}
-                  />
-                  <div className="absolute inset-[34%] rounded-full border-2 border-[#f3ba2f]/70 bg-[#151003] text-center shadow-[0_0_25px_rgba(243,186,47,0.34)] flex items-center justify-center overflow-hidden">
-                    <Image
-                      src="/earn-ecosystem-hub.png"
-                      alt="URA Fiscal Fun"
-                      width={128}
-                      height={128}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  {playSubtabCards.ecosystem.map((item, idx, arr) => {
-                    const appearance = playCardAppearance[item.id] ?? {
-                      tone: 'from-[#3d300f] to-[#5d4612] border-[#f3ba2f]/55',
-                      icon: '⭐',
-                    };
-                    const angle = (-90 + (idx * 360) / arr.length) * (Math.PI / 180);
-                    const radius = idx % 2 === 0 ? 43 : 33;
-                    const labelRadius = radius + 11;
-                    const left = 50 + radius * Math.cos(angle);
-                    const top = 50 + radius * Math.sin(angle);
-                    const labelLeft = 50 + labelRadius * Math.cos(angle);
-                    const labelTop = 50 + labelRadius * Math.sin(angle);
-                    const shortLabel = item.title.length > 14 ? `${item.title.slice(0, 14)}…` : item.title;
-                    const normalizedAngle = ((-90 + (idx * 360) / arr.length) % 360 + 360) % 360;
-                    let labelTilt = 0;
-                    if (normalizedAngle >= 315 || normalizedAngle < 45) labelTilt = 12;
-                    else if (normalizedAngle < 135) labelTilt = 6;
-                    else if (normalizedAngle < 225) labelTilt = -12;
-                    else labelTilt = -6;
-                    return (
-                      <React.Fragment key={item.id}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            triggerHapticFeedback(window);
-                            item.onClick();
-                          }}
-                          className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border bg-gradient-to-br ${appearance.tone} h-14 w-14 flex items-center justify-center text-xl shadow-[0_0_12px_rgba(243,186,47,0.18)] transition-transform hover:scale-105`}
-                          style={{ left: `${left}%`, top: `${top}%` }}
-                          title={item.title}
-                          aria-label={item.title}
-                        >
-                          {appearance.icon}
-                        </button>
-                        <div
-                          className="absolute max-w-[88px] rounded-full border border-[#f3ba2f]/30 bg-[#12161e]/82 px-2 py-0.5 text-center text-[9px] font-semibold leading-tight text-[#f6d88a] shadow-[0_0_8px_rgba(243,186,47,0.2)]"
-                          style={{
-                            left: `${labelLeft}%`,
-                            top: `${labelTop}%`,
-                            transform: `translate(-50%, -50%) rotate(${labelTilt}deg)`,
-                          }}
-                          aria-hidden
-                        >
-                          {shortLabel}
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {playSubtabCards.ecosystem.map((item) => {
-                  const appearance = playCardAppearance[item.id] ?? {
-                    tone: 'from-[#3d300f] to-[#5d4612] border-[#f3ba2f]/55',
-                    icon: '⭐',
-                  };
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        triggerHapticFeedback(window);
-                        item.onClick();
-                      }}
-                      className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
-                    >
-                      <div className="flex items-start gap-2">
-                        <span className="mt-0.5 inline-flex h-9 min-w-9 items-center justify-center rounded-lg bg-[#111621]/80 border border-[#f3ba2f]/35 text-lg">
-                          {appearance.icon}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-extrabold text-white leading-tight">{item.title}</p>
-                          <p className="text-xs text-[#f8e8bf]/95 mt-1 leading-snug">{item.subtitle}</p>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <EcosystemRadialDashboard
+              modules={playSubtabCards.ecosystem.map((item) => ({
+                id: item.id,
+                title:
+                  item.id === 'true-false'
+                    ? 'True or False – Uganda Tax Edition'
+                    : item.title,
+                subtitle: item.subtitle,
+                icon: playCardAppearance[item.id]?.icon ?? '⭐',
+                onClick: item.onClick,
+              }))}
+              onHaptic={() => triggerHapticFeedback(window)}
+              onBottomNav={(key: EcosystemBottomNavKey) => {
+                switch (key) {
+                  case 'learn':
+                    setEarnFeatureTab('learn');
+                    break;
+                  case 'earn':
+                    setEarnFeatureTab('earn');
+                    break;
+                  case 'engage':
+                    setEarnFeatureTab('play');
+                    setActiveTab('All');
+                    break;
+                  case 'empower':
+                    setCurrentView?.('airdrop');
+                    break;
+                  case 'elevate':
+                    setCurrentView?.('game');
+                    break;
+                  default:
+                    break;
+                }
+              }}
+            />
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {playSubtabCards[playFeatureSubTab].map((item) => {

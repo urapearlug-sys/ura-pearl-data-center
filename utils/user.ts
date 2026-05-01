@@ -13,7 +13,15 @@
  * GitHub: https://github.com/nikandr-surkov
  */
 
+import { DEV_PREVIEW_TELEGRAM_ID } from '@/utils/dev-auth-constants';
+
+function isDevBypassInitData(initData: string): boolean {
+  const t = (initData ?? '').trim();
+  return t === 'dev-local-bypass' || t === 'temp';
+}
+
 export function getUserTelegramId(initData: string): string | null {
+  if (isDevBypassInitData(initData)) return DEV_PREVIEW_TELEGRAM_ID;
   try {
     // Decode the URL-encoded string
     const decodedInitData = decodeURIComponent(initData);

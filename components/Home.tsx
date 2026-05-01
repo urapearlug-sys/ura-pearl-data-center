@@ -8,8 +8,29 @@ import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
+import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
+import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 
 type ActionCenterTab = 'most-used' | 'favorites';
+
+const HOME_ECOSYSTEM_ICONS: Record<string, string> = {
+  tasks: '✅',
+  decode: '🔐',
+  matrix: '🎴',
+  'collection-cards': '🗂️',
+  'weekly-event': '🎁',
+  'global-joinable-tasks': '🌍',
+  'ura-quiz': '📝',
+  'receipt-rush': '🧾',
+  'true-false': '⚖️',
+  leaderboard: '🏆',
+  'karibu-daily': '📅',
+  'tap-arena': '🎮',
+  'mine-flow': '⛏️',
+  'pearls-collection': '🧊',
+  'citizen-network': '👥',
+  'pearls-airdrop': '🎈',
+};
 
 type ActionItem = {
   id: string;
@@ -50,6 +71,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
+  const [showEcosystemDashboard, setShowEcosystemDashboard] = useState(false);
   const { userTelegramName, points, pointsBalance, userTelegramInitData } = useGameStore();
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
@@ -210,8 +232,75 @@ export default function Home({ setCurrentView }: HomeProps) {
     showToast('Favorite added', 'success');
   };
 
+  const homeEcosystemModules = useMemo((): EcosystemDashboardModule[] => {
+    const goEarn = (payload: EarnBootstrapPayload) => {
+      queueEarnBootstrap(payload);
+      setShowEcosystemDashboard(false);
+      setCurrentView('earn');
+    };
+    const goView = (view: string) => {
+      setShowEcosystemDashboard(false);
+      setCurrentView(view);
+    };
+    const ic = HOME_ECOSYSTEM_ICONS;
+    return [
+      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', icon: ic.tasks, onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }) },
+      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', icon: ic.decode, onClick: () => goEarn({ earnFeatureTab: 'play', openDailyCipher: true }) },
+      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', icon: ic.matrix, onClick: () => goEarn({ earnFeatureTab: 'play', openDailyCombo: true }) },
+      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', icon: ic['collection-cards'], onClick: () => goView('collection') },
+      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', icon: ic['weekly-event'], onClick: () => goEarn({ earnFeatureTab: 'play', openWeeklyEvent: true }) },
+      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', icon: ic['global-joinable-tasks'], onClick: () => goEarn({ earnFeatureTab: 'play', openGlobalTasks: true }) },
+      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', icon: ic['ura-quiz'], onClick: () => goEarn({ earnFeatureTab: 'play', openMitrolabsQuiz: true }) },
+      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', icon: ic['receipt-rush'], onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }) },
+      {
+        id: 'true-false',
+        title: 'True or False – Uganda Tax Edition',
+        subtitle: 'Tax knowledge challenge',
+        icon: ic['true-false'],
+        onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }),
+      },
+      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', icon: ic.leaderboard, onClick: () => goView('game') },
+      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', icon: ic['karibu-daily'], onClick: () => goEarn({ earnFeatureTab: 'play', openDailyLogin: true }) },
+      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', icon: ic['tap-arena'], onClick: () => goView('game') },
+      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', icon: ic['mine-flow'], onClick: () => goView('mine') },
+      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', icon: ic['pearls-collection'], onClick: () => goView('collection') },
+      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', icon: ic['citizen-network'], onClick: () => goView('friends') },
+      { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', icon: ic['pearls-airdrop'], onClick: () => goView('airdrop') },
+    ];
+  }, [setCurrentView]);
+
+  useEffect(() => {
+    if (!showEcosystemDashboard || typeof document === 'undefined') return;
+    const el = document.getElementById('home-ecosystem-panel');
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [showEcosystemDashboard]);
+
   return (
     <div className="bg-black flex justify-center min-h-screen">
+      {/* Side drawer-handle: opens ecosystem popup (matches edge tab + left chevron pattern) */}
+      <button
+        type="button"
+        onClick={() => {
+          triggerHapticFeedback(window);
+          setShowEcosystemDashboard((open) => !open);
+        }}
+        aria-label={showEcosystemDashboard ? 'Hide URA Civilizational Ecosystem' : 'Open URA Civilizational Ecosystem'}
+        aria-expanded={showEcosystemDashboard}
+        className="fixed right-0 top-1/2 z-[45] -translate-y-1/2 flex items-center justify-center rounded-l-2xl border border-r-0 border-white/12 bg-[#1f2229] py-6 pl-2.5 pr-1 shadow-[-6px_0_16px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#262a32] active:bg-[#181b21] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.75}
+          className={`h-5 w-5 text-white transition-transform duration-200 ${showEcosystemDashboard ? 'rotate-180' : ''}`}
+          aria-hidden
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+
       <div className="w-full bg-black text-white flex flex-col max-w-xl pb-24">
         <div className="px-4 pt-4">
           <button
@@ -242,6 +331,57 @@ export default function Home({ setCurrentView }: HomeProps) {
               priority
             />
           </div>
+
+          {showEcosystemDashboard ? (
+            <div
+              className="mt-4 rounded-xl border border-[#2d2f38] bg-[#11141d] p-2 scroll-mt-4"
+              id="home-ecosystem-panel"
+              role="region"
+              aria-label="URA Civilizational Ecosystem"
+            >
+              <div className="mb-1 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowEcosystemDashboard(false);
+                  }}
+                  className="rounded-lg px-2 py-1 text-xs font-semibold text-gray-400 transition-colors hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                >
+                  Close
+                </button>
+              </div>
+              <EcosystemRadialDashboard
+                modules={homeEcosystemModules}
+                onHaptic={() => triggerHapticFeedback(window)}
+                onBottomNav={(key: EcosystemBottomNavKey) => {
+                  setShowEcosystemDashboard(false);
+                  switch (key) {
+                    case 'learn':
+                      queueEarnBootstrap({ earnFeatureTab: 'learn' });
+                      setCurrentView('earn');
+                      break;
+                    case 'earn':
+                      queueEarnBootstrap({ earnFeatureTab: 'earn' });
+                      setCurrentView('earn');
+                      break;
+                    case 'engage':
+                      queueEarnBootstrap({ earnFeatureTab: 'play', activeTabAll: true });
+                      setCurrentView('earn');
+                      break;
+                    case 'empower':
+                      setCurrentView('airdrop');
+                      break;
+                    case 'elevate':
+                      setCurrentView('game');
+                      break;
+                    default:
+                      break;
+                  }
+                }}
+              />
+            </div>
+          ) : null}
 
           <section className="mt-6" aria-label="Action Center">
             <h2 className="text-lg font-bold text-white tracking-tight mb-3">Action Center</h2>

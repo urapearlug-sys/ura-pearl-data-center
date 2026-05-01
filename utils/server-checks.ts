@@ -14,13 +14,16 @@
  */
 
 import { validate as validateInitData } from '@tma.js/init-data-node';
+import { DEV_PREVIEW_TELEGRAM_ID } from '@/utils/dev-auth-constants';
+
+export { DEV_PREVIEW_TELEGRAM_ID } from '@/utils/dev-auth-constants';
 
 interface ValidatedData {
   [key: string]: string;
 }
 
 interface User {
-  id?: string;
+  id?: string | number;
   username?: string;
   first_name?: string;
   is_premium?: boolean;
@@ -37,9 +40,21 @@ interface ValidationResult {
 // Signature is still validated; only the age check is relaxed.
 const INIT_DATA_MAX_AGE_SEC = 7 * 24 * 60 * 60;
 
+/**
+ * Skip Telegram init validation. Enabled for `next dev` and Vercel preview unless FORCE_TELEGRAM_AUTH=true.
+ * Production uses real validation unless BYPASS_TELEGRAM_AUTH=true.
+ */
+export function isTelegramAuthBypassed(): boolean {
+  if (process.env.FORCE_TELEGRAM_AUTH === 'true') return false;
+  if (process.env.BYPASS_TELEGRAM_AUTH === 'true') return true;
+  if (process.env.NODE_ENV === 'development') return true;
+  if (process.env.VERCEL_ENV === 'preview') return true;
+  return false;
+}
+
 export function validateTelegramWebAppData(telegramInitData: string): ValidationResult {
   const BOT_TOKEN = process.env.BOT_TOKEN;
-  const BYPASS_AUTH = process.env.BYPASS_TELEGRAM_AUTH === 'true';
+  const BYPASS_AUTH = isTelegramAuthBypassed();
 
   console.log("validateTelegramWebAppData");
   console.log("telegramInitData", telegramInitData);
@@ -49,9 +64,15 @@ export function validateTelegramWebAppData(telegramInitData: string): Validation
   let message = '';
 
   if (BYPASS_AUTH) {
-    validatedData = { temp: '' };
-    user = { id: 'undefined', username: 'Unknown User' };
-    message = 'Authentication bypassed for development';
+    validatedData = { temp: '1', user: '{}' };
+    user = {
+      id: DEV_PREVIEW_TELEGRAM_ID,
+      username: 'local_preview',
+      first_name: 'Preview',
+      language_code: 'en',
+      is_premium: false,
+    };
+    message = 'Authentication bypassed (dev or preview)';
   } else {
     if (!BOT_TOKEN) {
       return { message: 'BOT_TOKEN is not set', validatedData: null, user: {} };

@@ -66,10 +66,16 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         ? normalizedStartParam.replace(/^(kentId|ref_)/i, '').trim() || null
         : null;
 
-      if (process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true') {
-        initData = "temp";
-      } else if (!initData && process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH !== 'false') {
-        initData = "temp";
+      const allowWithoutTelegram =
+        process.env.NODE_ENV === 'development' ||
+        process.env.NEXT_PUBLIC_BYPASS_TELEGRAM_AUTH === 'true' ||
+        process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview';
+
+      if (allowWithoutTelegram) {
+        if (!initData) initData = 'dev-local-bypass';
+        if (!telegramName || telegramName === 'Unknown User') {
+          telegramName = process.env.NEXT_PUBLIC_DEV_DISPLAY_NAME || 'Preview';
+        }
       }
 
       const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/user` : '/api/user';
@@ -92,10 +98,10 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
       const userData = data;
 
       if (!initData) {
-        throw new Error('initData is undefined');
+        throw new Error('Open URAPearls from Telegram, or run with npm run dev (local bypass).');
       }
       if (!telegramName) {
-        throw new Error('telegramName is undefined');
+        throw new Error('Missing display name. Open from Telegram or set NEXT_PUBLIC_DEV_DISPLAY_NAME.');
       }
 
       // Restore any pending points and totalTaps that weren't synced before close (same persistence as Settings/notifications)
