@@ -64,7 +64,8 @@ export default function MyProgressModal({ onClose, onOpenGuide }: MyProgressModa
 
   const displayPoints = serverProgress?.points ?? points;
   const displayBalance = serverProgress?.pointsBalance ?? pointsBalance;
-  const displayLevelIndex = serverProgress?.gameLevelIndex ?? gameLevelIndex;
+  const rawLevelIndex = serverProgress?.gameLevelIndex ?? gameLevelIndex;
+  const displayLevelIndex = Math.min(Math.max(rawLevelIndex, 0), LEVELS.length - 1);
   const displayTotalDonated = serverProgress?.totalDonatedPoints ?? 0;
 
   const currentLevel = LEVELS[displayLevelIndex];

@@ -13,7 +13,7 @@
  * GitHub: https://github.com/nikandr-surkov
  */
 
-import { crystal1, crystal2, crystal3, crystal4, crystal5, crystal6, crystal7, crystal8, crystal9, crystal10, mainCharacter } from "@/images";
+import { mainCharacter, rankBlue, rankGold, rankSilver, rankWhite } from "@/images";
 import { StaticImageData } from "next/image";
 
 export const ALLOW_ALL_DEVICES = true;
@@ -34,16 +34,10 @@ export interface LevelData {
 }
 
 export const LEVELS: LevelData[] = [
-  { name: "Baobab", minPoints: 0, minTaps: 0, bigImage: mainCharacter, smallImage: crystal1, color: "#5B6C8F", primaryColor: "#5B6C8F", accentColor: "#AAB2C0", friendBonus: 0, friendBonusPremium: 0 },
-  { name: "Shaka", minPoints: 500000, minTaps: 1000, bigImage: mainCharacter, smallImage: crystal2, color: "#2F8F9D", primaryColor: "#2F8F9D", accentColor: "#7ED9D2", friendBonus: 20000, friendBonusPremium: 25000 },
-  { name: "Mwami", minPoints: 2500000, minTaps: 5000, bigImage: mainCharacter, smallImage: crystal3, color: "#1F8A70", primaryColor: "#1F8A70", accentColor: "#6FD8A8", friendBonus: 30000, friendBonusPremium: 50000 },
-  { name: "Inkosi", minPoints: 15000000, minTaps: 25000, bigImage: mainCharacter, smallImage: crystal4, color: "#2C3E9F", primaryColor: "#2C3E9F", accentColor: "#5B7CFA", friendBonus: 40000, friendBonusPremium: 75000 },
-  { name: "Sultan", minPoints: 50000000, minTaps: 100000, bigImage: mainCharacter, smallImage: crystal5, color: "#5A2D82", primaryColor: "#5A2D82", accentColor: "#A678E2", friendBonus: 60000, friendBonusPremium: 100000 },
-  { name: "Negus", minPoints: 150000000, minTaps: 500000, bigImage: mainCharacter, smallImage: crystal6, color: "#F39C12", primaryColor: "#F39C12", accentColor: "#FFD36A", friendBonus: 100000, friendBonusPremium: 150000 },
-  { name: "Pharaoh", minPoints: 500000000, minTaps: 2000000, bigImage: mainCharacter, smallImage: crystal7, color: "#B11226", primaryColor: "#B11226", accentColor: "#FF4C4C", friendBonus: 250000, friendBonusPremium: 500000 },
-  { name: "Eze", minPoints: 1000000000, minTaps: 5000000, bigImage: mainCharacter, smallImage: crystal8, color: "#D4AF37", primaryColor: "#D4AF37", accentColor: "#F7E7A9", friendBonus: 500000, friendBonusPremium: 1000000 },
-  { name: "Emir", minPoints: 50000000000, minTaps: 10000000, bigImage: mainCharacter, smallImage: crystal9, color: "#4FD1C5", primaryColor: "#4FD1C5", accentColor: "#E6FFFA", friendBonus: 1000000, friendBonusPremium: 2000000 },
-  { name: "Mansa", minPoints: 1000000000000, minTaps: 25000000, bigImage: mainCharacter, smallImage: crystal10, color: "#7CFF00", primaryColor: "#0B0F19", accentColor: "#7CFF00", friendBonus: 2000000, friendBonusPremium: 5000000 },
+  { name: "Citizen", minPoints: 0, minTaps: 0, bigImage: mainCharacter, smallImage: rankWhite, color: "#E8ECF5", primaryColor: "#566178", accentColor: "#BFC8D8", friendBonus: 0, friendBonusPremium: 0 },
+  { name: "Contributor", minPoints: 500000, minTaps: 1000, bigImage: mainCharacter, smallImage: rankSilver, color: "#C9CFDA", primaryColor: "#69758C", accentColor: "#D8DFED", friendBonus: 20000, friendBonusPremium: 25000 },
+  { name: "Validator", minPoints: 2500000, minTaps: 5000, bigImage: mainCharacter, smallImage: rankBlue, color: "#5C88E8", primaryColor: "#2B4F98", accentColor: "#86B4FF", friendBonus: 30000, friendBonusPremium: 50000 },
+  { name: "Guardian", minPoints: 15000000, minTaps: 25000, bigImage: mainCharacter, smallImage: rankGold, color: "#F3BA2F", primaryColor: "#6E5214", accentColor: "#FFD36A", friendBonus: 40000, friendBonusPremium: 75000 },
 ];
 
 export const DAILY_REWARDS = [

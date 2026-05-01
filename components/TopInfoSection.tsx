@@ -39,6 +39,7 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
         profitPerHour,
         totalDonatedPoints,
     } = useGameStore();
+    const safeLevelIndex = Math.min(Math.max(gameLevelIndex, 0), LEVELS.length - 1);
 
     const handleSettingsClick = () => {
         triggerHapticFeedback(window);
@@ -53,7 +54,7 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
     const leftBlock = (
         <div className="flex items-center space-x-2">
             <div className="p-1 rounded-lg bg-[#1d2025]">
-                <Image src={LEVELS[gameLevelIndex].smallImage} width={24} height={24} alt="Small Level Icon" />
+                <Image src={LEVELS[safeLevelIndex].smallImage} width={24} height={24} alt="Rank Icon" />
             </div>
             <div>
                 <p className="text-sm flex items-center gap-1">

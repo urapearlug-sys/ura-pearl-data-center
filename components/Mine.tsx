@@ -22,7 +22,7 @@ import TopInfoSection from '@/components/TopInfoSection';
 import { MAXIMUM_INACTIVE_TIME_FOR_MINE } from '@/utils/consts';
 import Image from 'next/image';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
-import { total } from '@/images';
+import { pearlWhite } from '@/images';
 import { useToast } from '@/contexts/ToastContext';
 import Info from '@/icons/Info';
 
@@ -92,18 +92,18 @@ export default function Mine({ setCurrentView }: MineProps) {
                 <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
                     <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
                         <div className="px-4 pt-1 pb-24">
-                            <h1 className="text-2xl text-center mt-4">Upgrade Lumens Production</h1>
+                            <h1 className="text-2xl text-center mt-4">Upgrade PEARLS Production</h1>
 
                             <div className="px-4 mt-4 flex justify-center">
                                 <div className="px-4 py-2 flex items-center space-x-2">
-                                    <Image src={total} alt="Total" width={48} height={48} className="mx-auto" />
+                                    <Image src={pearlWhite} alt="PEARLS" width={48} height={48} className="mx-auto rounded-full" />
                                     <p className="text-4xl text-white" suppressHydrationWarning >{Math.floor(pointsBalance).toLocaleString()}</p>
                                 </div>
                             </div>
 
                             <div className="bg-[#272a2f] rounded-lg p-4 mt-6">
                                 <div className="flex justify-between items-center mb-4">
-                                    <p>Current Lumens per hour:</p>
+                                    <p>Current PEARLS per hour:</p>
                                     <p className="text-[#f3ba2f]">{formatNumber(profitPerHour)}</p>
                                 </div>
                                 <div className="flex justify-between items-center mb-4">
@@ -111,7 +111,7 @@ export default function Mine({ setCurrentView }: MineProps) {
                                     <p className="text-[#f3ba2f]">{formatNumber(upgradeCost)}</p>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <p>Lumens per hour increase:</p>
+                                    <p>PEARLS per hour increase:</p>
                                     <p className="text-[#f3ba2f]">+{formatNumber(upgradeIncrease)}</p>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ export default function Mine({ setCurrentView }: MineProps) {
                             <div className="bg-[#272a2f] rounded-lg p-4 mt-6 flex items-start">
                                 <Info className="w-6 h-6 text-[#f3ba2f] mr-3 flex-shrink-0 mt-1" />
                                 <p className="text-sm text-gray-300">
-                                    Your mine automatically produces Lumens for up to <span className="text-white font-bold">{maxInactiveHours} hours</span> after your last activity. Make sure to check in regularly to maximize your lumens production!
+                                    Your mine automatically produces PEARLS for up to <span className="text-white font-bold">{maxInactiveHours} hours</span> after your last activity. Make sure to check in regularly to maximize your PEARLS production!
                                 </p>
                             </div>
 

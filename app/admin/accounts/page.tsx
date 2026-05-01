@@ -12,6 +12,9 @@ interface UserAccount {
   name: string;
   points: number;
   pointsBalance: number;
+  whitePearls: number;
+  bluePearls: number;
+  goldishPearls: number;
   region: string | null;
   isPremium: boolean;
   isFrozen: boolean;
@@ -450,6 +453,9 @@ export default function AccountsAdminPage() {
                     <th className="p-3 text-left">Telegram ID</th>
                     <th className="p-3 text-left">Region</th>
                     <th className="p-3 text-right">Points</th>
+                    <th className="p-3 text-right">White</th>
+                    <th className="p-3 text-right">Blue</th>
+                    <th className="p-3 text-right">Goldish</th>
                     <th className="p-3 text-center">Tasks</th>
                     <th className="p-3 text-center">Referrals</th>
                     <th className="p-3 text-center">Status</th>
@@ -485,6 +491,15 @@ export default function AccountsAdminPage() {
                       <td className="p-3">{user.region?.toUpperCase() || 'N/A'}</td>
                       <td className="p-3 text-right text-[#f3ba2f] font-bold">
                         {formatNumber(user.points)}
+                      </td>
+                      <td className="p-3 text-right text-slate-200 font-semibold">
+                        {formatNumber(user.whitePearls)}
+                      </td>
+                      <td className="p-3 text-right text-[#5fa8ff] font-semibold">
+                        {formatNumber(user.bluePearls)}
+                      </td>
+                      <td className="p-3 text-right text-[#f3ba2f] font-semibold">
+                        {formatNumber(user.goldishPearls)}
                       </td>
                       <td className="p-3 text-center">{user.activities.tasks}</td>
                       <td className="p-3 text-center">{user.activities.referrals}</td>

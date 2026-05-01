@@ -50,8 +50,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
-  const { userTelegramName, points, userTelegramInitData } = useGameStore();
-  const [whitePearls, setWhitePearls] = useState(0);
+  const { userTelegramName, points, pointsBalance, userTelegramInitData } = useGameStore();
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
 
@@ -101,6 +100,7 @@ export default function Home({ setCurrentView }: HomeProps) {
 
   const levelIndex = useMemo(() => calculateLevelIndex(points), [points]);
   const pearlsDisplay = Math.floor(points).toLocaleString();
+  const liveWhitePearls = Math.max(0, Math.floor(pointsBalance));
   const rankStep = Math.min(levelIndex + 1, LEVELS.length);
   const rankTotal = LEVELS.length;
   const ranks = useMemo(
@@ -131,7 +131,6 @@ export default function Home({ setCurrentView }: HomeProps) {
         });
         if (!res.ok) return;
         const data = await res.json();
-        setWhitePearls(Math.floor(data?.balances?.white ?? 0));
         setBluePearls(Math.floor(data?.balances?.bluePending ?? 0));
         setGoldishPearls(Math.floor(data?.balances?.goldish ?? 0));
       } catch {
@@ -277,7 +276,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                 </button>
                 <div className="mt-4 space-y-2">
                   {[
-                    { key: 'white', label: 'White pearl', value: whitePearls, color: 'text-slate-200', hint: 'From instant approved tasks', image: pearlWhite },
+                    { key: 'white', label: 'White pearl', value: liveWhitePearls, color: 'text-slate-200', hint: 'From taps & instant approved tasks', image: pearlWhite },
                     { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks', image: pearlBlue },
                     { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls', image: pearlGolden },
                   ].map((item) => (

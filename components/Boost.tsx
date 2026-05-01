@@ -17,7 +17,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { battery, lightning, multiclick, total } from '@/images';
+import { battery, lightning, multiclick, pearlWhite } from '@/images';
 import { calculateEnergyLimitUpgradeCost, calculateMultitapUpgradeCost, useGameStore } from '@/utils/game-mechanics';
 import IceCube from '@/icons/IceCube';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
@@ -243,7 +243,7 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
             <div className="px-4 pt-1 pb-24">
               <div className="px-4 mt-4 flex justify-center">
                 <div className="px-4 py-2 flex items-center space-x-2">
-                  <Image src={total} alt="Total" width={48} height={48} className="mx-auto" />
+                  <Image src={pearlWhite} alt="PEARLS" width={48} height={48} className="mx-auto rounded-full" />
                   <p className="text-4xl text-white" suppressHydrationWarning>{Math.floor(pointsBalance).toLocaleString()}</p>
                 </div>
               </div>

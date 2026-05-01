@@ -181,7 +181,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
   const energyProgressPercent = maxEnergy > 0 ? Math.min(100, (energy / maxEnergy) * 100) : 0;
 
-  const currentLevel = LEVELS[gameLevelIndex];
+  const safeLevelIndex = Math.min(Math.max(gameLevelIndex, 0), LEVELS.length - 1);
+  const currentLevel = LEVELS[safeLevelIndex];
   const primary = currentLevel?.primaryColor ?? '#5B6C8F';
   const accent = currentLevel?.accentColor ?? '#AAB2C0';
   const isDarkLevel = gameLevelIndex >= 9; // Mansa
@@ -265,7 +266,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 onClick={() => { triggerHapticFeedback(window); setShowMyProgress(true); }}
                 className="flex justify-center gap-2 w-full"
               >
-                <p style={{ color: primary, fontWeight: 700 }}>{LEVELS[gameLevelIndex].name}</p>
+                <p style={{ color: primary, fontWeight: 700 }}>{LEVELS[safeLevelIndex].name}</p>
                 <p className="text-[#95908a]" >&#8226;</p>
                 <p>{gameLevelIndex + 1} <span className="text-[#95908a]">/ {LEVELS.length}</span></p>
               </button>
