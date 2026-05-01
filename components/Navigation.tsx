@@ -16,10 +16,9 @@
 'use client'
 
 import Image, { StaticImageData } from 'next/image';
-import Mine from '@/icons/Mine';
 import Friends from '@/icons/Friends';
 import Coins from '@/icons/Coins';
-import { collection, game } from '@/images';
+import { navHome, navLearn, navServices } from '@/images';
 import { FC } from 'react';
 import { IconProps } from '@/utils/types';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -32,9 +31,9 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-    { name: 'Home', image: game, view: 'home' },
-    { name: 'Eearn', icon: Mine, view: 'eearn' },
-    { name: 'Services', image: collection, view: 'services' },
+    { name: 'Home', image: navHome, view: 'home' },
+    { name: 'Learn', image: navLearn, view: 'eearn' },
+    { name: 'Services', image: navServices, view: 'services' },
     { name: 'Earn', icon: Coins, view: 'earn' },
     { name: 'Guild', icon: Friends, view: 'guild' },
 ];

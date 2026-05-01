@@ -77,6 +77,9 @@ import rankWhite from "./rank-white.png";
 import rankSilver from "./rank-silver.png";
 import rankBlue from "./rank-blue.png";
 import rankGold from "./rank-gold.png";
+import navHome from "./nav-home.png";
+import navLearn from "./nav-learn.png";
+import navServices from "./nav-services.png";
 
 
 export {
@@ -131,6 +134,9 @@ export {
     rankSilver,
     rankBlue,
     rankGold,
+    navHome,
+    navLearn,
+    navServices,
     blockchain,
     afrolumens,
     mitroplus,
