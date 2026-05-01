@@ -22,12 +22,12 @@ export default function TermsOfServicePage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">1. Acceptance of Terms</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          By accessing or using AfroLumens (&quot;the app&quot;), you agree to these Terms of Service and our Privacy Policy. If you do not agree, do not use the app.
+          By accessing or using URAPearls (&quot;the app&quot;), you agree to these Terms of Service and our Privacy Policy. If you do not agree, do not use the app.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">2. Description of Service</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          AfroLumens is a Telegram Mini App that allows you to earn in-app points (PEARLS) by tapping, completing tasks, referring friends, staking, and playing mini-games. PEARLS and other in-app rewards have no guaranteed real-world value unless otherwise stated in the app or by the operator. We may add, change, or discontinue features at any time.
+          URAPearls is a Telegram Mini App that allows you to earn in-app points (PEARLS) by tapping, completing tasks, referring friends, staking, and playing mini-games. PEARLS and other in-app rewards have no guaranteed real-world value unless otherwise stated in the app or by the operator. We may add, change, or discontinue features at any time.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">3. Eligibility and Account</h2>
@@ -75,7 +75,7 @@ export default function TermsOfServicePage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">10. Governing Law and Contact</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          These terms are governed by the laws applicable to the operator of AfroLumens. For questions or disputes, contact us via the official AfroLumens Telegram channel or support contact provided in the app.
+          These terms are governed by the laws applicable to the operator of URAPearls. For questions or disputes, contact us via the official URAPearls Telegram channel or support contact provided in the app.
         </p>
       </div>
     </div>

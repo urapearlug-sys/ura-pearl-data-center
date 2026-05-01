@@ -255,7 +255,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
               <div className="px-4 mt-4 flex justify-center">
                 <div className="px-4 py-2 flex items-center space-x-2">
-                  <Image src={total} alt="Total" width={48} height={48} className="mx-auto" />
+                  <Image src="/pearls-bounce.png" alt="PEARLS" width={48} height={48} className="mx-auto rounded-full" />
                   <p className="text-4xl text-white" suppressHydrationWarning >{Math.floor(pointsBalance).toLocaleString()}</p>
                 </div>
               </div>
@@ -291,16 +291,16 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                     }}
                   >
                     <Image
-                      src={LEVELS[gameLevelIndex].bigImage}
-                      alt="Main Character"
+                      src="/tap-arena-center.png"
+                      alt="Tap Arena Center"
                       fill
                       style={{
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         objectPosition: 'center',
-                        transform: 'scale(1.05) translateY(10%)'
+                        transform: 'scale(0.94)'
                       }}
                       onError={(e) => {
-                        console.error('Image failed to load:', LEVELS[gameLevelIndex].bigImage);
+                        console.error('Image failed to load:', '/tap-arena-center.png');
                         console.error('Error:', e);
                       }}
                       priority
@@ -352,7 +352,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
       {clicks.map((click) => (
         <div
           key={click.id}
-          className="absolute text-5xl font-bold opacity-0 text-white pointer-events-none flex justify-center"
+          className="absolute opacity-0 text-white pointer-events-none flex flex-col items-center justify-center"
           style={{
             top: `${click.y - 42}px`,
             left: `${click.x - 28}px`,
@@ -360,7 +360,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           }}
           onAnimationEnd={() => handleAnimationEnd(click.id)}
         >
-          {pointsPerClick}<IceCube className="w-12 h-12 mx-auto" />
+          <Image src="/pearls-bounce.png" alt="PEARLS" width={42} height={42} className="rounded-full" />
+          <span className="mt-1 text-base font-bold text-white drop-shadow-[0_0_6px_rgba(0,0,0,0.6)]">+{pointsPerClick} PEARLS</span>
         </div>
       ))}
     </div>

@@ -116,9 +116,9 @@ export default function LeaguesGuidePopup({ onClose }: LeaguesGuidePopupProps) {
           </section>
 
           <section className="mb-6">
-            <h3 className="text-[#f3ba2f] font-bold text-base mb-1.5">5) AfroLumens Championship</h3>
+            <h3 className="text-[#f3ba2f] font-bold text-base mb-1.5">5) URAPearls Championship</h3>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Every <strong className="text-white">8 weeks</strong>, the <strong className="text-[#f3ba2f]">AfroLumens Championship</strong> runs. The <strong className="text-white">top 100</strong> players from the Diamond and Legend tiers qualify. The Championship has a larger prize pool, NFT trophy, and public leaderboard. Tap the Championship card in Leagues to see the next event date and whether you’re on track to qualify.
+              Every <strong className="text-white">8 weeks</strong>, the <strong className="text-[#f3ba2f]">URAPearls Championship</strong> runs. The <strong className="text-white">top 100</strong> players from the Diamond and Legend tiers qualify. The Championship has a larger prize pool, NFT trophy, and public leaderboard. Tap the Championship card in Leagues to see the next event date and whether you’re on track to qualify.
             </p>
           </section>
 

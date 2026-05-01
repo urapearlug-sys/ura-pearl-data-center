@@ -210,7 +210,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
     return (
       <div className="bg-[#1d2025] flex justify-center items-center min-h-screen px-4">
         <div className="w-full max-w-xl text-white flex flex-col items-center text-center">
-          <h1 className="text-2xl font-bold mb-2">Welcome to AfroLumens</h1>
+          <h1 className="text-2xl font-bold mb-2">Welcome to URAPearls</h1>
           <p className="text-gray-400 text-sm mb-6">
             Please read and accept our Privacy Policy and Terms of Service to continue.
           </p>

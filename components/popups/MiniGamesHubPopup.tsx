@@ -201,7 +201,7 @@ export default function MiniGamesHubPopup({ onClose }: MiniGamesHubPopupProps) {
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
           <div>
             <h2 className="text-lg font-bold text-white">Mini Games</h2>
-            <p className="text-xs text-gray-400">Afrolumens Tap2Earn · Tap a game for details</p>
+            <p className="text-xs text-gray-400">URAPearls Tap2Earn · Tap a game for details</p>
           </div>
           <button
             type="button"

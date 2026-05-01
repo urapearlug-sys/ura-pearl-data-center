@@ -672,7 +672,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                                     >
                                       <span className="text-3xl">🔥</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-white">AfroLumens Championship</p>
+                                        <p className="font-bold text-white">URAPearls Championship</p>
                                         <p className="text-sm text-rose-200/90">Top 100 Diamond & Legend · Every 8 weeks</p>
                                       </div>
                                       <span className="text-gray-400">→</span>

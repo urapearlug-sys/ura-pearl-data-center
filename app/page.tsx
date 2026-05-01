@@ -30,7 +30,7 @@ export default function Home() {
           </div>
         </div>
         
-        <h1 className="text-3xl font-bold mb-4">Welcome to AfroLumens</h1>
+        <h1 className="text-3xl font-bold mb-4">Welcome to URAPearls</h1>
         
         <p className="text-xl mb-2">The game is on the <Link href="/clicker" className="underline">Clicker</Link> page.</p>
         <p className="text-xl mb-6">Developed by <Link href="https://www.youtube.com/@NikandrSurkov" target="_blank" className="underline">Nikandr Surkov</Link>.</p>

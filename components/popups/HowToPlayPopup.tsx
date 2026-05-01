@@ -32,7 +32,7 @@ export default function HowToPlayPopup({ onClose }: HowToPlayPopupProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
-          <h2 className="text-lg font-bold text-white">How to play AfroLumens</h2>
+          <h2 className="text-lg font-bold text-white">How to play URAPearls</h2>
           <button
             type="button"
             onClick={handleClose}

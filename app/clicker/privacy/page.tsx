@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">1. Introduction</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          AfroLumens (&quot;we&quot;, &quot;our&quot;, or &quot;the app&quot;) is a Telegram Mini App that lets you earn in-app points (PEARLS), complete tasks, refer friends, and use features such as staking and mini-games. This Privacy Policy explains how we collect, use, and protect your information when you use AfroLumens.
+          URAPearls (&quot;we&quot;, &quot;our&quot;, or &quot;the app&quot;) is a Telegram Mini App that lets you earn in-app points (PEARLS), complete tasks, refer friends, and use features such as staking and mini-games. This Privacy Policy explains how we collect, use, and protect your information when you use URAPearls.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">2. Information We Collect</h2>
@@ -60,12 +60,12 @@ export default function PrivacyPolicyPage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">7. Your Rights</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          Depending on your jurisdiction, you may have the right to access, correct, or delete your personal data. Contact us through the official AfroLumens Telegram channel or bot support to make a request.
+          Depending on your jurisdiction, you may have the right to access, correct, or delete your personal data. Contact us through the official URAPearls Telegram channel or bot support to make a request.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">8. Children</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          AfroLumens is not directed at children under 13 (or the applicable age in your country). We do not knowingly collect data from such users.
+          URAPearls is not directed at children under 13 (or the applicable age in your country). We do not knowingly collect data from such users.
         </p>
 
         <h2 className="text-white font-semibold mt-6 mb-2">9. Changes</h2>
@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
 
         <h2 className="text-white font-semibold mt-6 mb-2">10. Contact</h2>
         <p className="text-gray-300 text-sm leading-relaxed mb-4">
-          For questions about this Privacy Policy or your data, contact us via the official AfroLumens Telegram channel or support contact provided in the app.
+          For questions about this Privacy Policy or your data, contact us via the official URAPearls Telegram channel or support contact provided in the app.
         </p>
       </div>
     </div>
