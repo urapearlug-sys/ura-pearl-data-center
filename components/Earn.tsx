@@ -129,9 +129,9 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [showGlobalTasks, setShowGlobalTasks] = useState(false);
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(initialTab);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
   const [earnFeatureTab, setEarnFeatureTab] = useState<'play' | 'learn' | 'earn'>('play');
+  const [playFeatureSubTab, setPlayFeatureSubTab] = useState<'highlights' | 'afrolumens' | 'ecosystem'>('highlights');
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -139,7 +139,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
 
   useEffect(() => {
     if (openMoreDefault) {
-      setShowMoreMenu(true);
+      setEarnFeatureTab('play');
+      setPlayFeatureSubTab('afrolumens');
     }
   }, [openMoreDefault]);
 
@@ -229,14 +230,38 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
-  const earnFeatureCards: Record<'play' | 'learn' | 'earn', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
-    play: [
+  const playSubtabCards: Record<'highlights' | 'afrolumens' | 'ecosystem', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
+    highlights: [
+      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => setActiveTab('All') },
+      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => setShowDailyCipher(true) },
+      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => setShowDailyCombo(true) },
+      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView?.('collection') },
+      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => setShowWeeklyEvent(true) },
+      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => setShowGlobalTasks(true) },
       { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => setShowMitrolabsQuiz(true) },
       { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => setActiveTab('All') },
       { id: 'true-false', title: 'True or False - Uganda tax edition', subtitle: 'Tax knowledge challenge', onClick: () => setActiveTab('All') },
       { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView?.('game') },
       { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => setShowDailyLogin(true) },
     ],
+    afrolumens: [
+      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView?.('game') },
+      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView?.('mine') },
+      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView?.('collection') },
+      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', onClick: () => setCurrentView?.('friends') },
+      { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView?.('airdrop') },
+    ],
+    ecosystem: [
+      { id: 'mini-games', title: 'Mini Games Hub', subtitle: 'Open all mini-games', onClick: () => setShowMiniGamesHub(true) },
+      { id: 'decode-ecosystem', title: 'Decode', subtitle: 'Cipher challenge mode', onClick: () => setShowDailyCipher(true) },
+      { id: 'matrix-ecosystem', title: 'Matrix', subtitle: 'Daily combo mode', onClick: () => setShowDailyCombo(true) },
+      { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => setShowLuckySpin(true) },
+      { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => setShowWeeklyEvent(true) },
+      { id: 'global-tasks-ecosystem', title: 'Global Joinable Tasks', subtitle: 'Cross-league and team challenges', onClick: () => setShowGlobalTasks(true) },
+    ],
+  };
+
+  const earnFeatureCards: Record<'learn' | 'earn', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
     learn: [
       { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => setActiveTab('All') },
       { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => setShowWeeklyEvent(true) },
@@ -274,8 +299,31 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           </button>
         ))}
       </div>
+      {earnFeatureTab === 'play' ? (
+        <div className="mt-2 grid grid-cols-3 gap-2">
+          {[
+            { key: 'highlights' as const, label: 'Highlights' },
+            { key: 'afrolumens' as const, label: 'Afro classics' },
+            { key: 'ecosystem' as const, label: 'Ecosystem' },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setPlayFeatureSubTab(tab.key);
+              }}
+              className={`rounded-lg py-2 text-xs font-semibold transition-colors ${
+                playFeatureSubTab === tab.key ? 'bg-[#1e3d6e] text-white' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <div className="mt-3 space-y-2">
-        {earnFeatureCards[earnFeatureTab].map((item) => (
+        {(earnFeatureTab === 'play' ? playSubtabCards[playFeatureSubTab] : earnFeatureCards[earnFeatureTab]).map((item) => (
           <button
             key={item.id}
             type="button"
@@ -332,66 +380,12 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 ) : (
                   <>
                     {renderEarnFeatureLayout()}
-
-                    <div className="flex justify-center mt-4">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          triggerHapticFeedback(window);
-                          setShowMoreMenu(true);
-                        }}
-                        className="px-6 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
-                      >
-                        More
-                      </button>
-                    </div>
                   </>
                 )}
               </div>
             </div>
           </div>
         </div>
-        {showMoreMenu && (
-          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70">
-            <div className="w-full max-w-xl rounded-t-3xl bg-[#1d2025] border-t border-[#3d4046] p-4 pb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-white">More</h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    setShowMoreMenu(false);
-                  }}
-                  className="text-gray-400 hover:text-white"
-                >
-                  Close
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { name: 'Game', view: 'game' },
-                  { name: 'Mine', view: 'mine' },
-                  { name: 'Collection', view: 'collection' },
-                  { name: 'Friends', view: 'friends' },
-                  { name: 'Airdrop', view: 'airdrop' },
-                ].map((item) => (
-                  <button
-                    key={item.view}
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMoreMenu(false);
-                      setCurrentView?.(item.view);
-                    }}
-                    className="rounded-xl border border-[#3d4046] bg-[#272a2f] py-3 text-white font-semibold hover:border-[#f3ba2f] transition-colors"
-                  >
-                    {item.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
@@ -411,16 +405,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                   Balance: {formatNumber(Math.floor(pointsBalance))} PEARLS
                 </p>
                 <div className="flex justify-center mb-5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setShowMoreMenu(true);
-                    }}
-                    className="px-5 py-2.5 rounded-xl bg-[#272a2f] border border-[#3d4046] text-white hover:border-[#f3ba2f] transition-colors"
-                  >
-                    More
-                  </button>
+                  <p className="text-xs text-gray-400">All classic features are now under Play subtabs.</p>
                 </div>
 
                 <div className="mb-6">
@@ -1037,47 +1022,6 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
           myTeams={myTeams}
           myLeagues={leaguesData?.customLeagues?.map((cl) => ({ id: cl.id, name: cl.name, isCreator: cl.isCreator })) ?? []}
         />
-      )}
-      {showMoreMenu && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70">
-          <div className="w-full max-w-xl rounded-t-3xl bg-[#1d2025] border-t border-[#3d4046] p-4 pb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">More</h3>
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  setShowMoreMenu(false);
-                }}
-                className="text-gray-400 hover:text-white"
-              >
-                Close
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { name: 'Game', view: 'game' },
-                { name: 'Mine', view: 'mine' },
-                { name: 'Collection', view: 'collection' },
-                { name: 'Friends', view: 'friends' },
-                { name: 'Airdrop', view: 'airdrop' },
-              ].map((item) => (
-                <button
-                  key={item.view}
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    setShowMoreMenu(false);
-                    setCurrentView?.(item.view);
-                  }}
-                  className="rounded-xl border border-[#3d4046] bg-[#272a2f] py-3 text-white font-semibold hover:border-[#f3ba2f] transition-colors"
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
