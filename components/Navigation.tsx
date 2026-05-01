@@ -16,8 +16,7 @@
 'use client'
 
 import Image, { StaticImageData } from 'next/image';
-import Coins from '@/icons/Coins';
-import { navHome, navLearn, navServices } from '@/images';
+import { navHome, navLearn, navServices, earnRewardsIcon, navGuild } from '@/images';
 import { FC } from 'react';
 import { IconProps } from '@/utils/types';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -25,7 +24,7 @@ import { triggerHapticFeedback } from '@/utils/ui';
 type NavItem = {
     name: string;
     icon?: FC<IconProps> | null;
-    image?: StaticImageData | string | null;
+    image?: StaticImageData | null;
     view: string;
 };
 
@@ -33,8 +32,8 @@ const navItems: NavItem[] = [
     { name: 'Home', image: navHome, view: 'home' },
     { name: 'Learn', image: navLearn, view: 'eearn' },
     { name: 'Services', image: navServices, view: 'services' },
-    { name: 'Earn', icon: Coins, view: 'earn' },
-    { name: 'Guild', image: '/nav-guild-icon.png', view: 'guild' },
+    { name: 'Earn', image: earnRewardsIcon, view: 'earn' },
+    { name: 'Guild', image: navGuild, view: 'guild' },
 ];
 
 interface NavigationProps {

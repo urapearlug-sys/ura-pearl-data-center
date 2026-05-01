@@ -21,7 +21,7 @@ import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { ACTIVITY_TAB_CATEGORIES } from '@/utils/consts';
 import { capitalizeFirstLetter, formatNumber, triggerHapticFeedback } from '@/utils/ui';
-import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift } from '@/images';
+import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift, earnRewardsIcon } from '@/images';
 import TaskPopup from './popups/TaskPopup';
 import DailyLoginPopup from './popups/DailyLoginPopup';
 import DailyCipherPopup from './popups/DailyCipherPopup';
@@ -550,7 +550,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
               <div className="px-4 pt-6 pb-24">
                 <div className="flex justify-center mb-4">
                   <Image
-                    src="/earn-rewards-icon.png"
+                    src={earnRewardsIcon}
                     alt="Earn rewards and tasks"
                     width={96}
                     height={96}
@@ -603,7 +603,7 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
               <div className="relative mt-4">
                 <div className="flex justify-center mb-4">
                   <Image
-                    src="/earn-rewards-icon.png"
+                    src={earnRewardsIcon}
                     alt="Earn rewards and tasks"
                     width={96}
                     height={96}

@@ -80,6 +80,8 @@ import rankGold from "./rank-gold.png";
 import navHome from "./nav-home.png";
 import navLearn from "./nav-learn.png";
 import navServices from "./nav-services.png";
+import earnRewardsIcon from "./earn-rewards-icon.png";
+import navGuild from "./nav-guild-icon.png";
 
 
 export {
@@ -137,6 +139,8 @@ export {
     navHome,
     navLearn,
     navServices,
+    earnRewardsIcon,
+    navGuild,
     blockchain,
     afrolumens,
     mitroplus,
