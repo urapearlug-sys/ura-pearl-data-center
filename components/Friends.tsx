@@ -17,10 +17,8 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import Image, { StaticImageData } from 'next/image';
-import IceCubes from '@/icons/IceCubes';
 import { useGameStore } from '@/utils/game-mechanics';
-import { baseGift, bigGift } from '@/images';
-import IceCube from '@/icons/IceCube';
+import { baseGift, bigGift, pearlWhite } from '@/images';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { REFERRAL_BONUS_BASE, REFERRAL_BONUS_PREMIUM, LEVELS } from '@/utils/consts';
 import { getUserTelegramId } from '@/utils/user';
@@ -165,7 +163,7 @@ export default function Friends() {
                       <div className="flex flex-col ml-2">
                         <span className="font-medium">Invite a friend</span>
                         <div className="flex items-center">
-                          <IceCube className="w-6 h-6" />
+                          <Image src={pearlWhite} alt="PEARLS" width={20} height={20} className="rounded-full" />
                           <span className="ml-1 text-white"><span className="text-[#f3ba2f]">+{formatNumber(REFERRAL_BONUS_BASE)}</span> for you and your friend</span>
                         </div>
                       </div>
@@ -178,7 +176,7 @@ export default function Friends() {
                       <div className="flex flex-col ml-2">
                         <span className="font-medium">Invite a friend with Telegram Premium</span>
                         <div className="flex items-center">
-                          <IceCube className="w-6 h-6" />
+                          <Image src={pearlWhite} alt="PEARLS" width={20} height={20} className="rounded-full" />
                           <span className="ml-1 text-white"><span className="text-[#f3ba2f]">+{formatNumber(REFERRAL_BONUS_PREMIUM)}</span> for you and your friend</span>
                         </div>
                       </div>
@@ -213,11 +211,11 @@ export default function Friends() {
                         </div>
                         <div className="flex items-center justify-between flex-1">
                           <div className="flex items-center mr-4">
-                            <IceCube className="w-4 h-4 mr-1" />
+                            <Image src={pearlWhite} alt="PEARLS" width={14} height={14} className="rounded-full mr-1" />
                             <span className="text-yellow-400">+{formatNumber(level.friendBonus)}</span>
                           </div>
                           <div className="flex items-center">
-                            <IceCube className="w-4 h-4 mr-1" />
+                            <Image src={pearlWhite} alt="PEARLS" width={14} height={14} className="rounded-full mr-1" />
                             <span className="text-yellow-400">+{formatNumber(level.friendBonusPremium)}</span>
                           </div>
                         </div>

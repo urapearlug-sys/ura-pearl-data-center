@@ -17,9 +17,8 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
-import { lightning, pearlBlue, pearlGolden, pearlWhite } from '@/images';
+import { lightning, pearlWhite } from '@/images';
 import { calculateEnergyLimitUpgradeCost, calculateMultitapUpgradeCost, useGameStore } from '@/utils/game-mechanics';
-import IceCube from '@/icons/IceCube';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { useHydration } from '@/utils/useHydration';
@@ -282,11 +281,11 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
                 <button className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4" onClick={handleMultitapUpgrade}
                   disabled={isLoadingMultitap || !isMultitapAffordable}>
                   <div className="flex items-center">
-                    <Image src={pearlBlue} alt="PEARLS Multitap" width={40} height={40} className="rounded-full" />
+                    <Image src={pearlWhite} alt="PEARLS Multitap" width={40} height={40} className="rounded-full" />
                     <div className="flex flex-col ml-2">
                       <span className="text-left font-medium">Multitap</span>
                       <div className="flex justify-center items-center">
-                        <IceCube size={24} />
+                        <Image src={pearlWhite} alt="PEARLS" width={20} height={20} className="rounded-full" />
                         <span className="ml-1 text-gray-500">
                           <span className={`font-bold ${isMultitapAffordable ? 'text-white' : ''}`}>
                             {formatNumber(calculateMultitapUpgradeCost(multitapLevelIndex))}
@@ -303,11 +302,11 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
                 </button>
                 <button className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4 mt-2" onClick={handleEnergyLimitUpgrade} disabled={isLoadingEnergyLimit || !isEnergyLimitAffordable}>
                   <div className="flex items-center">
-                    <Image src={pearlGolden} alt="PEARLS Energy limit" width={40} height={40} className="rounded-full" />
+                    <Image src={pearlWhite} alt="PEARLS Energy limit" width={40} height={40} className="rounded-full" />
                     <div className="flex flex-col ml-2">
                       <span className="text-left font-medium">Energy limit</span>
                       <div className="flex justify-center items-center">
-                        <IceCube size={24} />
+                        <Image src={pearlWhite} alt="PEARLS" width={20} height={20} className="rounded-full" />
                         <span className="ml-1 text-gray-500">
                           <span className={`font-bold ${isEnergyLimitAffordable ? 'text-white' : ''}`}>
                             {formatNumber(calculateEnergyLimitUpgradeCost(energyLimitLevelIndex))}

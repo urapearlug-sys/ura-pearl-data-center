@@ -17,7 +17,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { airdropHero, paidTrophy1, tonWallet } from '@/images';
+import { paidTrophy1, pearlWhite, tonWallet } from '@/images';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import Angle from '@/icons/Angle';
 import Copy from '@/icons/Copy';
@@ -281,7 +281,7 @@ export default function Airdrop() {
                         <div className="px-4 pt-1 pb-24">
                             <div className="relative mt-4">
                                 <div className="flex justify-center mb-4">
-                                    <Image src={airdropHero} alt="Airdrop" width={96} height={96} className="rounded-lg mr-2" />
+                                    <Image src={pearlWhite} alt="White Pearl" width={96} height={96} className="rounded-full mr-2" />
                                 </div>
                                 <h1 className="text-2xl text-center mb-2">Airdrop & Market</h1>
                                 <p className="text-gray-300 text-center mb-4 font-normal">
@@ -359,8 +359,8 @@ export default function Airdrop() {
                                             🏆
                                         </div>
                                         <div className="text-left">
-                                            <div className="text-lg">Global Rankings</div>
-                                            <div className="text-sm opacity-75">View all players worldwide</div>
+                                            <div className="text-lg">Country Ranking</div>
+                                            <div className="text-sm opacity-75">View players by country</div>
                                         </div>
                                     </div>
                                     <Angle size={32} className="text-black" />

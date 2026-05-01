@@ -249,7 +249,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
     <div className="fixed inset-0 z-50 flex flex-col bg-black">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#f3ba2f] to-[#e6a422] p-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-black">Global Rankings</h1>
+        <h1 className="text-xl font-bold text-black">Country Ranking</h1>
         <button
           onClick={handleClose}
           className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center"
@@ -264,7 +264,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
           <span className="text-white font-bold">{formatNumber(totalUsers)}</span> Players
         </div>
         <div className="text-sm text-gray-400">
-          <span className="text-white font-bold">{regions.length}</span> Regions
+          <span className="text-white font-bold">{regions.length}</span> Countries
         </div>
       </div>
 
@@ -294,7 +294,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
           }}
           className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
         >
-          <option value="">All Regions</option>
+          <option value="">All Countries</option>
           {regionGroups.length > 0 && (
             <>
               <optgroup label="By region (countries listed below)">
