@@ -35,6 +35,28 @@ const FALLBACK_CATEGORIES: LearnCategory[] = LEARN_CATEGORY_DEFAULTS.map((x) => 
   enabled: x.enabled ?? true,
 }));
 
+const CATEGORY_ICON_EMOJI: Record<string, string> = {
+  'general-tax': '📘',
+  agriculture: '🌾',
+  construction: '🏗️',
+  education: '🏫',
+  entertainment: '🎵',
+  fishing: '🐟',
+  health: '🏥',
+  hospitality: '🏨',
+  manufacturing: '🏭',
+  mining: '⛏️',
+  'real-estate': '🏠',
+  transportation: '🚚',
+  'oil-gas': '🛢️',
+  'wholesale-retail': '🛍️',
+  investors: '💼',
+  'tax-curriculum': '🧠',
+  'government-agencies': '🏛️',
+  'digital-services': '💻',
+  'small-business': '🏪',
+};
+
 export default function Learn() {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<'general' | 'tax-education'>('general');
@@ -186,8 +208,8 @@ export default function Learn() {
                   className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-3 py-3 text-left hover:border-[#f3ba2f] transition-colors"
                 >
                   <div className="flex items-start gap-2">
-                    <span className="mt-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-md bg-[#dbe9ff] text-[10px] font-bold uppercase text-[#204887]">
-                      {category.icon}
+                    <span className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#dbe9ff] text-sm leading-none">
+                      {CATEGORY_ICON_EMOJI[category.slug] ?? '📚'}
                     </span>
                     <p className="text-[#16427f] text-[15px] leading-tight font-semibold">{category.title}</p>
                   </div>
