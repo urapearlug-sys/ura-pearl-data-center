@@ -28,9 +28,10 @@ import {
   zoom,
 } from '@/images';
 import {
+  GROUP_THEME,
   URA_SERVICE_CATEGORIES,
+  URA_SERVICES_DEFAULT_CATEGORY_ID,
   type ServiceImageKey,
-  type UraServiceCategoryId,
   type UraServiceItem,
 } from '@/data/ura-services-catalog';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -74,10 +75,10 @@ function openServiceUrl(url: string) {
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-type SearchHit = { item: UraServiceItem; categoryLabel: string; categoryId: UraServiceCategoryId };
+type SearchHit = { item: UraServiceItem; categoryLabel: string; categoryId: string };
 
 export default function Services() {
-  const [activeCategoryId, setActiveCategoryId] = useState<UraServiceCategoryId>('domestic-etax');
+  const [activeCategoryId, setActiveCategoryId] = useState<string>(URA_SERVICES_DEFAULT_CATEGORY_ID);
   const [search, setSearch] = useState('');
   const [taxCalculatorOpen, setTaxCalculatorOpen] = useState(false);
   const [taxCalculatorRefUrl, setTaxCalculatorRefUrl] = useState('https://ura.go.ug/en/domestic-taxes/');
@@ -97,6 +98,8 @@ export default function Services() {
     [activeCategoryId]
   );
 
+  const activeTheme = GROUP_THEME[activeCategory.groupId];
+
   const searchHits = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return [] as SearchHit[];
@@ -106,7 +109,9 @@ export default function Services() {
         if (
           item.title.toLowerCase().includes(q) ||
           item.description.toLowerCase().includes(q) ||
-          item.id.toLowerCase().includes(q)
+          item.id.toLowerCase().includes(q) ||
+          cat.title.toLowerCase().includes(q) ||
+          cat.shortLabel.toLowerCase().includes(q)
         ) {
           hits.push({ item, categoryLabel: cat.shortLabel, categoryId: cat.id });
         }
@@ -119,13 +124,13 @@ export default function Services() {
 
   return (
     <div className="bg-black min-h-screen flex justify-center pb-28">
-      <div className="w-full max-w-xl flex text-white min-h-screen">
+      <div className="w-full max-w-xl flex text-white min-h-0">
         {/* Main content */}
         <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
           <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
             <h1 className="text-xl font-bold tracking-tight text-white px-1">URA Services</h1>
             <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-3">
-              Live links to official portals — register, file, pay, and trade in one hub.
+              Official portals and tools — domestic tax, customs, legal, careers, research, and partner links.
             </p>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" aria-hidden>
@@ -150,18 +155,19 @@ export default function Services() {
                 </h2>
                 {searchHits.length === 0 ? (
                   <p className="text-sm text-slate-500 py-8 text-center rounded-xl border border-dashed border-[#2d323c]">
-                    No services match “{search.trim()}”. Try another keyword or pick a category.
+                    No services match “{search.trim()}”. Try another keyword or pick a category on the right.
                   </p>
                 ) : (
                   <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                     {searchHits.map(({ item, categoryLabel, categoryId }) => {
                       const catMeta = URA_SERVICE_CATEGORIES.find((c) => c.id === categoryId)!;
+                      const th = GROUP_THEME[catMeta.groupId];
                       return (
                         <ServiceCard
-                          key={`${item.id}-search`}
+                          key={`${item.id}-${categoryId}-search`}
                           item={item}
                           badge={categoryLabel}
-                          accentClass={catMeta.accentClass}
+                          accentClass={th.accentClass}
                           onActivate={activateService}
                         />
                       );
@@ -171,11 +177,16 @@ export default function Services() {
               </>
             ) : (
               <>
-                <h2 className={`text-base font-bold mb-1 ${activeCategory.accentClass}`}>{activeCategory.title}</h2>
-                <p className="text-[11px] text-slate-500 mb-4">{activeCategory.services.length} digital entry points</p>
+                <h2 className={`text-base font-bold mb-1 ${activeTheme.accentClass}`}>{activeCategory.title}</h2>
+                <p className="text-[11px] text-slate-500 mb-4">{activeCategory.services.length} quick links</p>
                 <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                   {activeCategory.services.map((item) => (
-                    <ServiceCard key={item.id} item={item} accentClass={activeCategory.accentClass} onActivate={activateService} />
+                    <ServiceCard
+                      key={item.id}
+                      item={item}
+                      accentClass={activeTheme.accentClass}
+                      onActivate={activateService}
+                    />
                   ))}
                 </div>
               </>
@@ -183,43 +194,56 @@ export default function Services() {
           </div>
         </main>
 
-        {/* Right category rail (reference layout) */}
+        {/* Right category rail — scrollable, grouped */}
         <aside
-          className="w-[4.5rem] sm:w-[5.25rem] shrink-0 bg-[#0c0e12] flex flex-col items-stretch py-3 gap-1 border-l border-white/[0.06]"
+          className="w-[min(7.75rem,28vw)] sm:w-32 shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.06] max-h-[calc(100dvh-5.5rem)] sm:max-h-[calc(100dvh-5rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
           aria-label="Service categories"
         >
-          {URA_SERVICE_CATEGORIES.map((cat) => {
-            const isActive = !showSearchResults && cat.id === activeCategoryId;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  setActiveCategoryId(cat.id);
-                  setSearch('');
-                }}
-                className={`mx-1.5 flex flex-col items-center justify-center gap-1 rounded-xl py-3 px-1 transition-all duration-200 border ${
-                  isActive ? cat.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.04]'
-                }`}
-              >
-                <span
-                  className={`text-2xl leading-none transition-colors ${
-                    isActive ? cat.activeIconClass : cat.idleIconClass
-                  }`}
-                >
-                  {cat.sidebarIcon}
-                </span>
-                <span
-                  className={`text-[9px] font-bold text-center leading-tight max-w-[4rem] ${
-                    isActive ? 'text-white' : 'text-slate-500'
-                  }`}
-                >
-                  {cat.shortLabel}
-                </span>
-              </button>
-            );
-          })}
+          <p className="sticky top-0 z-10 bg-[#080a0d]/95 backdrop-blur-sm px-2 py-2 text-[9px] font-bold uppercase tracking-wide text-slate-500 border-b border-white/[0.06]">
+            Categories
+          </p>
+          <div className="py-1.5 pb-4 space-y-0">
+            {URA_SERVICE_CATEGORIES.map((cat, i) => {
+              const isActive = !showSearchResults && cat.id === activeCategoryId;
+              const theme = GROUP_THEME[cat.groupId];
+              const showGroupHeader = i === 0 || URA_SERVICE_CATEGORIES[i - 1].groupTitle !== cat.groupTitle;
+              return (
+                <div key={cat.id}>
+                  {showGroupHeader ? (
+                    <p className="px-2.5 pt-3 pb-1 text-[8px] font-extrabold uppercase tracking-wider text-slate-500 leading-snug">
+                      {cat.groupTitle}
+                    </p>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      triggerHapticFeedback(window);
+                      setActiveCategoryId(cat.id);
+                      setSearch('');
+                    }}
+                    className={`mx-1.5 mb-1 flex w-[calc(100%-0.75rem)] flex-col items-center justify-center gap-0.5 rounded-xl py-2 px-1 transition-all duration-200 border ${
+                      isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <span
+                      className={`text-xl leading-none transition-colors ${
+                        isActive ? theme.activeIconClass : theme.idleIconClass
+                      }`}
+                    >
+                      {cat.sidebarIcon}
+                    </span>
+                    <span
+                      className={`text-[8px] sm:text-[9px] font-bold text-center leading-tight px-0.5 ${
+                        isActive ? 'text-white' : 'text-slate-500'
+                      }`}
+                    >
+                      {cat.shortLabel}
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </aside>
       </div>
 
