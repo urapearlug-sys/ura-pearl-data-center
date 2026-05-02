@@ -4,8 +4,6 @@
 export const EARN_BOOTSTRAP_KEY = 'ura:earn-bootstrap';
 
 export type EarnBootstrapPayload = {
-  earnFeatureTab?: 'play' | 'learn' | 'earn';
-  playFeatureSubTab?: 'highlights' | 'afrolumens' | 'ecosystem';
   activeTabAll?: boolean;
   openDailyCipher?: boolean;
   openDailyCombo?: boolean;
@@ -13,6 +11,8 @@ export type EarnBootstrapPayload = {
   openGlobalTasks?: boolean;
   openMitrolabsQuiz?: boolean;
   openDailyLogin?: boolean;
+  openMiniGamesHub?: boolean;
+  openLuckySpin?: boolean;
 };
 
 export function queueEarnBootstrap(payload: EarnBootstrapPayload): void {

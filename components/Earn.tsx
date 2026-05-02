@@ -56,12 +56,12 @@ import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
-import { EcosystemRadialDashboard, type EcosystemBottomNavKey } from '@/components/ecosystem';
-import { consumeEarnBootstrap } from '@/utils/earn-bootstrap';
+import { consumeEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
+import EarnShortcutGrids from '@/components/EarnShortcutGrids';
+import PublishedActivitiesFeed from '@/components/PublishedActivitiesFeed';
 
 interface EarnProps {
   setCurrentView?: (view: string) => void;
-  openMoreDefault?: boolean;
   initialTab?: string;
   minimalOnly?: boolean;
 }
@@ -92,7 +92,7 @@ const useFetchTasks = (userTelegramInitData: string) => {
   return { tasks, setTasks, isLoading };
 };
 
-export default function Earn({ setCurrentView, openMoreDefault = false, initialTab = 'All', minimalOnly = false }: EarnProps) {
+export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly = false }: EarnProps) {
   const { userTelegramInitData, pointsBalance } = useGameStore();
   const { tasks, setTasks, isLoading } = useFetchTasks(userTelegramInitData);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -132,25 +132,14 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
-  const [earnFeatureTab, setEarnFeatureTab] = useState<'play' | 'learn' | 'earn'>('play');
-  const [playFeatureSubTab, setPlayFeatureSubTab] = useState<'highlights' | 'afrolumens' | 'ecosystem'>('highlights');
 
   useEffect(() => {
     setActiveTab(initialTab);
   }, [initialTab]);
 
   useEffect(() => {
-    if (openMoreDefault) {
-      setEarnFeatureTab('play');
-      setPlayFeatureSubTab('afrolumens');
-    }
-  }, [openMoreDefault]);
-
-  useEffect(() => {
     const p = consumeEarnBootstrap();
     if (!p) return;
-    if (p.earnFeatureTab) setEarnFeatureTab(p.earnFeatureTab);
-    if (p.playFeatureSubTab) setPlayFeatureSubTab(p.playFeatureSubTab);
     if (p.activeTabAll) setActiveTab('All');
     const open = () => {
       if (p.openDailyCipher) setShowDailyCipher(true);
@@ -159,6 +148,8 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
       if (p.openGlobalTasks) setShowGlobalTasks(true);
       if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
       if (p.openDailyLogin) setShowDailyLogin(true);
+      if (p.openMiniGamesHub) setShowMiniGamesHub(true);
+      if (p.openLuckySpin) setShowLuckySpin(true);
     };
     requestAnimationFrame(open);
   }, []);
@@ -249,244 +240,20 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
   }, [tasks]);
 
   const tabLabels = useMemo(() => ['All', ...ACTIVITY_TAB_CATEGORIES], []);
-  const playCardAppearance: Record<string, { tone: string; icon: string }> = {
-    tasks: { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '✅' },
-    decode: { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
-    matrix: { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
-    'collection-cards': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🗂️' },
-    'weekly-event': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎁' },
-    'global-joinable-tasks': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
-    'ura-quiz': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📝' },
-    'receipt-rush': { tone: 'from-[#17334d] to-[#234a6d] border-[#6eb4ff]/50', icon: '🧾' },
-    'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
-    leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
-    'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
-    'tap-arena': { tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50', icon: '🎮' },
-    'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
-    'pearls-collection': { tone: 'from-[#26345d] to-[#3a4a78] border-[#8ea3df]/45', icon: '🧊' },
-    'citizen-network': { tone: 'from-[#224b58] to-[#2a6170] border-[#71c9dd]/45', icon: '👥' },
-    'pearls-airdrop': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '🎈' },
-    'mini-games': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🕹️' },
-    'decode-ecosystem': { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
-    'matrix-ecosystem': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
-    'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
-    'tax-trivia-live': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎤' },
-    'global-tasks-ecosystem': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
-  };
 
-  const playSubtabCards: Record<'highlights' | 'afrolumens' | 'ecosystem', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
-    highlights: [
-      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => setActiveTab('All') },
-      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => setShowDailyCipher(true) },
-      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => setShowDailyCombo(true) },
-      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView?.('collection') },
-      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => setShowWeeklyEvent(true) },
-      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => setShowGlobalTasks(true) },
-      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => setShowMitrolabsQuiz(true) },
-      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => setActiveTab('All') },
-      { id: 'true-false', title: 'True or False - Uganda tax edition', subtitle: 'Tax knowledge challenge', onClick: () => setActiveTab('All') },
-      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView?.('game') },
-      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => setShowDailyLogin(true) },
-    ],
-    afrolumens: [
-      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView?.('game') },
-      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView?.('mine') },
-      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView?.('collection') },
-      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', onClick: () => setCurrentView?.('friends') },
-      { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView?.('airdrop') },
-    ],
-    ecosystem: [
-      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => setActiveTab('All') },
-      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => setShowDailyCipher(true) },
-      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => setShowDailyCombo(true) },
-      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView?.('collection') },
-      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => setShowWeeklyEvent(true) },
-      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => setShowGlobalTasks(true) },
-      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => setShowMitrolabsQuiz(true) },
-      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => setActiveTab('All') },
-      { id: 'true-false', title: 'True or False - Uganda tax edition', subtitle: 'Tax knowledge challenge', onClick: () => setActiveTab('All') },
-      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView?.('game') },
-      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => setShowDailyLogin(true) },
-      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView?.('game') },
-      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView?.('mine') },
-      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView?.('collection') },
-      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', onClick: () => setCurrentView?.('friends') },
-      { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView?.('airdrop') },
-    ],
-  };
-
-  const earnFeatureCards: Record<'learn' | 'earn', Array<{ id: string; title: string; subtitle: string; onClick: () => void }>> = {
-    learn: [
-      { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => setActiveTab('All') },
-      { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => setShowWeeklyEvent(true) },
-      { id: 'mini-games', title: 'Mini games', subtitle: 'Open mini games hub', onClick: () => setShowMiniGamesHub(true) },
-      { id: 'decode', title: 'Decode', subtitle: 'Cipher challenge mode', onClick: () => setShowDailyCipher(true) },
-      { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => setShowLuckySpin(true) },
-    ],
-    earn: [
-      { id: 'voice-reports', title: 'Voice reports', subtitle: 'Approval-required blue pearls', onClick: () => setActiveTab('All') },
-      { id: 'whistle-blower', title: 'Whistle blower', subtitle: 'Protected reporting tasks', onClick: () => setActiveTab('All') },
-    ],
-  };
-  const renderEarnFeatureLayout = () => (
-    <div className="rounded-xl border border-[#2d2f38] bg-[#11141d] p-2">
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { key: 'play' as const, label: 'Play' },
-          { key: 'learn' as const, label: 'Learn' },
-          { key: 'earn' as const, label: 'Earn' },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            type="button"
-            onClick={() => {
-              triggerHapticFeedback(window);
-              setEarnFeatureTab(tab.key);
-            }}
-            className={`rounded-lg py-2 text-sm font-semibold transition-colors ${
-              earnFeatureTab === tab.key
-                ? 'bg-[var(--ura-blue-dark)] text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      {earnFeatureTab === 'play' ? (
-        <div className="mt-2 grid grid-cols-3 gap-2">
-          {[
-            { key: 'highlights' as const, label: 'Highlights' },
-            { key: 'afrolumens' as const, label: 'Pearl Classic' },
-            { key: 'ecosystem' as const, label: 'Ecosystem' },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => {
-                triggerHapticFeedback(window);
-                setPlayFeatureSubTab(tab.key);
-              }}
-              className={`relative overflow-hidden rounded-xl border px-2 py-2.5 text-xs font-semibold tracking-wide transition-all duration-200 ${
-                playFeatureSubTab === tab.key
-                  ? tab.key === 'highlights'
-                    ? 'border-[#f3ba2f]/70 bg-gradient-to-r from-[#6a4f14] to-[#8b6718] text-[#fff4cf] shadow-[0_0_18px_rgba(243,186,47,0.28)]'
-                    : tab.key === 'afrolumens'
-                    ? 'border-[#3ad1a7]/65 bg-gradient-to-r from-[#185142] to-[#1f6b57] text-[#d8fff2] shadow-[0_0_18px_rgba(58,209,167,0.25)]'
-                    : 'border-[#5fb9ff]/70 bg-gradient-to-r from-[#193f67] to-[#215887] text-[#e3f3ff] shadow-[0_0_18px_rgba(95,185,255,0.28)]'
-                  : 'border-[#2f3442] bg-[#161a23] text-gray-300 hover:border-[#4a5263] hover:text-white hover:bg-[#1b2130]'
-              }`}
-            >
-              {playFeatureSubTab === tab.key && (
-                <span
-                  className={`pointer-events-none absolute left-1/2 top-0 h-[2px] w-10 -translate-x-1/2 rounded-full ${
-                    tab.key === 'highlights'
-                      ? 'bg-[#f3ba2f]'
-                      : tab.key === 'afrolumens'
-                      ? 'bg-[#3ad1a7]'
-                      : 'bg-[#5fb9ff]'
-                  }`}
-                />
-              )}
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-      <div className="mt-3">
-        {earnFeatureTab === 'play' ? (
-          playFeatureSubTab === 'ecosystem' ? (
-            <EcosystemRadialDashboard
-              modules={playSubtabCards.ecosystem.map((item) => ({
-                id: item.id,
-                title:
-                  item.id === 'true-false'
-                    ? 'True or False – Uganda Tax Edition'
-                    : item.title,
-                subtitle: item.subtitle,
-                icon: playCardAppearance[item.id]?.icon ?? '⭐',
-                onClick: item.onClick,
-              }))}
-              onHaptic={() => triggerHapticFeedback(window)}
-              onBottomNav={(key: EcosystemBottomNavKey) => {
-                switch (key) {
-                  case 'learn':
-                    setEarnFeatureTab('learn');
-                    break;
-                  case 'earn':
-                    setEarnFeatureTab('earn');
-                    break;
-                  case 'engage':
-                    setEarnFeatureTab('play');
-                    setActiveTab('All');
-                    break;
-                  case 'empower':
-                    setCurrentView?.('airdrop');
-                    break;
-                  case 'elevate':
-                    setCurrentView?.('game');
-                    break;
-                  default:
-                    break;
-                }
-              }}
-            />
-          ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {playSubtabCards[playFeatureSubTab].map((item) => {
-                const appearance = playCardAppearance[item.id] ?? {
-                  tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
-                  icon: '⭐',
-                };
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      item.onClick();
-                    }}
-                    className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
-                  >
-                    <div className="flex items-start gap-2">
-                      <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
-                        {appearance.icon}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-                        <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )
-        ) : (
-          <div className="space-y-2">
-            {earnFeatureCards[earnFeatureTab].map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  item.onClick();
-                }}
-                className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
-                  earnFeatureTab === 'learn'
-                    ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
-                    : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
-                }`}
-              >
-                <p className="text-sm font-bold text-white">{item.title}</p>
-                <p className="text-xs text-gray-300 mt-1">{item.subtitle}</p>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  const applyEarnBootstrap = useCallback((p: EarnBootstrapPayload) => {
+    if (p.activeTabAll) setActiveTab('All');
+    requestAnimationFrame(() => {
+      if (p.openDailyCipher) setShowDailyCipher(true);
+      if (p.openDailyCombo) setShowDailyCombo(true);
+      if (p.openWeeklyEvent) setShowWeeklyEvent(true);
+      if (p.openGlobalTasks) setShowGlobalTasks(true);
+      if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
+      if (p.openDailyLogin) setShowDailyLogin(true);
+      if (p.openMiniGamesHub) setShowMiniGamesHub(true);
+      if (p.openLuckySpin) setShowLuckySpin(true);
+    });
+  }, []);
 
   if (minimalOnly) {
     return (
@@ -530,7 +297,11 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                   <Wallet setCurrentView={setCurrentView ?? (() => {})} embedded />
                 ) : (
                   <>
-                    {renderEarnFeatureLayout()}
+                    <EarnShortcutGrids
+                      setCurrentView={setCurrentView ?? (() => {})}
+                      applyEarnBootstrap={applyEarnBootstrap}
+                    />
+                    <PublishedActivitiesFeed initData={userTelegramInitData} />
                   </>
                 )}
               </div>
@@ -562,14 +333,6 @@ export default function Earn({ setCurrentView, openMoreDefault = false, initialT
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
                   Balance: {formatNumber(Math.floor(pointsBalance))} PEARLS
                 </p>
-                <div className="flex justify-center mb-5">
-                  <p className="text-xs text-gray-400">All classic features are now under Play subtabs.</p>
-                </div>
-
-                <div className="mb-6">
-                  {renderEarnFeatureLayout()}
-                </div>
-
                 {/* Activities section – tabbed list (scroll down to see) */}
                 <section
                   id="earn-activities"

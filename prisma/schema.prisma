@@ -221,6 +221,18 @@ model UserTask {
   @@unique([userId, taskId])
 }
 
+/// Admin-published posts shown under “Activities” on the Earn tab (newest first).
+model PublishedActivity {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  body        String
+  link        String?
+  linkLabel   String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 enum TaskType {
   VISIT
   TELEGRAM

@@ -244,23 +244,23 @@ export default function Home({ setCurrentView }: HomeProps) {
     };
     const ic = HOME_ECOSYSTEM_ICONS;
     return [
-      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', icon: ic.tasks, onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }) },
-      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', icon: ic.decode, onClick: () => goEarn({ earnFeatureTab: 'play', openDailyCipher: true }) },
-      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', icon: ic.matrix, onClick: () => goEarn({ earnFeatureTab: 'play', openDailyCombo: true }) },
+      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', icon: ic.tasks, onClick: () => goEarn({activeTabAll: true }) },
+      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', icon: ic.decode, onClick: () => goEarn({openDailyCipher: true }) },
+      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', icon: ic.matrix, onClick: () => goEarn({openDailyCombo: true }) },
       { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', icon: ic['collection-cards'], onClick: () => goView('collection') },
-      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', icon: ic['weekly-event'], onClick: () => goEarn({ earnFeatureTab: 'play', openWeeklyEvent: true }) },
-      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', icon: ic['global-joinable-tasks'], onClick: () => goEarn({ earnFeatureTab: 'play', openGlobalTasks: true }) },
-      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', icon: ic['ura-quiz'], onClick: () => goEarn({ earnFeatureTab: 'play', openMitrolabsQuiz: true }) },
-      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', icon: ic['receipt-rush'], onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }) },
+      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', icon: ic['weekly-event'], onClick: () => goEarn({openWeeklyEvent: true }) },
+      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', icon: ic['global-joinable-tasks'], onClick: () => goEarn({openGlobalTasks: true }) },
+      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', icon: ic['ura-quiz'], onClick: () => goEarn({openMitrolabsQuiz: true }) },
+      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', icon: ic['receipt-rush'], onClick: () => goEarn({activeTabAll: true }) },
       {
         id: 'true-false',
         title: 'True or False – Uganda Tax Edition',
         subtitle: 'Tax knowledge challenge',
         icon: ic['true-false'],
-        onClick: () => goEarn({ earnFeatureTab: 'play', activeTabAll: true }),
+        onClick: () => goEarn({activeTabAll: true }),
       },
       { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', icon: ic.leaderboard, onClick: () => goView('game') },
-      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', icon: ic['karibu-daily'], onClick: () => goEarn({ earnFeatureTab: 'play', openDailyLogin: true }) },
+      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', icon: ic['karibu-daily'], onClick: () => goEarn({openDailyLogin: true }) },
       { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', icon: ic['tap-arena'], onClick: () => goView('game') },
       { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', icon: ic['mine-flow'], onClick: () => goView('mine') },
       { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', icon: ic['pearls-collection'], onClick: () => goView('collection') },
@@ -358,15 +358,13 @@ export default function Home({ setCurrentView }: HomeProps) {
                   setShowEcosystemDashboard(false);
                   switch (key) {
                     case 'learn':
-                      queueEarnBootstrap({ earnFeatureTab: 'learn' });
-                      setCurrentView('earn');
+                      setCurrentView('eearn');
                       break;
                     case 'earn':
-                      queueEarnBootstrap({ earnFeatureTab: 'earn' });
                       setCurrentView('earn');
                       break;
                     case 'engage':
-                      queueEarnBootstrap({ earnFeatureTab: 'play', activeTabAll: true });
+                      queueEarnBootstrap({ activeTabAll: true });
                       setCurrentView('earn');
                       break;
                     case 'empower':

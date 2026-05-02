@@ -1,0 +1,89 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { triggerHapticFeedback } from '@/utils/ui';
+
+export type PublishedActivityItem = {
+  id: string;
+  title: string;
+  body: string;
+  link: string | null;
+  linkLabel: string | null;
+  createdAt: string;
+};
+
+type Props = {
+  initData: string;
+};
+
+export default function PublishedActivitiesFeed({ initData }: Props) {
+  const [items, setItems] = useState<PublishedActivityItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const qs = initData?.trim()
+          ? `?initData=${encodeURIComponent(initData)}`
+          : '';
+        const res = await fetch(`/api/published-activities${qs}`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(typeof data?.error === 'string' ? data.error : 'Failed to load');
+        if (!cancelled) setItems(Array.isArray(data?.activities) ? data.activities : []);
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [initData]);
+
+  return (
+    <section className="mt-8 border-t border-[#2d2f38] pt-6" aria-label="Published activities">
+      <h2 className="text-lg font-bold text-white tracking-tight mb-1">Activities</h2>
+      <p className="text-[11px] text-gray-500 mb-4">New updates appear at the top.</p>
+
+      {loading ? (
+        <p className="text-sm text-gray-500 py-4 text-center">Loading activities…</p>
+      ) : error ? (
+        <p className="text-sm text-rose-400/90 py-2">{error}</p>
+      ) : items.length === 0 ? (
+        <p className="text-sm text-gray-500 py-3 rounded-xl border border-dashed border-[#2d2f38] px-3 text-center">
+          No published activities yet. Admins can add posts from the admin panel.
+        </p>
+      ) : (
+        <div className="space-y-3">
+          {items.map((item) => (
+            <article
+              key={item.id}
+              className="rounded-xl border border-[#2d2f38] bg-[#141821] p-3 text-left shadow-sm"
+            >
+              <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
+              <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
+              <p className="text-[10px] text-gray-500 mt-2 tabular-nums">
+                {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+              </p>
+              {item.link ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => triggerHapticFeedback(window)}
+                  className="mt-3 inline-flex items-center justify-center rounded-lg border border-cyan-500/50 bg-cyan-950/30 px-3 py-2 text-xs font-semibold text-cyan-200 hover:border-cyan-400"
+                >
+                  {item.linkLabel || 'Open link'}
+                </a>
+              ) : null}
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
