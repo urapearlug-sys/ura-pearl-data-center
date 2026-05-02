@@ -1,6 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { pearlWhite } from '@/images';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 
 export type PublishedActivityItem = {
@@ -76,7 +78,12 @@ export default function PublishedActivitiesFeed(_props: Props) {
                 ) : null}
               </div>
               {item.kind === 'task' && typeof item.points === 'number' ? (
-                <p className="text-[11px] text-[#f3ba2f] font-semibold mt-1">+{formatNumber(item.points)} pearls</p>
+                <div className="flex items-center gap-1.5 mt-1 flex-nowrap">
+                  <Image src={pearlWhite} alt="" width={18} height={18} className="h-[18px] w-[18px] shrink-0 object-contain" />
+                  <span className="text-[11px] text-[#f3ba2f] font-semibold whitespace-nowrap">
+                    +{formatNumber(item.points)} pearls
+                  </span>
+                </div>
               ) : null}
               <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
               <p className="text-[10px] text-gray-500 mt-2 tabular-nums">

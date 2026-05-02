@@ -671,9 +671,11 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                       Number of friends (required): {Number(task.taskData.friendsNumber)}
                                     </p>
                                   )}
-                                  <div className="flex items-center gap-1.5 mt-0.5">
+                                  <div className="flex items-center gap-1.5 mt-0.5 flex-nowrap">
                                     <Image src={pearlWhite} alt="" width={16} height={16} className="h-4 w-4 flex-shrink-0 object-contain" />
-                                    <span className="text-sm font-medium text-[#f3ba2f]">{formatNumber(task.points)}</span>
+                                    <span className="text-sm font-medium text-[#f3ba2f] whitespace-nowrap">
+                                      +{formatNumber(task.points)} pearls
+                                    </span>
                                   </div>
                                 </div>
                               </div>

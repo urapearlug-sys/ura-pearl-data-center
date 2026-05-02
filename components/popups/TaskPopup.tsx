@@ -41,6 +41,11 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
   const [isTimerFinished, setIsTimerFinished] = useState(false);
   const [answerInput, setAnswerInput] = useState('');
   const [redeemCodeInput, setRedeemCodeInput] = useState('');
+  const handleCheckRef = useRef<() => Promise<void>>(async () => {});
+  const localTaskRef = useRef(localTask);
+  localTaskRef.current = localTask;
+  /** Prevents double auto-verify when interval ticks again at 0 */
+  const visitAutoVerifyKeyRef = useRef<string | null>(null);
 
   const handleStart = useCallback(async () => {
     setIsLoading(true);
@@ -69,11 +74,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
       setLocalTask(updatedTask);
       onUpdate(updatedTask);
       showToast('Task started successfully!', 'success');
-
-      // Open the link in a new window if it's a VISIT task and has a link
-      if (localTask.type === 'VISIT' && localTask.taskData.link) {
-        window.open(localTask.taskData.link, '_blank');
-      }
+      // Link opens from the Visit / call-to-action button only (not on Start).
     } catch (error) {
       console.error('Error starting task:', error);
       showToast('Failed to start task. Please try again.', 'error');
@@ -187,6 +188,12 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
     }
   };
 
+  handleCheckRef.current = handleCheck;
+
+  useEffect(() => {
+    visitAutoVerifyKeyRef.current = null;
+  }, [localTask.id, localTask.taskStartTimestamp]);
+
   const getTimeRemaining = useCallback(() => {
     if (!localTask.taskStartTimestamp) return null;
     const now = new Date();
@@ -208,22 +215,39 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
         const remaining = getTimeRemaining();
         setTimeRemaining(remaining);
         if (remaining === 0) {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          setLocalTask({ ...localTask }); // Trigger re-render when timer reaches 0
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
+          setLocalTask((prev) => ({ ...prev }));
           setIsTimerFinished(true);
+          const t = localTaskRef.current;
+          const verifyKey = `${t.id}:${String(t.taskStartTimestamp)}`;
+          const needsAnswer = Boolean(t.taskData?.correctAnswer?.trim());
+          if (
+            visitAutoVerifyKeyRef.current !== verifyKey &&
+            t.type === 'VISIT' &&
+            !t.isCompleted &&
+            !needsAnswer
+          ) {
+            visitAutoVerifyKeyRef.current = verifyKey;
+            queueMicrotask(() => void handleCheckRef.current());
+          }
         } else {
           setIsTimerFinished(false);
         }
       };
 
-      updateTimer(); // Call immediately to set initial time
-      intervalRef.current = setInterval(updateTimer, 1000);
+      updateTimer();
+      if (getTimeRemaining() !== 0) {
+        intervalRef.current = setInterval(updateTimer, 1000);
+      }
 
       return () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
       };
     }
-  }, [isHydrated, localTask, getTimeRemaining]);
+  }, [isHydrated, localTask.taskStartTimestamp, localTask.isCompleted, localTask.id, getTimeRemaining]);
 
   const handleClose = () => {
     triggerHapticFeedback(window);
@@ -289,19 +313,24 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
         {localTask.taskData?.link && (
           <div className="flex justify-center mb-4">
             <button
+              type="button"
               className="w-fit px-6 py-3 text-xl font-bold bg-blue-500 text-white rounded-2xl"
               onClick={() => {
                 triggerHapticFeedback(window);
                 window.open(localTask.taskData.link, '_blank');
               }}
             >
-              {localTask.type === 'REDEEM_CODE' ? 'Attend' : localTask.callToAction}
+              {localTask.type === 'REDEEM_CODE'
+                ? 'Attend'
+                : (localTask.callToAction?.trim() || 'Visit')}
             </button>
           </div>
         )}
-        <div className="flex justify-center items-center mb-4 gap-1.5">
-          <Image src={pearlWhite} alt="" width={28} height={28} className="h-7 w-7 object-contain" />
-          <span className="text-white font-bold text-2xl">+{formatNumber(localTask.points)}</span>
+        <div className="flex justify-center items-center mb-4 gap-2 flex-nowrap">
+          <Image src={pearlWhite} alt="" width={32} height={32} className="h-8 w-8 shrink-0 object-contain" />
+          <span className="text-white font-bold text-2xl whitespace-nowrap">
+            +{formatNumber(localTask.points)} pearls
+          </span>
         </div>
         {localTask.type === 'VISIT' && localTask.taskData?.correctAnswer && (
           <div className="mb-4">
@@ -331,6 +360,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
         )}
         {localTask.type === 'VISIT' ? (
           <button
+            type="button"
             className={`w-full py-6 text-xl font-bold text-white rounded-2xl flex items-center justify-center ${isLoading || localTask.isCompleted || (localTask.taskStartTimestamp && !isTimerFinished) || (localTask.taskData?.correctAnswer && !answerInput.trim() && localTask.taskStartTimestamp && isTimerFinished)
               ? 'bg-gray-500 cursor-not-allowed'
               : 'bg-green-500'
@@ -343,7 +373,13 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
             ) : localTask.isCompleted ? (
               'Completed'
             ) : localTask.taskStartTimestamp ? (
-              isHydrated ? (timeRemaining === 0 ? 'Check' : formatTime(timeRemaining || 0)) : 'Loading...'
+              isHydrated
+                ? timeRemaining === 0
+                  ? localTask.taskData?.correctAnswer?.trim()
+                    ? 'Check'
+                    : 'Verifying…'
+                  : formatTime(timeRemaining || 0)
+                : 'Loading...'
             ) : (
               'Start'
             )}
