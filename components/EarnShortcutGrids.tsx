@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 
@@ -8,6 +9,8 @@ export type EarnShortcutGridsProps = {
   /** When the user is already on Earn, open popups / tab changes without remounting */
   applyEarnBootstrap?: (p: EarnBootstrapPayload) => void;
 };
+
+type ShortcutItem = { id: string; title: string; subtitle: string; onClick: () => void };
 
 const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   tasks: { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '✅' },
@@ -31,7 +34,21 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
 };
 
+/** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
+const PRIMARY_SHORTCUT_IDS: string[] = [
+  'ura-quiz',
+  'receipt-rush',
+  'karibu-daily',
+  'true-false',
+  'tap-arena',
+  'pearls-airdrop',
+];
+
+const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
+
 export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }: EarnShortcutGridsProps) {
+  const [moreOpen, setMoreOpen] = useState(false);
+
   const goEarn = (payload: EarnBootstrapPayload) => {
     if (applyEarnBootstrap) {
       applyEarnBootstrap(payload);
@@ -41,7 +58,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     setCurrentView('earn');
   };
 
-  const highlights = [
+  const highlights: ShortcutItem[] = [
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => goEarn({ openDailyCipher: true }) },
     { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => goEarn({ openDailyCombo: true }) },
@@ -60,7 +77,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => goEarn({ openDailyLogin: true }) },
   ];
 
-  const pearlClassic = [
+  const pearlClassic: ShortcutItem[] = [
     { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView('game') },
     { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView('mine') },
     { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView('collection') },
@@ -68,7 +85,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     { id: 'pearls-airdrop', title: 'PEARLS Airdrop', subtitle: 'Airdrop and campaign rewards', onClick: () => setCurrentView('airdrop') },
   ];
 
-  const learningFun = [
+  const learningFun: ShortcutItem[] = [
     { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => goEarn({ openWeeklyEvent: true }) },
     { id: 'mini-games', title: 'Mini games', subtitle: 'Open mini games hub', onClick: () => goEarn({ openMiniGamesHub: true }) },
@@ -76,12 +93,34 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => goEarn({ openLuckySpin: true }) },
   ];
 
-  const earnPlatform = [
+  const earnPlatform: ShortcutItem[] = [
     { id: 'voice-reports', title: 'Voice reports', subtitle: 'Approval-required blue pearls', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'whistle-blower', title: 'Whistle blower', subtitle: 'Protected reporting tasks', onClick: () => goEarn({ activeTabAll: true }) },
   ];
 
-  const renderHighlightGrid = (items: typeof highlights) => (
+  const byId = new Map<string, ShortcutItem>();
+  for (const item of highlights) {
+    if (!byId.has(item.id)) byId.set(item.id, item);
+  }
+  for (const item of pearlClassic) {
+    if (!byId.has(item.id)) byId.set(item.id, item);
+  }
+
+  const primaryItems: ShortcutItem[] = PRIMARY_SHORTCUT_IDS.map((id) => {
+    const item = byId.get(id);
+    if (!item) {
+      throw new Error(`EarnShortcutGrids: missing primary shortcut "${id}"`);
+    }
+    return item;
+  });
+
+  const moreHighlights = highlights.filter((h) => !PRIMARY_ID_SET.has(h.id));
+  const morePearlClassic = pearlClassic.filter((p) => !PRIMARY_ID_SET.has(p.id));
+  const moreLearning = learningFun.filter(
+    (l) => !PRIMARY_ID_SET.has(l.id) && !moreHighlights.some((h) => h.id === l.id)
+  );
+
+  const renderHighlightGrid = (items: ShortcutItem[]) => (
     <div className="grid grid-cols-2 gap-3">
       {items.map((item) => {
         const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
@@ -113,10 +152,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     </div>
   );
 
-  const renderListColumn = (
-    items: Array<{ id: string; title: string; subtitle: string; onClick: () => void }>,
-    variant: 'learn' | 'earn'
-  ) => (
+  const renderListColumn = (items: ShortcutItem[], variant: 'learn' | 'earn') => (
     <div className="space-y-2">
       {items.map((item) => (
         <button
@@ -140,39 +176,72 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   );
 
   return (
-    <div className="mt-2 space-y-8">
+    <div className="mt-2 space-y-6">
       <div>
         <h2 className="text-white text-lg font-bold tracking-tight">Pearls, games & activities</h2>
-        <p className="text-gray-400 text-xs mt-1">Tap to open modes or tasks below.</p>
+        <p className="text-gray-400 text-xs mt-1">Tap a shortcut below. Open More for the full list.</p>
       </div>
 
-      <section aria-labelledby="earn-tab-highlights-heading">
-        <h3 id="earn-tab-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#f3ba2f] mb-3">
-          Highlights
+      <section aria-labelledby="earn-primary-shortcuts-heading">
+        <h3 id="earn-primary-shortcuts-heading" className="sr-only">
+          Primary shortcuts
         </h3>
-        {renderHighlightGrid(highlights)}
+        {renderHighlightGrid(primaryItems)}
       </section>
 
-      <section aria-labelledby="earn-tab-pearl-classic-heading">
-        <h3 id="earn-tab-pearl-classic-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-300/95 mb-3">
-          Pearl Classic
-        </h3>
-        {renderHighlightGrid(pearlClassic)}
-      </section>
-
-      <section aria-labelledby="earn-tab-learning-fun-heading">
-        <h3 id="earn-tab-learning-fun-heading" className="text-sm font-bold uppercase tracking-wide text-amber-200/90 mb-3">
-          Learning & fun
-        </h3>
-        {renderListColumn(learningFun, 'learn')}
-      </section>
-
-      <section aria-labelledby="earn-tab-platform-heading">
-        <h3 id="earn-tab-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-200/90 mb-3">
-          On-platform earn
-        </h3>
-        {renderListColumn(earnPlatform, 'earn')}
-      </section>
+      <div className="rounded-2xl border border-[#3d4046] bg-[#141821] overflow-hidden">
+        <button
+          type="button"
+          onClick={() => {
+            triggerHapticFeedback(window);
+            setMoreOpen((o) => !o);
+          }}
+          aria-expanded={moreOpen}
+          className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#1a1d26]"
+        >
+          <div className="min-w-0">
+            <p className="text-base font-extrabold text-white">More</p>
+            <p className="text-xs text-gray-500 mt-0.5">Tasks, decode, collection, leagues, and more</p>
+          </div>
+          <span className="text-gray-400 text-sm font-semibold tabular-nums shrink-0">{moreOpen ? '▲' : '▼'}</span>
+        </button>
+        {moreOpen ? (
+          <div className="px-3 pb-4 pt-2 space-y-6 border-t border-[#2d2f38]">
+            {moreHighlights.length > 0 ? (
+              <section aria-labelledby="earn-more-highlights-heading">
+                <h4 id="earn-more-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#f3ba2f] mb-3">
+                  Highlights
+                </h4>
+                {renderHighlightGrid(moreHighlights)}
+              </section>
+            ) : null}
+            {morePearlClassic.length > 0 ? (
+              <section aria-labelledby="earn-more-pearl-heading">
+                <h4 id="earn-more-pearl-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-300/95 mb-3">
+                  Pearl Classic
+                </h4>
+                {renderHighlightGrid(morePearlClassic)}
+              </section>
+            ) : null}
+            {moreLearning.length > 0 ? (
+              <section aria-labelledby="earn-more-learning-heading">
+                <h4 id="earn-more-learning-heading" className="text-sm font-bold uppercase tracking-wide text-amber-200/90 mb-3">
+                  Learning & fun
+                </h4>
+                {renderListColumn(moreLearning, 'learn')}
+              </section>
+            ) : null}
+            {earnPlatform.length > 0 ? (
+              <section aria-labelledby="earn-more-platform-heading">
+                <h4 id="earn-more-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-200/90 mb-3">
+                  On-platform earn
+                </h4>
+                {renderListColumn(earnPlatform, 'earn')}
+              </section>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

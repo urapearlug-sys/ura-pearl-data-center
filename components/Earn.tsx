@@ -301,7 +301,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                       setCurrentView={setCurrentView ?? (() => {})}
                       applyEarnBootstrap={applyEarnBootstrap}
                     />
-                    <PublishedActivitiesFeed initData={userTelegramInitData} />
+                    <section aria-label="Activities">
+                      <PublishedActivitiesFeed initData={userTelegramInitData} />
+                    </section>
                   </>
                 )}
               </div>
