@@ -44,7 +44,12 @@ function supportEmail(): string | null {
   return e || null;
 }
 
-export default function SupportChatWidget() {
+export type SupportChatWidgetProps = {
+  /** `clicker` clears the bottom tab bar; `landing` uses standard safe-area inset */
+  placement?: 'landing' | 'clicker';
+};
+
+export default function SupportChatWidget({ placement = 'landing' }: SupportChatWidgetProps) {
   const [open, setOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -95,8 +100,15 @@ export default function SupportChatWidget() {
     }
   }, [input, loading, messages]);
 
+  const bottomClass =
+    placement === 'clicker'
+      ? 'bottom-[calc(6.85rem+env(safe-area-inset-bottom,0px))]'
+      : 'bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))]';
+
   return (
-    <div className="pointer-events-none fixed z-[90] flex flex-col items-end gap-2 bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] right-[max(1.25rem,env(safe-area-inset-right,0px))]">
+    <div
+      className={`pointer-events-none fixed z-[90] flex flex-col items-end gap-2 ${bottomClass} right-[max(1.25rem,env(safe-area-inset-right,0px))]`}
+    >
       {open ? (
         <div
           className="pointer-events-auto w-[min(100vw-1.5rem,22rem)] max-h-[min(70vh,32rem)] flex flex-col rounded-2xl border border-white/10 bg-[#14171c] shadow-[0_12px_40px_rgba(0,0,0,0.55)] overflow-hidden"

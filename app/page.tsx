@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </div>
 
-      <SupportChatWidget />
+      <SupportChatWidget placement="landing" />
     </div>
   );
 }

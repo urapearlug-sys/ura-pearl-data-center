@@ -10,6 +10,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
+import SupportChatWidget from '@/components/SupportChatWidget';
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -799,6 +800,8 @@ export default function Home({ setCurrentView }: HomeProps) {
           </div>
         </div>
       )}
+
+      <SupportChatWidget placement="clicker" />
     </div>
   );
 }
