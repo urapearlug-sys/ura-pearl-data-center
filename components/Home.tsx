@@ -55,16 +55,37 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
 ];
 
-/** Shown at top of Action Center → Most used; subtitles align with Earn shortcuts. */
-const HOME_MOST_USED_PINNED: ActionItem[] = [
-  { id: 'karibu', title: 'Karibu Daily', subtitle: 'Daily reward check-in', pearlType: 'white', route: 'earn', group: 'play', icon: dailyReward },
-  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', group: 'earn', icon: dailyCombo },
-  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+/** Full-width row under Action Center → Most used (same chrome as Earn shortcut cards). */
+const HOME_MOST_USED_KARIBU: ActionItem = {
+  id: 'karibu',
+  title: 'Karibu Daily',
+  subtitle: 'Daily reward check-in',
+  pearlType: 'white',
+  route: 'earn',
+  group: 'play',
+  icon: dailyReward,
+};
+
+/**
+ * 2×2 grid: top row URA Quiz | Receipt Rush, bottom row Whistle blower | Voice reports (matches reference layout).
+ */
+const HOME_MOST_USED_GRID: ActionItem[] = [
   { id: 'quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
   { id: 'receipt', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', pearlType: 'blue', group: 'play', icon: dailyCombo },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', group: 'earn', icon: dailyCombo },
 ];
 
-const HOME_MOST_USED_PINNED_IDS = new Set(HOME_MOST_USED_PINNED.map((p) => p.id));
+const HOME_MOST_USED_KARIBU_CHROME = { emoji: '📅', border: 'border-[#d9a63a]/55' } as const;
+
+const HOME_MOST_USED_GRID_CHROME: Record<string, { emoji: string; border: string }> = {
+  quiz: { emoji: '📝', border: 'border-[#d9a63a]/55' },
+  receipt: { emoji: '🧾', border: 'border-[#6eb4ff]/50' },
+  whistle: { emoji: '🛡️', border: 'border-[#5eead4]/45' },
+  voice: { emoji: '🎤', border: 'border-[#a78bfa]/55' },
+};
+
+const HOME_MOST_USED_PINNED_IDS = new Set<string>(['karibu', ...HOME_MOST_USED_GRID.map((x) => x.id)]);
 
 interface HomeProps {
   setCurrentView: (view: string) => void;
@@ -273,6 +294,59 @@ export default function Home({ setCurrentView }: HomeProps) {
         </p>
       ) : null}
     </button>
+  );
+
+  const renderMostUsedPinnedKaribu = () => {
+    const { emoji, border } = HOME_MOST_USED_KARIBU_CHROME;
+    return (
+      <button
+        type="button"
+        onClick={() => handleAction(HOME_MOST_USED_KARIBU)}
+        className={`w-full rounded-2xl border ${border} bg-[#12141a] px-3 py-3.5 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
+      >
+        <div className="flex items-start gap-3">
+          <span
+            className="mt-0.5 inline-flex h-10 min-w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-[#111621]/90 text-xl"
+            aria-hidden
+          >
+            {emoji}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-extrabold leading-tight text-white">{HOME_MOST_USED_KARIBU.title}</p>
+            <p className="mt-1 text-sm leading-snug text-slate-300/95">{HOME_MOST_USED_KARIBU.subtitle}</p>
+          </div>
+        </div>
+      </button>
+    );
+  };
+
+  const renderMostUsedPinnedGrid = () => (
+    <div className="mt-3 grid grid-cols-2 gap-3">
+      {HOME_MOST_USED_GRID.map((item) => {
+        const chrome = HOME_MOST_USED_GRID_CHROME[item.id] ?? { emoji: '⭐', border: 'border-[#2d2f38]' };
+        return (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => handleAction(item)}
+            className={`rounded-2xl border ${chrome.border} bg-[#12141a] px-3 py-3 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
+          >
+            <div className="flex items-start gap-2">
+              <span
+                className="mt-0.5 inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-[#111621]/90 text-lg"
+                aria-hidden
+              >
+                {chrome.emoji}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-extrabold leading-tight text-white">{item.title}</p>
+                <p className="mt-1 text-[13px] leading-snug text-slate-300/95">{item.subtitle}</p>
+              </div>
+            </div>
+          </button>
+        );
+      })}
+    </div>
   );
 
   const addCatalogFavorite = (id: string) => {
@@ -539,10 +613,13 @@ export default function Home({ setCurrentView }: HomeProps) {
             <div className="mt-4 space-y-2">
               {activeActionTab === 'most-used' ? (
                 <>
-                  <div className="space-y-2">{HOME_MOST_USED_PINNED.map((item) => renderActionCenterItem(item, `pinned-${item.id}`))}</div>
+                  <div className="space-y-0">
+                    {renderMostUsedPinnedKaribu()}
+                    {renderMostUsedPinnedGrid()}
+                  </div>
                   {mostUsedRest.length > 0 ? (
                     <>
-                      <p className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Your most used</p>
+                      <p className="mt-4 pt-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Your most used</p>
                       <div className="space-y-2">{mostUsedRest.map((item) => renderActionCenterItem(item, item.id))}</div>
                     </>
                   ) : null}
