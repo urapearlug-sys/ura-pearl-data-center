@@ -45,12 +45,13 @@ import Collection from '@/components/Collection';
 import Home from '@/components/Home';
 import Learn from '@/components/Learn';
 import Services from '@/components/Services';
+import Guild from '@/components/Guild';
 
 function EmptyPrimaryPage() {
     return <div className="bg-black min-h-screen" />;
 }
 
-const MORE_VIEWS = new Set(['game', 'mine', 'collection', 'friends', 'airdrop']);
+const MORE_VIEWS = new Set(['game', 'mine', 'collection', 'friends', 'airdrop', 'guild']);
 
 function ClickerPage() {
     useExitFullscreenWhenOpenedViaOpenButton();
@@ -94,7 +95,7 @@ function ClickerPage() {
             case 'services':
                 return <Services />;
             case 'guild':
-                return <EmptyPrimaryPage />;
+                return <Guild setCurrentView={setCurrentView} />;
             case 'earn':
                 return <Earn setCurrentView={setCurrentView} minimalOnly />;
             case 'airdrop':
