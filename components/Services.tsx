@@ -124,7 +124,7 @@ export default function Services() {
 
   return (
     <div className="bg-black min-h-screen flex justify-center pb-28">
-      <div className="w-full max-w-xl flex text-white min-h-0">
+      <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
         {/* Main content */}
         <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
           <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
@@ -194,9 +194,9 @@ export default function Services() {
           </div>
         </main>
 
-        {/* Right rail — six consolidated categories */}
+        {/* Right rail — six categories, evenly spaced to fill viewport */}
         <aside
-          className="w-[min(5.25rem,22vw)] sm:w-28 shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.06] py-3 px-1 justify-start"
+          className="sticky top-0 w-[min(5.75rem,24vw)] sm:w-[7.25rem] shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.08] px-1.5 py-3 gap-2 h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)]"
           aria-label="Service categories"
         >
           {URA_SERVICE_CATEGORIES.map((cat) => {
@@ -211,19 +211,19 @@ export default function Services() {
                   setActiveCategoryId(cat.id);
                   setSearch('');
                 }}
-                className={`mx-0.5 mb-2 flex flex-col items-center justify-center gap-1 rounded-xl py-2.5 px-1 transition-all duration-200 border ${
-                  isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.05]'
+                className={`flex-1 min-h-0 flex flex-col items-center justify-center gap-1.5 rounded-xl px-1 py-2 transition-all duration-200 border ${
+                  isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.06]'
                 }`}
               >
                 <span
-                  className={`text-2xl leading-none transition-colors ${
+                  className={`text-[1.65rem] sm:text-[1.85rem] leading-none transition-colors ${
                     isActive ? theme.activeIconClass : theme.idleIconClass
                   }`}
                 >
                   {cat.sidebarIcon}
                 </span>
                 <span
-                  className={`text-[9px] sm:text-[10px] font-bold text-center leading-tight px-0.5 ${
+                  className={`text-[9px] sm:text-[10px] font-bold text-center leading-snug px-0.5 ${
                     isActive ? 'text-white' : 'text-slate-500'
                   }`}
                 >
