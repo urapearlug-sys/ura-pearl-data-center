@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 
@@ -32,6 +32,8 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'mini-games': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🕹️' },
   'tax-trivia-live': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎤' },
   'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
+  /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
+  'earn-more': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '➕' },
 };
 
 /** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
@@ -47,7 +49,7 @@ const PRIMARY_SHORTCUT_IDS: string[] = [
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
 
 export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }: EarnShortcutGridsProps) {
-  const [moreOpen, setMoreOpen] = useState(false);
+  const [morePopupOpen, setMorePopupOpen] = useState(false);
 
   const goEarn = (payload: EarnBootstrapPayload) => {
     if (applyEarnBootstrap) {
@@ -120,48 +122,65 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     (l) => !PRIMARY_ID_SET.has(l.id) && !moreHighlights.some((h) => h.id === l.id)
   );
 
-  const renderHighlightGrid = (items: ShortcutItem[]) => (
+  const closeMorePopup = useCallback(() => setMorePopupOpen(false), []);
+
+  const runShortcut = useCallback(
+    (item: ShortcutItem, closeAfter: boolean) => {
+      triggerHapticFeedback(window);
+      if (closeAfter) setMorePopupOpen(false);
+      item.onClick();
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!morePopupOpen || typeof window === 'undefined') return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMorePopup();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [morePopupOpen, closeMorePopup]);
+
+  const renderHighlightButton = (item: ShortcutItem, opts?: { closePopupAfter?: boolean }) => {
+    const closeAfter = opts?.closePopupAfter ?? false;
+    const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
+      tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
+      icon: '⭐',
+    };
+    return (
+      <button
+        key={item.id}
+        type="button"
+        onClick={() => runShortcut(item, closeAfter)}
+        className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+      >
+        <div className="flex items-start gap-2">
+          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+            {appearance.icon}
+          </span>
+          <div className="min-w-0">
+            <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
+            <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+          </div>
+        </div>
+      </button>
+    );
+  };
+
+  const renderHighlightGrid = (items: ShortcutItem[], opts?: { closePopupAfter?: boolean }) => (
     <div className="grid grid-cols-2 gap-3">
-      {items.map((item) => {
-        const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
-          tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
-          icon: '⭐',
-        };
-        return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => {
-              triggerHapticFeedback(window);
-              item.onClick();
-            }}
-            className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
-          >
-            <div className="flex items-start gap-2">
-              <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
-                {appearance.icon}
-              </span>
-              <div className="min-w-0">
-                <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-                <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
-              </div>
-            </div>
-          </button>
-        );
-      })}
+      {items.map((item) => renderHighlightButton(item, opts))}
     </div>
   );
 
-  const renderListColumn = (items: ShortcutItem[], variant: 'learn' | 'earn') => (
+  const renderListColumn = (items: ShortcutItem[], variant: 'learn' | 'earn', closePopupAfter?: boolean) => (
     <div className="space-y-2">
       {items.map((item) => (
         <button
           key={item.id}
           type="button"
-          onClick={() => {
-            triggerHapticFeedback(window);
-            item.onClick();
-          }}
+          onClick={() => runShortcut(item, Boolean(closePopupAfter))}
           className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
             variant === 'learn'
               ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
@@ -186,62 +205,100 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
         <h3 id="earn-primary-shortcuts-heading" className="sr-only">
           Primary shortcuts
         </h3>
-        {renderHighlightGrid(primaryItems)}
+        <div className="grid grid-cols-2 gap-3">
+          {primaryItems.map((item) => renderHighlightButton(item))}
+          {(() => {
+            const appearance = PLAY_CARD_APPEARANCE['earn-more'];
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setMorePopupOpen(true);
+                }}
+                className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+              >
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+                    {appearance.icon}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-base font-extrabold text-white leading-tight">More</p>
+                    <p className="text-sm text-blue-100/95 mt-1 leading-snug">Tasks, decode, collection, leagues & more</p>
+                  </div>
+                </div>
+              </button>
+            );
+          })()}
+        </div>
       </section>
 
-      <div className="rounded-2xl border border-[#3d4046] bg-[#141821] overflow-hidden">
-        <button
-          type="button"
-          onClick={() => {
-            triggerHapticFeedback(window);
-            setMoreOpen((o) => !o);
+      {morePopupOpen ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/75 backdrop-blur-[1px]"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="earn-more-popup-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeMorePopup();
           }}
-          aria-expanded={moreOpen}
-          className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#1a1d26]"
         >
-          <div className="min-w-0">
-            <p className="text-base font-extrabold text-white">More</p>
-            <p className="text-xs text-gray-500 mt-0.5">Tasks, decode, collection, leagues, and more</p>
+          <div
+            className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl border border-[#3d4046] bg-[#13161d] shadow-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#2d2f38] shrink-0">
+              <h3 id="earn-more-popup-title" className="text-lg font-bold text-white">
+                More options
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  closeMorePopup();
+                }}
+                className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-400 hover:bg-white/5 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+            <div className="overflow-y-auto px-3 py-4 space-y-6 no-scrollbar">
+              {moreHighlights.length > 0 ? (
+                <section aria-labelledby="earn-more-highlights-heading">
+                  <h4 id="earn-more-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#f3ba2f] mb-3">
+                    Highlights
+                  </h4>
+                  {renderHighlightGrid(moreHighlights, { closePopupAfter: true })}
+                </section>
+              ) : null}
+              {morePearlClassic.length > 0 ? (
+                <section aria-labelledby="earn-more-pearl-heading">
+                  <h4 id="earn-more-pearl-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-300/95 mb-3">
+                    Pearl Classic
+                  </h4>
+                  {renderHighlightGrid(morePearlClassic, { closePopupAfter: true })}
+                </section>
+              ) : null}
+              {moreLearning.length > 0 ? (
+                <section aria-labelledby="earn-more-learning-heading">
+                  <h4 id="earn-more-learning-heading" className="text-sm font-bold uppercase tracking-wide text-amber-200/90 mb-3">
+                    Learning & fun
+                  </h4>
+                  {renderListColumn(moreLearning, 'learn', true)}
+                </section>
+              ) : null}
+              {earnPlatform.length > 0 ? (
+                <section aria-labelledby="earn-more-platform-heading">
+                  <h4 id="earn-more-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-200/90 mb-3">
+                    On-platform earn
+                  </h4>
+                  {renderListColumn(earnPlatform, 'earn', true)}
+                </section>
+              ) : null}
+            </div>
           </div>
-          <span className="text-gray-400 text-sm font-semibold tabular-nums shrink-0">{moreOpen ? '▲' : '▼'}</span>
-        </button>
-        {moreOpen ? (
-          <div className="px-3 pb-4 pt-2 space-y-6 border-t border-[#2d2f38]">
-            {moreHighlights.length > 0 ? (
-              <section aria-labelledby="earn-more-highlights-heading">
-                <h4 id="earn-more-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#f3ba2f] mb-3">
-                  Highlights
-                </h4>
-                {renderHighlightGrid(moreHighlights)}
-              </section>
-            ) : null}
-            {morePearlClassic.length > 0 ? (
-              <section aria-labelledby="earn-more-pearl-heading">
-                <h4 id="earn-more-pearl-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-300/95 mb-3">
-                  Pearl Classic
-                </h4>
-                {renderHighlightGrid(morePearlClassic)}
-              </section>
-            ) : null}
-            {moreLearning.length > 0 ? (
-              <section aria-labelledby="earn-more-learning-heading">
-                <h4 id="earn-more-learning-heading" className="text-sm font-bold uppercase tracking-wide text-amber-200/90 mb-3">
-                  Learning & fun
-                </h4>
-                {renderListColumn(moreLearning, 'learn')}
-              </section>
-            ) : null}
-            {earnPlatform.length > 0 ? (
-              <section aria-labelledby="earn-more-platform-heading">
-                <h4 id="earn-more-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-200/90 mb-3">
-                  On-platform earn
-                </h4>
-                {renderListColumn(earnPlatform, 'earn')}
-              </section>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 }
