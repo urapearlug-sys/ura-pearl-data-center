@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { triggerHapticFeedback } from '@/utils/ui';
+import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 
 export type PublishedActivityItem = {
   id: string;
@@ -10,6 +10,10 @@ export type PublishedActivityItem = {
   link: string | null;
   linkLabel: string | null;
   createdAt: string;
+  /** Admin announcements vs earn tasks (tasks also appear under Activities for visibility) */
+  kind?: 'post' | 'task';
+  points?: number;
+  category?: string;
 };
 
 type Props = {
@@ -53,7 +57,8 @@ export default function PublishedActivitiesFeed(_props: Props) {
         <p className="text-sm text-rose-400/90 py-2">{error}</p>
       ) : items.length === 0 ? (
         <p className="text-sm text-gray-500 py-3 rounded-xl border border-dashed border-[#2d2f38] px-3 text-center">
-          No published activities yet. Admins can add posts from the admin panel.
+          No updates yet. Admins can add announcements under Published activities or earn tasks under Manage
+          tasks.
         </p>
       ) : (
         <div className="space-y-3">
@@ -62,7 +67,17 @@ export default function PublishedActivitiesFeed(_props: Props) {
               key={item.id}
               className="rounded-xl border border-[#2d2f38] bg-[#141821] p-3 text-left shadow-sm"
             >
-              <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
+              <div className="flex flex-wrap items-center gap-2 gap-y-1">
+                <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
+                {item.kind === 'task' ? (
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-200/90 bg-amber-500/15 border border-amber-500/35 rounded px-1.5 py-0.5">
+                    Task
+                  </span>
+                ) : null}
+              </div>
+              {item.kind === 'task' && typeof item.points === 'number' ? (
+                <p className="text-[11px] text-[#f3ba2f] font-semibold mt-1">+{formatNumber(item.points)} pearls</p>
+              ) : null}
               <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
               <p className="text-[10px] text-gray-500 mt-2 tabular-nums">
                 {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
