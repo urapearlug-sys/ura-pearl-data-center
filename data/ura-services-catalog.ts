@@ -1,5 +1,5 @@
 /**
- * URA Services hub — six top-level sidebar buckets; each opens a full grid of links.
+ * URA Services hub — top-level sidebar buckets; each opens a full grid of links.
  */
 
 export type UraServiceItem = {
@@ -15,6 +15,7 @@ export type UraServiceItem = {
 export type ServiceGroupId =
   | 'domestic'
   | 'import-export'
+  | 'single-window'
   | 'legal-policy'
   | 'opportunities'
   | 'research'
@@ -49,6 +50,12 @@ export const GROUP_THEME: Record<
     activeIconClass: 'text-teal-200',
     idleIconClass: 'text-slate-600',
     accentClass: 'text-teal-300',
+  },
+  'single-window': {
+    activeClass: 'bg-emerald-500/22 border-emerald-400/55 shadow-[0_0_14px_rgba(52,211,153,0.2)]',
+    activeIconClass: 'text-emerald-200',
+    idleIconClass: 'text-slate-600',
+    accentClass: 'text-emerald-300',
   },
   'legal-policy': {
     activeClass: 'bg-rose-500/20 border-rose-400/50 shadow-[0_0_14px_rgba(251,113,133,0.18)]',
@@ -137,7 +144,6 @@ export const URA_SERVICE_CATEGORIES: UraServiceCategory[] = [
       { id: 'aeo-info', title: 'Authorized Economic Operator', description: 'Trusted trader programme.', url: 'https://ura.go.ug/en/customs/', serviceIcon: '⭐' },
       { id: 'bonded', title: 'Warehousing & bonds', description: 'Bonded warehouses & suspense.', url: 'https://ura.go.ug/en/customs/', serviceIcon: '🏭' },
       { id: 'uesw-ura', title: 'Uganda Electronic Single Window', description: 'UESW overview (URA).', url: 'https://ura.go.ug/en/uesw/', serviceIcon: '🪟' },
-      { id: 'uesw-portal', title: 'Single Window portal', description: 'singlewindow.go.ug — STP login.', url: 'https://www.singlewindow.go.ug/', serviceIcon: '🌐' },
       { id: 'uesw-faq', title: 'UESW FAQs', description: 'How to register and transact.', url: 'https://ura.go.ug/en/frequently-asked-questionsfaqs-on-the-uganda-electronic-single-windowuesw/', serviceIcon: '❔' },
       { id: 'sct', title: 'Single Customs Territory', description: 'EAC regional transit.', url: 'https://ura.go.ug/en/customs/', serviceIcon: '🌍' },
       { id: 'eaccma', title: 'EACCMA & duty remission', description: 'Legal texts & remissions.', url: 'https://ura.go.ug/download-category/laws-and-acts/', serviceIcon: '📑' },
@@ -148,6 +154,113 @@ export const URA_SERVICE_CATEGORIES: UraServiceCategory[] = [
       { id: 'clearing-agents', title: 'Clearing & forwarding', description: 'Licensed agents & UESW.', url: 'https://ura.go.ug/en/uesw/', serviceIcon: '🧑‍✈️' },
       { id: 'ucifa', title: 'UCIFA', description: 'Clearing & forwarding association.', url: 'https://www.ucifa.or.ug/', serviceIcon: '🚛' },
       { id: 'public-auction', title: 'Public customs auction', description: 'Online auction information.', url: 'https://ura.go.ug/en/import-export/public-online-auction/', serviceIcon: '🔨' },
+    ],
+  },
+  {
+    id: 'single-window',
+    groupId: 'single-window',
+    shortLabel: 'Single Window',
+    title: 'Uganda Electronic Single Window',
+    sidebarIcon: '🪟',
+    services: [
+      {
+        id: 'uesw-portal-home',
+        title: 'UESW home',
+        description: 'Uganda Electronic Single Window — national trade portal.',
+        url: 'https://www.singlewindow.go.ug/',
+        serviceIcon: '🏠',
+      },
+      {
+        id: 'uesw-stp',
+        title: 'Single Trade Portal (STP)',
+        description: 'Single Trade Portal entry — e-services and transactions.',
+        url: 'https://www.singlewindow.go.ug/stp',
+        serviceIcon: '📋',
+      },
+      {
+        id: 'uesw-login',
+        title: 'UESW login',
+        description: 'Sign in to the UESW system.',
+        url: 'https://www.singlewindow.go.ug/uesw/Login',
+        serviceIcon: '🔐',
+      },
+      {
+        id: 'uesw-auctions',
+        title: 'Auctions',
+        description: 'Portal auctions (as on the UESW site).',
+        url: 'https://www.singlewindow.go.ug/auction/',
+        serviceIcon: '🔨',
+      },
+      {
+        id: 'uesw-tracking',
+        title: 'Track approvals',
+        description: 'Track application and approval status.',
+        url: 'https://www.singlewindow.go.ug/uesw/Tracking',
+        serviceIcon: '📍',
+      },
+      {
+        id: 'uesw-downloads',
+        title: 'Downloads',
+        description: 'Forms, guides, and downloadable resources.',
+        url: 'https://www.singlewindow.go.ug/uesw/Downloads',
+        serviceIcon: '⬇️',
+      },
+      {
+        id: 'uesw-licensing',
+        title: 'Licensing',
+        description: 'Licensing services on the Single Window.',
+        url: 'https://www.singlewindow.go.ug/license/',
+        serviceIcon: '📜',
+      },
+      {
+        id: 'uesw-atransporter',
+        title: 'aTransporter',
+        description: 'Transporter module on the Single Window.',
+        url: 'https://www.singlewindow.go.ug/atransporter/',
+        serviceIcon: '🚚',
+      },
+      {
+        id: 'uesw-eure',
+        title: 'eURE',
+        description: 'eURE service on the Single Window.',
+        url: 'https://www.singlewindow.go.ug/eure',
+        serviceIcon: '♻️',
+      },
+      {
+        id: 'uesw-licensed-agents',
+        title: 'Licensed agents',
+        description: 'Directory / reporting for licensed agents.',
+        url: 'https://www.singlewindow.go.ug/uesw/LicensedAgents',
+        serviceIcon: '👥',
+      },
+      {
+        id: 'uesw-licensed-customs-report',
+        title: 'Licensed customs agents report',
+        description: 'Licensed customs agents report.',
+        url: 'https://www.singlewindow.go.ug/uesw/LicensedCustomsAgentsReport',
+        serviceIcon: '📊',
+      },
+      {
+        id: 'uesw-customs-reports',
+        title: 'Customs reports',
+        description: 'UESW customs reporting.',
+        url: 'https://www.singlewindow.go.ug/uesw/CustomsReports',
+        serviceIcon: '🛃',
+      },
+      {
+        id: 'uesw-mda-reports',
+        title: 'MDA reports',
+        description: 'Ministry / agency (MDA) reports.',
+        url: 'https://www.singlewindow.go.ug/uesw/MDAReports',
+        serviceIcon: '🏛️',
+      },
+      {
+        id: 'uesw-rects-reports',
+        title: 'RECTS reports',
+        description: 'RECTS reporting module.',
+        url: 'https://www.singlewindow.go.ug/uesw/RECTSReports',
+        serviceIcon: '📑',
+      },
     ],
   },
   {
@@ -213,7 +326,6 @@ export const URA_SERVICE_CATEGORIES: UraServiceCategory[] = [
     sidebarIcon: '🌐',
     services: [
       { id: 'mofped', title: 'Ministry of Finance (MoFPED)', description: 'National economic policy.', url: 'https://www.finance.go.ug/', serviceIcon: '🏛️' },
-      { id: 'sw-portal', title: 'Uganda Electronic Single Window', description: 'singlewindow.go.ug portal.', url: 'https://www.singlewindow.go.ug/', serviceIcon: '🪟' },
       { id: 'cma', title: 'Capital Markets Authority', description: 'Investor-facing regulator.', url: 'https://www.cmauganda.co.ug/', serviceIcon: '📈' },
       { id: 'uia', title: 'Uganda Investment Authority', description: 'Investment promotion.', url: 'https://www.uia.go.ug/', serviceIcon: '💼' },
       { id: 'eac', title: 'East African Community', description: 'Customs union & integration.', url: 'https://www.eac.int/', serviceIcon: '🌍' },

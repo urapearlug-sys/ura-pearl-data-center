@@ -77,7 +77,7 @@ export default function Services() {
           <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
             <h1 className="text-xl font-bold tracking-tight text-white px-1">URA Services</h1>
             <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-3">
-              Official portals and tools — domestic tax, customs, legal, careers, research, and partner links.
+              Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links.
             </p>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" aria-hidden>
@@ -141,7 +141,7 @@ export default function Services() {
           </div>
         </main>
 
-        {/* Right rail — six categories, evenly spaced to fill viewport */}
+        {/* Right rail — category chips, evenly spaced to fill viewport */}
         <aside
           className="sticky top-0 w-[min(5.75rem,24vw)] sm:w-[7.25rem] shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.08] px-1.5 py-3 gap-2 h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)]"
           aria-label="Service categories"
