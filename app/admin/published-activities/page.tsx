@@ -25,7 +25,7 @@ export default function AdminPublishedActivitiesPage() {
   const [body, setBody] = useState('');
   const [link, setLink] = useState('');
   const [linkLabel, setLinkLabel] = useState('Learn more');
-  const [isPublished, setIsPublished] = useState(false);
+  const [isPublished, setIsPublished] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async () => {
@@ -72,7 +72,7 @@ export default function AdminPublishedActivitiesPage() {
       setBody('');
       setLink('');
       setLinkLabel('Learn more');
-      setIsPublished(false);
+      setIsPublished(true);
       void load();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Failed', 'error');
@@ -125,7 +125,8 @@ export default function AdminPublishedActivitiesPage() {
           <h1 className="text-3xl font-bold text-[#f3ba2f] mt-2">Published activities (Earn tab)</h1>
           <p className="text-gray-400 text-sm mt-2">
             These posts appear under <strong className="text-gray-200">Activities</strong> on the app Earn tab. Newest
-            published posts show at the top.
+            published posts show at the top. Only <strong className="text-gray-200">published</strong> rows are visible in
+            the app — drafts stay here until you tap Publish on a row.
           </p>
         </div>
 

@@ -160,6 +160,9 @@ export const imageDisplayNames: Record<string, string> = {
     tiktalk: 'TikTalk',
     website: 'Website',
     zoom: 'Zoom',
+    pearlWhite: 'White pearl',
+    pearlBlue: 'Blue pearl',
+    pearlGolden: 'Golden pearl',
 };
 
 export const imageMap: Record<string, any> = {
@@ -172,6 +175,9 @@ export const imageMap: Record<string, any> = {
     baseGift,
     dailyCipher,
     dailyCombo,
+    pearlWhite,
+    pearlBlue,
+    pearlGolden,
     blockchain,
     afrolumens,
     mitroplus,
@@ -189,9 +195,17 @@ export const imageMap: Record<string, any> = {
     Website: website,
 };
 
+/** Legacy task keys still stored as AfroLumens branding → show URA white pearl in Earn / task popup */
+const TASK_IMAGE_ALIASES: Record<string, string> = {
+    afrolumens: 'pearlWhite',
+};
+
 /** Resolve task image src (tries key as-is then lowercase so "TikTalk" and "tiktalk" both work). */
 export function getTaskImageSrc(imageKey: string | null | undefined) {
     if (!imageKey || typeof imageKey !== 'string') return undefined;
-    const key = imageKey.trim();
+    let key = imageKey.trim();
+    const lower = key.toLowerCase();
+    const aliased = TASK_IMAGE_ALIASES[key] ?? TASK_IMAGE_ALIASES[lower];
+    if (aliased) key = aliased;
     return imageMap[key] ?? imageMap[key.toLowerCase()] ?? undefined;
 }
