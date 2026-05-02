@@ -55,6 +55,17 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
 ];
 
+/** Shown at top of Action Center → Most used; subtitles align with Earn shortcuts. */
+const HOME_MOST_USED_PINNED: ActionItem[] = [
+  { id: 'karibu', title: 'Karibu Daily', subtitle: 'Daily reward check-in', pearlType: 'white', route: 'earn', group: 'play', icon: dailyReward },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
+  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', pearlType: 'blue', group: 'play', icon: dailyCombo },
+];
+
+const HOME_MOST_USED_PINNED_IDS = new Set(HOME_MOST_USED_PINNED.map((p) => p.id));
+
 interface HomeProps {
   setCurrentView: (view: string) => void;
 }
@@ -109,10 +120,11 @@ export default function Home({ setCurrentView }: HomeProps) {
     return [...pickedCatalog, ...customFavorites];
   }, [favoriteIds, customFavorites]);
 
-  const displayedItems = useMemo(() => {
-    if (activeActionTab === 'favorites') return favoriteItems;
-    return mostUsedItems;
-  }, [activeActionTab, favoriteItems, mostUsedItems]);
+  /** Most-used scores excluding pinned ids so Karibu / Quiz / etc. are not listed twice. */
+  const mostUsedRest = useMemo(
+    () => mostUsedItems.filter((item) => !HOME_MOST_USED_PINNED_IDS.has(item.id)),
+    [mostUsedItems]
+  );
 
   const availableFavoriteOptions = useMemo(() => {
     const q = favoritesSearch.trim().toLowerCase();
@@ -201,12 +213,67 @@ export default function Home({ setCurrentView }: HomeProps) {
   const handleAction = (item: ActionItem) => {
     triggerHapticFeedback(window);
     setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
+    if (item.route === 'earn') {
+      switch (item.id) {
+        case 'karibu':
+          queueEarnBootstrap({ openDailyLogin: true });
+          setCurrentView('earn');
+          return;
+        case 'quiz':
+          queueEarnBootstrap({ openMitrolabsQuiz: true });
+          setCurrentView('earn');
+          return;
+        case 'receipt':
+          queueEarnBootstrap({ activeTabAll: true });
+          setCurrentView('earn');
+          return;
+        case 'voice':
+        case 'whistle':
+          queueEarnBootstrap({ activeTabAll: true });
+          setCurrentView('earn');
+          return;
+        default:
+          setCurrentView('earn');
+          return;
+      }
+    }
     if (item.route) {
       setCurrentView(item.route);
       return;
     }
     showToast(`${item.title} — coming soon`, 'success');
   };
+
+  const renderActionCenterItem = (item: ActionItem, rowKey: string) => (
+    <button
+      key={rowKey}
+      type="button"
+      onClick={() => handleAction(item)}
+      className="w-full rounded-xl border border-[#2d2f38] bg-[#151821] px-4 py-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
+    >
+      <div className="flex items-start gap-3">
+        <div className="h-9 w-9 rounded-lg border border-[#2f3340] bg-[#0f1218] flex items-center justify-center overflow-hidden flex-shrink-0">
+          {item.icon ? (
+            <Image src={item.icon} alt="" width={24} height={24} className="h-6 w-6 object-contain" />
+          ) : (
+            <span className="text-xs font-bold text-gray-300">{item.title.slice(0, 1).toUpperCase()}</span>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
+          {item.subtitle ? <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p> : null}
+        </div>
+      </div>
+      {item.group ? <p className="mt-1 text-[11px] text-gray-500 uppercase tracking-wide">{item.group}</p> : null}
+      {item.pearlType ? (
+        <p className="mt-1 text-[11px]">
+          <span className={item.pearlType === 'white' ? 'text-slate-300' : 'text-[#5fa8ff]'}>
+            {item.pearlType === 'white' ? 'White pearl activity' : 'Blue pearl activity'}
+          </span>
+        </p>
+      ) : null}
+    </button>
+  );
 
   const addCatalogFavorite = (id: string) => {
     setFavoriteIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
@@ -470,56 +537,27 @@ export default function Home({ setCurrentView }: HomeProps) {
             ) : null}
 
             <div className="mt-4 space-y-2">
-              {displayedItems.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleAction(item)}
-                  className="w-full rounded-xl border border-[#2d2f38] bg-[#151821] px-4 py-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="h-9 w-9 rounded-lg border border-[#2f3340] bg-[#0f1218] flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {item.icon ? (
-                        <Image src={item.icon} alt="" width={24} height={24} className="h-6 w-6 object-contain" />
-                      ) : (
-                        <span className="text-xs font-bold text-gray-300">{item.title.slice(0, 1).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-white text-sm leading-snug">{item.title}</p>
-                      {item.subtitle ? (
-                        <p className="text-xs text-gray-400 mt-1">{item.subtitle}</p>
-                      ) : null}
-                    </div>
-                  </div>
-                  {item.group ? (
-                    <p className="mt-1 text-[11px] text-gray-500 uppercase tracking-wide">{item.group}</p>
+              {activeActionTab === 'most-used' ? (
+                <>
+                  <div className="space-y-2">{HOME_MOST_USED_PINNED.map((item) => renderActionCenterItem(item, `pinned-${item.id}`))}</div>
+                  {mostUsedRest.length > 0 ? (
+                    <>
+                      <p className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">Your most used</p>
+                      <div className="space-y-2">{mostUsedRest.map((item) => renderActionCenterItem(item, item.id))}</div>
+                    </>
                   ) : null}
-                  {item.pearlType ? (
-                    <p className="mt-1 text-[11px]">
-                      <span
-                        className={
-                          item.pearlType === 'white'
-                            ? 'text-slate-300'
-                            : 'text-[#5fa8ff]'
-                        }
-                      >
-                        {item.pearlType === 'white' ? 'White pearl activity' : 'Blue pearl activity'}
-                      </span>
-                    </p>
+                </>
+              ) : (
+                <>
+                  {favoriteItems.map((item) => renderActionCenterItem(item, item.id))}
+                  {favoriteItems.length === 0 ? (
+                    <div className="w-full rounded-xl border border-dashed border-[#2d2f38] bg-[#151821] px-4 py-3 text-left">
+                      <p className="font-semibold text-white text-sm">No favorites yet</p>
+                      <p className="text-xs text-gray-400 mt-1">Open “Manage favorites” to add items by search or manual entry.</p>
+                    </div>
                   ) : null}
-                </button>
-              ))}
-              {displayedItems.length === 0 ? (
-                <div className="w-full rounded-xl border border-dashed border-[#2d2f38] bg-[#151821] px-4 py-3 text-left">
-                  <p className="font-semibold text-white text-sm">{activeActionTab === 'most-used' ? 'No most-used items yet' : 'No favorites yet'}</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {activeActionTab === 'most-used'
-                      ? 'Use activities and your most visited options will appear here automatically.'
-                      : 'Open “Manage favorites” to add items by search or manual entry.'}
-                  </p>
-                </div>
-              ) : null}
+                </>
+              )}
             </div>
           </section>
         </div>
