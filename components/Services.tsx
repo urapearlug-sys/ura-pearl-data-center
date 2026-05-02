@@ -194,56 +194,44 @@ export default function Services() {
           </div>
         </main>
 
-        {/* Right category rail — scrollable, grouped */}
+        {/* Right rail — six consolidated categories */}
         <aside
-          className="w-[min(7.75rem,28vw)] sm:w-32 shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.06] max-h-[calc(100dvh-5.5rem)] sm:max-h-[calc(100dvh-5rem)] overflow-y-auto overflow-x-hidden overscroll-contain"
+          className="w-[min(5.25rem,22vw)] sm:w-28 shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.06] py-3 px-1 justify-start"
           aria-label="Service categories"
         >
-          <p className="sticky top-0 z-10 bg-[#080a0d]/95 backdrop-blur-sm px-2 py-2 text-[9px] font-bold uppercase tracking-wide text-slate-500 border-b border-white/[0.06]">
-            Categories
-          </p>
-          <div className="py-1.5 pb-4 space-y-0">
-            {URA_SERVICE_CATEGORIES.map((cat, i) => {
-              const isActive = !showSearchResults && cat.id === activeCategoryId;
-              const theme = GROUP_THEME[cat.groupId];
-              const showGroupHeader = i === 0 || URA_SERVICE_CATEGORIES[i - 1].groupTitle !== cat.groupTitle;
-              return (
-                <div key={cat.id}>
-                  {showGroupHeader ? (
-                    <p className="px-2.5 pt-3 pb-1 text-[8px] font-extrabold uppercase tracking-wider text-slate-500 leading-snug">
-                      {cat.groupTitle}
-                    </p>
-                  ) : null}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      setActiveCategoryId(cat.id);
-                      setSearch('');
-                    }}
-                    className={`mx-1.5 mb-1 flex w-[calc(100%-0.75rem)] flex-col items-center justify-center gap-0.5 rounded-xl py-2 px-1 transition-all duration-200 border ${
-                      isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.05]'
-                    }`}
-                  >
-                    <span
-                      className={`text-xl leading-none transition-colors ${
-                        isActive ? theme.activeIconClass : theme.idleIconClass
-                      }`}
-                    >
-                      {cat.sidebarIcon}
-                    </span>
-                    <span
-                      className={`text-[8px] sm:text-[9px] font-bold text-center leading-tight px-0.5 ${
-                        isActive ? 'text-white' : 'text-slate-500'
-                      }`}
-                    >
-                      {cat.shortLabel}
-                    </span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {URA_SERVICE_CATEGORIES.map((cat) => {
+            const isActive = !showSearchResults && cat.id === activeCategoryId;
+            const theme = GROUP_THEME[cat.groupId];
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setActiveCategoryId(cat.id);
+                  setSearch('');
+                }}
+                className={`mx-0.5 mb-2 flex flex-col items-center justify-center gap-1 rounded-xl py-2.5 px-1 transition-all duration-200 border ${
+                  isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.05]'
+                }`}
+              >
+                <span
+                  className={`text-2xl leading-none transition-colors ${
+                    isActive ? theme.activeIconClass : theme.idleIconClass
+                  }`}
+                >
+                  {cat.sidebarIcon}
+                </span>
+                <span
+                  className={`text-[9px] sm:text-[10px] font-bold text-center leading-tight px-0.5 ${
+                    isActive ? 'text-white' : 'text-slate-500'
+                  }`}
+                >
+                  {cat.shortLabel}
+                </span>
+              </button>
+            );
+          })}
         </aside>
       </div>
 
