@@ -21,7 +21,7 @@ import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
-import { getTaskImageSrc } from '@/images';
+import { getTaskImageSrc, pearlWhite } from '@/images';
 import { useHydration } from '@/utils/useHydration';
 import { TASK_WAIT_TIME } from '@/utils/consts';
 import { useToast } from '@/contexts/ToastContext';
@@ -299,9 +299,9 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
             </button>
           </div>
         )}
-        <div className="flex justify-center items-center mb-4">
-          <IceCube className="w-6 h-6" />
-          <span className="text-white font-bold text-2xl ml-1">+{formatNumber(localTask.points)}</span>
+        <div className="flex justify-center items-center mb-4 gap-1.5">
+          <Image src={pearlWhite} alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+          <span className="text-white font-bold text-2xl">+{formatNumber(localTask.points)}</span>
         </div>
         {localTask.type === 'VISIT' && localTask.taskData?.correctAnswer && (
           <div className="mb-4">

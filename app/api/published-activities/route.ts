@@ -1,24 +1,12 @@
-// Public: published activity posts for Earn tab (newest first). Validates Telegram initData in production.
+// Public: published activity posts for Earn tab (newest first). Read-only list is public (no Telegram gate)
+// so announcements load even if initData is missing or stale; admin routes protect creates/updates.
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
-import { isTelegramAuthBypassed, validateTelegramWebAppData } from '@/utils/server-checks';
 
-export async function GET(req: NextRequest) {
-  const raw = req.nextUrl.searchParams.get('initData');
-  const initData = raw?.trim() ?? '';
-  const bypass = isTelegramAuthBypassed();
+export const dynamic = 'force-dynamic';
 
-  // In dev/preview bypass, empty initData is OK (browser testing without Telegram WebApp).
-  if (!bypass && !initData) {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
-
-  const { validatedData } = validateTelegramWebAppData(initData || 'dev-local-bypass');
-  if (!validatedData) {
-    return NextResponse.json({ error: 'Invalid Telegram data' }, { status: 403 });
-  }
-
+export async function GET() {
   try {
     const items = await prisma.publishedActivity.findMany({
       where: { isPublished: true },

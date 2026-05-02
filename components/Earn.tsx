@@ -21,7 +21,7 @@ import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { ACTIVITY_TAB_CATEGORIES } from '@/utils/consts';
 import { capitalizeFirstLetter, formatNumber, triggerHapticFeedback } from '@/utils/ui';
-import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift, earnRewardsIcon } from '@/images';
+import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift, earnRewardsIcon, pearlWhite } from '@/images';
 import TaskPopup from './popups/TaskPopup';
 import DailyLoginPopup from './popups/DailyLoginPopup';
 import DailyCipherPopup from './popups/DailyCipherPopup';
@@ -672,7 +672,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     </p>
                                   )}
                                   <div className="flex items-center gap-1.5 mt-0.5">
-                                    <IceCube className="w-4 h-4 text-[#f3ba2f] flex-shrink-0" />
+                                    <Image src={pearlWhite} alt="" width={16} height={16} className="h-4 w-4 flex-shrink-0 object-contain" />
                                     <span className="text-sm font-medium text-[#f3ba2f]">{formatNumber(task.points)}</span>
                                   </div>
                                 </div>
@@ -699,6 +699,8 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                     </>
                   )}
                 </section>
+
+                <PublishedActivitiesFeed initData={userTelegramInitData} />
               </div>
             </div>
           </div>

@@ -13,10 +13,11 @@ export type PublishedActivityItem = {
 };
 
 type Props = {
-  initData: string;
+  /** @deprecated No longer sent; API is public read. Prop kept for call-site compatibility */
+  initData?: string;
 };
 
-export default function PublishedActivitiesFeed({ initData }: Props) {
+export default function PublishedActivitiesFeed(_props: Props) {
   const [items, setItems] = useState<PublishedActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +26,7 @@ export default function PublishedActivitiesFeed({ initData }: Props) {
     let cancelled = false;
     const load = async () => {
       try {
-        const qs = initData?.trim()
-          ? `?initData=${encodeURIComponent(initData)}`
-          : '';
-        const res = await fetch(`/api/published-activities${qs}`);
+        const res = await fetch('/api/published-activities', { cache: 'no-store' });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(typeof data?.error === 'string' ? data.error : 'Failed to load');
         if (!cancelled) setItems(Array.isArray(data?.activities) ? data.activities : []);
@@ -42,7 +40,7 @@ export default function PublishedActivitiesFeed({ initData }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [initData]);
+  }, []);
 
   return (
     <section className="mt-8 border-t border-[#2d2f38] pt-6" aria-label="Published activities">
