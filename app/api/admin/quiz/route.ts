@@ -28,6 +28,10 @@ export async function GET(req: NextRequest) {
       questions,
       branches,
       completionBonusPoints: settings?.completionBonusPoints ?? 0,
+      autoRotationEnabled: settings?.autoRotationEnabled ?? false,
+      autoRotationWeekdays: settings?.autoRotationWeekdays ?? '1,4',
+      lastAutoRotationUtcDate: settings?.lastAutoRotationUtcDate ?? null,
+      autoRotationQuestionCount: settings?.autoRotationQuestionCount ?? 5,
     });
   } catch (error) {
     console.error('Admin quiz GET error:', error);
@@ -148,6 +152,62 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, completionBonusPoints: settings.completionBonusPoints });
     }
 
+    if (action === 'updateAutoRotation') {
+      const autoRotationEnabled = Boolean(body.autoRotationEnabled);
+      const rawWd = typeof body.autoRotationWeekdays === 'string' ? body.autoRotationWeekdays.trim() : '1,4';
+      const autoRotationWeekdays = rawWd || '1,4';
+      const autoRotationQuestionCount = Math.min(
+        20,
+        Math.max(1, typeof body.autoRotationQuestionCount === 'number' ? body.autoRotationQuestionCount : 5),
+      );
+      let settings = await prisma.quizSettings.findFirst();
+      if (settings) {
+        settings = await prisma.quizSettings.update({
+          where: { id: settings.id },
+          data: { autoRotationEnabled, autoRotationWeekdays, autoRotationQuestionCount },
+        });
+      } else {
+        settings = await prisma.quizSettings.create({
+          data: {
+            completionBonusPoints: 0,
+            autoRotationEnabled,
+            autoRotationWeekdays,
+            autoRotationQuestionCount,
+          },
+        });
+      }
+      return NextResponse.json({
+        success: true,
+        autoRotationEnabled: settings.autoRotationEnabled,
+        autoRotationWeekdays: settings.autoRotationWeekdays,
+        autoRotationQuestionCount: settings.autoRotationQuestionCount,
+      });
+    }
+
+    if (action === 'runAutoRotationNow') {
+      const settings = await prisma.quizSettings.findFirst();
+      const count = Math.min(
+        20,
+        Math.max(1, typeof body.count === 'number' ? body.count : settings?.autoRotationQuestionCount ?? 5),
+      );
+      const all = await prisma.quizQuestion.findMany({ select: { id: true } });
+      const ids = all.map((q) => q.id);
+      if (ids.length === 0) {
+        return NextResponse.json({ success: true, activeCount: 0, totalQuestions: 0 });
+      }
+      const shuffled = [...ids].sort(() => Math.random() - 0.5);
+      const activeIds = shuffled.slice(0, Math.min(count, ids.length));
+      const inactiveIds = ids.filter((id) => !activeIds.includes(id));
+      const ops = [
+        prisma.quizQuestion.updateMany({ where: { id: { in: activeIds } }, data: { isActive: true } }),
+      ];
+      if (inactiveIds.length > 0) {
+        ops.push(prisma.quizQuestion.updateMany({ where: { id: { in: inactiveIds } }, data: { isActive: false } }));
+      }
+      await prisma.$transaction(ops);
+      return NextResponse.json({ success: true, activeCount: activeIds.length, totalQuestions: ids.length });
+    }
+
     if (action === 'seedBlockchainPool') {
       const { BLOCKCHAIN_QUIZ_QUESTIONS } = await import('@/data/quiz-blockchain-questions');
       const items = Array.isArray(BLOCKCHAIN_QUIZ_QUESTIONS) ? BLOCKCHAIN_QUIZ_QUESTIONS : [];
@@ -193,12 +253,16 @@ export async function POST(req: NextRequest) {
       const all = await prisma.quizQuestion.findMany({ select: { id: true } });
       const ids = all.map((q) => q.id);
       const shuffled = [...ids].sort(() => Math.random() - 0.5);
-      const activeIds = shuffled.slice(0, count);
-      await prisma.$transaction([
+      const activeIds = shuffled.slice(0, Math.min(count, ids.length));
+      const inactiveIds = ids.filter((id) => !activeIds.includes(id));
+      const ops = [
         prisma.quizQuestion.updateMany({ where: { id: { in: activeIds } }, data: { isActive: true } }),
-        prisma.quizQuestion.updateMany({ where: { id: { notIn: activeIds } }, data: { isActive: false } }),
-      ]);
-      return NextResponse.json({ success: true, activeCount: count, totalQuestions: ids.length });
+      ];
+      if (inactiveIds.length > 0) {
+        ops.push(prisma.quizQuestion.updateMany({ where: { id: { in: inactiveIds } }, data: { isActive: false } }));
+      }
+      await prisma.$transaction(ops);
+      return NextResponse.json({ success: true, activeCount: activeIds.length, totalQuestions: ids.length });
     }
 
     if (action === 'resetAllQuizAttempts') {

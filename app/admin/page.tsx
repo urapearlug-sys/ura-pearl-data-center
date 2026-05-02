@@ -63,7 +63,7 @@ const AdminPanel = () => {
         { title: 'Staking audit', path: '/admin/staking-audit', description: 'Report and correct stakes with wrong bonus %' },
         { title: 'League Management', path: '/admin/league-management', description: 'Add, delete, and manage teams and leagues; donate PEARLS to teams; add or remove teams from leagues' },
         { title: 'Global Joinable Tasks', path: '/admin/global-tasks', description: 'Track tasks (taps, tiers, invites); set winner and redeem prize (stakes + 2× bonus)' },
-        { title: 'Mitroplus Quiz', path: '/admin/quiz', description: 'Set multiple-choice questions for the Earn page Mitroplus Quiz; users earn PEARLS on first completion' },
+        { title: 'URA Quiz', path: '/admin/quiz', description: 'Multiple-choice URA Quiz on Earn: manage questions, pool, completion bonus, and Mon/Thu UTC automated sets' },
         { title: 'Learn Content', path: '/admin/learn', description: 'Manage Learn page categories and lessons shown in full-screen detail views' },
         { title: 'Daily Pattern', path: '/admin/daily-pattern', description: 'View today\'s 9-dot pattern for the minigame; set override. Pattern changes automatically each day.' },
         { title: 'Shop (Match 2 Earn)', path: '/admin/shop', description: 'Approve or reject product listings. Approved products appear in the in-app Shop where users sell for PEARLS.' },

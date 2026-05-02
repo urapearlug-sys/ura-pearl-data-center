@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { MITROLABS_QUIZ_REWARD_POINTS } from '@/utils/consts';
+import { maybeApplyAutomatedQuizRotation } from '@/utils/quiz-auto-rotation';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,6 +23,8 @@ function getStartOfDayUTC(d: Date): Date {
 
 export async function GET(req: NextRequest) {
   try {
+    await maybeApplyAutomatedQuizRotation();
+
     const questions = await prisma.quizQuestion.findMany({
       where: { isActive: true },
       orderBy: [{ branch: { order: 'asc' } }, { order: 'asc' }],

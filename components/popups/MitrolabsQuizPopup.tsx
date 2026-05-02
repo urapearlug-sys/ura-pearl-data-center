@@ -43,10 +43,12 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
   const showToast = useToast();
 
   const fetchQuiz = useCallback(async () => {
-    if (!userTelegramInitData) return;
     try {
-      const res = await fetch(`/api/quiz?initData=${encodeURIComponent(userTelegramInitData)}`);
-      if (!res.ok) throw new Error('Failed to load Mitroplus Quiz');
+      const url = userTelegramInitData
+        ? `/api/quiz?initData=${encodeURIComponent(userTelegramInitData)}`
+        : '/api/quiz';
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load URA Quiz');
       const data = await res.json();
       setQuestions(data.questions ?? []);
       setHasCompleted(data.hasCompleted ?? false);
@@ -117,7 +119,11 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
   };
 
   const handleSubmit = async (forceSubmit = false) => {
-    if (!userTelegramInitData || questions.length === 0 || submitting) return;
+    if (!userTelegramInitData) {
+      showToast('Open the app from Telegram to submit your answers.', 'error');
+      return;
+    }
+    if (questions.length === 0 || submitting) return;
     if (!forceSubmit && answers.length < questions.length && answers.every((a) => a === undefined)) {
       showToast('Please answer all questions', 'error');
       return;
@@ -166,7 +172,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
       <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#1d2025] p-4">
         <div className="flex items-center gap-2 text-gray-400">
           <IceCube className="w-8 h-8 animate-pulse" />
-          <span>Loading Mitroplus Quiz…</span>
+          <span>Loading URA Quiz…</span>
         </div>
         <button type="button" onClick={onClose} className="mt-6 text-[#f3ba2f] hover:underline">Cancel</button>
       </div>
@@ -176,8 +182,11 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
   if (questions.length === 0 && !hasCompleted) {
     return (
       <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#1d2025] p-4">
-        <h2 className="text-xl font-bold text-white mb-2">Mitroplus Quiz</h2>
-        <p className="text-gray-400 text-center mb-6">No questions available yet. Check back later.</p>
+        <h2 className="text-xl font-bold text-white mb-2">URA Quiz</h2>
+        <p className="text-gray-400 text-center mb-6 max-w-sm">
+          No active questions yet. Admins can add items under Admin → URA Quiz, load the question pool, and optionally
+          turn on automated sets every Monday &amp; Thursday (UTC).
+        </p>
         <button type="button" onClick={onClose} className="px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
       </div>
     );
@@ -190,8 +199,8 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl" aria-label="Close">&times;</button>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center text-center">
-          <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">Mitroplus Quiz</h2>
-          <p className="text-gray-300 mb-2">You have already completed this Mitroplus Quiz.</p>
+          <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">URA Quiz</h2>
+          <p className="text-gray-300 mb-2">You have already completed today&apos;s URA Quiz.</p>
           {lastAttempt && (
             <p className="text-gray-400 text-sm">Score: {lastAttempt.correctCount}/{lastAttempt.totalCount} · +{formatNumber(lastAttempt.pointsAwarded)} PEARLS claimed</p>
           )}
@@ -213,7 +222,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl" aria-label="Close">&times;</button>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center text-center">
-          <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">Mitroplus Quiz complete</h2>
+          <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">URA Quiz complete</h2>
           <p className="text-white text-lg mb-1">{result.correctCount} / {result.totalCount} correct</p>
           {noAnswersAttended && (
             <p className="text-gray-400 text-sm mb-2">You didn&apos;t answer any question in time. 0 PEARLS.</p>

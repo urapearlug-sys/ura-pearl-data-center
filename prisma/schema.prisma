@@ -372,8 +372,16 @@ model QuizBranch {
 }
 
 model QuizSettings {
-  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
-  completionBonusPoints Int      @default(0) // extra ALM when user gets all questions correct
+  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  completionBonusPoints    Int      @default(0) // extra ALM when user gets all questions correct
+  /// When true, pick a random active set from the pool on scheduled UTC weekdays (see autoRotationWeekdays).
+  autoRotationEnabled      Boolean  @default(false)
+  /// Comma-separated JS getUTCDay() values: 0=Sun … 1=Mon … 4=Thu. Default "1,4" = Monday & Thursday.
+  autoRotationWeekdays     String   @default("1,4")
+  /// UTC calendar date (YYYY-MM-DD) of last automated rotation; avoids double-rotating the same day.
+  lastAutoRotationUtcDate  String?
+  /// How many questions to activate per rotation (capped by pool size).
+  autoRotationQuestionCount Int     @default(5)
 }
 
 model QuizQuestion {

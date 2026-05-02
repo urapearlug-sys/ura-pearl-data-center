@@ -323,6 +323,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
           </div>
         </div>
         {taskPopupEl}
+        {showMitrolabsQuiz && (
+          <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
+        )}
       </div>
     );
   }
