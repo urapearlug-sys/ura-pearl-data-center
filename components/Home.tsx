@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image, { type StaticImageData } from 'next/image';
-import { dailyCipher, dailyCombo, dailyReward, defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, rankBlue, rankGold, rankSilver, rankWhite, uraFiscalFunBanner, uraTreasuryCounter } from '@/images';
+import { dailyCipher, dailyCombo, dailyReward, defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite, rankBlue, rankGold, rankSilver, rankWhite, uraFiscalFunHomeBanner, uraTreasuryCounter } from '@/images';
 import { calculateLevelIndex, useGameStore } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -464,10 +464,10 @@ export default function Home({ setCurrentView }: HomeProps) {
 
           <div className="mt-4 rounded-2xl overflow-hidden border border-[#2c2f38] bg-[#f5f0e8]">
             <Image
-              src={uraFiscalFunBanner}
+              src={uraFiscalFunHomeBanner}
               alt="Fiscal Fun — Uganda Revenue Authority"
-              width={1024}
-              height={393}
+              width={640}
+              height={360}
               className="w-full h-auto object-cover"
               sizes="(max-width: 576px) 100vw, 576px"
               priority

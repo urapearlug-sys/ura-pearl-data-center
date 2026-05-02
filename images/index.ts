@@ -68,6 +68,7 @@ import roketicon from "./roketicon.gif";
 import uraLanding from "./ura-landing.png";
 import defaultProfileAvatar from "./default-profile-avatar.png";
 import uraFiscalFunBanner from "./ura-fiscal-fun-banner.png";
+import uraFiscalFunHomeBanner from "./ura-fiscal-fun-home-banner.png";
 import uraDailyPearlCoins from "./ura-daily-pearl-coins.png";
 import uraTreasuryCounter from "./ura-treasury-counter.png";
 import pearlWhite from "./pearl-white.png";
@@ -127,6 +128,7 @@ export {
     uraLanding,
     defaultProfileAvatar,
     uraFiscalFunBanner,
+    uraFiscalFunHomeBanner,
     uraDailyPearlCoins,
     uraTreasuryCounter,
     pearlWhite,
