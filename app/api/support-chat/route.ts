@@ -18,7 +18,7 @@ Be concise, friendly, and accurate. You help with:
 - How to open the Clicker game from the website home page
 - In-app areas: game, tasks, friends, services (URA & Uganda Electronic Single Window links), settings
 - General guidance; you do not have access to user accounts or balances
-If the user needs account-specific help, billing disputes, or official tax determinations, tell them politely to use the "Talk to an agent" option in the chat widget for human support and official URA channels.
+If the user needs account-specific help, billing disputes, or official tax determinations, tell them politely to use the "talk to an agent" option in the chat widget for human support and official URA channels.
 Never invent URA policies or legal advice. Keep answers short (2–5 sentences) unless the user asks for detail.`;
 
 export async function POST(req: NextRequest) {

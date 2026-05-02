@@ -4,12 +4,12 @@
 
 const GENERIC = `I’m the URAPearls help assistant. I can explain how to open the **Clicker** game, where to find **Tasks**, **Friends**, **Services** (URA tools & Single Window), and general navigation.
 
-If you need account-specific help or something I can’t resolve, tap **Talk to an agent** below.`;
+If you need account-specific help or something I can’t resolve, tap **talk to an agent** below.`;
 
 export function getSupportChatFallbackReply(userMessage: string): string {
   const q = userMessage.trim().toLowerCase();
   if (!q) {
-    return 'Ask me anything about URAPearls or URA services — or use **Talk to an agent** for a human.';
+    return 'Ask me anything about URAPearls or URA services — or use **talk to an agent** for a human.';
   }
 
   if (/\b(hello|hi|hey|good morning|good afternoon)\b/.test(q)) {
@@ -21,7 +21,7 @@ export function getSupportChatFallbackReply(userMessage: string): string {
   }
 
   if (/\b(agent|human|person|support|live chat|operator|representative)\b/.test(q)) {
-    return 'To reach a person, open **Talk to an agent** in this chat — you’ll get Telegram, phone, and other options.';
+    return 'To reach a person, open **talk to an agent** in this chat — you’ll get Telegram, phone, and other options.';
   }
 
   if (/\b(clicker|game|play|tap|points|pearls|level)\b/.test(q)) {

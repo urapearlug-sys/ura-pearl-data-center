@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import { triggerHapticFeedback } from '@/utils/ui';
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string };
@@ -20,7 +19,7 @@ function openExternalUrl(url: string) {
 const INTRO_ASSISTANT: ChatMessage = {
   role: 'assistant',
   content:
-    'Hi — I’m here to answer questions about **URAPearls** and how to use the app and **URA Services** links.\n\nIf you’re stuck or want a person, tap **Talk to an agent** anytime.',
+    'Hi — I’m here to answer questions about **URAPearls** and how to use the app and **URA Services** links.\n\nIf you’re stuck or want a person, tap **talk to an agent** anytime.',
 };
 
 function supportTelegramUrl(): string {
@@ -46,11 +45,6 @@ function supportEmail(): string | null {
 }
 
 export default function SupportChatWidget() {
-  const pathname = usePathname() ?? '';
-  const isAdminRoute = pathname.startsWith('/admin');
-  /** Bottom nav on /clicker is ~6rem + safe area; lift FAB so it is not covered. */
-  const isClickerRoute = pathname === '/clicker' || pathname.startsWith('/clicker/');
-
   const [open, setOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -84,16 +78,16 @@ export default function SupportChatWidget() {
         throw new Error('Request failed');
       }
       const data = (await res.json()) as { reply?: string };
-      const reply = data.reply?.trim() || 'Sorry — I could not generate a reply. Try **Talk to an agent**.';
+      const reply = data.reply?.trim() || 'Sorry — I could not generate a reply. Try **talk to an agent**.';
       setMessages((m) => [...m, { role: 'assistant', content: reply }]);
     } catch {
-      setError('Could not reach the assistant. Please try again or use Talk to an agent.');
+      setError('Could not reach the assistant. Please try again or use talk to an agent.');
       setMessages((m) => [
         ...m,
         {
           role: 'assistant',
           content:
-            'I’m having trouble connecting. You can still reach our team with **Talk to an agent** below.',
+            'I’m having trouble connecting. You can still reach our team with **talk to an agent** below.',
         },
       ]);
     } finally {
@@ -101,16 +95,8 @@ export default function SupportChatWidget() {
     }
   }, [input, loading, messages]);
 
-  const bottomOffsetClass = isClickerRoute
-    ? 'bottom-[calc(6.85rem+env(safe-area-inset-bottom,0px))]'
-    : 'bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))]';
-
-  if (isAdminRoute) return null;
-
   return (
-    <div
-      className={`pointer-events-none fixed z-[90] flex flex-col items-end gap-2 ${bottomOffsetClass} right-[max(1.25rem,env(safe-area-inset-right,0px))]`}
-    >
+    <div className="pointer-events-none fixed z-[90] flex flex-col items-end gap-2 bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] right-[max(1.25rem,env(safe-area-inset-right,0px))]">
       {open ? (
         <div
           className="pointer-events-auto w-[min(100vw-1.5rem,22rem)] max-h-[min(70vh,32rem)] flex flex-col rounded-2xl border border-white/10 bg-[#14171c] shadow-[0_12px_40px_rgba(0,0,0,0.55)] overflow-hidden"
@@ -165,7 +151,7 @@ export default function SupportChatWidget() {
               }}
               className="w-full rounded-xl border border-emerald-400/40 bg-emerald-500/15 py-2 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/25 transition-colors"
             >
-              {agentOpen ? 'Hide agent options' : 'Not satisfied? Talk to an agent'}
+              {agentOpen ? 'Hide agent options' : 'Not satisfied? talk to an agent'}
             </button>
 
             {agentOpen ? (
