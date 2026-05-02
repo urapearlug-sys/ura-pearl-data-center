@@ -19,11 +19,12 @@ import Image from 'next/image';
 import { uraLanding } from '@/images';
 import IceCube from '@/icons/IceCube';
 import Link from 'next/link';
+import SupportChatWidget from '@/components/SupportChatWidget';
 
 export default function Home() {
   return (
-    <div className="bg-[#1d2025] flex justify-center items-center h-screen">
-      <div className="w-full max-w-xl text-white flex flex-col items-center">
+    <div className="relative bg-[#1d2025] flex justify-center items-center min-h-screen min-h-[100dvh]">
+      <div className="w-full max-w-xl text-white flex flex-col items-center px-4 py-8">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
             <Image src={uraLanding} alt="URA Landing" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
@@ -41,6 +42,8 @@ export default function Home() {
           <IceCube className="w-8 h-8 animate-pulse delay-200" />
         </div>
       </div>
+
+      <SupportChatWidget />
     </div>
   );
 }
