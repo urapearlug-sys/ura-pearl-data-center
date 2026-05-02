@@ -5,6 +5,7 @@ import {
   GROUP_THEME,
   URA_SERVICE_CATEGORIES,
   URA_SERVICES_DEFAULT_CATEGORY_ID,
+  type UraServiceCategory,
   type UraServiceItem,
 } from '@/data/ura-services-catalog';
 import { triggerHapticFeedback } from '@/utils/ui';
@@ -23,6 +24,33 @@ function openServiceUrl(url: string) {
 }
 
 type SearchHit = { item: UraServiceItem; categoryLabel: string; categoryId: string };
+
+/** Preserve catalog order: first occurrence of each listSection defines bucket order. */
+function groupServicesByListSection(services: UraServiceItem[]): { heading: string | null; items: UraServiceItem[] }[] {
+  const order: string[] = [];
+  const buckets = new Map<string, UraServiceItem[]>();
+  for (const item of services) {
+    const key = item.listSection?.trim() ?? '';
+    if (!buckets.has(key)) {
+      buckets.set(key, []);
+      order.push(key);
+    }
+    buckets.get(key)!.push(item);
+  }
+  return order.map((key) => ({
+    heading: key ? key : null,
+    items: buckets.get(key)!,
+  }));
+}
+
+function subsectionTitle(
+  heading: string | null,
+  sectionCount: number
+): string | null {
+  if (sectionCount <= 1 && !heading) return null;
+  if (heading) return heading;
+  return 'General';
+}
 
 export default function Services() {
   const [activeCategoryId, setActiveCategoryId] = useState<string>(URA_SERVICES_DEFAULT_CATEGORY_ID);
@@ -69,6 +97,24 @@ export default function Services() {
 
   const showSearchResults = search.trim().length > 0;
 
+  const serviceSections = useMemo(
+    () => groupServicesByListSection(activeCategory.services),
+    [activeCategory]
+  );
+
+  const searchGroupedByCategory = useMemo(() => {
+    if (!showSearchResults || searchHits.length === 0) return [] as { category: UraServiceCategory; hits: SearchHit[] }[];
+    const map = new Map<string, SearchHit[]>();
+    for (const hit of searchHits) {
+      if (!map.has(hit.categoryId)) map.set(hit.categoryId, []);
+      map.get(hit.categoryId)!.push(hit);
+    }
+    return URA_SERVICE_CATEGORIES.map((category) => ({
+      category,
+      hits: map.get(category.id) ?? [],
+    })).filter((x) => x.hits.length > 0);
+  }, [searchHits, showSearchResults]);
+
   return (
     <div className="bg-black min-h-screen flex justify-center pb-28">
       <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
@@ -76,9 +122,16 @@ export default function Services() {
         <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
           <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
             <h1 className="text-xl font-bold tracking-tight text-white px-1">URA Services</h1>
-            <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-3">
+            <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-1">
               Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links.
             </p>
+            {!showSearchResults ? (
+              <p className={`text-[10px] font-semibold uppercase tracking-wider px-1 mb-3 ${activeTheme.accentClass}`}>
+                Viewing: {activeCategory.sidebarIcon} {activeCategory.shortLabel}
+              </p>
+            ) : (
+              <p className="text-[10px] text-slate-600 px-1 mb-3">Search across all categories</p>
+            )}
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" aria-hidden>
                 🔍
@@ -105,18 +158,31 @@ export default function Services() {
                     No services match “{search.trim()}”. Try another keyword or pick a category on the right.
                   </p>
                 ) : (
-                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                    {searchHits.map(({ item, categoryLabel, categoryId }) => {
-                      const catMeta = URA_SERVICE_CATEGORIES.find((c) => c.id === categoryId)!;
-                      const th = GROUP_THEME[catMeta.groupId];
+                  <div className="space-y-6">
+                    {searchGroupedByCategory.map(({ category, hits }) => {
+                      const th = GROUP_THEME[category.groupId];
                       return (
-                        <ServiceCard
-                          key={`${item.id}-${categoryId}-search`}
-                          item={item}
-                          badge={categoryLabel}
-                          accentClass={th.accentClass}
-                          onActivate={activateService}
-                        />
+                        <section key={category.id} aria-labelledby={`search-cat-${category.id}`}>
+                          <h3
+                            id={`search-cat-${category.id}`}
+                            className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider mb-2 pb-1 border-b border-white/[0.08] ${th.accentClass}`}
+                          >
+                            <span aria-hidden>{category.sidebarIcon}</span>
+                            {category.shortLabel}
+                            <span className="text-slate-500 font-normal normal-case">({hits.length})</span>
+                          </h3>
+                          <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                            {hits.map(({ item, categoryId }) => (
+                              <ServiceCard
+                                key={`${item.id}-${categoryId}-search`}
+                                item={item}
+                                badge={item.listSection}
+                                accentClass={th.accentClass}
+                                onActivate={activateService}
+                              />
+                            ))}
+                          </div>
+                        </section>
                       );
                     })}
                   </div>
@@ -124,17 +190,51 @@ export default function Services() {
               </>
             ) : (
               <>
-                <h2 className={`text-base font-bold mb-1 ${activeTheme.accentClass}`}>{activeCategory.title}</h2>
-                <p className="text-[11px] text-slate-500 mb-4">{activeCategory.services.length} quick links</p>
-                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                  {activeCategory.services.map((item) => (
-                    <ServiceCard
-                      key={item.id}
-                      item={item}
-                      accentClass={activeTheme.accentClass}
-                      onActivate={activateService}
-                    />
-                  ))}
+                <div className="rounded-xl border border-white/[0.09] bg-[#0e1116] px-3 py-3 mb-4 shadow-inner shadow-black/30">
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-2xl leading-none shrink-0" aria-hidden>
+                      {activeCategory.sidebarIcon}
+                    </span>
+                    <div className="min-w-0">
+                      <p className={`text-[10px] font-bold uppercase tracking-wider ${activeTheme.accentClass}`}>
+                        {activeCategory.shortLabel}
+                      </p>
+                      <h2 className={`text-base font-bold leading-snug mt-0.5 ${activeTheme.accentClass}`}>
+                        {activeCategory.title}
+                      </h2>
+                      {activeCategory.listIntro ? (
+                        <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">{activeCategory.listIntro}</p>
+                      ) : null}
+                      <p className="text-[10px] text-slate-500 mt-2">{activeCategory.services.length} quick links</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-5">
+                  {serviceSections.map(({ heading, items }, idx) => {
+                    const st = subsectionTitle(heading, serviceSections.length);
+                    return (
+                      <section key={`sec-${idx}-${heading ?? 'ungrouped'}`} className="space-y-2">
+                        {st ? (
+                          <h3
+                            className={`text-[11px] font-bold uppercase tracking-wide pl-0.5 border-l-2 border-current ${activeTheme.accentClass} opacity-90`}
+                          >
+                            {st}
+                          </h3>
+                        ) : null}
+                        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                          {items.map((item) => (
+                            <ServiceCard
+                              key={item.id}
+                              item={item}
+                              accentClass={activeTheme.accentClass}
+                              onActivate={activateService}
+                            />
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  })}
                 </div>
               </>
             )}
