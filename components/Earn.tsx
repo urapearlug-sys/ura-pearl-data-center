@@ -207,11 +207,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
     }
   }, [activeTab]);
 
-  const handleTaskSelection = useCallback((task: Task) => {
-    if (!task.isCompleted) {
-      triggerHapticFeedback(window);
-      setSelectedTask(task);
-    }
+  const openTaskPopup = useCallback((task: Task) => {
+    triggerHapticFeedback(window);
+    setSelectedTask(task);
   }, []);
 
   const handleTaskUpdate = useCallback((updatedTask: Task) => {
@@ -221,6 +219,16 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       )
     );
   }, [setTasks]);
+
+  const taskPopupEl =
+    selectedTask != null ? (
+      <TaskPopup
+        key={selectedTask.id}
+        task={selectedTask}
+        onClose={() => setSelectedTask(null)}
+        onUpdate={handleTaskUpdate}
+      />
+    ) : null;
 
   const displayTasks = useMemo(() => {
     const list =
@@ -302,7 +310,11 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                       applyEarnBootstrap={applyEarnBootstrap}
                     />
                     <section aria-label="Activities">
-                      <PublishedActivitiesFeed initData={userTelegramInitData} />
+                      <PublishedActivitiesFeed
+                        initData={userTelegramInitData}
+                        tasks={tasks}
+                        onOpenTask={openTaskPopup}
+                      />
                     </section>
                   </>
                 )}
@@ -310,6 +322,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
             </div>
           </div>
         </div>
+        {taskPopupEl}
       </div>
     );
   }
@@ -646,75 +659,71 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                             <p className="font-medium text-gray-400">No activities in this section.</p>
                           </div>
                         ) : (
-                          displayTasks.map((task) => (
-                            <button
-                              key={task.id}
-                              type="button"
-                              onClick={() => handleTaskSelection(task)}
-                              className="w-full text-left flex items-center justify-between gap-3 rounded-xl p-4 bg-gradient-to-br from-[#252836] to-[#1e2029] border border-[#2d2f38] hover:border-violet-500/40 hover:from-[#2a2c38] hover:to-[#22242e] active:scale-[0.99] transition-all duration-200 shadow-lg"
-                            >
-                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <div className="w-11 h-11 rounded-xl bg-[#1a1c22] flex items-center justify-center flex-shrink-0 border border-[#2d2f38] overflow-hidden">
-                                  {(() => {
-                                    const imgSrc = getTaskImageSrc(task.image);
-                                    return imgSrc ? (
-                                      <Image src={imgSrc} alt={task.title} width={36} height={36} className="rounded-lg object-cover" />
-                                    ) : (
-                                    <IceCube className="w-6 h-6 text-[#f3ba2f]" />
-                                    );
-                                  })()}
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <p className="font-semibold text-white truncate">{task.title}</p>
-                                  {task.type === 'REFERRAL' && task.taskData?.friendsNumber != null && (
-                                    <p className="text-sm text-gray-400 mt-0.5">
-                                      Number of friends (required): {Number(task.taskData.friendsNumber)}
-                                    </p>
-                                  )}
-                                  <div className="flex items-center gap-1.5 mt-0.5 flex-nowrap">
-                                    <Image src={pearlWhite} alt="" width={16} height={16} className="h-4 w-4 flex-shrink-0 object-contain" />
-                                    <span className="text-sm font-medium text-[#f3ba2f] whitespace-nowrap">
-                                      +{formatNumber(task.points)} pearls
-                                    </span>
+                          <div className="grid grid-cols-2 gap-3">
+                            {displayTasks.map((task) => (
+                              <button
+                                key={task.id}
+                                type="button"
+                                onClick={() => openTaskPopup(task)}
+                                className="text-left rounded-xl border border-[#2d2f38] bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 shadow-lg hover:border-violet-500/45 hover:from-[#2a2c38] hover:to-[#22242e] active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+                              >
+                                <div className="flex items-start gap-2 flex-1 min-h-0">
+                                  <div className="w-10 h-10 rounded-lg bg-[#1a1c22] flex items-center justify-center shrink-0 border border-[#2d2f38] overflow-hidden">
+                                    {(() => {
+                                      const imgSrc = getTaskImageSrc(task.image);
+                                      return imgSrc ? (
+                                        <Image src={imgSrc} alt="" width={36} height={36} className="object-cover w-9 h-9 rounded-md" />
+                                      ) : (
+                                        <IceCube className="w-5 h-5 text-[#f3ba2f]" />
+                                      );
+                                    })()}
                                   </div>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-[11px] font-bold text-white leading-snug line-clamp-3">{task.title}</p>
+                                    {task.type === 'REFERRAL' && task.taskData?.friendsNumber != null && (
+                                      <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-2">
+                                        Friends needed: {Number(task.taskData.friendsNumber)}
+                                      </p>
+                                    )}
+                                    <div className="flex items-center gap-1 mt-1.5 flex-nowrap">
+                                      <Image src={pearlWhite} alt="" width={14} height={14} className="h-3.5 w-3.5 shrink-0 object-contain" />
+                                      <span className="text-[11px] font-semibold text-[#f3ba2f] whitespace-nowrap">
+                                        +{formatNumber(task.points)} pearls
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <span className="shrink-0 mt-0.5 flex flex-col items-center gap-0.5" aria-hidden>
+                                    {task.isCompleted ? (
+                                      <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                                        <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                      </span>
+                                    ) : (
+                                      <span className="text-gray-500 text-lg leading-none">›</span>
+                                    )}
+                                  </span>
                                 </div>
-                              </div>
-                              <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-                                {task.isCompleted ? (
-                                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                                    <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                  </span>
-                                ) : (
-                                  <span className="text-gray-500">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                  </span>
-                                )}
-                              </div>
-                            </button>
-                          ))
+                              </button>
+                            ))}
+                          </div>
                         )}
                       </div>
                     </>
                   )}
                 </section>
 
-                <PublishedActivitiesFeed initData={userTelegramInitData} />
+                <PublishedActivitiesFeed
+                  initData={userTelegramInitData}
+                  tasks={tasks}
+                  onOpenTask={openTaskPopup}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      {selectedTask && (
-        <TaskPopup
-          task={selectedTask}
-          onClose={() => setSelectedTask(null)}
-          onUpdate={handleTaskUpdate}
-        />
-      )}
+      {taskPopupEl}
       {showDailyLogin && (
         <DailyLoginPopup onClose={() => setShowDailyLogin(false)} />
       )}

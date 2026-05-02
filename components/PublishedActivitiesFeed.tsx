@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { pearlWhite } from '@/images';
+import IceCube from '@/icons/IceCube';
+import { getTaskImageSrc, pearlWhite } from '@/images';
+import type { Task } from '@/utils/types';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 
 export type PublishedActivityItem = {
@@ -16,14 +18,23 @@ export type PublishedActivityItem = {
   kind?: 'post' | 'task';
   points?: number;
   category?: string;
+  image?: string;
 };
 
 type Props = {
   /** @deprecated No longer sent; API is public read. Prop kept for call-site compatibility */
   initData?: string;
+  /** When set with onOpenTask, task tiles open the earn task popup instead of only opening the external link */
+  tasks?: Task[];
+  onOpenTask?: (task: Task) => void;
 };
 
-export default function PublishedActivitiesFeed(_props: Props) {
+function taskIdFromActivityItem(item: PublishedActivityItem): string | null {
+  if (item.kind !== 'task' || !item.id.startsWith('task:')) return null;
+  return item.id.slice('task:'.length);
+}
+
+export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Props) {
   const [items, setItems] = useState<PublishedActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,45 +74,87 @@ export default function PublishedActivitiesFeed(_props: Props) {
           tasks.
         </p>
       ) : (
-        <div className="space-y-3">
-          {items.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-xl border border-[#2d2f38] bg-[#141821] p-3 text-left shadow-sm"
-            >
-              <div className="flex flex-wrap items-center gap-2 gap-y-1">
-                <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
-                {item.kind === 'task' ? (
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-200/90 bg-amber-500/15 border border-amber-500/35 rounded px-1.5 py-0.5">
-                    Task
-                  </span>
-                ) : null}
-              </div>
-              {item.kind === 'task' && typeof item.points === 'number' ? (
-                <div className="flex items-center gap-1.5 mt-1 flex-nowrap">
-                  <Image src={pearlWhite} alt="" width={18} height={18} className="h-[18px] w-[18px] shrink-0 object-contain" />
-                  <span className="text-[11px] text-[#f3ba2f] font-semibold whitespace-nowrap">
-                    +{formatNumber(item.points)} pearls
+        <div className="grid grid-cols-2 gap-3">
+          {items.map((item) => {
+            if (item.kind !== 'task') {
+              return (
+                <article
+                  key={item.id}
+                  className="col-span-2 rounded-xl border border-[#2d2f38] bg-[#141821] p-3 text-left shadow-sm"
+                >
+                  <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
+                  <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
+                  <p className="text-[10px] text-gray-500 mt-2 tabular-nums">
+                    {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                  </p>
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => triggerHapticFeedback(window)}
+                      className="mt-3 inline-flex items-center justify-center rounded-lg border border-cyan-500/50 bg-cyan-950/30 px-3 py-2 text-xs font-semibold text-cyan-200 hover:border-cyan-400"
+                    >
+                      {item.linkLabel || 'Open link'}
+                    </a>
+                  ) : null}
+                </article>
+              );
+            }
+
+            const rawId = taskIdFromActivityItem(item);
+            const fullTask = rawId && tasks.length ? tasks.find((t) => t.id === rawId) : undefined;
+
+            const onActivate = () => {
+              triggerHapticFeedback(window);
+              if (fullTask && onOpenTask) {
+                onOpenTask(fullTask);
+                return;
+              }
+              if (item.link) window.open(item.link, '_blank', 'noopener,noreferrer');
+            };
+
+            const imgSrc = getTaskImageSrc(item.image ?? fullTask?.image);
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={onActivate}
+                className="rounded-xl border border-[#2d2f38] bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 text-left shadow-lg hover:border-violet-500/45 active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+              >
+                <div className="flex items-start gap-2 flex-1 min-h-0">
+                  <div className="w-10 h-10 rounded-lg bg-[#1a1c22] flex items-center justify-center shrink-0 border border-[#2d2f38] overflow-hidden">
+                    {imgSrc ? (
+                      <Image src={imgSrc} alt="" width={36} height={36} className="object-cover w-9 h-9 rounded-md" />
+                    ) : (
+                      <IceCube className="w-5 h-5 text-[#f3ba2f]" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-bold text-white leading-snug line-clamp-3">{item.title}</p>
+                    {typeof item.points === 'number' ? (
+                      <div className="flex items-center gap-1 mt-1.5 flex-nowrap">
+                        <Image
+                          src={pearlWhite}
+                          alt=""
+                          width={14}
+                          height={14}
+                          className="h-3.5 w-3.5 shrink-0 object-contain"
+                        />
+                        <span className="text-[11px] font-semibold text-[#f3ba2f] whitespace-nowrap">
+                          +{formatNumber(item.points)} pearls
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+                  <span className="text-gray-500 text-lg leading-none shrink-0 mt-0.5" aria-hidden>
+                    ›
                   </span>
                 </div>
-              ) : null}
-              <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
-              <p className="text-[10px] text-gray-500 mt-2 tabular-nums">
-                {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
-              </p>
-              {item.link ? (
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => triggerHapticFeedback(window)}
-                  className="mt-3 inline-flex items-center justify-center rounded-lg border border-cyan-500/50 bg-cyan-950/30 px-3 py-2 text-xs font-semibold text-cyan-200 hover:border-cyan-400"
-                >
-                  {item.linkLabel || 'Open link'}
-                </a>
-              ) : null}
-            </article>
-          ))}
+              </button>
+            );
+          })}
         </div>
       )}
     </section>
