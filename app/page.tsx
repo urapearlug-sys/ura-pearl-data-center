@@ -19,7 +19,6 @@ import Image from 'next/image';
 import { uraLanding } from '@/images';
 import IceCube from '@/icons/IceCube';
 import Link from 'next/link';
-import SupportChatWidget from '@/components/SupportChatWidget';
 
 export default function Home() {
   return (
@@ -42,8 +41,6 @@ export default function Home() {
           <IceCube className="w-8 h-8 animate-pulse delay-200" />
         </div>
       </div>
-
-      <SupportChatWidget />
     </div>
   );
 }

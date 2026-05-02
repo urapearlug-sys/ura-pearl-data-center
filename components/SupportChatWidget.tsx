@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { triggerHapticFeedback } from '@/utils/ui';
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string };
@@ -45,6 +46,11 @@ function supportEmail(): string | null {
 }
 
 export default function SupportChatWidget() {
+  const pathname = usePathname() ?? '';
+  const isAdminRoute = pathname.startsWith('/admin');
+  /** Bottom nav on /clicker is ~6rem + safe area; lift FAB so it is not covered. */
+  const isClickerRoute = pathname === '/clicker' || pathname.startsWith('/clicker/');
+
   const [open, setOpen] = useState(false);
   const [agentOpen, setAgentOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -95,8 +101,16 @@ export default function SupportChatWidget() {
     }
   }, [input, loading, messages]);
 
+  const bottomOffsetClass = isClickerRoute
+    ? 'bottom-[calc(6.85rem+env(safe-area-inset-bottom,0px))]'
+    : 'bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))]';
+
+  if (isAdminRoute) return null;
+
   return (
-    <div className="fixed z-[100] bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] flex flex-col items-end gap-2 pointer-events-none">
+    <div
+      className={`pointer-events-none fixed z-[90] flex flex-col items-end gap-2 ${bottomOffsetClass} right-[max(1.25rem,env(safe-area-inset-right,0px))]`}
+    >
       {open ? (
         <div
           className="pointer-events-auto w-[min(100vw-1.5rem,22rem)] max-h-[min(70vh,32rem)] flex flex-col rounded-2xl border border-white/10 bg-[#14171c] shadow-[0_12px_40px_rgba(0,0,0,0.55)] overflow-hidden"
@@ -235,12 +249,15 @@ export default function SupportChatWidget() {
           setOpen((o) => !o);
           if (open) setAgentOpen(false);
         }}
-        className="pointer-events-auto flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white pl-4 pr-1.5 py-1.5 shadow-lg shadow-sky-900/40 border border-white/15 hover:brightness-110 active:scale-[0.98] transition-all"
+        className="pointer-events-auto flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white pl-4 pr-1 py-1.5 shadow-[0_6px_28px_rgba(14,165,233,0.45)] ring-2 ring-cyan-200/55 ring-offset-2 ring-offset-[#0a0c0f] border border-white/20 hover:brightness-110 hover:shadow-[0_8px_32px_rgba(34,211,238,0.5)] active:scale-[0.97] transition-all motion-safe:animate-pulse-soft"
         aria-expanded={open}
         aria-label={open ? 'Close support chat' : 'Open support chat'}
       >
-        <span className="text-sm font-bold tracking-tight">Help</span>
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black/25 text-xl" aria-hidden>
+        <span className="text-sm font-bold tracking-tight drop-shadow-sm">Help</span>
+        <span
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 text-[1.35rem] leading-none"
+          aria-hidden
+        >
           💬
         </span>
       </button>
