@@ -135,14 +135,15 @@ export default function Learn() {
           Access URA guidance quickly through a clear general overview and sector-specific learning cards.
         </p>
 
-        <div className="mt-3 rounded-xl overflow-hidden border border-[#3f6db5]">
+        <div className="mt-3 rounded-xl overflow-hidden border border-[#3f6db5] bg-white">
           <Image
             src={uraFiscalFunBanner}
-            alt="Tax education banner"
+            alt="Fiscal Fun — Uganda Revenue Authority"
             width={1024}
-            height={682}
-            className="w-full h-24 object-cover"
+            height={393}
+            className="w-full h-auto object-cover"
             sizes="(max-width: 576px) 100vw, 576px"
+            priority
           />
         </div>
 

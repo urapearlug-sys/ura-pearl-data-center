@@ -467,7 +467,7 @@ export default function Home({ setCurrentView }: HomeProps) {
               src={uraFiscalFunBanner}
               alt="Fiscal Fun — Uganda Revenue Authority"
               width={1024}
-              height={682}
+              height={393}
               className="w-full h-auto object-cover"
               sizes="(max-width: 576px) 100vw, 576px"
               priority
