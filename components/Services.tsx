@@ -1,67 +1,14 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Image, { type StaticImageData } from 'next/image';
-import {
-  announcements,
-  baseGift,
-  blockchain,
-  collection,
-  dailyCipher,
-  dailyCombo,
-  dailyReward,
-  earnRewardsIcon,
-  friends,
-  game,
-  mitroplus,
-  navServices,
-  paidTrophy1,
-  pearlBlue,
-  pearlGolden,
-  pearlWhite,
-  telegram,
-  total,
-  uraFiscalFunBanner,
-  uraLanding,
-  uraTreasuryCounter,
-  website,
-  zoom,
-} from '@/images';
 import {
   GROUP_THEME,
   URA_SERVICE_CATEGORIES,
   URA_SERVICES_DEFAULT_CATEGORY_ID,
-  type ServiceImageKey,
   type UraServiceItem,
 } from '@/data/ura-services-catalog';
 import { triggerHapticFeedback } from '@/utils/ui';
 import TaxCalculatorModal from '@/components/TaxCalculatorModal';
-
-const SERVICE_IMAGES: Record<ServiceImageKey, StaticImageData> = {
-  dailyReward,
-  dailyCipher,
-  dailyCombo,
-  uraTreasuryCounter,
-  pearlWhite,
-  pearlBlue,
-  pearlGolden,
-  collection,
-  baseGift,
-  blockchain,
-  uraFiscalFunBanner,
-  earnRewardsIcon,
-  uraLanding,
-  announcements,
-  total,
-  game,
-  friends,
-  telegram,
-  navServices,
-  paidTrophy1,
-  mitroplus,
-  zoom,
-  website,
-};
 
 function openServiceUrl(url: string) {
   triggerHapticFeedback(window);
@@ -158,7 +105,7 @@ export default function Services() {
                     No services match “{search.trim()}”. Try another keyword or pick a category on the right.
                   </p>
                 ) : (
-                  <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                     {searchHits.map(({ item, categoryLabel, categoryId }) => {
                       const catMeta = URA_SERVICE_CATEGORIES.find((c) => c.id === categoryId)!;
                       const th = GROUP_THEME[catMeta.groupId];
@@ -179,7 +126,7 @@ export default function Services() {
               <>
                 <h2 className={`text-base font-bold mb-1 ${activeTheme.accentClass}`}>{activeCategory.title}</h2>
                 <p className="text-[11px] text-slate-500 mb-4">{activeCategory.services.length} quick links</p>
-                <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   {activeCategory.services.map((item) => (
                     <ServiceCard
                       key={item.id}
@@ -211,19 +158,20 @@ export default function Services() {
                   setActiveCategoryId(cat.id);
                   setSearch('');
                 }}
-                className={`flex-1 min-h-0 flex flex-col items-center justify-center gap-1.5 rounded-xl px-1 py-2 transition-all duration-200 border ${
+                className={`flex-1 min-h-0 flex flex-col items-center justify-center gap-1 rounded-lg px-1 py-1.5 transition-all duration-200 border ${
                   isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.06]'
                 }`}
               >
                 <span
-                  className={`text-[1.65rem] sm:text-[1.85rem] leading-none transition-colors ${
+                  className={`text-xl sm:text-[1.35rem] leading-none transition-colors ${
                     isActive ? theme.activeIconClass : theme.idleIconClass
                   }`}
+                  aria-hidden
                 >
                   {cat.sidebarIcon}
                 </span>
                 <span
-                  className={`text-[9px] sm:text-[10px] font-bold text-center leading-snug px-0.5 ${
+                  className={`text-[8px] sm:text-[9px] font-semibold text-center leading-snug px-0.5 ${
                     isActive ? 'text-white' : 'text-slate-500'
                   }`}
                 >
@@ -253,23 +201,23 @@ function ServiceCard({
   accentClass: string;
   onActivate: (item: UraServiceItem) => void;
 }) {
-  const img = SERVICE_IMAGES[item.imageKey] ?? uraTreasuryCounter;
-
   return (
     <button
       type="button"
       title={item.description}
       onClick={() => onActivate(item)}
-      className="group flex flex-col rounded-2xl bg-gradient-to-b from-[#1e222b] to-[#14171e] border border-[#2a3038] p-2 sm:p-2.5 text-center transition-all duration-200 hover:border-sky-400/35 hover:shadow-[0_8px_24px_rgba(0,0,0,0.45)] hover:-translate-y-0.5 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50"
+      className="group flex flex-col rounded-xl bg-gradient-to-b from-[#1c1f26] to-[#13161c] border border-[#2a3038] p-1.5 sm:p-2 text-center transition-all duration-200 hover:border-sky-400/30 hover:shadow-md hover:-translate-y-px active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/45"
     >
-      <div className="relative mx-auto w-full aspect-square max-h-[4.5rem] sm:max-h-[5.25rem] rounded-xl overflow-hidden bg-[#0f1218] border border-white/[0.06] mb-1.5">
-        <Image src={img} alt="" fill className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-300" sizes="120px" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60 pointer-events-none" />
+      <div
+        className="mx-auto mb-1 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg bg-[#0d0f14] border border-white/[0.07] text-[1.35rem] sm:text-[1.45rem] leading-none shadow-inner group-hover:bg-[#12151c] transition-colors"
+        aria-hidden
+      >
+        {item.serviceIcon}
       </div>
       {badge ? (
-        <span className={`text-[8px] font-bold uppercase tracking-wide mb-0.5 ${accentClass}`}>{badge}</span>
+        <span className={`text-[7px] font-bold uppercase tracking-wide mb-0.5 ${accentClass}`}>{badge}</span>
       ) : null}
-      <span className="text-[10px] sm:text-[11px] font-semibold text-white leading-tight line-clamp-3 min-h-[2.5rem] text-center">
+      <span className="text-[9px] sm:text-[10px] font-medium text-white/95 leading-snug line-clamp-3 min-h-[2.25rem] text-center">
         {item.title}
       </span>
     </button>
