@@ -251,7 +251,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
         return (
           <div>
             <h2 className="text-lg font-bold text-white mb-2">Service catalog</h2>
-            <p className="text-sm text-gray-400">Browse URA services and quick actions. Content coming soon.</p>
+            <p className="text-sm text-gray-400">Use the Services tab for categorized URA portals — eTax, EFRIS, customs, and support.</p>
           </div>
         );
 

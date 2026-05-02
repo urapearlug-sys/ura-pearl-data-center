@@ -44,6 +44,7 @@ import Settings from '@/components/Settings';
 import Collection from '@/components/Collection';
 import Home from '@/components/Home';
 import Learn from '@/components/Learn';
+import Services from '@/components/Services';
 
 function EmptyPrimaryPage() {
     return <div className="bg-black min-h-screen" />;
@@ -91,7 +92,7 @@ function ClickerPage() {
             case 'eearn':
                 return <Learn />;
             case 'services':
-                return <EmptyPrimaryPage />;
+                return <Services />;
             case 'guild':
                 return <EmptyPrimaryPage />;
             case 'earn':
