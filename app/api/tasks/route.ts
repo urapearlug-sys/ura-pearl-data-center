@@ -38,14 +38,10 @@ export async function GET(req: Request) {
   }
 
   try {
-    // Fetch the user
-    const user = await prisma.user.findUnique({
+    // User may not exist in DB yet (first open, sync lag). Still return public tasks so Earn is not empty.
+    const dbUser = await prisma.user.findUnique({
       where: { telegramId },
     });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
 
     // Fetch active tasks; then exclude only those explicitly hidden (isHidden === true).
     // Tasks without isHidden (created before the field existed) are shown.
@@ -55,15 +51,17 @@ export async function GET(req: Request) {
     const visibleTasks = activeTasks.filter((t) => t.isHidden !== true);
 
     // UserTask entries for this user for active tasks (we'll only return visible ones)
-    const validUserTasks = await prisma.userTask.findMany({
-      where: {
-        userId: user.id,
-        task: { isActive: true },
-      },
-      include: {
-        task: true,
-      },
-    });
+    const validUserTasks = dbUser
+      ? await prisma.userTask.findMany({
+          where: {
+            userId: dbUser.id,
+            task: { isActive: true },
+          },
+          include: {
+            task: true,
+          },
+        })
+      : [];
 
     // Prepare the response data — incomplete first, completed last (only visible tasks)
     const tasksData = visibleTasks
