@@ -52,5 +52,32 @@ export async function POST(req: Request) {
       },
     });
   });
-  return NextResponse.json({ success: true, swap: { from: 'WHITE', to: 'BLUE', amount: swapAmount } });
+
+  const fresh = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: {
+      whitePearls: true,
+      pointsBalance: true,
+      bluePearlsPending: true,
+      bluePearlsApprovedTotal: true,
+      goldishPearls: true,
+    },
+  });
+  if (!fresh) {
+    return NextResponse.json({ success: true, swap: { from: 'WHITE', to: 'BLUE', amount: swapAmount } });
+  }
+  const bluePending = Math.floor(fresh.bluePearlsPending);
+  const blueApproved = Math.floor(fresh.bluePearlsApprovedTotal);
+  return NextResponse.json({
+    success: true,
+    swap: { from: 'WHITE', to: 'BLUE', amount: swapAmount },
+    balances: {
+      white: Math.floor(fresh.whitePearls),
+      pointsBalance: Math.floor(Number(fresh.pointsBalance ?? 0)),
+      bluePending,
+      blueApprovedTotal: blueApproved,
+      blueTotal: bluePending + blueApproved,
+      goldish: Math.floor(fresh.goldishPearls),
+    },
+  });
 }

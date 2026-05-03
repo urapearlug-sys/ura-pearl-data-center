@@ -55,11 +55,14 @@ export async function POST(req: Request) {
     }),
   ]);
 
+  const bluePending = Math.floor(fresh.bluePearlsPending);
+  const blueApprovedTotal = Math.floor(fresh.bluePearlsApprovedTotal);
   return NextResponse.json({
     balances: {
       white: Math.floor(fresh.whitePearls),
-      bluePending: Math.floor(fresh.bluePearlsPending),
-      blueApprovedTotal: Math.floor(fresh.bluePearlsApprovedTotal),
+      bluePending,
+      blueApprovedTotal,
+      blueTotal: bluePending + blueApprovedTotal,
       goldish: Math.floor(fresh.goldishPearls),
     },
     recentAudits,

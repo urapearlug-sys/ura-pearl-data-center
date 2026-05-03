@@ -18,17 +18,18 @@ type PearlType = 'white' | 'goldish';
 
 export default function Wallet({ setCurrentView, embedded = false }: WalletProps) {
   const showToast = useToast();
-  const { userTelegramInitData } = useGameStore();
+  const { userTelegramInitData, setPointsBalance } = useGameStore();
 
   const [loading, setLoading] = useState(true);
   const [white, setWhite] = useState(0);
   const [bluePending, setBluePending] = useState(0);
+  const [blueApproved, setBlueApproved] = useState(0);
   const [golden, setGolden] = useState(0);
   const [history, setHistory] = useState<Array<{ id: string; eventType?: string; createdAt: string; amount?: number | null }>>([]);
 
   const [convertFromAmount, setConvertFromAmount] = useState(String(WHITE_TO_GOLDISH_RATE));
   const [converting, setConverting] = useState(false);
-  const [exchangeMode, setExchangeMode] = useState<'sell' | 'convert'>('sell');
+  const [exchangeMode, setExchangeMode] = useState<'whiteGolden' | 'whiteBlue'>('whiteGolden');
 
   const [withdrawAmount, setWithdrawAmount] = useState('1');
   const [withdrawing, setWithdrawing] = useState(false);
@@ -41,16 +42,38 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
 
   const [myTelegramId, setMyTelegramId] = useState('');
 
-  const totalPearls = white + bluePending + golden;
+  const blueTotal = useMemo(() => bluePending + blueApproved, [bluePending, blueApproved]);
+  const totalPearls = white + blueTotal + golden;
   const convertInput = Math.max(0, Math.floor(Number(convertFromAmount) || 0));
   const convertOutput = convertInput;
 
   const canConvert = useMemo(() => convertInput >= 1 && convertInput <= white, [convertInput, white]);
   const convertFromBalance = white;
-  const convertToBalance = bluePending;
+  const convertToBalance = blueTotal;
   const tradeInput = Math.max(0, Math.floor(Number(convertFromAmount) || 0));
-  const sellGoldenOutput = Math.floor(tradeInput / WHITE_TO_GOLDISH_RATE);
-  const canSell = tradeInput >= WHITE_TO_GOLDISH_RATE && tradeInput <= white;
+  const goldenConversionOut = Math.floor(tradeInput / WHITE_TO_GOLDISH_RATE);
+  const canWhiteToGolden = tradeInput >= WHITE_TO_GOLDISH_RATE && tradeInput <= white;
+
+  type ServerPearlBalances = {
+    white: number;
+    pointsBalance?: number;
+    bluePending: number;
+    blueApprovedTotal?: number;
+    blueTotal?: number;
+    goldish: number;
+  };
+
+  const applyServerBalances = (b: ServerPearlBalances) => {
+    setWhite(Math.floor(b.white));
+    const bp = Math.floor(b.bluePending);
+    const ba = Math.floor(b.blueApprovedTotal ?? (typeof b.blueTotal === 'number' ? Math.max(0, b.blueTotal - bp) : 0));
+    setBluePending(bp);
+    setBlueApproved(Number.isFinite(ba) ? ba : 0);
+    setGolden(Math.floor(b.goldish));
+    if (typeof b.pointsBalance === 'number' && Number.isFinite(b.pointsBalance)) {
+      setPointsBalance(Math.floor(b.pointsBalance));
+    }
+  };
 
   const loadWallet = async () => {
     if (!userTelegramInitData) return;
@@ -63,9 +86,20 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to load wallet');
-      setWhite(Math.floor(data?.balances?.white ?? 0));
-      setBluePending(Math.floor(data?.balances?.bluePending ?? 0));
-      setGolden(Math.floor(data?.balances?.goldish ?? 0));
+      const bp = Math.floor(data?.balances?.bluePending ?? 0);
+      const ba = Math.floor(data?.balances?.blueApprovedTotal ?? 0);
+      const bt =
+        typeof data?.balances?.blueTotal === 'number'
+          ? Math.floor(data.balances.blueTotal)
+          : bp + ba;
+      applyServerBalances({
+        white: Math.floor(data?.balances?.white ?? 0),
+        bluePending: bp,
+        blueApprovedTotal: ba,
+        blueTotal: bt,
+        goldish: Math.floor(data?.balances?.goldish ?? 0),
+        pointsBalance: Math.floor(data?.balances?.white ?? 0),
+      });
       setHistory(data?.recentAudits ?? []);
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Failed to load wallet', 'error');
@@ -112,7 +146,10 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Conversion failed');
-      showToast('Swap successful', 'success');
+      if (data?.balances && typeof data.balances === 'object') {
+        applyServerBalances(data.balances as ServerPearlBalances);
+      }
+      showToast('Conversion successful', 'success');
       await loadWallet();
       notifyPearlBalancesRefresh();
     } catch (error) {
@@ -122,8 +159,8 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
     }
   };
 
-  const handleSell = async () => {
-    if (!userTelegramInitData || !canSell) return;
+  const handleWhiteToGolden = async () => {
+    if (!userTelegramInitData || !canWhiteToGolden) return;
     setConverting(true);
     try {
       const res = await fetch('/api/pearls/sell', {
@@ -135,12 +172,15 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Sell failed');
-      showToast('Sell successful', 'success');
+      if (!res.ok) throw new Error(data.error || 'Conversion failed');
+      if (data?.balances && typeof data.balances === 'object') {
+        applyServerBalances(data.balances as ServerPearlBalances);
+      }
+      showToast('Conversion successful', 'success');
       await loadWallet();
       notifyPearlBalancesRefresh();
     } catch (error) {
-      showToast(error instanceof Error ? error.message : 'Sell failed', 'error');
+      showToast(error instanceof Error ? error.message : 'Conversion failed', 'error');
     } finally {
       setConverting(false);
     }
@@ -270,7 +310,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               disabled={converting || !canConvert}
               className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] text-center disabled:opacity-60 ${e ? 'py-2' : 'py-3'}`}
             >
-              <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>{converting ? 'Converting...' : 'Swap'}</p>
+              <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>{converting ? 'Converting...' : 'White→Blue'}</p>
             </button>
             <button
               type="button"
@@ -288,7 +328,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             <h2 className={`font-bold ${e ? 'text-sm' : 'text-lg'}`}>Balances</h2>
             {[
               { code: 'WHITE', name: 'White Pearl', value: white, image: pearlWhite },
-              { code: 'BLUE', name: 'Blue Pearl (Pending)', value: bluePending, image: pearlBlue },
+              { code: 'BLUE', name: 'Blue pearl (pending + approved)', value: blueTotal, image: pearlBlue },
               { code: 'GOLDEN', name: 'Golden Pearl', value: golden, image: pearlGolden },
             ].map((item) => (
               <div
@@ -314,34 +354,35 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
           </section>
 
           <section className={`rounded-2xl border border-[#2d2f38] bg-[#050608] ${e ? 'p-3' : 'p-4'}`}>
+            <h2 className={`font-bold text-white ${e ? 'text-sm mb-2' : 'text-base mb-3'}`}>Conversions</h2>
             <div className="rounded-full border border-[#1f2227] bg-[#0f1115] p-1 grid grid-cols-2 gap-1">
               <button
                 type="button"
                 onClick={() => {
                   triggerHapticFeedback(window);
-                  setExchangeMode('sell');
+                  setExchangeMode('whiteGolden');
                 }}
                 className={`rounded-full font-semibold transition-colors inline-flex items-center justify-center gap-1.5 ${
                   e ? 'py-1 text-xs' : 'py-1.5 text-sm'
-                } ${exchangeMode === 'sell' ? 'bg-[#2a2d34] text-white' : 'text-gray-500'}`}
+                } ${exchangeMode === 'whiteGolden' ? 'bg-[#2a2d34] text-white' : 'text-gray-500'}`}
               >
                 <Image src={pearlWhite} alt="" width={16} height={16} className="h-4 w-4 object-contain opacity-90" />
                 <Image src={pearlGolden} alt="" width={16} height={16} className="h-4 w-4 object-contain opacity-90" />
-                <span>Sell</span>
+                <span>White→Golden</span>
               </button>
               <button
                 type="button"
                 onClick={() => {
                   triggerHapticFeedback(window);
-                  setExchangeMode('convert');
+                  setExchangeMode('whiteBlue');
                 }}
                 className={`rounded-full font-semibold transition-colors inline-flex items-center justify-center gap-1.5 ${
                   e ? 'py-1 text-xs' : 'py-1.5 text-sm'
-                } ${exchangeMode === 'convert' ? 'bg-[#2a2d34] text-white' : 'text-gray-500'}`}
+                } ${exchangeMode === 'whiteBlue' ? 'bg-[#2a2d34] text-white' : 'text-gray-500'}`}
               >
                 <Image src={pearlWhite} alt="" width={16} height={16} className="h-4 w-4 object-contain opacity-90" />
                 <Image src={pearlBlue} alt="" width={16} height={16} className="h-4 w-4 object-contain opacity-90" />
-                <span>Swap</span>
+                <span>White→Blue</span>
               </button>
             </div>
 
@@ -349,7 +390,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               <p className={`font-semibold tracking-tight tabular-nums ${e ? 'text-2xl' : 'text-6xl'}`}>{tradeInput.toLocaleString()}</p>
             </div>
 
-            {exchangeMode === 'convert' ? (
+            {exchangeMode === 'whiteBlue' ? (
               <div className={`rounded-2xl border border-[#1f2227] bg-[#0f1115] divide-y divide-[#22252d] overflow-hidden ${e ? 'mt-3' : 'mt-5'}`}>
                 <div className={`flex items-center justify-between gap-3 ${e ? 'p-2.5' : 'p-3'}`}>
                   <div className={`flex items-center min-w-0 ${e ? 'gap-2' : 'gap-3'}`}>
@@ -362,7 +403,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                     />
                     <div className="min-w-0">
                       <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>From</p>
-                      <p className="mt-0.5 text-[11px] text-gray-400">White → blue (pending)</p>
+                      <p className="mt-0.5 text-[11px] text-gray-400">White converts to blue (pending)</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
@@ -387,12 +428,12 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                     />
                     <div className="min-w-0">
                       <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>To</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">Blue pearl (pending)</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5">Blue (adds to pending)</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <p className={`font-semibold tabular-nums ${e ? 'text-base' : 'text-lg'}`}>{convertOutput.toLocaleString()}</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">Balance {convertToBalance.toLocaleString()}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">Total blue {convertToBalance.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
@@ -408,7 +449,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                       className={`shrink-0 object-contain ${e ? 'h-9 w-9' : 'h-11 w-11'}`}
                     />
                     <div className="min-w-0">
-                      <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>Sell</p>
+                      <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>From</p>
                       <p className="text-[11px] text-gray-400 mt-0.5">White pearl</p>
                     </div>
                   </div>
@@ -433,13 +474,13 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                       className={`shrink-0 object-contain ${e ? 'h-9 w-9' : 'h-11 w-11'}`}
                     />
                     <div className="min-w-0">
-                      <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>Receive</p>
+                      <p className={`font-semibold text-white ${e ? 'text-xs' : 'text-sm'}`}>To</p>
                       <p className="text-[11px] text-gray-400 mt-0.5">Golden pearl</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <p className={`font-semibold tabular-nums ${e ? 'text-base' : 'text-lg'}`}>
-                      {sellGoldenOutput.toLocaleString()}
+                      {goldenConversionOut.toLocaleString()}
                     </p>
                     <p className="text-[11px] text-gray-400 mt-0.5">
                       {`${WHITE_TO_GOLDISH_RATE.toLocaleString()} white = 1 golden`}
@@ -451,23 +492,23 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
 
             <button
               type="button"
-              onClick={exchangeMode === 'convert' ? handleConvert : handleSell}
-              disabled={converting || (exchangeMode === 'convert' && !canConvert) || (exchangeMode === 'sell' && !canSell)}
+              onClick={exchangeMode === 'whiteBlue' ? handleConvert : handleWhiteToGolden}
+              disabled={
+                converting ||
+                (exchangeMode === 'whiteBlue' && !canConvert) ||
+                (exchangeMode === 'whiteGolden' && !canWhiteToGolden)
+              }
               className={`mt-4 w-full rounded-full bg-[#0e1014] border border-[#1f2227] font-semibold text-gray-300 disabled:opacity-50 ${e ? 'py-2.5 text-sm' : 'py-3 text-base'}`}
             >
-              {converting
-                ? 'Processing...'
-                : exchangeMode === 'convert'
-                  ? 'Swap now'
-                  : 'Sell now'}
+              {converting ? 'Processing...' : 'Convert'}
             </button>
-            {exchangeMode === 'convert' ? (
+            {exchangeMode === 'whiteBlue' ? (
               <p className="mt-2 text-[11px] text-gray-500 text-center">
-                One-way: white becomes blue (pending). Blue cannot be swapped back to white.
+                One-way conversion: white to blue (pending). Blue cannot be converted back to white.
               </p>
             ) : (
               <p className="mt-2 text-[11px] text-gray-500 text-center">
-                One-way: white becomes golden. Golden cannot be turned back into white here.
+                One-way conversion: white to golden. Golden cannot be converted back to white here.
               </p>
             )}
           </section>

@@ -105,7 +105,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
   const [showEcosystemDashboard, setShowEcosystemDashboard] = useState(false);
-  const { userTelegramName, points, pointsBalance, userTelegramInitData } = useGameStore();
+  const { userTelegramName, points, pointsBalance, userTelegramInitData, setPointsBalance } = useGameStore();
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
 
@@ -187,8 +187,15 @@ export default function Home({ setCurrentView }: HomeProps) {
         });
         if (!res.ok) return;
         const data = await res.json();
-        setBluePearls(Math.floor(data?.balances?.bluePending ?? 0));
+        const bp = Math.floor(data?.balances?.bluePending ?? 0);
+        const ba = Math.floor(data?.balances?.blueApprovedTotal ?? 0);
+        const bt =
+          typeof data?.balances?.blueTotal === 'number'
+            ? Math.floor(data.balances.blueTotal)
+            : bp + ba;
+        setBluePearls(bt);
         setGoldishPearls(Math.floor(data?.balances?.goldish ?? 0));
+        setPointsBalance(Math.floor(data?.balances?.white ?? 0));
       } catch {
         // Keep UI responsive with zero fallback if pearls API is unavailable.
       }
@@ -557,7 +564,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                 <div className="mt-4 space-y-2">
                   {[
                     { key: 'white', label: 'White pearl', value: liveWhitePearls, color: 'text-slate-200', hint: 'From taps & instant approved tasks', image: pearlWhite },
-                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'From approval-required tasks', image: pearlBlue },
+                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'Pending + approved (includes wallet white→blue)', image: pearlBlue },
                     { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls', image: pearlGolden },
                   ].map((item) => (
                     <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 flex items-center gap-2">

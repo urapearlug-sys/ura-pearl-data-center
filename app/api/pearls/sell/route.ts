@@ -61,8 +61,30 @@ export async function POST(req: Request) {
     });
   });
 
+  const fresh = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: {
+      whitePearls: true,
+      pointsBalance: true,
+      bluePearlsPending: true,
+      bluePearlsApprovedTotal: true,
+      goldishPearls: true,
+    },
+  });
+  const bluePending = fresh ? Math.floor(fresh.bluePearlsPending) : 0;
+  const blueApproved = fresh ? Math.floor(fresh.bluePearlsApprovedTotal) : 0;
   return NextResponse.json({
     success: true,
-    trade: { mode: 'sell', soldWhite: whiteConsumed, receivedGolden: goldenReceived },
+    conversion: { soldWhite: whiteConsumed, receivedGolden: goldenReceived },
+    balances: fresh
+      ? {
+          white: Math.floor(fresh.whitePearls),
+          pointsBalance: Math.floor(Number(fresh.pointsBalance ?? 0)),
+          bluePending,
+          blueApprovedTotal: blueApproved,
+          blueTotal: bluePending + blueApproved,
+          goldish: Math.floor(fresh.goldishPearls),
+        }
+      : undefined,
   });
 }
