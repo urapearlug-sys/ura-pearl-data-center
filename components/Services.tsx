@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { navServices } from '@/images';
+import UraStadiumPageHero from '@/components/UraStadiumPageHero';
 import {
   GROUP_THEME,
   URA_SERVICE_CATEGORIES,
@@ -116,14 +118,19 @@ export default function Services() {
   }, [searchHits, showSearchResults]);
 
   return (
-    <div className="bg-black min-h-screen flex justify-center pb-28">
-      <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
+    <div className="min-h-screen flex flex-col bg-[#0f3c86] pb-28">
+      <UraStadiumPageHero
+        title="URA Services"
+        description="Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links."
+        icon={navServices}
+      />
+      <div className="flex-1 flex justify-center bg-black min-h-0">
+        <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
         {/* Main content */}
         <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
           <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
-            <h1 className="text-xl font-bold tracking-tight text-white px-1">URA Services</h1>
             <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-1">
-              Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links.
+              Pick a category on the right or search below.
             </p>
             {!showSearchResults ? (
               <p className={`text-[10px] font-semibold uppercase tracking-wider px-1 mb-3 ${activeTheme.accentClass}`}>
@@ -281,6 +288,7 @@ export default function Services() {
             );
           })}
         </aside>
+        </div>
       </div>
 
       {taxCalculatorOpen ? (

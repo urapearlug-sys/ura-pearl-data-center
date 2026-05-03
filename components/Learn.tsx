@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import { uraFiscalFunBanner } from '@/images';
+import { uraFiscalFunBanner, navLearn } from '@/images';
+import UraStadiumPageHero from '@/components/UraStadiumPageHero';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { LEARN_CATEGORY_DEFAULTS } from '@/data/learn-defaults';
 import { useToast } from '@/contexts/ToastContext';
@@ -129,13 +130,13 @@ export default function Learn() {
 
   return (
     <div className="bg-[#0f3c86] min-h-screen pb-24">
-      <div className="px-4 pt-4">
-        <h1 className="text-white text-2xl font-bold tracking-tight">Tax Education</h1>
-        <p className="text-blue-100 text-sm mt-1">
-          Access URA guidance quickly through a clear general overview and sector-specific learning cards.
-        </p>
-
-        <div className="mt-3 rounded-xl overflow-hidden border border-[#3f6db5] bg-white">
+      <UraStadiumPageHero
+        title="Tax Education"
+        description="Access URA guidance quickly through a clear general overview and sector-specific learning cards."
+        icon={navLearn}
+      />
+      <div className="w-full max-w-xl mx-auto px-4 pt-2">
+        <div className="rounded-xl overflow-hidden border border-[#3f6db5] bg-white">
           <Image
             src={uraFiscalFunBanner}
             alt="Fiscal Fun — Uganda Revenue Authority"

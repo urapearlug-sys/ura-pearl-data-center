@@ -12,6 +12,7 @@ import { navGuild, uraLogoCircle, pearlWhite, baseGift, bigGift } from '@/images
 import Copy from '@/icons/Copy';
 import { useToast } from '@/contexts/ToastContext';
 import GlobalRankingPopup from '@/components/popups/GlobalRankingPopup';
+import UraStadiumPageHero from '@/components/UraStadiumPageHero';
 
 type GuildLeader = {
   rank: number;
@@ -50,7 +51,7 @@ interface GuildProps {
 function rankStyleLight(rank: number): string {
   if (rank === 1) return 'text-amber-800 bg-amber-100 border-amber-400';
   if (rank === 2) return 'text-slate-800 bg-slate-200 border-slate-400';
-  if (rank === 3) return 'text-orange-900 bg-orange-100 border-orange-400';
+  if (rank === 3) return 'text-[#123f78] bg-[#c5ddf7] border-[#5b9fd8]';
   return 'text-[#335f97] bg-[#dbe9ff] border-[#8bb4ef]/60';
 }
 
@@ -143,44 +144,17 @@ export default function Guild({ setCurrentView }: GuildProps) {
 
   return (
     <div className="bg-[#0f3c86] min-h-screen pb-28">
-      {/* Top atmosphere + stadium cap (URA navy + gold accent, inspired by guild header reference) */}
-      <div className="relative w-full">
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-[min(38vh,260px)] bg-gradient-to-b from-[#02091c] via-[#0a2650] to-transparent"
-          aria-hidden
-        />
-        <div className="relative mx-auto w-full max-w-xl px-4 pt-5 pb-2">
-          <div
-            className="relative overflow-hidden rounded-[2.75rem] rounded-b-[1.35rem] border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-b from-[#061428] via-[#0a1f3d] to-[#0e2d58] px-5 pt-8 pb-7 text-center shadow-[0_0_0_1px_rgba(243,186,47,0.28),0_-10px_40px_rgba(243,186,47,0.2),0_18px_44px_rgba(0,0,0,0.42)]"
-            role="banner"
-          >
-            <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-[2.75rem]"
-              aria-hidden
-            />
-            <div className="relative flex flex-col items-center gap-4">
-              <div className="relative rounded-2xl border border-[#8bb4ef]/45 bg-gradient-to-b from-[#1c4580] to-[#0f2d56] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_8px_24px_rgba(0,0,0,0.4)]">
-                <Image src={navGuild} alt="" width={64} height={64} className="object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]" />
-              </div>
-              <div>
-                <h1 className="text-white text-2xl font-bold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">
-                  Citizen Guild
-                </h1>
-                <p className="text-blue-100/95 text-sm mt-2 font-medium leading-relaxed max-w-md mx-auto">
-                  Uganda Revenue Authority · Fiscal Fun community. Grow your circle, climb national and area boards, and
-                  earn pearl rewards for every friend who joins.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <UraStadiumPageHero
+        title="Citizen Guild"
+        description="Uganda Revenue Authority · Fiscal Fun community. Grow your circle, climb national and area boards, and earn pearl rewards for every friend who joins."
+        icon={navGuild}
+      />
 
       <div className="w-full max-w-xl mx-auto px-4 pt-2">
         {loading ? (
           <p className="text-center text-blue-100 py-12 text-sm">Loading guild…</p>
         ) : error ? (
-          <p className="text-center text-rose-200 py-8 text-sm">{error}</p>
+          <p className="text-center text-amber-100/95 py-8 text-sm">{error}</p>
         ) : (
           <>
             {me ? (
@@ -401,7 +375,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
         )}
       </div>
 
-      {/* Footer: black band, URA tri-stripe, centered seal overlapping stripe (gov-style reference) */}
+      {/* Footer: black band, URA stripe (navy · gold · sky blue), seal on stripe */}
       <footer className="relative mt-14 w-full bg-[#0a0a0a] pb-10 pt-8 px-4 text-white" aria-label="Guild page footer">
         <div className="relative mx-auto max-w-xl">
           <div className="relative flex h-28 items-center justify-center">
@@ -411,7 +385,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
             >
               <div className="flex-1 bg-[#0f3c86]" />
               <div className="flex-1 bg-[#f3ba2f]" />
-              <div className="flex-1 bg-[#b91c1c]" />
+              <div className="flex-1 bg-[#2d8acb]" />
             </div>
             <div className="relative z-10 flex size-[7.25rem] shrink-0 items-center justify-center rounded-full border-[5px] border-white/95 bg-white p-1.5 shadow-[0_14px_36px_rgba(0,0,0,0.6)] ring-1 ring-black/35">
               <Image
