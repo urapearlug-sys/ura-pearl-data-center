@@ -104,6 +104,7 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
 
             const rawId = taskIdFromActivityItem(item);
             const fullTask = rawId && tasks.length ? tasks.find((t) => t.id === rawId) : undefined;
+            const isDone = Boolean(fullTask?.isCompleted);
 
             const onActivate = () => {
               triggerHapticFeedback(window);
@@ -121,7 +122,9 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
                 key={item.id}
                 type="button"
                 onClick={onActivate}
-                className="rounded-xl border border-ura-border/85 bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 text-left shadow-lg hover:border-violet-500/45 active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+                className={`rounded-xl border bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 text-left shadow-lg hover:border-violet-500/45 active:scale-[0.99] transition-all flex flex-col min-h-[104px] ${
+                  isDone ? 'border-emerald-500/45 ring-1 ring-emerald-500/20' : 'border-ura-border/85'
+                }`}
               >
                 <div className="flex items-start gap-2 flex-1 min-h-0">
                   <div className="w-10 h-10 rounded-lg bg-ura-panel-2 flex items-center justify-center shrink-0 border border-ura-border/85 overflow-hidden">
@@ -148,8 +151,19 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
                       </div>
                     ) : null}
                   </div>
-                  <span className="text-gray-500 text-lg leading-none shrink-0 mt-0.5" aria-hidden>
-                    ›
+                  <span className="shrink-0 mt-0.5 flex flex-col items-center" aria-hidden>
+                    {isDone ? (
+                      <span
+                        className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center"
+                        title="Completed"
+                      >
+                        <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </span>
+                    ) : (
+                      <span className="text-gray-500 text-lg leading-none">›</span>
+                    )}
                   </span>
                 </div>
               </button>
