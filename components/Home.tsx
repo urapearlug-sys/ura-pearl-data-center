@@ -10,6 +10,8 @@ import { useToast } from '@/contexts/ToastContext';
 import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
+import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
+import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 import SupportChatWidget from '@/components/SupportChatWidget';
 
 type ActionCenterTab = 'most-used' | 'favorites';
@@ -26,7 +28,6 @@ const HOME_ECOSYSTEM_ICONS: Record<string, string> = {
   'true-false': '⚖️',
   leaderboard: '🏆',
   'karibu-daily': '📅',
-  'tap-arena': '🎮',
   'mine-flow': '⛏️',
   'pearls-collection': '🧊',
   'citizen-network': '👥',
@@ -60,7 +61,7 @@ const ACTION_CATALOG: ActionItem[] = [
 const HOME_MOST_USED_KARIBU: ActionItem = {
   id: 'karibu',
   title: 'Karibu Daily',
-  subtitle: 'Daily reward check-in',
+  subtitle: '10-day login · white pearls',
   pearlType: 'white',
   route: 'earn',
   group: 'play',
@@ -108,6 +109,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const { userTelegramName, points, pointsBalance, userTelegramInitData, setPointsBalance } = useGameStore();
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
+  const [karibuHomeSubtitle, setKaribuHomeSubtitle] = useState('10-day login · 100–1000 white pearls');
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -209,6 +211,42 @@ export default function Home({ setCurrentView }: HomeProps) {
   }, [userTelegramInitData]);
 
   useEffect(() => {
+    if (!userTelegramInitData) return;
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch(
+          `/api/daily-reward?initData=${encodeURIComponent(userTelegramInitData)}`
+        );
+        if (!res.ok || cancelled) return;
+        const s = await res.json();
+        const c = karibuDaysCompleted(s);
+        const line = s.claimedToday
+          ? `Day ${c}/10 · claimed today`
+          : s.canClaimToday
+            ? `Day ${c}/10 · open to claim`
+            : `Day ${c}/10 · Karibu Daily`;
+        setKaribuHomeSubtitle(line);
+      } catch {
+        /* keep default */
+      }
+    };
+    void load();
+    const onKaribu = () => {
+      void load();
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('karibu-daily-status-changed', onKaribu);
+    }
+    return () => {
+      cancelled = true;
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('karibu-daily-status-changed', onKaribu);
+      }
+    };
+  }, [userTelegramInitData]);
+
+  useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
       const parsedVisits = JSON.parse(window.localStorage.getItem(visitsStorageKey) ?? '{}') as Record<string, number>;
@@ -245,8 +283,7 @@ export default function Home({ setCurrentView }: HomeProps) {
     if (item.route === 'earn') {
       switch (item.id) {
         case 'karibu':
-          queueEarnBootstrap({ openDailyLogin: true });
-          setCurrentView('earn');
+          navigateToKaribuDaily(setCurrentView, 'home');
           return;
         case 'quiz':
           queueEarnBootstrap({ openMitrolabsQuiz: true });
@@ -321,7 +358,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-base font-extrabold leading-tight text-[#123f78]">{HOME_MOST_USED_KARIBU.title}</p>
-            <p className="mt-1 text-sm leading-snug text-[#335f97]">{HOME_MOST_USED_KARIBU.subtitle}</p>
+            <p className="mt-1 text-sm leading-snug text-[#335f97]">{karibuHomeSubtitle}</p>
           </div>
         </div>
       </button>
@@ -409,8 +446,16 @@ export default function Home({ setCurrentView }: HomeProps) {
         onClick: () => goEarn({activeTabAll: true }),
       },
       { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', icon: ic.leaderboard, onClick: () => goView('game') },
-      { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', icon: ic['karibu-daily'], onClick: () => goEarn({openDailyLogin: true }) },
-      { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', icon: ic['tap-arena'], onClick: () => goView('game') },
+      {
+        id: 'karibu-daily',
+        title: 'Karibu Daily',
+        subtitle: '10-day streak · Tap Arena after claim',
+        icon: ic['karibu-daily'],
+        onClick: () => {
+          setShowEcosystemDashboard(false);
+          navigateToKaribuDaily(setCurrentView, 'home');
+        },
+      },
       { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', icon: ic['mine-flow'], onClick: () => goView('mine') },
       { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', icon: ic['pearls-collection'], onClick: () => goView('collection') },
       { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', icon: ic['citizen-network'], onClick: () => goView('friends') },

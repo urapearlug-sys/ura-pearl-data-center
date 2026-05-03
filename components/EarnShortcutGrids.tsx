@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
+import { useGameStore } from '@/utils/game-mechanics';
+import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
+import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 
 export type EarnShortcutGridsProps = {
   setCurrentView: (view: string) => void;
@@ -24,7 +27,6 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
   leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
   'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
-  'tap-arena': { tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50', icon: '🎮' },
   'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
   'pearls-collection': { tone: 'from-[#26345d] to-[#3a4a78] border-[#8ea3df]/45', icon: '🧊' },
   'citizen-network': { tone: 'from-[#224b58] to-[#2a6170] border-[#71c9dd]/45', icon: '👥' },
@@ -42,14 +44,57 @@ const PRIMARY_SHORTCUT_IDS: string[] = [
   'receipt-rush',
   'karibu-daily',
   'true-false',
-  'tap-arena',
   'pearls-airdrop',
 ];
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
 
+function useKaribuEarnSubtitle() {
+  const { userTelegramInitData } = useGameStore();
+  const [subtitle, setSubtitle] = useState('10-day streak · 100–1000 white pearls');
+
+  useEffect(() => {
+    if (!userTelegramInitData) return;
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch(
+          `/api/daily-reward?initData=${encodeURIComponent(userTelegramInitData)}`
+        );
+        if (!res.ok || cancelled) return;
+        const s = await res.json();
+        const c = karibuDaysCompleted(s);
+        const line = s.claimedToday
+          ? `Day ${c}/10 · Tap Arena unlocked today`
+          : s.canClaimToday
+            ? `Day ${c}/10 · Claim to unlock Tap Arena`
+            : `Day ${c}/10 · Karibu Daily`;
+        setSubtitle(line);
+      } catch {
+        /* keep default */
+      }
+    };
+    void load();
+    const onRefresh = () => {
+      void load();
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('karibu-daily-status-changed', onRefresh);
+    }
+    return () => {
+      cancelled = true;
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('karibu-daily-status-changed', onRefresh);
+      }
+    };
+  }, [userTelegramInitData]);
+
+  return subtitle;
+}
+
 export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }: EarnShortcutGridsProps) {
   const [morePopupOpen, setMorePopupOpen] = useState(false);
+  const karibuSubtitle = useKaribuEarnSubtitle();
 
   const goEarn = (payload: EarnBootstrapPayload) => {
     if (applyEarnBootstrap) {
@@ -76,11 +121,15 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
       onClick: () => goEarn({ activeTabAll: true }),
     },
     { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView('game') },
-    { id: 'karibu-daily', title: 'Karibu Daily', subtitle: 'Daily reward check-in', onClick: () => goEarn({ openDailyLogin: true }) },
+    {
+      id: 'karibu-daily',
+      title: 'Karibu Daily',
+      subtitle: karibuSubtitle,
+      onClick: () => navigateToKaribuDaily(setCurrentView, 'earn'),
+    },
   ];
 
   const pearlClassic: ShortcutItem[] = [
-    { id: 'tap-arena', title: 'Tap Arena', subtitle: 'Classic tap gameplay (rebranded from Game)', onClick: () => setCurrentView('game') },
     { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', onClick: () => setCurrentView('mine') },
     { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', onClick: () => setCurrentView('collection') },
     { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', onClick: () => setCurrentView('friends') },

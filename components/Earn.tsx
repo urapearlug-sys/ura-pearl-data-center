@@ -23,7 +23,6 @@ import { ACTIVITY_TAB_CATEGORIES } from '@/utils/consts';
 import { capitalizeFirstLetter, formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { imageMap, getTaskImageSrc, dailyReward, dailyCipher, dailyCombo, baseGift, earnRewardsIcon, pearlWhite } from '@/images';
 import TaskPopup from './popups/TaskPopup';
-import DailyLoginPopup from './popups/DailyLoginPopup';
 import DailyCipherPopup from './popups/DailyCipherPopup';
 import DailyComboPopup from './popups/DailyComboPopup';
 import MiniGamesPopup from './popups/MiniGamesPopup';
@@ -57,6 +56,7 @@ import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
 import { consumeEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
+import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 import EarnShortcutGrids from '@/components/EarnShortcutGrids';
 import PublishedActivitiesFeed from '@/components/PublishedActivitiesFeed';
 
@@ -96,7 +96,6 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   const { userTelegramInitData, pointsBalance } = useGameStore();
   const { tasks, setTasks, isLoading } = useFetchTasks(userTelegramInitData);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [showDailyLogin, setShowDailyLogin] = useState(false);
   const [showDailyCipher, setShowDailyCipher] = useState(false);
   const [showDailyCombo, setShowDailyCombo] = useState(false);
   const [showMiniGames, setShowMiniGames] = useState(false);
@@ -147,7 +146,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       if (p.openWeeklyEvent) setShowWeeklyEvent(true);
       if (p.openGlobalTasks) setShowGlobalTasks(true);
       if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
-      if (p.openDailyLogin) setShowDailyLogin(true);
+      if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
       if (p.openMiniGamesHub) setShowMiniGamesHub(true);
       if (p.openLuckySpin) setShowLuckySpin(true);
     };
@@ -257,7 +256,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       if (p.openWeeklyEvent) setShowWeeklyEvent(true);
       if (p.openGlobalTasks) setShowGlobalTasks(true);
       if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
-      if (p.openDailyLogin) setShowDailyLogin(true);
+      if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
       if (p.openMiniGamesHub) setShowMiniGamesHub(true);
       if (p.openLuckySpin) setShowLuckySpin(true);
     });
@@ -727,9 +726,6 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
         </div>
       </div>
       {taskPopupEl}
-      {showDailyLogin && (
-        <DailyLoginPopup onClose={() => setShowDailyLogin(false)} />
-      )}
       {showDailyCipher && (
         <DailyCipherPopup onClose={() => setShowDailyCipher(false)} />
       )}

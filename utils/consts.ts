@@ -45,18 +45,8 @@ export const LEVELS: LevelData[] = [
   { name: "Guardian", minPoints: 15000000, minTaps: 25000, bigImage: mainCharacter, smallImage: rankGold, color: "#F3BA2F", primaryColor: "#6E5214", accentColor: "#FFD36A", friendBonus: 40000, friendBonusPremium: 75000 },
 ];
 
-export const DAILY_REWARDS = [
-  500,
-  1000,
-  2500,
-  5000,
-  15000,
-  25000,
-  100000,
-  250000,
-  500000,
-  1000000
-];
+/** Karibu Daily: white pearls per consecutive day (day 1 … day 10). */
+export const DAILY_REWARDS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
 
 export const MAXIMUM_INACTIVE_TIME_FOR_MINE = 3*60*60*1000; // 3 hours in milliseconds
 

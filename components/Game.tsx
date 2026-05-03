@@ -26,12 +26,15 @@ import { useGameStore } from '@/utils/game-mechanics';
 import Snowflake from '@/icons/Snowflake';
 import TopInfoSection from '@/components/TopInfoSection';
 import NotificationBanner from '@/components/NotificationBanner';
-import WeeklyEventPopup from '@/components/popups/WeeklyEventPopup';
 import MyProgressModal from '@/components/popups/MyProgressModal';
 import HowToPlayPopup from '@/components/popups/HowToPlayPopup';
 import CongratulationsBanner from '@/components/CongratulationsBanner';
 import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
+import { useToast } from '@/contexts/ToastContext';
+import type { DailyRewardStatus } from '@/utils/karibu-daily-ui';
+import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
+import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 
 interface GameProps {
   currentView: string;
@@ -39,6 +42,7 @@ interface GameProps {
 }
 
 export default function Game({ currentView, setCurrentView }: GameProps) {
+  const showToast = useToast();
 
   const [isAnimationEnabled, setIsAnimationEnabled] = useState(true);
 
@@ -78,32 +82,36 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     suspensionReason,
   } = useGameStore();
 
-  const [weeklyRank, setWeeklyRank] = useState<number | null>(null);
-  const [weeklyTotal, setWeeklyTotal] = useState<number | null>(null);
-  const [showWeeklyChallenge, setShowWeeklyChallenge] = useState(false);
   const [showMyProgress, setShowMyProgress] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [karibuStatus, setKaribuStatus] = useState<DailyRewardStatus | null>(null);
 
-  const fetchWeeklyRank = useCallback(async () => {
+  const fetchKaribuDaily = useCallback(async () => {
+    if (!userTelegramInitData) return;
     try {
       const base = typeof window !== 'undefined' ? window.location.origin : '';
-      const url = userTelegramInitData
-        ? `${base}/api/weekly-event?initData=${encodeURIComponent(userTelegramInitData)}`
-        : `${base}/api/weekly-event`;
-      const res = await fetch(url);
+      const res = await fetch(
+        `${base}/api/daily-reward?initData=${encodeURIComponent(userTelegramInitData)}`
+      );
       const data = await res.json();
-      if (res.ok) {
-        if (typeof data.myRank === 'number') setWeeklyRank(data.myRank);
-        if (typeof data.totalParticipants === 'number') setWeeklyTotal(data.totalParticipants);
-      }
+      if (res.ok) setKaribuStatus(data);
     } catch {
       // ignore
     }
   }, [userTelegramInitData]);
 
   useEffect(() => {
-    fetchWeeklyRank();
-  }, [fetchWeeklyRank]);
+    void fetchKaribuDaily();
+  }, [fetchKaribuDaily]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onRefresh = () => {
+      void fetchKaribuDaily();
+    };
+    window.addEventListener('karibu-daily-status-changed', onRefresh);
+    return () => window.removeEventListener('karibu-daily-status-changed', onRefresh);
+  }, [fetchKaribuDaily]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -136,6 +144,12 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const handleInteraction = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault(); // Prevent default behavior
     if (isFrozen) return;
+
+    if (karibuStatus && !karibuStatus.claimedToday) {
+      triggerHapticFeedback(window);
+      showToast('Claim Karibu Daily first to unlock tapping today.', 'error');
+      return;
+    }
 
     const processInteraction = (clientX: number, clientY: number, pageX: number, pageY: number) => {
       if (energy - pointsPerClick < 0) return;
@@ -194,6 +208,9 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
   const defaultSuspensionMessage = 'Cheating is bad. Your account has been suspended.';
 
+  const karibuCompleted = karibuStatus ? karibuDaysCompleted(karibuStatus) : 0;
+  const tapLocked = Boolean(karibuStatus && !karibuStatus.claimedToday);
+
   return (
     <div className="bg-ura-page flex justify-center min-h-screen">
       <div className="w-full bg-ura-page text-white h-screen font-bold flex flex-col max-w-xl relative">
@@ -239,18 +256,23 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 type="button"
                 onClick={() => {
                   triggerHapticFeedback(window);
-                  setShowWeeklyChallenge(true);
+                  navigateToKaribuDaily(setCurrentView, 'game');
                 }}
                 className="w-full mt-2 py-2 flex items-center justify-between text-left"
               >
-                <span className="text-sm text-[#95908a]">Weekly Challenge</span>
+                <span className="text-sm text-[#95908a]">Karibu Daily</span>
                 <span className="flex items-center gap-2 text-sm font-medium text-white">
-                  {weeklyRank != null ? (
-                    <>#{weeklyRank}{weeklyTotal != null ? ` / ${weeklyTotal.toLocaleString()}` : ''}</>
-                  ) : (
-                    <span className="text-[#95908a]">—</span>
-                  )}
-                  <span className="text-[#f3ba2f]">View more</span>
+                  <span className="flex gap-0.5" aria-hidden>
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <span
+                        key={i}
+                        className={`h-2 w-2 rounded-full ${i < karibuCompleted ? 'bg-emerald-400' : 'bg-[#43433b]'}`}
+                      />
+                    ))}
+                  </span>
+                  <span className="text-[#f3ba2f] shrink-0">
+                    {karibuCompleted}/10{tapLocked ? ' · claim' : ''}
+                  </span>
                 </span>
               </button>
 
@@ -271,9 +293,16 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 <p>{gameLevelIndex + 1} <span className="text-[#95908a]">/ {LEVELS.length}</span></p>
               </button>
 
-              <div className="px-4 mt-4 flex justify-center">
+              <div className="px-4 mt-4 flex justify-center relative">
+                {tapLocked && (
+                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 z-10 flex justify-center pointer-events-none">
+                    <p className="text-center text-xs font-semibold text-amber-200/95 bg-black/55 px-3 py-2 rounded-xl border border-amber-500/40 max-w-[280px]">
+                      Claim today&apos;s Karibu reward to unlock Tap Arena.
+                    </p>
+                  </div>
+                )}
                 <div
-                  className="w-80 h-80 p-4 rounded-full flex items-center justify-center transition-all duration-500"
+                  className={`w-80 h-80 p-4 rounded-full flex items-center justify-center transition-all duration-500 ${tapLocked ? 'opacity-45' : ''}`}
                   style={{
                     background: circleGradient,
                     border: circleBorder,
@@ -332,10 +361,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
           </div>
         </div>
       </div>
-
-      {showWeeklyChallenge && (
-        <WeeklyEventPopup onClose={() => setShowWeeklyChallenge(false)} />
-      )}
 
       {showMyProgress && (
         <MyProgressModal

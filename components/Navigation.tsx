@@ -76,7 +76,13 @@ export default function Navigation({ currentView, setCurrentView }: NavigationPr
                     onClick={() => handleViewChange(item.view)}
                     className="flex-1"
                 >
-                    <div className={`flex flex-col items-center justify-center ${currentView === item.view ? 'text-white bg-ura-panel-3/80' : 'text-gray-400'} h-16 m-1 p-2 rounded-2xl`}>
+                    <div
+                        className={`flex flex-col items-center justify-center ${
+                            currentView === item.view || (item.view === 'earn' && currentView === 'karibu-daily')
+                                ? 'text-white bg-ura-panel-3/80'
+                                : 'text-gray-400'
+                        } h-16 m-1 p-2 rounded-2xl`}
+                    >
                         <div className="w-8 h-8 relative">
                             {item.image && (
                                 <div className="w-full h-full relative">

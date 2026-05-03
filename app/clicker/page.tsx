@@ -46,6 +46,7 @@ import Home from '@/components/Home';
 import Learn from '@/components/Learn';
 import Services from '@/components/Services';
 import Guild from '@/components/Guild';
+import KaribuDailyPage from '@/components/KaribuDailyPage';
 
 function EmptyPrimaryPage() {
     return <div className="bg-ura-page min-h-screen" />;
@@ -98,6 +99,8 @@ function ClickerPage() {
                 return <Guild setCurrentView={setCurrentView} />;
             case 'earn':
                 return <Earn setCurrentView={setCurrentView} minimalOnly />;
+            case 'karibu-daily':
+                return <KaribuDailyPage setCurrentView={setCurrentView} />;
             case 'airdrop':
                 return <Airdrop />;
             case 'collection':
