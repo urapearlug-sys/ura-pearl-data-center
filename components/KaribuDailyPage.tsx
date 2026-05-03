@@ -58,6 +58,11 @@ export default function KaribuDailyPage({ setCurrentView }: KaribuDailyPageProps
     setCurrentView(v);
   };
 
+  const handleOpenTapArena = () => {
+    triggerHapticFeedback(window);
+    setCurrentView('game');
+  };
+
   const handleClaim = async () => {
     if (!userTelegramInitData || !status?.canClaimToday || isClaiming) return;
     setIsClaiming(true);
@@ -203,6 +208,27 @@ export default function KaribuDailyPage({ setCurrentView }: KaribuDailyPageProps
         {status && !status.claimedToday && !status.canClaimToday && (
           <p className="text-center text-gray-400 text-sm mt-6">Unable to load claim status. Try again later.</p>
         )}
+
+        {status ? (
+          <div className="mt-8 space-y-2">
+            <button
+              type="button"
+              onClick={handleOpenTapArena}
+              className={`w-full py-3.5 rounded-xl text-sm font-bold shadow-md transition active:scale-[0.99] ${
+                status.claimedToday
+                  ? 'bg-gradient-to-r from-amber-500 to-[#f3ba2f] text-black hover:opacity-95 border border-amber-400/50'
+                  : 'border-2 border-sky-500/45 bg-sky-950/25 text-sky-100 hover:bg-sky-900/35 hover:border-sky-400/55'
+              }`}
+            >
+              Open Tap Arena
+            </button>
+            {!status.claimedToday && status.canClaimToday ? (
+              <p className="text-center text-[11px] text-gray-500 px-1">
+                Tapping stays locked until you claim today&apos;s reward above — or open Tap Arena to see your balance and progress.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );
