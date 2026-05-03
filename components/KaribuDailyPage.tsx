@@ -6,7 +6,7 @@ import IceCube from '@/icons/IceCube';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
-import { dailyReward } from '@/images';
+import { pearlWhite } from '@/images';
 import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import type { DailyRewardStatus } from '@/utils/karibu-daily-ui';
 import { getKaribuDayState } from '@/utils/karibu-daily-ui';
@@ -79,6 +79,10 @@ export default function KaribuDailyPage({ setCurrentView }: KaribuDailyPageProps
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('karibu-daily-status-changed'));
       }
+      // Send user straight to Tap Arena after claiming today’s reward.
+      window.setTimeout(() => {
+        setCurrentView('game');
+      }, 550);
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Claim failed', 'error');
     } finally {
@@ -118,7 +122,7 @@ export default function KaribuDailyPage({ setCurrentView }: KaribuDailyPageProps
           </button>
           <div className="min-w-0 flex-1 flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-ura-panel-2 flex items-center justify-center ring-2 ring-[#f3ba2f]/40 shrink-0">
-              <Image src={dailyReward} alt="" width={24} height={24} className="rounded" />
+              <Image src={pearlWhite} alt="" width={24} height={24} className="rounded" />
             </div>
             <div className="min-w-0">
               <h1 className="text-lg font-bold text-white leading-tight">Karibu Daily</h1>
