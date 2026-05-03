@@ -120,6 +120,7 @@ export async function POST(req: Request) {
                 isPremium: isPremium,
                 points: newPoints,
                 pointsBalance: { increment: minedPoints },
+                whitePearls: { increment: minedPoints },
                 offlinePointsEarned: minedPoints,
                 lastPointsUpdateTimestamp: currentTime,
                 energy: Math.min(lastEnergy + restoredEnergy, maxEnergyLimit),
@@ -140,6 +141,7 @@ export async function POST(req: Request) {
                 data: {
                   points: { increment: additionalReferralPoints },
                   pointsBalance: { increment: additionalReferralPoints },
+                  whitePearls: { increment: additionalReferralPoints },
                   referralPointsEarned: { increment: additionalReferralPoints },
                 },
               });
@@ -210,6 +212,7 @@ export async function POST(req: Request) {
             data: {
               points: { increment: referrerSignUpBonus },
               pointsBalance: { increment: referrerSignUpBonus },
+              whitePearls: { increment: referrerSignUpBonus },
               referralPointsEarned: { increment: referrerSignUpBonus },
               referrals: { connect: { id: dbUser.id } },
             },

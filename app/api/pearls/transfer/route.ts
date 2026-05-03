@@ -40,8 +40,14 @@ export async function POST(req: Request) {
   const dbType = pearlType === 'white' ? PearlType.WHITE : PearlType.GOLDISH;
   await prisma.$transaction(async (tx) => {
     if (dbType === PearlType.WHITE) {
-      await tx.user.update({ where: { id: sender.id }, data: { whitePearls: { decrement: amt } } });
-      await tx.user.update({ where: { id: recipient.id }, data: { whitePearls: { increment: amt } } });
+      await tx.user.update({
+        where: { id: sender.id },
+        data: { whitePearls: { decrement: amt }, pointsBalance: { decrement: amt } },
+      });
+      await tx.user.update({
+        where: { id: recipient.id },
+        data: { whitePearls: { increment: amt }, pointsBalance: { increment: amt } },
+      });
     } else {
       await tx.user.update({ where: { id: sender.id }, data: { goldishPearls: { decrement: amt } } });
       await tx.user.update({ where: { id: recipient.id }, data: { goldishPearls: { increment: amt } } });

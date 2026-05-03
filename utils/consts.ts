@@ -18,6 +18,11 @@ import { StaticImageData } from "next/image";
 
 export const ALLOW_ALL_DEVICES = true;
 
+/** White pearls required for 1 golden (goldish) pearl — buy/sell/convert (must match wallet + API). */
+export const WHITE_TO_GOLDISH_RATE = 1_000_000;
+/** Approved blue pearls batch size per 1 goldish (admin / treasury conversion). */
+export const BLUE_TO_GOLDISH_RATE = 25;
+
 export const WALLET_MANIFEST_URL = "https://violet-traditional-rabbit-103.mypinata.cloud/ipfs/QmcFgnfXoiNtp8dvy25xA9hMEjz5AzugTuPQNTHQMTw9Tf";
 
 export interface LevelData {

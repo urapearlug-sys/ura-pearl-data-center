@@ -3,7 +3,7 @@ import { PearlType } from '@prisma/client';
 import prisma from '@/utils/prisma';
 import { resolveUserFromInitData } from '@/utils/pearls';
 
-type SwapType = 'white_to_blue' | 'blue_to_white';
+type SwapType = 'white_to_blue';
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
@@ -17,58 +17,40 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
   }
 
+  if (swapType !== 'white_to_blue') {
+    return NextResponse.json(
+      { error: 'Blue pearls cannot be swapped back to white. Only white → blue is allowed.' },
+      { status: 400 }
+    );
+  }
+
   const user = await resolveUserFromInitData(initData);
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
 
   const swapAmount = Math.max(1, Math.floor(Number(amount)));
 
-  if (swapType === 'white_to_blue') {
-    if (user.whitePearls < swapAmount) {
-      return NextResponse.json({ error: 'Insufficient White pearls' }, { status: 400 });
-    }
-    await prisma.$transaction(async (tx) => {
-      await tx.user.update({
-        where: { id: user.id },
-        data: {
-          whitePearls: { decrement: swapAmount },
-          bluePearlsPending: { increment: swapAmount },
-        },
-      });
-      await tx.pearlConversion.create({
-        data: {
-          userId: user.id,
-          fromType: PearlType.WHITE,
-          toType: PearlType.BLUE,
-          fromAmount: swapAmount,
-          toAmount: swapAmount,
-          trigger: 'user_request',
-        },
-      });
-    });
-    return NextResponse.json({ success: true, swap: { from: 'WHITE', to: 'BLUE', amount: swapAmount } });
-  }
-
-  if (user.bluePearlsPending < swapAmount) {
-    return NextResponse.json({ error: 'Insufficient Blue pearls' }, { status: 400 });
+  if (user.whitePearls < swapAmount) {
+    return NextResponse.json({ error: 'Insufficient White pearls' }, { status: 400 });
   }
   await prisma.$transaction(async (tx) => {
     await tx.user.update({
       where: { id: user.id },
       data: {
-        bluePearlsPending: { decrement: swapAmount },
-        whitePearls: { increment: swapAmount },
+        whitePearls: { decrement: swapAmount },
+        pointsBalance: { decrement: swapAmount },
+        bluePearlsPending: { increment: swapAmount },
       },
     });
     await tx.pearlConversion.create({
       data: {
         userId: user.id,
-        fromType: PearlType.BLUE,
-        toType: PearlType.WHITE,
+        fromType: PearlType.WHITE,
+        toType: PearlType.BLUE,
         fromAmount: swapAmount,
         toAmount: swapAmount,
         trigger: 'user_request',
       },
     });
   });
-  return NextResponse.json({ success: true, swap: { from: 'BLUE', to: 'WHITE', amount: swapAmount } });
+  return NextResponse.json({ success: true, swap: { from: 'WHITE', to: 'BLUE', amount: swapAmount } });
 }

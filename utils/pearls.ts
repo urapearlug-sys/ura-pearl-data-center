@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { PearlActivityStatus, PearlAuditEventType, PearlType, Prisma } from '@prisma/client';
+import { BLUE_TO_GOLDISH_RATE, WHITE_TO_GOLDISH_RATE } from '@/utils/consts';
 
-export const WHITE_TO_GOLDISH_RATE = 50;
-export const BLUE_TO_GOLDISH_RATE = 25;
+export { BLUE_TO_GOLDISH_RATE, WHITE_TO_GOLDISH_RATE } from '@/utils/consts';
 
 export async function resolveUserFromInitData(initData: string) {
   const { validatedData, user } = validateTelegramWebAppData(initData);
@@ -59,7 +59,10 @@ export async function creditWhitePearlsInstant(
   });
   await tx.user.update({
     where: { id: userId },
-    data: { whitePearls: { increment: amt } },
+    data: {
+      whitePearls: { increment: amt },
+      pointsBalance: { increment: amt },
+    },
   });
   await createPearlAudit(tx, {
     userId,
@@ -86,4 +89,18 @@ export function convertBlueToGoldish(blueAmount: number) {
     blueConsumed: goldish * BLUE_TO_GOLDISH_RATE,
     blueRemainder: blueAmount - goldish * BLUE_TO_GOLDISH_RATE,
   };
+}
+
+/** When taps credit `pointsBalance` but not `whitePearls`, wallet under-reads. Catch up one-way (never lowers white). */
+export async function reconcileWhitePearlsFromPointsBalance(userId: string) {
+  const u = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { pointsBalance: true, whitePearls: true },
+  });
+  if (!u) return;
+  const pb = Math.floor(Number(u.pointsBalance ?? 0));
+  const wp = Math.floor(Number(u.whitePearls ?? 0));
+  if (pb > wp) {
+    await prisma.user.update({ where: { id: userId }, data: { whitePearls: pb } });
+  }
 }

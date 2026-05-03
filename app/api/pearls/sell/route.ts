@@ -25,7 +25,10 @@ export async function POST(req: Request) {
   const whiteConsumed = Math.floor(requestedWhite / WHITE_TO_GOLDISH_RATE) * WHITE_TO_GOLDISH_RATE;
   const goldenReceived = Math.floor(whiteConsumed / WHITE_TO_GOLDISH_RATE);
   if (goldenReceived <= 0) {
-    return NextResponse.json({ error: 'Need at least 50 white pearls to sell' }, { status: 400 });
+    return NextResponse.json(
+      { error: `Need at least ${WHITE_TO_GOLDISH_RATE.toLocaleString()} white pearls to sell for 1 golden` },
+      { status: 400 }
+    );
   }
 
   await prisma.$transaction(async (tx) => {
@@ -33,6 +36,7 @@ export async function POST(req: Request) {
       where: { id: user.id },
       data: {
         whitePearls: { decrement: whiteConsumed },
+        pointsBalance: { decrement: whiteConsumed },
         goldishPearls: { increment: goldenReceived },
       },
     });

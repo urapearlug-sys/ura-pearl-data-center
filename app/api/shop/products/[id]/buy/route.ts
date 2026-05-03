@@ -62,11 +62,11 @@ export async function POST(
   await prisma.$transaction([
     prisma.user.update({
       where: { id: buyer.id },
-      data: { pointsBalance: { decrement: priceAlm } },
+      data: { pointsBalance: { decrement: priceAlm }, whitePearls: { decrement: priceAlm } },
     }),
     prisma.user.update({
       where: { id: product.sellerId },
-      data: { pointsBalance: { increment: priceAlm } },
+      data: { pointsBalance: { increment: priceAlm }, whitePearls: { increment: priceAlm } },
     }),
     prisma.shopProduct.update({
       where: { id: productId },

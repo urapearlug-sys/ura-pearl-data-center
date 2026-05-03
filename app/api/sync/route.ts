@@ -169,6 +169,7 @@ export async function POST(req: Request) {
             data: {
               points: { increment: totalPoints },
               pointsBalance: { increment: totalPoints },
+              whitePearls: { increment: totalPoints },
               totalTaps: { increment: taps },
               energy: clampedEnergy,
               lastPointsUpdateTimestamp: new Date(effectiveTimestamp),

@@ -175,9 +175,9 @@ export default function GlobalRankingPopup({ onClose }: Props) {
   };
 
   const getRankColor = (rank: number): string => {
-    if (rank === 1) return 'text-yellow-400';
+    if (rank === 1) return 'text-[#f3ba2f]';
     if (rank === 2) return 'text-gray-300';
-    if (rank === 3) return 'text-orange-400';
+    if (rank === 3) return 'text-[#5eb3e8]';
     return 'text-white';
   };
 

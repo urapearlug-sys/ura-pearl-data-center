@@ -101,6 +101,7 @@ export async function POST(req: Request) {
       where: { id: dbUser.id },
       data: {
         pointsBalance: { decrement: amountToLock },
+        whitePearls: { decrement: amountToLock },
         pointsInMarketplace: { increment: amountToLock },
       },
     }),

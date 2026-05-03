@@ -18,6 +18,7 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
+import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 
 // Same pattern as Settings/NotificationCenter: persist to localStorage so data survives close/reopen
 const PENDING_SYNC_KEY = 'clicker_pending_sync';
@@ -94,6 +95,7 @@ export function PointSynchronizer() {
                 : minimumTotalTaps;
             setTotalTaps(newTotalTaps);
             try { localStorage.removeItem(PENDING_SYNC_KEY); } catch { /* ignore */ }
+            notifyPearlBalancesRefresh();
             //showToast(`Successfully synchronized! Points synced: ${pointsToSync}`, 'success');
         } catch (error) {
             showToast(`Error syncing with server: ${error instanceof Error ? error.message : String(error)}`, 'error');

@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     if (activityType === 'white') {
       await tx.user.update({
         where: { id: user.id },
-        data: { whitePearls: { increment: amt } },
+        data: { whitePearls: { increment: amt }, pointsBalance: { increment: amt } },
       });
       await createPearlAudit(tx, {
         userId: user.id,

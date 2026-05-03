@@ -49,7 +49,7 @@ interface GuildProps {
 
 /** Rank badge on light URA panels (matches Learn card contrast). */
 function rankStyleLight(rank: number): string {
-  if (rank === 1) return 'text-amber-800 bg-amber-100 border-amber-400';
+  if (rank === 1) return 'text-[#123f78] bg-amber-100 border-amber-400';
   if (rank === 2) return 'text-slate-800 bg-slate-200 border-slate-400';
   if (rank === 3) return 'text-[#123f78] bg-[#c5ddf7] border-[#5b9fd8]';
   return 'text-[#335f97] bg-[#dbe9ff] border-[#8bb4ef]/60';
@@ -173,7 +173,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                   </div>
                   <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
                     <p className="text-[#335f97] text-xs font-semibold">Pearl points</p>
-                    <p className="text-xl text-amber-800 tabular-nums mt-1 flex items-center justify-center gap-1 font-bold">
+                    <p className="text-xl text-[#f3ba2f] tabular-nums mt-1 flex items-center justify-center gap-1 font-bold">
                       <Image src={pearlWhite} alt="" width={18} height={18} className="object-contain" />
                       {formatNumber(me.points)}
                     </p>
@@ -184,7 +184,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                   </div>
                   <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
                     <p className="text-[#335f97] text-xs font-semibold">Pearls from referrals</p>
-                    <p className="text-xl text-amber-800 font-bold tabular-nums mt-1">{formatNumber(me.referralPearlsEarned)}</p>
+                    <p className="text-xl text-[#f3ba2f] font-bold tabular-nums mt-1">{formatNumber(me.referralPearlsEarned)}</p>
                   </div>
                 </div>
                 {me.areaRank != null ? (
@@ -212,7 +212,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                     <div className="flex items-center gap-1 mt-0.5">
                       <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
                       <span className="text-xs text-[#335f97]">
-                        <span className="text-amber-800 font-semibold">+{formatNumber(REFERRAL_BONUS_BASE)}</span> each
+                        <span className="text-[#f3ba2f] font-semibold">+{formatNumber(REFERRAL_BONUS_BASE)}</span> each
                       </span>
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                     <div className="flex items-center gap-1 mt-0.5">
                       <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
                       <span className="text-xs text-[#335f97]">
-                        <span className="text-amber-800 font-semibold">+{formatNumber(REFERRAL_BONUS_PREMIUM)}</span> each
+                        <span className="text-[#f3ba2f] font-semibold">+{formatNumber(REFERRAL_BONUS_PREMIUM)}</span> each
                       </span>
                     </div>
                   </div>
@@ -288,7 +288,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                       <p className="text-sm font-semibold text-[#16427f] truncate">{u.name}</p>
                       <p className="text-[10px] text-[#335f97] truncate">{u.regionLabel}</p>
                     </div>
-                    <span className="text-sm text-amber-800 font-bold tabular-nums shrink-0">{formatNumber(u.points)}</span>
+                    <span className="text-sm text-[#f3ba2f] font-bold tabular-nums shrink-0">{formatNumber(u.points)}</span>
                   </li>
                 ))}
               </ul>
@@ -309,7 +309,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                       {u.rank}
                     </span>
                     <p className="text-xs font-semibold text-[#16427f] line-clamp-2 leading-snug">{u.name}</p>
-                    <p className="text-lg text-[#123f78] font-bold mt-2 tabular-nums">{u.referrals ?? 0}</p>
+                    <p className="text-lg text-[#f3ba2f] font-bold mt-2 tabular-nums">{u.referrals ?? 0}</p>
                     <p className="text-[10px] text-[#335f97]">invites</p>
                   </div>
                 ))}
@@ -350,7 +350,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                             <li key={u.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#f4f8ff]">
                               <span className="text-[10px] text-[#335f97] w-5 tabular-nums font-medium">#{u.rank}</span>
                               <span className="text-xs text-[#16427f] font-medium truncate flex-1">{u.name}</span>
-                              <span className="text-xs text-amber-800 font-bold tabular-nums">{formatNumber(u.points)}</span>
+                              <span className="text-xs text-[#f3ba2f] font-bold tabular-nums">{formatNumber(u.points)}</span>
                             </li>
                           ))}
                         </ul>

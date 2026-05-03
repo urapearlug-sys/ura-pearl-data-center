@@ -56,6 +56,7 @@ export async function POST(
       where: { id: dbUser.id },
       data: {
         pointsBalance: { increment: returnAmount },
+        whitePearls: { increment: returnAmount },
         pointsInMarketplace: { decrement: returnAmount },
       },
     }),

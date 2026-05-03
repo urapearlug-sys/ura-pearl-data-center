@@ -97,6 +97,7 @@ export async function POST(req: Request) {
                     data: {
                         points: { increment: minedPoints },
                         pointsBalance: updatedPointsBalance - upgradeCost,
+                        whitePearls: { increment: minedPoints - upgradeCost },
                         mineLevelIndex: newMineLevelIndex,
                         lastPointsUpdateTimestamp: new Date(currentTime),
                     },
