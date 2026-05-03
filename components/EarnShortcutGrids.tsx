@@ -13,27 +13,27 @@ export type EarnShortcutGridsProps = {
 type ShortcutItem = { id: string; title: string; subtitle: string; onClick: () => void };
 
 const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
-  tasks: { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '✅' },
-  decode: { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
-  matrix: { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
-  'collection-cards': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🗂️' },
-  'weekly-event': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎁' },
-  'global-joinable-tasks': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
-  'ura-quiz': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📝' },
-  'receipt-rush': { tone: 'from-[#17334d] to-[#234a6d] border-[#6eb4ff]/50', icon: '🧾' },
-  'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
-  leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
-  'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
-  'tap-arena': { tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50', icon: '🎮' },
-  'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
-  'pearls-collection': { tone: 'from-[#26345d] to-[#3a4a78] border-[#8ea3df]/45', icon: '🧊' },
-  'citizen-network': { tone: 'from-[#224b58] to-[#2a6170] border-[#71c9dd]/45', icon: '👥' },
-  'pearls-airdrop': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '🎈' },
-  'mini-games': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🕹️' },
-  'tax-trivia-live': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎤' },
-  'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
+  tasks: { tone: 'from-[#fffdf8] to-[#fff4dc] border-[#d9a63a]/45', icon: '✅' },
+  decode: { tone: 'from-[#f0fbff] to-[#e3f4fc] border-[#38b8db]/45', icon: '🔐' },
+  matrix: { tone: 'from-[#f7f4ff] to-[#ebe4ff] border-[#8a6dff]/40', icon: '🎴' },
+  'collection-cards': { tone: 'from-[#f4f8ff] to-[#e4ecfc] border-[#78a8ff]/40', icon: '🗂️' },
+  'weekly-event': { tone: 'from-[#fff5f8] to-[#ffe8f0] border-[#ff6f97]/40', icon: '🎁' },
+  'global-joinable-tasks': { tone: 'from-[#f0fdf8] to-[#e2f7ef] border-[#3ad1a7]/40', icon: '🌍' },
+  'ura-quiz': { tone: 'from-[#fffdf8] to-[#fff4dc] border-[#d9a63a]/45', icon: '📝' },
+  'receipt-rush': { tone: 'from-[#f4f8ff] to-[#dce9fc] border-[#6eb4ff]/45', icon: '🧾' },
+  'true-false': { tone: 'from-[#f0fbfc] to-[#e2f6f8] border-[#74d1e2]/45', icon: '⚖️' },
+  leaderboard: { tone: 'from-[#f4f7ff] to-[#e6eefc] border-[#93a8d8]/45', icon: '🏆' },
+  'karibu-daily': { tone: 'from-[#fffdf8] to-[#fff4dc] border-[#d9a63a]/45', icon: '📅' },
+  'tap-arena': { tone: 'from-[#f4f8ff] to-[#dce9fc] border-[#82b4ff]/45', icon: '🎮' },
+  'mine-flow': { tone: 'from-[#f0fdf9] to-[#e4f7f1] border-[#69c9b2]/40', icon: '⛏️' },
+  'pearls-collection': { tone: 'from-[#f4f6ff] to-[#e8ecfc] border-[#8ea3df]/40', icon: '🧊' },
+  'citizen-network': { tone: 'from-[#f0fafc] to-[#e4f4f8] border-[#71c9dd]/40', icon: '👥' },
+  'pearls-airdrop': { tone: 'from-[#fffdf8] to-[#fff4dc] border-[#d9a63a]/45', icon: '🎈' },
+  'mini-games': { tone: 'from-[#f7f4ff] to-[#ebe4ff] border-[#8a6dff]/40', icon: '🕹️' },
+  'tax-trivia-live': { tone: 'from-[#fff5f8] to-[#ffe8f0] border-[#ff6f97]/40', icon: '🎤' },
+  'spin-wheel': { tone: 'from-[#f4f8ff] to-[#e4ecfc] border-[#78a8ff]/40', icon: '🎡' },
   /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
-  'earn-more': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '➕' },
+  'earn-more': { tone: 'from-[#f7f4ff] to-[#ebe4ff] border-[#8a6dff]/40', icon: '➕' },
 };
 
 /** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
@@ -145,7 +145,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   const renderHighlightButton = (item: ShortcutItem, opts?: { closePopupAfter?: boolean }) => {
     const closeAfter = opts?.closePopupAfter ?? false;
     const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
-      tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
+      tone: 'from-[#f4f8ff] to-[#dce9fc] border-[#82b4ff]/45',
       icon: '⭐',
     };
     return (
@@ -153,15 +153,15 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
         key={item.id}
         type="button"
         onClick={() => runShortcut(item, closeAfter)}
-        className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+        className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01] hover:border-[#f3ba2f]/45`}
       >
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-white border border-[#cfe0ff] text-xl">
             {appearance.icon}
           </span>
           <div className="min-w-0">
-            <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-            <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+            <p className="text-base font-extrabold text-[#123f78] leading-tight">{item.title}</p>
+            <p className="text-sm text-[#335f97] mt-1 leading-snug">{item.subtitle}</p>
           </div>
         </div>
       </button>
@@ -183,12 +183,12 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
           onClick={() => runShortcut(item, Boolean(closePopupAfter))}
           className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
             variant === 'learn'
-              ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
-              : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
+              ? 'border-[#f3ba2f]/45 bg-[#fffbeb] hover:border-[#f3ba2f]/65'
+              : 'border-[#8bb4ef]/40 bg-[#f0f9ff] hover:border-[#f3ba2f]/45'
           }`}
         >
-          <p className="text-sm font-bold text-white">{item.title}</p>
-          <p className="text-xs text-gray-300 mt-1">{item.subtitle}</p>
+          <p className="text-sm font-bold text-[#123f78]">{item.title}</p>
+          <p className="text-xs text-[#335f97] mt-1">{item.subtitle}</p>
         </button>
       ))}
     </div>
@@ -197,8 +197,8 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   return (
     <div className="mt-2 space-y-6">
       <div>
-        <h2 className="text-white text-lg font-bold tracking-tight">Pearls, games & activities</h2>
-        <p className="text-gray-400 text-xs mt-1">Tap a shortcut below. Open More for the full list.</p>
+        <h2 className="text-[#123f78] text-lg font-bold tracking-tight">Pearls, games & activities</h2>
+        <p className="text-[#335f97] text-xs mt-1">Tap a shortcut below. Open More for the full list.</p>
       </div>
 
       <section aria-labelledby="earn-primary-shortcuts-heading">
@@ -216,15 +216,15 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                   triggerHapticFeedback(window);
                   setMorePopupOpen(true);
                 }}
-                className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+                className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01] hover:border-[#f3ba2f]/45`}
               >
                 <div className="flex items-start gap-2">
-                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-white border border-[#cfe0ff] text-xl">
                     {appearance.icon}
                   </span>
                   <div className="min-w-0">
-                    <p className="text-base font-extrabold text-white leading-tight">More</p>
-                    <p className="text-sm text-blue-100/95 mt-1 leading-snug">Tasks, decode, collection, leagues & more</p>
+                    <p className="text-base font-extrabold text-[#123f78] leading-tight">More</p>
+                    <p className="text-sm text-[#335f97] mt-1 leading-snug">Tasks, decode, collection, leagues & more</p>
                   </div>
                 </div>
               </button>
@@ -235,7 +235,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
 
       {morePopupOpen ? (
         <div
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-ura-navy/75 backdrop-blur-[1px]"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-[#0f315f]/55 backdrop-blur-[1px]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="earn-more-popup-title"
@@ -244,11 +244,11 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
           }}
         >
           <div
-            className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl border border-ura-border/75 bg-[#13161d] shadow-xl overflow-hidden"
+            className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl border border-[#8bb4ef]/35 bg-[#f4f8ff] shadow-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-ura-border/85 shrink-0">
-              <h3 id="earn-more-popup-title" className="text-lg font-bold text-white">
+            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#dbe9ff] shrink-0">
+              <h3 id="earn-more-popup-title" className="text-lg font-bold text-[#123f78]">
                 More options
               </h3>
               <button
@@ -257,7 +257,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                   triggerHapticFeedback(window);
                   closeMorePopup();
                 }}
-                className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-400 hover:bg-white/5 hover:text-white"
+                className="rounded-lg px-3 py-1.5 text-sm font-semibold text-[#335f97] hover:bg-white/90 hover:text-[#123f78]"
               >
                 Close
               </button>
@@ -265,7 +265,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
             <div className="overflow-y-auto px-3 py-4 space-y-6 no-scrollbar">
               {moreHighlights.length > 0 ? (
                 <section aria-labelledby="earn-more-highlights-heading">
-                  <h4 id="earn-more-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#f3ba2f] mb-3">
+                  <h4 id="earn-more-highlights-heading" className="text-sm font-bold uppercase tracking-wide text-[#c9a227] mb-3">
                     Highlights
                   </h4>
                   {renderHighlightGrid(moreHighlights, { closePopupAfter: true })}
@@ -273,7 +273,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
               ) : null}
               {morePearlClassic.length > 0 ? (
                 <section aria-labelledby="earn-more-pearl-heading">
-                  <h4 id="earn-more-pearl-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-300/95 mb-3">
+                  <h4 id="earn-more-pearl-heading" className="text-sm font-bold uppercase tracking-wide text-emerald-800/90 mb-3">
                     Pearl Classic
                   </h4>
                   {renderHighlightGrid(morePearlClassic, { closePopupAfter: true })}
@@ -281,7 +281,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
               ) : null}
               {moreLearning.length > 0 ? (
                 <section aria-labelledby="earn-more-learning-heading">
-                  <h4 id="earn-more-learning-heading" className="text-sm font-bold uppercase tracking-wide text-amber-200/90 mb-3">
+                  <h4 id="earn-more-learning-heading" className="text-sm font-bold uppercase tracking-wide text-amber-900/80 mb-3">
                     Learning & fun
                   </h4>
                   {renderListColumn(moreLearning, 'learn', true)}
@@ -289,7 +289,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
               ) : null}
               {earnPlatform.length > 0 ? (
                 <section aria-labelledby="earn-more-platform-heading">
-                  <h4 id="earn-more-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-200/90 mb-3">
+                  <h4 id="earn-more-platform-heading" className="text-sm font-bold uppercase tracking-wide text-cyan-900/80 mb-3">
                     On-platform earn
                   </h4>
                   {renderListColumn(earnPlatform, 'earn', true)}
