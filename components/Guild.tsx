@@ -46,11 +46,12 @@ interface GuildProps {
   setCurrentView?: (view: string) => void;
 }
 
-function rankStyle(rank: number): string {
-  if (rank === 1) return 'text-amber-300 bg-amber-500/15 border-amber-500/40';
-  if (rank === 2) return 'text-slate-200 bg-slate-400/15 border-slate-400/35';
-  if (rank === 3) return 'text-orange-300 bg-orange-600/15 border-orange-500/35';
-  return 'text-gray-400 bg-[#1a1c22] border-[#2d2f38]';
+/** Rank badge on light URA panels (matches Learn card contrast). */
+function rankStyleLight(rank: number): string {
+  if (rank === 1) return 'text-amber-800 bg-amber-100 border-amber-400';
+  if (rank === 2) return 'text-slate-800 bg-slate-200 border-slate-400';
+  if (rank === 3) return 'text-orange-900 bg-orange-100 border-orange-400';
+  return 'text-[#335f97] bg-[#dbe9ff] border-[#8bb4ef]/60';
 }
 
 export default function Guild({ setCurrentView }: GuildProps) {
@@ -141,239 +142,245 @@ export default function Guild({ setCurrentView }: GuildProps) {
   }, [resolveTelegramId, showToast]);
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] min-h-[80vh] overflow-y-auto no-scrollbar pb-32">
-            <div className="px-4 pt-5 pb-6">
-              <div className="flex flex-col items-center gap-2 mb-6">
-                <div className="rounded-2xl border border-[#2d2f38] bg-[#151821] p-3 shadow-lg">
-                  <Image src={navGuild} alt="" width={56} height={56} className="object-contain" />
-                </div>
-                <h1 className="text-2xl text-center tracking-tight">Citizen Guild</h1>
-                <p className="text-center text-sm text-gray-400 font-medium max-w-md leading-relaxed">
-                  Uganda Revenue Authority · Fiscal Fun community. Grow your circle, climb national and area boards, and
-                  earn pearl rewards for every friend who joins.
-                </p>
-              </div>
-
-              {loading ? (
-                <p className="text-center text-gray-500 py-12">Loading guild…</p>
-              ) : error ? (
-                <p className="text-center text-rose-400/90 py-8">{error}</p>
-              ) : (
-                <>
-                  {me ? (
-                    <section className="mb-6 rounded-2xl border border-violet-500/35 bg-gradient-to-br from-violet-950/40 to-[#151821] p-4" aria-label="Your guild standing">
-                      <h2 className="text-xs font-semibold uppercase tracking-wider text-violet-200/90 mb-3">Your standing</h2>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
-                        <div className="rounded-xl bg-black/25 border border-white/10 p-3">
-                          <p className="text-gray-500 text-xs font-semibold">National rank</p>
-                          <p className="text-xl text-white tabular-nums mt-1">
-                            #{me.globalRank}
-                            <span className="text-gray-500 text-sm font-normal"> / {formatNumber(me.totalPlayers)}</span>
-                          </p>
-                        </div>
-                        <div className="rounded-xl bg-black/25 border border-white/10 p-3">
-                          <p className="text-gray-500 text-xs font-semibold">Pearl points</p>
-                          <p className="text-xl text-[#f3ba2f] tabular-nums mt-1 flex items-center gap-1">
-                            <Image src={pearlWhite} alt="" width={18} height={18} className="object-contain" />
-                            {formatNumber(me.points)}
-                          </p>
-                        </div>
-                        <div className="rounded-xl bg-black/25 border border-white/10 p-3">
-                          <p className="text-gray-500 text-xs font-semibold">Friends invited</p>
-                          <p className="text-xl text-white tabular-nums mt-1">{me.referralCount}</p>
-                        </div>
-                        <div className="rounded-xl bg-black/25 border border-white/10 p-3">
-                          <p className="text-gray-500 text-xs font-semibold">Pearls from referrals</p>
-                          <p className="text-xl text-[#f3ba2f] tabular-nums mt-1">{formatNumber(me.referralPearlsEarned)}</p>
-                        </div>
-                      </div>
-                      {me.areaRank != null ? (
-                        <p className="mt-3 text-xs text-gray-400">
-                          Area board ({me.regionLabel}): you are <span className="text-white font-semibold">#{me.areaRank}</span> among
-                          players in the same language group.
-                        </p>
-                      ) : (
-                        <p className="mt-3 text-xs text-gray-500">Play with a set language/region to appear on area boards.</p>
-                      )}
-                    </section>
-                  ) : null}
-
-                  <section className="mb-6" aria-label="Referrals">
-                    <h2 className="text-lg text-white mb-2">Referrals &amp; rewards</h2>
-                    <p className="text-xs text-gray-500 font-medium mb-3">
-                      You and each friend get white pearls when they start from your link. Premium friends earn a bigger
-                      bonus for both sides.
-                    </p>
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-3 bg-[#272a2f] rounded-xl p-3 border border-[#2d2f38]">
-                        <Image src={baseGift} alt="" width={40} height={40} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm text-white">Standard invite</p>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
-                            <span className="text-xs text-gray-300">
-                              <span className="text-[#f3ba2f]">+{formatNumber(REFERRAL_BONUS_BASE)}</span> each
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 bg-[#272a2f] rounded-xl p-3 border border-[#2d2f38]">
-                        <Image src={bigGift} alt="" width={40} height={40} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm text-white">Telegram Premium friend</p>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
-                            <span className="text-xs text-gray-300">
-                              <span className="text-[#f3ba2f]">+{formatNumber(REFERRAL_BONUS_PREMIUM)}</span> each
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={handleShare}
-                        className="flex-1 py-3 rounded-xl bg-[#2b4f98] text-white text-sm font-semibold"
-                      >
-                        Share invite
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCopy}
-                        className="w-14 h-12 rounded-xl bg-[#3d4046] flex items-center justify-center text-white"
-                        aria-label="Copy invite link"
-                      >
-                        {copyLabel === 'Copied!' ? '✓' : <Copy />}
-                      </button>
-                    </div>
-                    {setCurrentView ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          triggerHapticFeedback(window);
-                          setCurrentView('friends');
-                        }}
-                        className="mt-3 w-full py-2 text-sm text-violet-300 font-semibold border border-violet-500/40 rounded-xl hover:bg-violet-500/10"
-                      >
-                        Open full friends list &amp; bonuses →
-                      </button>
-                    ) : null}
-                  </section>
-
-                  <section className="mb-6" aria-label="National leaderboard">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h2 className="text-lg text-white">Uganda · National pearl board</h2>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          triggerHapticFeedback(window);
-                          setShowRankings(true);
-                        }}
-                        className="text-xs font-semibold text-cyan-300 shrink-0"
-                      >
-                        Full table
-                      </button>
-                    </div>
-                    <p className="text-xs text-gray-500 mb-3">Top citizens by total pearl points across Fiscal Fun.</p>
-                    <ul className="rounded-xl border border-[#2d2f38] bg-[#141821] divide-y divide-[#2d2f38] overflow-hidden">
-                      {nationalLeaders.map((u) => (
-                        <li key={u.id} className="flex items-center gap-3 px-3 py-2.5">
-                          <span
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border shrink-0 ${rankStyle(u.rank)}`}
-                          >
-                            {u.rank}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm text-white truncate">{u.name}</p>
-                            <p className="text-[10px] text-gray-500 truncate">{u.regionLabel}</p>
-                          </div>
-                          <span className="text-sm text-[#f3ba2f] tabular-nums shrink-0">{formatNumber(u.points)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-
-                  <section className="mb-6" aria-label="Referral champions">
-                    <h2 className="text-lg text-white mb-2">Referral champions</h2>
-                    <p className="text-xs text-gray-500 mb-3">Players who brought the most friends into the guild.</p>
-                    <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
-                      {referralChampions.map((u) => (
-                        <div
-                          key={u.id}
-                          className="min-w-[140px] rounded-xl border border-[#2d2f38] bg-[#1a1c22] p-3 flex flex-col"
-                        >
-                          <span className={`text-[10px] font-bold w-6 h-6 rounded-md flex items-center justify-center border mb-2 ${rankStyle(u.rank)}`}>
-                            {u.rank}
-                          </span>
-                          <p className="text-xs text-white font-semibold line-clamp-2 leading-snug">{u.name}</p>
-                          <p className="text-lg text-cyan-300 mt-2 tabular-nums">{u.referrals ?? 0}</p>
-                          <p className="text-[10px] text-gray-500">invites</p>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-
-                  <section className="mb-4" aria-label="Area leaderboards">
-                    <h2 className="text-lg text-white mb-2">Area leaderboards</h2>
-                    <p className="text-xs text-gray-500 mb-3">
-                      Groups follow the app language / region codes in your profile. Compare ranks within your community
-                      cluster — the same filters power the global rankings explorer.
-                    </p>
-                    <div className="space-y-2">
-                      {areaBoards.map((board) => {
-                        const open = expandedArea === board.regionCode;
-                        return (
-                          <div key={board.regionCode} className="rounded-xl border border-[#2d2f38] bg-[#141821] overflow-hidden">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                triggerHapticFeedback(window);
-                                setExpandedArea(open ? null : board.regionCode);
-                              }}
-                              className="w-full flex items-center justify-between gap-2 px-3 py-3 text-left hover:bg-white/5"
-                            >
-                              <div className="min-w-0">
-                                <p className="text-sm text-white font-semibold truncate">{board.regionLabel}</p>
-                                <p className="text-[11px] text-gray-500">{formatNumber(board.memberCount)} members</p>
-                              </div>
-                              <span className="text-gray-500 text-lg shrink-0">{open ? '▾' : '▸'}</span>
-                            </button>
-                            {open ? (
-                              <ul className="border-t border-[#2d2f38] px-2 py-2 space-y-1">
-                                {board.leaders.map((u) => (
-                                  <li key={u.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#1d2025]/80">
-                                    <span className="text-[10px] text-gray-500 w-5 tabular-nums">#{u.rank}</span>
-                                    <span className="text-xs text-white truncate flex-1">{u.name}</span>
-                                    <span className="text-xs text-[#f3ba2f] tabular-nums">{formatNumber(u.points)}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : null}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </section>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      void load();
-                    }}
-                    className="w-full py-2 text-sm text-gray-400 border border-dashed border-[#2d2f38] rounded-xl"
-                  >
-                    Refresh guild data
-                  </button>
-                </>
-              )}
+    <div className="bg-[#0f3c86] min-h-screen pb-28 flex justify-center">
+      <div className="w-full max-w-xl px-4 pt-4">
+        <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-4 mb-4 shadow-sm">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="rounded-xl border border-[#3f6db5] bg-white p-3 shadow-sm">
+              <Image src={navGuild} alt="" width={56} height={56} className="object-contain" />
+            </div>
+            <div>
+              <h1 className="text-[#16427f] text-2xl font-bold tracking-tight">Citizen Guild</h1>
+              <p className="text-[#335f97] text-sm mt-1 font-medium leading-relaxed max-w-md mx-auto">
+                Uganda Revenue Authority · Fiscal Fun community. Grow your circle, climb national and area boards, and
+                earn pearl rewards for every friend who joins.
+              </p>
             </div>
           </div>
         </div>
+
+        {loading ? (
+          <p className="text-center text-blue-100 py-12 text-sm">Loading guild…</p>
+        ) : error ? (
+          <p className="text-center text-rose-200 py-8 text-sm">{error}</p>
+        ) : (
+          <>
+            {me ? (
+              <section
+                className="mb-4 rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-4"
+                aria-label="Your guild standing"
+              >
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-[#123f78] mb-3">Your standing</h2>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
+                    <p className="text-[#335f97] text-xs font-semibold">National rank</p>
+                    <p className="text-xl text-[#16427f] font-bold tabular-nums mt-1">
+                      #{me.globalRank}
+                      <span className="text-[#335f97] text-sm font-normal"> / {formatNumber(me.totalPlayers)}</span>
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
+                    <p className="text-[#335f97] text-xs font-semibold">Pearl points</p>
+                    <p className="text-xl text-amber-800 tabular-nums mt-1 flex items-center justify-center gap-1 font-bold">
+                      <Image src={pearlWhite} alt="" width={18} height={18} className="object-contain" />
+                      {formatNumber(me.points)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
+                    <p className="text-[#335f97] text-xs font-semibold">Friends invited</p>
+                    <p className="text-xl text-[#16427f] font-bold tabular-nums mt-1">{me.referralCount}</p>
+                  </div>
+                  <div className="rounded-xl bg-white border border-[#dbe9ff] p-3 shadow-sm">
+                    <p className="text-[#335f97] text-xs font-semibold">Pearls from referrals</p>
+                    <p className="text-xl text-amber-800 font-bold tabular-nums mt-1">{formatNumber(me.referralPearlsEarned)}</p>
+                  </div>
+                </div>
+                {me.areaRank != null ? (
+                  <p className="mt-3 text-xs text-[#335f97] leading-relaxed">
+                    Area board ({me.regionLabel}): you are <span className="text-[#16427f] font-semibold">#{me.areaRank}</span> among
+                    players in the same language group.
+                  </p>
+                ) : (
+                  <p className="mt-3 text-xs text-[#335f97]">Set your app language/region to appear on area boards.</p>
+                )}
+              </section>
+            ) : null}
+
+            <section className="mb-4" aria-label="Referrals">
+              <h2 className="text-white text-lg font-bold mb-1">Referrals &amp; rewards</h2>
+              <p className="text-blue-100 text-xs font-medium mb-3 leading-relaxed">
+                You and each friend get white pearls when they start from your link. Premium friends earn a bigger bonus
+                for both sides.
+              </p>
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-3 rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 hover:border-[#f3ba2f] transition-colors">
+                  <Image src={baseGift} alt="" width={40} height={40} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-[#16427f]">Standard invite</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
+                      <span className="text-xs text-[#335f97]">
+                        <span className="text-amber-800 font-semibold">+{formatNumber(REFERRAL_BONUS_BASE)}</span> each
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 hover:border-[#f3ba2f] transition-colors">
+                  <Image src={bigGift} alt="" width={40} height={40} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-[#16427f]">Telegram Premium friend</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <Image src={pearlWhite} alt="" width={16} height={16} className="object-contain" />
+                      <span className="text-xs text-[#335f97]">
+                        <span className="text-amber-800 font-semibold">+{formatNumber(REFERRAL_BONUS_PREMIUM)}</span> each
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-[#123f78] text-sm font-bold shadow-sm hover:brightness-105 active:brightness-95"
+                >
+                  Share invite
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="w-14 h-12 rounded-xl border-2 border-[#3f6db5] bg-[#0f315f] flex items-center justify-center text-blue-100 hover:bg-[#123f78] transition-colors"
+                  aria-label="Copy invite link"
+                >
+                  {copyLabel === 'Copied!' ? <span className="text-[#f3ba2f] font-bold">✓</span> : <Copy />}
+                </button>
+              </div>
+              {setCurrentView ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setCurrentView('friends');
+                  }}
+                  className="mt-3 w-full py-2.5 text-sm font-semibold text-[#f4f8ff] border border-[#8bb4ef]/50 rounded-xl bg-[#0f315f] hover:border-[#f3ba2f] hover:bg-[#123f78] transition-colors"
+                >
+                  Open full friends list &amp; bonuses →
+                </button>
+              ) : null}
+            </section>
+
+            <section className="mb-4" aria-label="National leaderboard">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <h2 className="text-white text-lg font-bold">Uganda · National pearl board</h2>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setShowRankings(true);
+                  }}
+                  className="text-xs font-semibold text-[#f3ba2f] shrink-0 hover:underline"
+                >
+                  Full table
+                </button>
+              </div>
+              <p className="text-blue-100 text-xs mb-3 leading-relaxed">Top citizens by total pearl points across Fiscal Fun.</p>
+              <ul className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] divide-y divide-[#dbe9ff] overflow-hidden shadow-sm">
+                {nationalLeaders.map((u) => (
+                  <li key={u.id} className="flex items-center gap-3 px-3 py-2.5 bg-white/60">
+                    <span
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold border shrink-0 ${rankStyleLight(u.rank)}`}
+                    >
+                      {u.rank}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-[#16427f] truncate">{u.name}</p>
+                      <p className="text-[10px] text-[#335f97] truncate">{u.regionLabel}</p>
+                    </div>
+                    <span className="text-sm text-amber-800 font-bold tabular-nums shrink-0">{formatNumber(u.points)}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="mb-4" aria-label="Referral champions">
+              <h2 className="text-white text-lg font-bold mb-1">Referral champions</h2>
+              <p className="text-blue-100 text-xs mb-3">Players who brought the most friends into the guild.</p>
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
+                {referralChampions.map((u) => (
+                  <div
+                    key={u.id}
+                    className="min-w-[140px] rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 flex flex-col shadow-sm hover:border-[#f3ba2f] transition-colors"
+                  >
+                    <span
+                      className={`text-[10px] font-bold w-6 h-6 rounded-md flex items-center justify-center border mb-2 ${rankStyleLight(u.rank)}`}
+                    >
+                      {u.rank}
+                    </span>
+                    <p className="text-xs font-semibold text-[#16427f] line-clamp-2 leading-snug">{u.name}</p>
+                    <p className="text-lg text-[#123f78] font-bold mt-2 tabular-nums">{u.referrals ?? 0}</p>
+                    <p className="text-[10px] text-[#335f97]">invites</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="mb-4" aria-label="Area leaderboards">
+              <h2 className="text-white text-lg font-bold mb-1">Area leaderboards</h2>
+              <p className="text-blue-100 text-xs mb-3 leading-relaxed">
+                Groups follow the app language / region codes in your profile. Compare ranks within your community
+                cluster — the same filters power the global rankings explorer.
+              </p>
+              <div className="space-y-2">
+                {areaBoards.map((board) => {
+                  const open = expandedArea === board.regionCode;
+                  return (
+                    <div
+                      key={board.regionCode}
+                      className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] overflow-hidden shadow-sm hover:border-[#f3ba2f]/80 transition-colors"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          triggerHapticFeedback(window);
+                          setExpandedArea(open ? null : board.regionCode);
+                        }}
+                        className="w-full flex items-center justify-between gap-2 px-3 py-3 text-left hover:bg-white/80"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-[#16427f] truncate">{board.regionLabel}</p>
+                          <p className="text-[11px] text-[#335f97]">{formatNumber(board.memberCount)} members</p>
+                        </div>
+                        <span className="text-[#123f78] text-lg shrink-0 font-bold">{open ? '▾' : '▸'}</span>
+                      </button>
+                      {open ? (
+                        <ul className="border-t border-[#dbe9ff] px-2 py-2 space-y-1 bg-white/50">
+                          {board.leaders.map((u) => (
+                            <li key={u.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#f4f8ff]">
+                              <span className="text-[10px] text-[#335f97] w-5 tabular-nums font-medium">#{u.rank}</span>
+                              <span className="text-xs text-[#16427f] font-medium truncate flex-1">{u.name}</span>
+                              <span className="text-xs text-amber-800 font-bold tabular-nums">{formatNumber(u.points)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                void load();
+              }}
+              className="w-full py-2.5 text-sm font-semibold text-blue-100 border border-dashed border-[#3f6db5] rounded-xl hover:border-[#f3ba2f] hover:text-white transition-colors"
+            >
+              Refresh guild data
+            </button>
+          </>
+        )}
       </div>
       {showRankings ? <GlobalRankingPopup onClose={() => setShowRankings(false)} /> : null}
     </div>
