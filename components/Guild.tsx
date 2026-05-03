@@ -400,6 +400,41 @@ export default function Guild({ setCurrentView }: GuildProps) {
           </>
         )}
       </div>
+
+      {/* Footer: black band, URA tri-stripe, centered seal overlapping stripe (gov-style reference) */}
+      <footer className="relative mt-14 w-full bg-[#0a0a0a] pb-10 pt-8 px-4 text-white" aria-label="Guild page footer">
+        <div className="relative mx-auto max-w-xl">
+          <div className="relative flex h-28 items-center justify-center">
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 flex h-[6px] w-screen max-w-none -translate-x-1/2 -translate-y-1/2 shadow-[0_0_14px_rgba(243,186,47,0.22)]"
+              aria-hidden
+            >
+              <div className="flex-1 bg-[#0f3c86]" />
+              <div className="flex-1 bg-[#f3ba2f]" />
+              <div className="flex-1 bg-[#b91c1c]" />
+            </div>
+            <div className="relative z-10 flex size-[7.25rem] shrink-0 items-center justify-center rounded-full border-[5px] border-white/95 bg-white p-2 shadow-[0_14px_36px_rgba(0,0,0,0.6)] ring-1 ring-black/35">
+              <Image src={navGuild} alt="Citizen Guild" width={72} height={72} className="object-contain" />
+            </div>
+          </div>
+          <p className="mt-8 text-left text-[11px] font-medium leading-relaxed text-white/82">
+            © {new Date().getFullYear()} Uganda Revenue Authority. All rights reserved.
+          </p>
+          <p className="mt-1 text-left text-[10px] leading-relaxed text-white/55">
+            Fiscal Fun Citizen Guild — community rankings and referrals. For official tax guidance, visit{' '}
+            <a
+              href="https://www.ura.go.ug"
+              className="text-[#8bb4ef] underline-offset-2 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ura.go.ug
+            </a>
+            .
+          </p>
+        </div>
+      </footer>
+
       {showRankings ? <GlobalRankingPopup onClose={() => setShowRankings(false)} /> : null}
     </div>
   );
