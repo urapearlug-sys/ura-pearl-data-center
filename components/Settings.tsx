@@ -10,6 +10,8 @@ import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import Toggle from '@/components/Toggle';
 import { triggerHapticFeedback } from '@/utils/ui';
+import { UGANDA_DISTRICTS } from '@/utils/uganda-districts';
+import { readStoredDistrictSlug, writeStoredDistrictSlug } from '@/utils/user-district-storage';
 
 interface SettingsProps {
   setCurrentView: (view: string) => void;
@@ -93,9 +95,17 @@ const SIDEBAR: { key: SidebarKey; label: string; icon: React.ReactNode }[] = [
 
 export default function Settings({ setCurrentView }: SettingsProps) {
   const showToast = useToast();
-  const { pointsBalance, userTelegramName } = useGameStore();
+  const { pointsBalance, userTelegramName, userTelegramInitData } = useGameStore();
   const [active, setActive] = useState<SidebarKey>('profile');
+  const [districtSlug, setDistrictSlug] = useState('');
+  const [districtSaving, setDistrictSaving] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (active === 'profile') {
+      setDistrictSlug(readStoredDistrictSlug() || '');
+    }
+  }, [active]);
 
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const [animationEnabled, setAnimationEnabled] = useState(true);
@@ -191,6 +201,67 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               <p className="text-[11px] text-gray-400 mt-2">
                 Conversion rules: <span className="text-white">50 White = 1 Goldish</span> · <span className="text-white">25 Blue = 1 Goldish</span>
               </p>
+            </div>
+
+            <div className="rounded-lg bg-[#1a1d26] border border-ura-border/85 p-3 mb-4">
+              <h3 className="text-sm font-bold text-white mb-1">District (rankings)</h3>
+              <p className="text-[11px] text-gray-400 mb-2">
+                Required when you first open the app. You can change it here anytime. Telegram does not send your district automatically.
+              </p>
+              <select
+                value={districtSlug}
+                onChange={(e) => setDistrictSlug(e.target.value)}
+                className="w-full rounded-lg bg-ura-panel text-white text-sm px-3 py-2 border border-ura-border/85 outline-none focus:border-[#f3ba2f]"
+                aria-label="Uganda district for rankings"
+              >
+                <option value="">Not set</option>
+                {[...UGANDA_DISTRICTS]
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((d) => (
+                    <option key={d.slug} value={d.slug}>
+                      {d.name}
+                    </option>
+                  ))}
+              </select>
+              <button
+                type="button"
+                disabled={districtSaving || !userTelegramInitData}
+                onClick={async () => {
+                  triggerHapticFeedback(window);
+                  if (!userTelegramInitData) {
+                    showToast('Open URAPearls from Telegram to save your district.', 'error');
+                    return;
+                  }
+                  setDistrictSaving(true);
+                  try {
+                    const res = await fetch('/api/user', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        telegramInitData: userTelegramInitData,
+                        district: districtSlug || '',
+                      }),
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                      throw new Error(typeof data.message === 'string' ? data.message : typeof data.error === 'string' ? data.error : 'Save failed');
+                    }
+                    if (typeof data.district === 'string' && data.district.trim()) {
+                      writeStoredDistrictSlug(data.district.trim().toLowerCase());
+                    } else {
+                      writeStoredDistrictSlug(null);
+                    }
+                    showToast('District saved for rankings.', 'success');
+                  } catch (err) {
+                    showToast(err instanceof Error ? err.message : 'Could not save district', 'error');
+                  } finally {
+                    setDistrictSaving(false);
+                  }
+                }}
+                className="mt-2 w-full rounded-lg bg-ura-gold text-black text-sm font-bold py-2.5 disabled:opacity-50"
+              >
+                {districtSaving ? 'Saving…' : 'Save district'}
+              </button>
             </div>
 
             <div className="space-y-2 flex-1 overflow-y-auto no-scrollbar pb-4">
