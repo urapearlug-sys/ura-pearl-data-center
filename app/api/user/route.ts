@@ -20,8 +20,21 @@ import { addActivityPoints } from '@/utils/league-points';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { calculateEnergyLimit, calculateLevelIndex, calculateMinedPoints, calculateRestoredEnergy } from '@/utils/game-mechanics';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { isValidDistrictSlug } from '@/utils/uganda-districts';
 
 const MAX_RETRIES = 3;
+
+/** Optional `district` on POST body: canonical Uganda district slug, or empty string to clear. */
+function districtUpdateFromBody(body: Record<string, unknown>): { district?: string | null } {
+  if (!Object.prototype.hasOwnProperty.call(body, 'district')) return {};
+  const raw = body.district;
+  if (raw === null || raw === '') return { district: null };
+  if (typeof raw !== 'string') return {};
+  const s = raw.trim().toLowerCase();
+  if (!s) return { district: null };
+  if (!isValidDistrictSlug(s)) return {};
+  return { district: s };
+}
 const RETRY_DELAY = 100; // milliseconds
 
 export async function POST(req: Request) {
@@ -128,6 +141,7 @@ export async function POST(req: Request) {
                 lastEnergyUpdateTimestamp: currentTime,
                 lastEnergyRefillsTimestamp: isNewDay ? currentTime : dbUser.lastEnergyRefillsTimestamp,
                 region: dbUser.region || telegramUser?.language_code || null,
+                ...districtUpdateFromBody(body as Record<string, unknown>),
                 // Ensure totalTaps exists for docs created before we added the field (persist across deployments)
                 ...(typeof dbUser.totalTaps !== 'number' && { totalTaps: 0 }),
               },
@@ -200,6 +214,7 @@ export async function POST(req: Request) {
             lastEnergyUpdateTimestamp: currentTime,
             lastEnergyRefillsTimestamp: currentTime,
             region: telegramUser?.language_code || null,
+            ...districtUpdateFromBody(body as Record<string, unknown>),
             referredBy: referredByUser ? { connect: { id: referredByUser.id } } : undefined,
           },
           include: { referredBy: true },

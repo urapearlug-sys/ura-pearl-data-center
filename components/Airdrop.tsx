@@ -126,7 +126,7 @@ export default function Airdrop() {
                     <div className="w-10 h-10 bg-ura-navy/20 rounded-full flex items-center justify-center text-xl">🏆</div>
                     <div className="text-left">
                       <div className="text-lg">Country Ranking</div>
-                      <div className="text-sm opacity-75">View players by country</div>
+                      <div className="text-sm opacity-75">View players by district and country</div>
                     </div>
                   </div>
                   <Angle size={32} className="text-black" />

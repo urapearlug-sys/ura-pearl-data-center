@@ -3,6 +3,7 @@ import prisma from '@/utils/prisma';
 import { validateTelegramWebAppData } from '@/utils/server-checks';
 import { calculateLevelIndex } from '@/utils/game-mechanics';
 import { LEVELS } from '@/utils/consts';
+import { getDistrictDisplayName } from '@/utils/uganda-districts';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,7 @@ export async function GET(req: Request) {
         pointsBalance: true,
         totalTaps: true,
         region: true,
+        district: true,
         totalDonatedPoints: true,
       },
     });
@@ -63,6 +65,8 @@ export async function GET(req: Request) {
       pointsBalance: dbUser.pointsBalance,
       totalTaps: dbUser.totalTaps ?? 0,
       region: dbUser.region,
+      district: dbUser.district,
+      districtName: getDistrictDisplayName(dbUser.district),
       totalDonatedPoints: Math.floor(dbUser.totalDonatedPoints ?? 0),
       gameLevelIndex: levelIndex,
       levelName: level.name,

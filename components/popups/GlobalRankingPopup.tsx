@@ -10,6 +10,10 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { LEVELS } from '@/utils/consts';
 import { calculateLevelIndex } from '@/utils/game-mechanics';
 import { useGameStore } from '@/utils/game-mechanics';
+import {
+  DISTRICT_FILTER_NONE,
+  DISTRICT_FILTER_OTHER,
+} from '@/utils/uganda-districts';
 
 interface UserRanking {
   rank: number;
@@ -20,6 +24,8 @@ interface UserRanking {
   pointsBalance: number;
   region: string | null;
   regionName: string;
+  district?: string | null;
+  districtName?: string;
   isPremium: boolean;
   isFrozen: boolean;
   createdAt: string;
@@ -49,6 +55,17 @@ interface RegionGroup {
   name: string;
 }
 
+interface DistrictStat {
+  slug: string;
+  name: string;
+  count: number;
+}
+
+interface DistrictMeta {
+  noDistrict: number;
+  otherDistrict: number;
+}
+
 interface Props {
   onClose: () => void;
 }
@@ -73,6 +90,9 @@ export default function GlobalRankingPopup({ onClose }: Props) {
   const [totalUsers, setTotalUsers] = useState(0);
   const [search, setSearch] = useState('');
   const [regionFilter, setRegionFilter] = useState(''); // '' | 'group:Europe' | 'de' (country code)
+  const [districtFilter, setDistrictFilter] = useState(''); // '' | slug | __none__ | __other__
+  const [districts, setDistricts] = useState<DistrictStat[]>([]);
+  const [districtMeta, setDistrictMeta] = useState<DistrictMeta>({ noDistrict: 0, otherDistrict: 0 });
   const [selectedUser, setSelectedUser] = useState<UserRanking | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [myRankData, setMyRankData] = useState<MyRankData | null>(null);
@@ -87,7 +107,9 @@ export default function GlobalRankingPopup({ onClose }: Props) {
         limit: '50',
       });
       if (search) params.set('search', search);
-      if (regionFilter.startsWith('group:')) {
+      if (districtFilter) {
+        params.set('district', districtFilter);
+      } else if (regionFilter.startsWith('group:')) {
         params.set('regionGroup', regionFilter.slice(6));
       } else if (regionFilter) {
         params.set('region', regionFilter);
@@ -113,6 +135,13 @@ export default function GlobalRankingPopup({ onClose }: Props) {
       setTotalUsers(data.pagination?.total || 0);
       if (data.regions) setRegions(data.regions);
       if (data.regionGroups) setRegionGroups(data.regionGroups);
+      if (Array.isArray(data.districts)) setDistricts(data.districts);
+      if (data.districtMeta && typeof data.districtMeta.noDistrict === 'number') {
+        setDistrictMeta({
+          noDistrict: data.districtMeta.noDistrict,
+          otherDistrict: data.districtMeta.otherDistrict ?? 0,
+        });
+      }
     } catch (error) {
       console.error('Failed to fetch rankings:', error);
       setFetchError('Network error. Pull down to retry.');
@@ -122,7 +151,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [page, search, regionFilter]);
+  }, [page, search, regionFilter, districtFilter]);
 
   useEffect(() => {
     fetchRankings();
@@ -232,8 +261,12 @@ export default function GlobalRankingPopup({ onClose }: Props) {
             <span className="text-xs bg-red-500 px-1.5 py-0.5 rounded text-white">Frozen</span>
           )}
         </div>
-        <div className="text-sm text-gray-400 flex items-center gap-2">
-          <span>{user.regionName}</span>
+        <div className="text-sm text-gray-400 flex items-center gap-2 flex-wrap">
+          {user.district ? (
+            <span>{user.districtName && user.districtName !== 'Not set' ? user.districtName : user.district}</span>
+          ) : (
+            <span>{user.regionName}</span>
+          )}
           <span className="text-gray-600">•</span>
           <span>{user.activitiesCompleted.tasks} tasks</span>
         </div>
@@ -264,7 +297,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
           <span className="text-white font-bold">{formatNumber(totalUsers)}</span> Players
         </div>
         <div className="text-sm text-gray-400">
-          <span className="text-white font-bold">{regions.length}</span> Countries
+          <span className="text-white font-bold">{districts.length}</span> Districts
         </div>
       </div>
 
@@ -287,17 +320,50 @@ export default function GlobalRankingPopup({ onClose }: Props) {
         </form>
 
         <select
-          value={regionFilter}
+          value={
+            districtFilter
+              ? `district:${districtFilter}`
+              : regionFilter
+          }
           onChange={(e) => {
-            setRegionFilter(e.target.value);
+            const v = e.target.value;
             setPage(1);
+            if (!v) {
+              setDistrictFilter('');
+              setRegionFilter('');
+              return;
+            }
+            if (v.startsWith('district:')) {
+              setRegionFilter('');
+              setDistrictFilter(v.slice('district:'.length));
+              return;
+            }
+            setDistrictFilter('');
+            setRegionFilter(v);
           }}
           className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
         >
-          <option value="">All Countries</option>
+          <option value="">All districts (all players)</option>
+          <optgroup label="By district — participants">
+            {districtMeta.noDistrict > 0 && (
+              <option value={`district:${DISTRICT_FILTER_NONE}`}>
+                No district assigned ({districtMeta.noDistrict})
+              </option>
+            )}
+            {districts.map((d) => (
+              <option key={d.slug} value={`district:${d.slug}`}>
+                {d.name} ({d.count})
+              </option>
+            ))}
+            {districtMeta.otherDistrict > 0 && (
+              <option value={`district:${DISTRICT_FILTER_OTHER}`}>
+                Other / not on list ({districtMeta.otherDistrict})
+              </option>
+            )}
+          </optgroup>
           {regionGroups.length > 0 && (
             <>
-              <optgroup label="By region (countries listed below)">
+              <optgroup label="By region (countries)">
                 {regionGroups.map((g) => (
                   <option key={g.id} value={`group:${g.id}`}>
                     {g.name}
@@ -313,11 +379,12 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               </optgroup>
             </>
           )}
-          {regionGroups.length === 0 && regions.map((r) => (
-            <option key={r.code} value={r.code || ''}>
-              {r.name} ({r.count})
-            </option>
-          ))}
+          {regionGroups.length === 0 &&
+            regions.map((r) => (
+              <option key={r.code} value={r.code || ''}>
+                {r.name} ({r.count})
+              </option>
+            ))}
         </select>
       </div>
 
@@ -452,6 +519,16 @@ export default function GlobalRankingPopup({ onClose }: Props) {
                   <div className="text-xs text-gray-400">Rank</div>
                   <div className={`text-lg font-bold ${getRankColor(selectedUser.rank)}`}>
                     {getRankBadge(selectedUser.rank)}
+                  </div>
+                </div>
+                <div className="bg-ura-panel p-3 rounded-lg">
+                  <div className="text-xs text-gray-400">District</div>
+                  <div className="text-lg font-bold text-white">
+                    {selectedUser.district
+                      ? selectedUser.districtName && selectedUser.districtName !== 'Not set'
+                        ? selectedUser.districtName
+                        : selectedUser.district
+                      : '—'}
                   </div>
                 </div>
                 <div className="bg-ura-panel p-3 rounded-lg">

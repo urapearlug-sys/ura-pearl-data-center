@@ -2,6 +2,13 @@
 
 import { NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
+import {
+  CANONICAL_DISTRICT_SLUGS,
+  DISTRICT_FILTER_NONE,
+  DISTRICT_FILTER_OTHER,
+  getDistrictDisplayName,
+  UGANDA_DISTRICTS,
+} from '@/utils/uganda-districts';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -107,25 +114,45 @@ export async function GET(req: Request) {
     const search = searchParams.get('search') || '';
     const regionFilter = searchParams.get('region') || '';
     const regionGroup = searchParams.get('regionGroup') || '';
+    const districtFilter = (searchParams.get('district') || '').trim().toLowerCase();
 
     const skip = (page - 1) * limit;
 
     // Build where clause. Do NOT filter by isHidden so all users show (production MongoDB
     // may have users without the isHidden field, and { not: true } can exclude them).
-    const whereClause: Record<string, unknown> = {};
+    const andParts: Record<string, unknown>[] = [];
 
     if (search) {
-      whereClause.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { telegramId: { contains: search } },
-      ];
+      andParts.push({
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { telegramId: { contains: search } },
+        ],
+      });
     }
 
-    if (regionGroup && REGION_GROUPS[regionGroup]) {
-      whereClause.region = { in: REGION_GROUPS[regionGroup] };
+    if (districtFilter) {
+      if (districtFilter === DISTRICT_FILTER_NONE) {
+        andParts.push({ OR: [{ district: null }, { district: '' }] });
+      } else if (districtFilter === DISTRICT_FILTER_OTHER) {
+        andParts.push({
+          AND: [
+            { district: { not: null } },
+            { district: { not: '' } },
+            { district: { notIn: [...CANONICAL_DISTRICT_SLUGS] } },
+          ],
+        });
+      } else {
+        andParts.push({ district: districtFilter });
+      }
+    } else if (regionGroup && REGION_GROUPS[regionGroup]) {
+      andParts.push({ region: { in: REGION_GROUPS[regionGroup] } });
     } else if (regionFilter) {
-      whereClause.region = regionFilter;
+      andParts.push({ region: regionFilter });
     }
+
+    const whereClause: Record<string, unknown> =
+      andParts.length === 0 ? {} : andParts.length === 1 ? andParts[0]! : { AND: andParts };
 
     // Get total count
     const totalUsers = await prisma.user.count({
@@ -142,6 +169,7 @@ export async function GET(req: Request) {
         points: true,
         pointsBalance: true,
         region: true,
+        district: true,
         isPremium: true,
         isFrozen: true,
         createdAt: true,
@@ -184,6 +212,8 @@ export async function GET(req: Request) {
       pointsBalance: Math.floor(user.pointsBalance),
       region: user.region,
       regionName: getRegionName(user.region),
+      district: user.district,
+      districtName: getDistrictDisplayName(user.district),
       isPremium: user.isPremium,
       isFrozen: user.isFrozen,
       createdAt: user.createdAt,
@@ -217,6 +247,37 @@ export async function GET(req: Request) {
 
     const regionGroupsList = Object.keys(REGION_GROUPS).map((name) => ({ id: name, name }));
 
+    const canonicalSlugSet = new Set(CANONICAL_DISTRICT_SLUGS);
+    const districtGroups = await prisma.user.groupBy({
+      by: ['district'],
+      _count: { district: true },
+    });
+    let districtNoAssignCount = 0;
+    let districtOtherCount = 0;
+    const districtCountBySlug = new Map<string, number>();
+    for (const row of districtGroups) {
+      const raw = row.district;
+      const c = row._count.district;
+      if (raw == null || raw === '') {
+        districtNoAssignCount += c;
+        continue;
+      }
+      const key = raw.trim().toLowerCase();
+      if (canonicalSlugSet.has(key)) {
+        districtCountBySlug.set(key, c);
+      } else {
+        districtOtherCount += c;
+      }
+    }
+
+    const districtStats = [...UGANDA_DISTRICTS]
+      .map((d) => ({
+        slug: d.slug,
+        name: d.name,
+        count: districtCountBySlug.get(d.slug) ?? 0,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
     const response = NextResponse.json({
       users: rankedUsers,
       pagination: {
@@ -227,6 +288,11 @@ export async function GET(req: Request) {
       },
       regions: regionStats,
       regionGroups: regionGroupsList,
+      districts: districtStats,
+      districtMeta: {
+        noDistrict: districtNoAssignCount,
+        otherDistrict: districtOtherCount,
+      },
     });
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     return response;

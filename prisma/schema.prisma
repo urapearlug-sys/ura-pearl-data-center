@@ -32,6 +32,9 @@ model User {
   // User region (derived from Telegram language_code or set manually)
   region                    String?
 
+  // Uganda district (canonical slug, e.g. kampala); optional — used for district rankings
+  district                  String?
+
   // Admin controls
   isFrozen                  Boolean  @default(false)  // Frozen accounts cannot perform actions
   isHidden                  Boolean  @default(false)  // Hidden accounts don't appear in rankings
