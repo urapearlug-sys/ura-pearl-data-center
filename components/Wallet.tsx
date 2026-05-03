@@ -347,7 +347,6 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
 
             <div className={e ? 'mt-4 text-center' : 'mt-6 text-center'}>
               <p className={`font-semibold tracking-tight tabular-nums ${e ? 'text-2xl' : 'text-6xl'}`}>{tradeInput.toLocaleString()}</p>
-              <p className={`text-emerald-400 ${e ? 'mt-0.5 text-xs' : 'mt-1 text-sm'}`}>~0 USD</p>
             </div>
 
             {exchangeMode === 'convert' ? (
