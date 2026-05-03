@@ -109,8 +109,8 @@ export default function MiniGamesPopup({ onClose, onlyGameId }: MiniGamesPopupPr
   const subtitle = isDailyPatternOnly ? 'Draw the correct pattern once per day' : 'Play once per day each';
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start">
           <div>
             <h2 className="text-xl font-bold text-white">{title}</h2>
@@ -136,11 +136,11 @@ export default function MiniGamesPopup({ onClose, onlyGameId }: MiniGamesPopupPr
                     }}
                     className={`w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all ${
                       game.claimedToday
-                        ? 'bg-[#272a2f]/80 hover:bg-[#272a2f] border border-[#3d4046]'
-                        : 'bg-[#272a2f] hover:bg-[#3a3d42] border border-[#3d4046]'
+                        ? 'bg-ura-panel-2/80 hover:bg-ura-panel-2 border border-ura-border/75'
+                        : 'bg-ura-panel-2 hover:bg-[#3a3d42] border border-ura-border/75'
                     }`}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-[#1d2025] flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-ura-panel flex items-center justify-center flex-shrink-0">
                       {game.id === 'tap_challenge' ? (
                         <Image src={lightning} alt="" width={28} height={28} />
                       ) : game.id === 'pattern_dots' ? (

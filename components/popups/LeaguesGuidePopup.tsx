@@ -14,12 +14,12 @@ export default function LeaguesGuidePopup({ onClose }: LeaguesGuidePopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center">
+    <div className="fixed inset-0 z-[60] bg-ura-navy/80 flex items-center justify-center">
       <div
-        className="bg-[#1d2025] w-full h-full max-w-xl flex flex-col shadow-xl"
+        className="bg-ura-panel w-full h-full max-w-xl flex flex-col shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Leagues – User guide</h2>
           <button
             type="button"
@@ -66,39 +66,39 @@ export default function LeaguesGuidePopup({ onClose }: LeaguesGuidePopupProps) {
               <strong className="text-white">Team is lower than league in ranks.</strong> Users in a <strong className="text-sky-300">team</strong> earn <strong className="text-sky-300">TP</strong>. Users in a <strong className="text-white">league</strong> (your team has joined a league) earn the same <strong className="text-sky-300">TP</strong> plus <strong className="text-[#f3ba2f]">LP</strong> (2× the base). So users in teams under leagues get extra benefits. <strong className="text-white">No single user joins a league—only teams.</strong> Tap <strong className="text-white">How to earn LP</strong> in the Leagues tab to open the full tables.
             </p>
             <p className="text-gray-400 text-xs mb-2 font-semibold">Team activities (TP only) – if you are only in a team:</p>
-            <div className="rounded-lg border border-[#3d4046] overflow-hidden mb-3">
+            <div className="rounded-lg border border-ura-border/75 overflow-hidden mb-3">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-[#272a2f] border-b border-[#3d4046]">
+                  <tr className="bg-ura-panel-2 border-b border-ura-border/75">
                     <th className="py-2 px-3 font-semibold text-white">Activity</th>
                     <th className="py-2 px-3 font-semibold text-right text-sky-300">TP</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-300">
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Daily Login</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+10</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Complete Task</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+20</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Attend X-Space</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+50</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Referral</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+100</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Win Challenge</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+200</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Daily Login</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+10</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Complete Task</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+20</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Attend X-Space</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+50</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Referral</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+100</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Win Challenge</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+200</td></tr>
                   <tr className="border-b-0"><td className="py-2 px-3">Streak Bonus</td><td className="py-2 px-3 text-right text-sky-300 font-medium">+5/day</td></tr>
                 </tbody>
               </table>
             </div>
             <p className="text-gray-400 text-xs mb-2 font-semibold">League activities (TP + LP) – if you are in a league (team under a league):</p>
-            <div className="rounded-lg border border-[#3d4046] overflow-hidden mb-2">
+            <div className="rounded-lg border border-ura-border/75 overflow-hidden mb-2">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="bg-[#272a2f] border-b border-[#3d4046]">
+                  <tr className="bg-ura-panel-2 border-b border-ura-border/75">
                     <th className="py-2 px-3 font-semibold text-white">Activity</th>
                     <th className="py-2 px-3 font-semibold text-right text-[#f3ba2f]">TP + LP</th>
                   </tr>
                 </thead>
                 <tbody className="text-gray-300">
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Daily Login</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+10 TP + 20 LP</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Complete Task</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+20 TP + 40 LP</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Attend X-Space</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+50 TP + 100 LP</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Referral</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+100 TP + 200 LP</td></tr>
-                  <tr className="border-b border-[#2d2f38]"><td className="py-2 px-3">Win Challenge</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+200 TP + 400 LP</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Daily Login</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+10 TP + 20 LP</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Complete Task</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+20 TP + 40 LP</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Attend X-Space</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+50 TP + 100 LP</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Referral</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+100 TP + 200 LP</td></tr>
+                  <tr className="border-b border-ura-border/85"><td className="py-2 px-3">Win Challenge</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+200 TP + 400 LP</td></tr>
                   <tr className="border-b-0"><td className="py-2 px-3">Streak Bonus</td><td className="py-2 px-3 text-right text-[#f3ba2f] font-medium">+5 TP + 10 LP/day</td></tr>
                 </tbody>
               </table>

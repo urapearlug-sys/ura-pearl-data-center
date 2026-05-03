@@ -128,7 +128,7 @@ export default function AdminDailyCipher() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">
           ← Back to Admin
@@ -140,7 +140,7 @@ export default function AdminDailyCipher() {
         ) : (
           <>
             {/* Override form */}
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Set Override for Date</h2>
               <p className="text-gray-400 text-sm mb-4">
                 Override the auto-generated cipher for a specific date (e.g. events, promos).
@@ -152,7 +152,7 @@ export default function AdminDailyCipher() {
                     type="date"
                     value={editDate}
                     onChange={(e) => setEditDate(e.target.value)}
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
                 <div>
@@ -162,7 +162,7 @@ export default function AdminDailyCipher() {
                     value={editWord}
                     onChange={(e) => setEditWord(e.target.value)}
                     placeholder="e.g. PEARLS"
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-32"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-32"
                   />
                 </div>
                 <div>
@@ -172,13 +172,13 @@ export default function AdminDailyCipher() {
                     value={editHint}
                     onChange={(e) => setEditHint(e.target.value)}
                     placeholder="e.g. 3 letters, your token"
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-48"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-48"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+                  className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
                 >
                   Save Override
                 </button>
@@ -186,7 +186,7 @@ export default function AdminDailyCipher() {
             </section>
 
             {/* Bulk import */}
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Bulk Import Words</h2>
               <p className="text-gray-400 text-sm mb-4">
                 Add words to the auto-selection pool. Used when no override exists for a date.
@@ -197,12 +197,12 @@ export default function AdminDailyCipher() {
                   onChange={(e) => setBulkWords(e.target.value)}
                   placeholder="PEARLS, COIN, TAP, MINE, REWARD..."
                   rows={3}
-                  className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-none"
+                  className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white resize-none"
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+                  className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
                 >
                   Import Words
                 </button>
@@ -210,12 +210,12 @@ export default function AdminDailyCipher() {
             </section>
 
             {/* Recent ciphers */}
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Recent Ciphers</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400 border-b border-[#3d4046]">
+                    <tr className="text-left text-gray-400 border-b border-ura-border/75">
                       <th className="pb-2 pr-4">Date</th>
                       <th className="pb-2 pr-4">Word / Answer (·−)</th>
                       <th className="pb-2 pr-4">Hint</th>
@@ -224,7 +224,7 @@ export default function AdminDailyCipher() {
                   </thead>
                   <tbody>
                     {ciphers.slice(0, 14).map((c) => (
-                      <tr key={c.id} className="border-b border-[#3d4046]/50">
+                      <tr key={c.id} className="border-b border-ura-border/75/50">
                         <td className="py-2 pr-4">{formatDate(c.date)}</td>
                         <td className="py-2 pr-4">
                           <span className="font-mono block">{c.word}</span>
@@ -246,7 +246,7 @@ export default function AdminDailyCipher() {
             </section>
 
             {/* Word pool */}
-            <section className="bg-[#272a2f] rounded-xl p-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4">Word Pool ({words.length} words)</h2>
               <p className="text-gray-400 text-sm mb-2">
                 Auto-selection cycles through these by day-of-year.
@@ -255,7 +255,7 @@ export default function AdminDailyCipher() {
                 {words.map((w) => (
                   <span
                     key={w.id}
-                    className="bg-[#1d2025] px-2 py-1 rounded text-sm font-mono"
+                    className="bg-ura-panel px-2 py-1 rounded text-sm font-mono"
                   >
                     {w.word}
                   </span>

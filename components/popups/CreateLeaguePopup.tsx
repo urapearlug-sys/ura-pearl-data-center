@@ -76,9 +76,9 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
-        <div className="px-4 py-3 flex justify-between items-center border-b border-[#3d4046]">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ura-navy/60">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
+        <div className="px-4 py-3 flex justify-between items-center border-b border-ura-border/75">
           <h2 className="text-lg font-bold text-white">Create league</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -87,8 +87,8 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
             <>
               <p className="text-gray-300 text-sm mb-4">Only <strong className="text-white">teams</strong> can create leagues. Create a team first (1M PEARLS), then create a league with that team (10M PEARLS).</p>
               <div className="flex gap-3">
-                <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="flex-1 py-3 rounded-xl bg-[#272a2f] text-gray-300 font-medium">Close</button>
-                <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); onOpenCreateTeam?.(); }} className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold">Create team</button>
+                <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="flex-1 py-3 rounded-xl bg-ura-panel-2 text-gray-300 font-medium">Close</button>
+                <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); onOpenCreateTeam?.(); }} className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold">Create team</button>
               </div>
             </>
           ) : !created ? (
@@ -105,7 +105,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                   <select
                     value={teamId}
                     onChange={(e) => setTeamId(e.target.value)}
-                    className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-4 py-3 text-white mb-3"
+                    className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-4 py-3 text-white mb-3"
                   >
                     {teams.map((t) => (
                       <option key={t.id} value={t.id}>{t.name}</option>
@@ -119,7 +119,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Lagos Squad"
-                className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-4 py-3 text-white placeholder-gray-500"
+                className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-4 py-3 text-white placeholder-gray-500"
                 maxLength={80}
               />
               <label className="flex items-start gap-2 mt-3 cursor-pointer">
@@ -127,7 +127,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                   type="checkbox"
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
-                  className="mt-1 rounded border-[#3d4046] bg-[#272a2f] text-[#f3ba2f] focus:ring-[#f3ba2f]"
+                  className="mt-1 rounded border-ura-border/75 bg-ura-panel-2 text-[#f3ba2f] focus:ring-[#f3ba2f]"
                 />
                 <span className="text-sm text-gray-300">{TERMS_AGREEMENT_LABEL_CREATOR}</span>
               </label>
@@ -135,7 +135,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                 <button
                   type="button"
                   onClick={() => { triggerHapticFeedback(window); onClose(); }}
-                  className="flex-1 py-3 rounded-xl bg-[#272a2f] text-gray-300 font-medium"
+                  className="flex-1 py-3 rounded-xl bg-ura-panel-2 text-gray-300 font-medium"
                 >
                   Cancel
                 </button>
@@ -143,7 +143,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                   type="button"
                   onClick={handleSubmit}
                   disabled={submitting || !canAfford || !canCreate || !agreedToTerms}
-                  className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50"
+                  className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50"
                 >
                   {submitting ? 'Creating…' : 'Create'}
                 </button>
@@ -158,12 +158,12 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
                   type="text"
                   readOnly
                   value={created.inviteCode}
-                  className="flex-1 bg-[#272a2f] border border-[#3d4046] rounded-lg px-4 py-3 text-white text-lg font-mono tracking-wider"
+                  className="flex-1 bg-ura-panel-2 border border-ura-border/75 rounded-lg px-4 py-3 text-white text-lg font-mono tracking-wider"
                 />
                 <button
                   type="button"
                   onClick={copyCode}
-                  className="py-3 px-4 rounded-lg bg-[#f3ba2f] text-black font-semibold"
+                  className="py-3 px-4 rounded-lg bg-ura-gold text-black font-semibold"
                 >
                   Copy
                 </button>
@@ -171,7 +171,7 @@ export default function CreateLeaguePopup({ onClose, teams, onCreate, onSuccess,
               <button
                 type="button"
                 onClick={() => { triggerHapticFeedback(window); onClose(); }}
-                className="w-full mt-4 py-3 rounded-xl bg-[#272a2f] text-white font-medium"
+                className="w-full mt-4 py-3 rounded-xl bg-ura-panel-2 text-white font-medium"
               >
                 Done
               </button>

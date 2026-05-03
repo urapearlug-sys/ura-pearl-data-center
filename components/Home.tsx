@@ -278,7 +278,7 @@ export default function Home({ setCurrentView }: HomeProps) {
       key={rowKey}
       type="button"
       onClick={() => handleAction(item)}
-      className="w-full rounded-xl border border-[#2d2f38] bg-[#151821] px-4 py-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
+      className="w-full rounded-xl border border-ura-border/85 bg-ura-panel/98 px-4 py-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
     >
       <div className="flex items-start gap-3">
         <div className="h-9 w-9 rounded-lg border border-[#2f3340] bg-[#0f1218] flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -310,7 +310,7 @@ export default function Home({ setCurrentView }: HomeProps) {
       <button
         type="button"
         onClick={() => handleAction(HOME_MOST_USED_KARIBU)}
-        className={`w-full rounded-2xl border ${border} bg-[#12141a] px-3 py-3.5 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
+        className={`w-full rounded-2xl border ${border} bg-ura-panel/95 px-3 py-3.5 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
       >
         <div className="flex items-start gap-3">
           <span
@@ -331,13 +331,13 @@ export default function Home({ setCurrentView }: HomeProps) {
   const renderMostUsedPinnedGrid = () => (
     <div className="mt-3 grid grid-cols-2 gap-3">
       {HOME_MOST_USED_GRID.map((item) => {
-        const chrome = HOME_MOST_USED_GRID_CHROME[item.id] ?? { emoji: '⭐', border: 'border-[#2d2f38]' };
+        const chrome = HOME_MOST_USED_GRID_CHROME[item.id] ?? { emoji: '⭐', border: 'border-ura-border/85' };
         return (
           <button
             key={item.id}
             type="button"
             onClick={() => handleAction(item)}
-            className={`rounded-2xl border ${chrome.border} bg-[#12141a] px-3 py-3 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
+            className={`rounded-2xl border ${chrome.border} bg-ura-panel/95 px-3 py-3 text-left transition-colors hover:bg-[#161a24] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25`}
           >
             <div className="flex items-start gap-2">
               <span
@@ -425,7 +425,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   }, [showEcosystemDashboard]);
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
+    <div className="bg-ura-page flex justify-center min-h-screen">
       {/* Side drawer-handle: opens ecosystem popup (matches edge tab + left chevron pattern) */}
       <button
         type="button"
@@ -435,7 +435,7 @@ export default function Home({ setCurrentView }: HomeProps) {
         }}
         aria-label={showEcosystemDashboard ? 'Hide URA Civilizational Ecosystem' : 'Open URA Civilizational Ecosystem'}
         aria-expanded={showEcosystemDashboard}
-        className="fixed right-0 top-1/2 z-[45] -translate-y-1/2 flex items-center justify-center rounded-l-2xl border border-r-0 border-white/12 bg-[#1f2229] py-6 pl-2.5 pr-1 shadow-[-6px_0_16px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#262a32] active:bg-[#181b21] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        className="fixed right-0 top-1/2 z-[45] -translate-y-1/2 flex items-center justify-center rounded-l-2xl border border-r-0 border-white/12 bg-ura-panel/90 py-6 pl-2.5 pr-1 shadow-[-6px_0_16px_rgba(0,0,0,0.35)] transition-colors hover:bg-[#262a32] active:bg-[#181b21] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/35 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -450,7 +450,7 @@ export default function Home({ setCurrentView }: HomeProps) {
         </svg>
       </button>
 
-      <div className="w-full bg-black text-white flex flex-col max-w-xl pb-24">
+      <div className="w-full bg-ura-page text-white flex flex-col max-w-xl pb-24">
         <div className="px-4 pt-4">
           <button
             type="button"
@@ -458,9 +458,9 @@ export default function Home({ setCurrentView }: HomeProps) {
               triggerHapticFeedback(window);
               setCurrentView('settings');
             }}
-            className="w-full rounded-2xl border border-[#2c2f38] bg-[#12141a] p-3 flex items-center gap-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
+            className="w-full rounded-2xl border border-ura-line/85 bg-ura-panel/95 p-3 flex items-center gap-3 text-left hover:border-[var(--ura-yellow)] transition-colors"
           >
-            <div className="w-10 h-10 rounded-full border border-[var(--ura-blue-medium)] overflow-hidden bg-[#1f2330] flex-shrink-0 relative">
+            <div className="w-10 h-10 rounded-full border border-[var(--ura-blue-medium)] overflow-hidden bg-ura-panel flex-shrink-0 relative">
               <Image src={defaultProfileAvatar} alt="Profile" fill className="object-cover" sizes="40px" />
             </div>
             <div className="min-w-0 flex-1">
@@ -469,7 +469,7 @@ export default function Home({ setCurrentView }: HomeProps) {
             </div>
           </button>
 
-          <div className="mt-4 rounded-2xl overflow-hidden border border-[#2c2f38] bg-[#f5f0e8]">
+          <div className="mt-4 rounded-2xl overflow-hidden border border-ura-line/85 bg-[#f5f0e8]">
             <Image
               src={uraFiscalFunHomeBanner}
               alt="Fiscal Fun — Uganda Revenue Authority"
@@ -483,7 +483,7 @@ export default function Home({ setCurrentView }: HomeProps) {
 
           {showEcosystemDashboard ? (
             <div
-              className="mt-4 rounded-xl border border-[#2d2f38] bg-[#11141d] p-2 scroll-mt-4"
+              className="mt-4 rounded-xl border border-ura-border/85 bg-[#11141d] p-2 scroll-mt-4"
               id="home-ecosystem-panel"
               role="region"
               aria-label="URA Civilizational Ecosystem"
@@ -533,7 +533,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           <section className="mt-6" aria-label="Action Center">
             <h2 className="text-lg font-bold text-white tracking-tight mb-3">Action Center</h2>
 
-            <div className="rounded-xl border border-[#2d2f38] bg-[#151821] p-3">
+            <div className="rounded-xl border border-ura-border/85 bg-ura-panel/98 p-3">
               <div className="min-w-0">
                 <h3 className="text-sm font-bold text-[var(--ura-yellow)] tracking-tight">Total PEARLS</h3>
                 <div className="mt-2 flex items-center gap-2">
@@ -567,7 +567,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                     { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#5fa8ff]', hint: 'Pending + approved (includes wallet white→blue)', image: pearlBlue },
                     { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[var(--ura-yellow)]', hint: 'Approved & withdraw-ready pearls', image: pearlGolden },
                   ].map((item) => (
-                    <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-[#12141a] px-2.5 py-2 flex items-center gap-2">
+                    <div key={item.key} className="rounded-lg border border-[#2a2d38] bg-ura-panel/95 px-2.5 py-2 flex items-center gap-2">
                       <Image src={item.image} alt={item.label} width={28} height={28} className="h-7 w-7 object-contain flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <p className={`text-xs font-semibold ${item.color}`}>{item.label}</p>
@@ -580,7 +580,7 @@ export default function Home({ setCurrentView }: HomeProps) {
               </div>
             </div>
 
-            <div className="mt-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
+            <div className="mt-4 rounded-xl border border-ura-border/85 bg-[#161923] p-1 grid grid-cols-2 gap-1">
               {(
                 [
                   { key: 'most-used' as const, label: 'Most used' },
@@ -611,7 +611,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                     triggerHapticFeedback(window);
                     setShowFavoritesManager(true);
                   }}
-                  className="w-full rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 text-sm font-semibold text-gray-200 hover:border-[var(--ura-yellow)] transition-colors"
+                  className="w-full rounded-lg border border-ura-border/85 bg-ura-panel-2/95 px-3 py-2 text-sm font-semibold text-gray-200 hover:border-[var(--ura-yellow)] transition-colors"
                 >
                   + Manage favorites
                 </button>
@@ -636,7 +636,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                 <>
                   {favoriteItems.map((item) => renderActionCenterItem(item, item.id))}
                   {favoriteItems.length === 0 ? (
-                    <div className="w-full rounded-xl border border-dashed border-[#2d2f38] bg-[#151821] px-4 py-3 text-left">
+                    <div className="w-full rounded-xl border border-dashed border-ura-border/85 bg-ura-panel/98 px-4 py-3 text-left">
                       <p className="font-semibold text-white text-sm">No favorites yet</p>
                       <p className="text-xs text-gray-400 mt-1">Open “Manage favorites” to add items by search or manual entry.</p>
                     </div>
@@ -649,8 +649,8 @@ export default function Home({ setCurrentView }: HomeProps) {
       </div>
 
       {showFavoritesManager && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[1px] p-4 flex items-end sm:items-center justify-center">
-          <div className="w-full max-w-md rounded-2xl border border-[#2d2f38] bg-[#13161d] p-4 max-h-[85vh] overflow-auto">
+        <div className="fixed inset-0 z-50 bg-ura-navy/70 backdrop-blur-[1px] p-4 flex items-end sm:items-center justify-center">
+          <div className="w-full max-w-md rounded-2xl border border-ura-border/85 bg-[#13161d] p-4 max-h-[85vh] overflow-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">Manage favorites</h3>
               <button
@@ -670,11 +670,11 @@ export default function Home({ setCurrentView }: HomeProps) {
                 value={favoritesSearch}
                 onChange={(e) => setFavoritesSearch(e.target.value)}
                 placeholder="Search activities to add"
-                className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                className="w-full rounded-lg border border-ura-border/85 bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
               />
               <div className="space-y-2">
                 {availableFavoriteOptions.slice(0, 8).map((item) => (
-                  <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                  <div key={item.id} className="rounded-lg border border-ura-border/85 bg-ura-panel-2/95 px-3 py-2 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-white truncate">{item.title}</p>
                       {item.subtitle ? <p className="text-xs text-gray-400 truncate">{item.subtitle}</p> : null}
@@ -698,24 +698,24 @@ export default function Home({ setCurrentView }: HomeProps) {
                   value={manualFavoriteTitle}
                   onChange={(e) => setManualFavoriteTitle(e.target.value)}
                   placeholder="Title"
-                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                  className="w-full rounded-lg border border-ura-border/85 bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
                 />
                 <input
                   value={manualFavoriteSubtitle}
                   onChange={(e) => setManualFavoriteSubtitle(e.target.value)}
                   placeholder="Subtitle (optional)"
-                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                  className="w-full rounded-lg border border-ura-border/85 bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
                 />
                 <input
                   value={manualFavoriteRoute}
                   onChange={(e) => setManualFavoriteRoute(e.target.value)}
                   placeholder="Route (e.g. earn, game) optional"
-                  className="w-full rounded-lg border border-[#2d2f38] bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
+                  className="w-full rounded-lg border border-ura-border/85 bg-[#0f1218] px-3 py-2 text-sm text-white placeholder:text-gray-500 outline-none focus:border-[var(--ura-yellow)]"
                 />
                 <button
                   type="button"
                   onClick={addManualFavorite}
-                  className="w-full rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 text-sm font-semibold text-gray-100 hover:border-[var(--ura-yellow)]"
+                  className="w-full rounded-lg border border-ura-border/85 bg-ura-panel-2/95 px-3 py-2 text-sm font-semibold text-gray-100 hover:border-[var(--ura-yellow)]"
                 >
                   Add manual favorite
                 </button>
@@ -729,7 +729,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                   const item = ACTION_CATALOG.find((x) => x.id === id);
                   if (!item) return null;
                   return (
-                    <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                    <div key={item.id} className="rounded-lg border border-ura-border/85 bg-ura-panel-2/95 px-3 py-2 flex items-center justify-between gap-2">
                       <p className="text-sm text-white truncate">{item.title}</p>
                       <button
                         type="button"
@@ -742,7 +742,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                   );
                 })}
                 {customFavorites.map((item) => (
-                  <div key={item.id} className="rounded-lg border border-[#2d2f38] bg-[#11141b] px-3 py-2 flex items-center justify-between gap-2">
+                  <div key={item.id} className="rounded-lg border border-ura-border/85 bg-ura-panel-2/95 px-3 py-2 flex items-center justify-between gap-2">
                     <p className="text-sm text-white truncate">{item.title}</p>
                     <button
                       type="button"
@@ -760,8 +760,8 @@ export default function Home({ setCurrentView }: HomeProps) {
       )}
 
       {showRanksPopup && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[1px] p-4 flex items-center justify-center">
-          <div className="w-full max-w-md rounded-2xl border border-[#2d2f38] bg-[#13161d] p-4">
+        <div className="fixed inset-0 z-50 bg-ura-navy/70 backdrop-blur-[1px] p-4 flex items-center justify-center">
+          <div className="w-full max-w-md rounded-2xl border border-ura-border/85 bg-[#13161d] p-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">Ranks</h3>
               <button

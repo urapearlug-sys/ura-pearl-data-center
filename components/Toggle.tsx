@@ -10,7 +10,7 @@ interface ToggleProps {
 export default function Toggle({ enabled, setEnabled }: ToggleProps) {
     return (
         <button
-            className={`${enabled ? 'bg-[#f3ba2f]' : 'bg-gray-500'
+            className={`${enabled ? 'bg-ura-gold' : 'bg-gray-500'
                 } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
             onClick={() => setEnabled(!enabled)}
         >

@@ -133,8 +133,8 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-        <div className="bg-[#1d2025] rounded-t-3xl p-6 w-full max-w-xl min-h-[320px] flex items-center justify-center">
+      <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+        <div className="bg-ura-panel rounded-t-3xl p-6 w-full max-w-xl min-h-[320px] flex items-center justify-center">
           <div className="w-10 h-10 border-2 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
@@ -142,13 +142,13 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
       <div
-        className={`bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}
+        className={`bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}
       >
         <div className="bg-gradient-to-b from-[#2a2d33] to-[#1d2025] px-5 pt-6 pb-4 flex justify-between items-start">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center ring-2 ring-cyan-500/40">
+            <div className="w-12 h-12 rounded-xl bg-ura-panel-2 flex items-center justify-center ring-2 ring-cyan-500/40">
               <Image src={dailyCipher} alt="Decode" width={28} height={28} className="rounded" />
             </div>
             <div>
@@ -166,7 +166,7 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
         </div>
 
         <div className="px-4 pb-8 pt-2">
-          <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
+          <div className="bg-ura-panel-2 rounded-xl p-4 mb-4">
             <p className="text-gray-400 text-sm mb-1">Hint</p>
             <p className="text-white font-medium">{status?.hint ?? '—'}</p>
             <div className="flex justify-between items-center mt-2 text-sm">
@@ -188,7 +188,7 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
             </div>
           ) : (
             <>
-              <div className="bg-[#1d2025] rounded-xl p-4 mb-4 min-h-[60px] border border-[#3d4046]">
+              <div className="bg-ura-panel rounded-xl p-4 mb-4 min-h-[60px] border border-ura-border/75">
                 <p className="text-gray-500 text-xs mb-1">Your pattern</p>
                 <p className="text-2xl font-mono text-cyan-300 break-all">
                   {pattern || '—'}
@@ -209,14 +209,14 @@ export default function DailyCipherPopup({ onClose }: DailyCipherPopupProps) {
                   <button
                     onClick={handleSpace}
                     disabled={isSubmitting}
-                    className="flex-1 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-gray-300 font-medium disabled:opacity-50"
+                    className="flex-1 py-3 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-gray-300 font-medium disabled:opacity-50"
                   >
                     Space (next letter)
                   </button>
                   <button
                     onClick={handleBackspace}
                     disabled={isSubmitting}
-                    className="px-4 py-3 rounded-xl bg-[#272a2f] border border-[#3d4046] text-gray-300 disabled:opacity-50"
+                    className="px-4 py-3 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-gray-300 disabled:opacity-50"
                   >
                     ⌫
                   </button>

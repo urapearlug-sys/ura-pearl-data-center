@@ -209,12 +209,12 @@ export default function GlobalRankingPopup({ onClose }: Props) {
     <button
       key={user.id}
       onClick={() => setSelectedUser(user)}
-      className="w-full p-4 flex items-center gap-3 hover:bg-[#272a2f] transition-colors text-left"
+      className="w-full p-4 flex items-center gap-3 hover:bg-ura-panel-2 transition-colors text-left"
     >
       <div className={`w-12 text-center font-bold shrink-0 ${getRankColor(user.rank)}`}>
         {getRankBadge(user.rank)}
       </div>
-      <div className="p-1 rounded-lg bg-[#272a2f] shrink-0">
+      <div className="p-1 rounded-lg bg-ura-panel-2 shrink-0">
         <Image
           src={LEVELS[calculateLevelIndex(user.points)].smallImage}
           width={28}
@@ -246,20 +246,20 @@ export default function GlobalRankingPopup({ onClose }: Props) {
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black">
+    <div className="fixed inset-0 z-50 flex flex-col bg-ura-page">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#f3ba2f] to-[#e6a422] p-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-ura-gold to-ura-gold-deep p-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-black">Country Ranking</h1>
         <button
           onClick={handleClose}
-          className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center"
+          className="w-10 h-10 bg-ura-navy/20 rounded-full flex items-center justify-center"
         >
           <Cross className="text-black" />
         </button>
       </div>
 
       {/* Stats Bar */}
-      <div className="bg-[#1d2025] px-4 py-3 flex items-center justify-between border-b border-gray-700">
+      <div className="bg-ura-panel px-4 py-3 flex items-center justify-between border-b border-gray-700">
         <div className="text-sm text-gray-400">
           <span className="text-white font-bold">{formatNumber(totalUsers)}</span> Players
         </div>
@@ -269,18 +269,18 @@ export default function GlobalRankingPopup({ onClose }: Props) {
       </div>
 
       {/* Search & Filter */}
-      <div className="bg-[#272a2f] p-4 space-y-3">
+      <div className="bg-ura-panel-2 p-4 space-y-3">
         <form onSubmit={handleSearch} className="flex gap-2">
           <input
             type="text"
             placeholder="Search by name or Telegram ID..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+            className="flex-1 bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
           />
           <button
             type="submit"
-            className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-semibold"
+            className="bg-ura-gold text-black px-4 py-2 rounded-lg font-semibold"
           >
             Search
           </button>
@@ -292,7 +292,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
             setRegionFilter(e.target.value);
             setPage(1);
           }}
-          className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+          className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
         >
           <option value="">All Countries</option>
           {regionGroups.length > 0 && (
@@ -322,7 +322,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
       </div>
 
       {/* Rankings List */}
-      <div className="flex-1 overflow-y-auto bg-[#1d2025]">
+      <div className="flex-1 overflow-y-auto bg-ura-panel">
         {loading ? (
           <div className="flex items-center justify-center h-40">
             <div className="w-8 h-8 border-4 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
@@ -332,7 +332,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
             <p className="text-red-400 mb-4">{fetchError}</p>
             <button
               onClick={() => fetchRankings()}
-              className="bg-[#f3ba2f] text-black font-semibold px-6 py-2 rounded-lg"
+              className="bg-ura-gold text-black font-semibold px-6 py-2 rounded-lg"
             >
               Retry
             </button>
@@ -377,7 +377,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               </div>
 
               {/* Level icon */}
-              <div className="p-1 rounded-lg bg-[#1d2025] shrink-0">
+              <div className="p-1 rounded-lg bg-ura-panel shrink-0">
                 <Image
                   src={LEVELS[myRankData.gameLevelIndex]?.smallImage ?? LEVELS[0].smallImage}
                   width={28}
@@ -406,11 +406,11 @@ export default function GlobalRankingPopup({ onClose }: Props) {
 
       {/* Pagination — arrows only, minimal height */}
       {totalPages > 1 && (
-        <div className="bg-[#272a2f] py-2 px-3 flex items-center justify-center gap-2">
+        <div className="bg-ura-panel-2 py-2 px-3 flex items-center justify-center gap-2">
           <button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page === 1}
-            className="w-9 h-9 flex items-center justify-center bg-[#1d2025] text-white rounded-lg disabled:opacity-50 text-xl leading-none"
+            className="w-9 h-9 flex items-center justify-center bg-ura-panel text-white rounded-lg disabled:opacity-50 text-xl leading-none"
             aria-label="Previous page"
           >
             ←
@@ -418,7 +418,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
           <button
             onClick={() => setPage(Math.min(totalPages, page + 1))}
             disabled={page === totalPages}
-            className="w-9 h-9 flex items-center justify-center bg-[#1d2025] text-white rounded-lg disabled:opacity-50 text-xl leading-none"
+            className="w-9 h-9 flex items-center justify-center bg-ura-panel text-white rounded-lg disabled:opacity-50 text-xl leading-none"
             aria-label="Next page"
           >
             →
@@ -428,8 +428,8 @@ export default function GlobalRankingPopup({ onClose }: Props) {
 
       {/* User Detail Modal */}
       {selectedUser && (
-        <div className="fixed inset-0 z-60 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-[#272a2f] rounded-2xl w-full max-w-md max-h-[80vh] overflow-y-auto">
+        <div className="fixed inset-0 z-60 bg-ura-navy/80 flex items-center justify-center p-4">
+          <div className="bg-ura-panel-2 rounded-2xl w-full max-w-md max-h-[80vh] overflow-y-auto">
             <div className="p-4 border-b border-gray-700 flex items-center justify-between">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 {selectedUser.name}
@@ -439,7 +439,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               </h2>
               <button
                 onClick={() => setSelectedUser(null)}
-                className="w-8 h-8 bg-[#1d2025] rounded-full flex items-center justify-center"
+                className="w-8 h-8 bg-ura-panel rounded-full flex items-center justify-center"
               >
                 <Cross className="text-gray-400 w-4 h-4" />
               </button>
@@ -448,23 +448,23 @@ export default function GlobalRankingPopup({ onClose }: Props) {
             <div className="p-4 space-y-4">
               {/* Basic Info */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#1d2025] p-3 rounded-lg">
+                <div className="bg-ura-panel p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Rank</div>
                   <div className={`text-lg font-bold ${getRankColor(selectedUser.rank)}`}>
                     {getRankBadge(selectedUser.rank)}
                   </div>
                 </div>
-                <div className="bg-[#1d2025] p-3 rounded-lg">
+                <div className="bg-ura-panel p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Region</div>
                   <div className="text-lg font-bold text-white">{selectedUser.regionName}</div>
                 </div>
-                <div className="bg-[#1d2025] p-3 rounded-lg">
+                <div className="bg-ura-panel p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Total Points</div>
                   <div className="text-lg font-bold text-[#f3ba2f]">
                     {formatNumber(selectedUser.points)} PEARLS
                   </div>
                 </div>
-                <div className="bg-[#1d2025] p-3 rounded-lg">
+                <div className="bg-ura-panel p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Balance</div>
                   <div className="text-lg font-bold text-white">
                     {formatNumber(selectedUser.pointsBalance)} PEARLS
@@ -495,37 +495,37 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               <div>
                 <h3 className="text-sm text-gray-400 mb-2">Activities Completed</h3>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Tasks</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.tasks}
                     </span>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Referrals</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.referrals}
                     </span>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Decode</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.dailyCiphers}
                     </span>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Matrix</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.dailyCombos}
                     </span>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Cards</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.cardsCollected}
                     </span>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg flex justify-between">
+                  <div className="bg-ura-panel p-3 rounded-lg flex justify-between">
                     <span className="text-gray-400">Stakes</span>
                     <span className="text-white font-bold">
                       {selectedUser.activitiesCompleted.stakesCreated}
@@ -538,15 +538,15 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               <div>
                 <h3 className="text-sm text-gray-400 mb-2">Upgrade Levels</h3>
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-[#1d2025] p-3 rounded-lg text-center">
+                  <div className="bg-ura-panel p-3 rounded-lg text-center">
                     <div className="text-xs text-gray-400">Multitap</div>
                     <div className="text-white font-bold">{selectedUser.multitapLevelIndex}</div>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg text-center">
+                  <div className="bg-ura-panel p-3 rounded-lg text-center">
                     <div className="text-xs text-gray-400">Energy</div>
                     <div className="text-white font-bold">{selectedUser.energyLimitLevelIndex}</div>
                   </div>
-                  <div className="bg-[#1d2025] p-3 rounded-lg text-center">
+                  <div className="bg-ura-panel p-3 rounded-lg text-center">
                     <div className="text-xs text-gray-400">Mine</div>
                     <div className="text-white font-bold">{selectedUser.mineLevelIndex}</div>
                   </div>
@@ -554,7 +554,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
               </div>
 
               {/* Referral Earnings */}
-              <div className="bg-[#1d2025] p-3 rounded-lg">
+              <div className="bg-ura-panel p-3 rounded-lg">
                 <div className="text-xs text-gray-400">Referral Earnings</div>
                 <div className="text-lg font-bold text-green-400">
                   +{formatNumber(selectedUser.referralPointsEarned)} PEARLS
@@ -563,7 +563,7 @@ export default function GlobalRankingPopup({ onClose }: Props) {
 
               {/* Donated to charity */}
               {selectedUser.totalDonatedPoints > 0 && (
-                <div className="bg-[#1d2025] p-3 rounded-lg">
+                <div className="bg-ura-panel p-3 rounded-lg">
                   <div className="text-xs text-gray-400">Donated to charity</div>
                   <div className="text-lg font-bold text-amber-400">
                     {formatNumber(selectedUser.totalDonatedPoints)} PEARLS

@@ -118,7 +118,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80">
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ura-navy/80">
         <div className="text-white text-lg">Loading dashboard…</div>
       </div>
     );
@@ -133,18 +133,18 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
   ];
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col bg-[#0f1115] min-h-[100dvh]">
-      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-[#2d2f38] bg-[#1a1c22]">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-ura-navy-deep/90 min-h-[100dvh]">
+      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-ura-border/85 bg-ura-panel-2">
         <div>
           <h1 className="text-lg font-bold text-white">Team: {teamName}</h1>
           <p className="text-xs text-gray-400">Member dashboard</p>
         </div>
-        <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#272a2f]">
+        <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-ura-panel-2">
           <span className="text-2xl">&times;</span>
         </button>
       </header>
 
-      <div className="flex border-b border-[#2d2f38] px-2">
+      <div className="flex border-b border-ura-border/85 px-2">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -163,27 +163,27 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
             <p className="text-gray-400 text-sm">Team progress and activity at a glance.</p>
             {overview && (
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Members</p>
                   <p className="text-xl font-bold text-white">{overview.memberCount}</p>
                 </div>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Total TP</p>
                   <p className="text-xl font-bold text-sky-400">{formatNumber(overview.totalTP)}</p>
                 </div>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Total LP</p>
                   <p className="text-xl font-bold text-amber-400">{formatNumber(overview.totalLP)}</p>
                 </div>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Announcements</p>
                   <p className="text-xl font-bold text-white">{overview.announcementsCount}</p>
                 </div>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Opinions / polls</p>
                   <p className="text-xl font-bold text-white">{overview.opinionsCount}</p>
                 </div>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-xs text-gray-500">Tasks (active / done)</p>
                   <p className="text-xl font-bold text-white">{overview.tasksAvailableCount} / {overview.tasksCompletedCount}</p>
                 </div>
@@ -192,7 +192,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
             {announcements.length > 0 && (
               <div>
                 <h3 className="text-sm font-semibold text-gray-300 mb-2">Latest announcement</h3>
-                <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <p className="text-white text-sm line-clamp-2">{announcements[0].text}</p>
                   <p className="text-xs text-gray-500 mt-1">{announcements[0].authorName} · {new Date(announcements[0].createdAt).toLocaleString()}</p>
                 </div>
@@ -209,7 +209,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
             ) : (
               <ul className="space-y-2">
                 {announcements.map((a) => (
-                  <li key={a.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                  <li key={a.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                     <p className="text-white text-sm">{a.text}</p>
                     <p className="text-xs text-gray-500 mt-1">{a.authorName} · {new Date(a.createdAt).toLocaleString()}</p>
                   </li>
@@ -227,7 +227,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
             ) : (
               <ul className="space-y-2">
                 {opinions.map((o) => (
-                  <li key={o.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                  <li key={o.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                     <p className="text-white font-medium text-sm">{o.title}</p>
                     {o.body && <p className="text-gray-400 text-xs mt-1">{o.body}</p>}
                     <p className="text-xs text-gray-500 mt-1">{o.authorName} · {new Date(o.createdAt).toLocaleString()}</p>
@@ -244,7 +244,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
             <p className="text-gray-400 text-sm">Team members with total TP/LP and this week.</p>
             <ul className="space-y-2">
               {members.map((m) => (
-                <li key={m.userId} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <li key={m.userId} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-white font-medium">{m.name}</span>
                     {m.isOwner && <span className="text-xs text-amber-400">Owner</span>}
@@ -268,7 +268,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
               ) : (
                 <ul className="space-y-2">
                   {tasksAvailable.map((c) => (
-                    <li key={c.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                    <li key={c.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                       <p className="text-white text-sm font-medium">{c.creatorTeamName} vs {c.opponentTeamName ?? 'TBD'}</p>
                       <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} PEARLS · Prize: {formatNumber(c.prizePool)} PEARLS · Status: {c.status}</p>
                       {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ends: {new Date(c.endsAt).toLocaleString()}</p>}
@@ -284,7 +284,7 @@ export default function TeamMemberDashboardPopup({ teamId, teamName, onClose, in
               ) : (
                 <ul className="space-y-2">
                   {tasksCompleted.map((c) => (
-                    <li key={c.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                    <li key={c.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                       <p className="text-white text-sm font-medium">{c.creatorTeamName} vs {c.opponentTeamName ?? '—'}</p>
                       <p className="text-xs text-gray-400 mt-1">Target: {formatNumber(c.targetAlm)} PEARLS · Prize: {formatNumber(c.prizePool)} PEARLS</p>
                       {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ended: {new Date(c.endsAt).toLocaleString()}</p>}

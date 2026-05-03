@@ -218,7 +218,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80">
+      <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ura-navy/80">
         <div className="text-white text-lg">Loading dashboard…</div>
       </div>
     );
@@ -255,18 +255,18 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
   ];
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col bg-[#0f1115] min-h-[100dvh]">
-      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-[#2d2f38] bg-[#1a1c22]">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-ura-navy-deep/90 min-h-[100dvh]">
+      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-ura-border/85 bg-ura-panel-2">
         <div>
           <h1 className="text-lg font-bold text-white">Team: {team?.name ?? teamName}</h1>
           <p className="text-xs text-gray-400">Management dashboard</p>
         </div>
-        <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#272a2f]">
+        <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-ura-panel-2">
           <span className="text-2xl">&times;</span>
         </button>
       </header>
 
-      <div className="flex border-b border-[#2d2f38] px-2">
+      <div className="flex border-b border-ura-border/85 px-2">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -283,7 +283,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
         {tab === 'members' && (
           <div className="space-y-3">
             {team?.inviteCode && (
-              <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3 mb-3">
+              <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3 mb-3">
                 <p className="text-xs text-gray-400 mb-1">Invite code (share to add members)</p>
                 <p className="font-mono text-white font-medium">{team.inviteCode}</p>
               </div>
@@ -291,7 +291,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
             <p className="text-gray-400 text-sm">Manage members: remove, mute, ban, or add a note.</p>
             <ul className="space-y-2">
               {members.map((m) => (
-                <li key={m.userId} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                <li key={m.userId} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <span className="text-white font-medium">{m.name}</span>
@@ -311,14 +311,14 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
                         )}
                         {punishUserId === m.userId ? (
                           <div className="flex flex-col gap-1 w-full mt-2">
-                            <input type="text" placeholder="Note (reason)" value={punishNote} onChange={(e) => setPunishNote(e.target.value)} className="w-full bg-[#272a2f] border border-[#3d4046] rounded px-2 py-1 text-white text-sm" />
+                            <input type="text" placeholder="Note (reason)" value={punishNote} onChange={(e) => setPunishNote(e.target.value)} className="w-full bg-ura-panel-2 border border-ura-border/75 rounded px-2 py-1 text-white text-sm" />
                             <div className="flex gap-1">
-                              <button type="button" onClick={() => runAction('punishMember', { userId: m.userId, punishmentNote: punishNote })} disabled={!!actioningId} className="px-2 py-1 rounded bg-[#f3ba2f] text-black text-xs font-medium">Save note</button>
-                              <button type="button" onClick={() => { setPunishUserId(null); setPunishNote(''); }} className="px-2 py-1 rounded bg-[#272a2f] text-gray-300 text-xs">Cancel</button>
+                              <button type="button" onClick={() => runAction('punishMember', { userId: m.userId, punishmentNote: punishNote })} disabled={!!actioningId} className="px-2 py-1 rounded bg-ura-gold text-black text-xs font-medium">Save note</button>
+                              <button type="button" onClick={() => { setPunishUserId(null); setPunishNote(''); }} className="px-2 py-1 rounded bg-ura-panel-2 text-gray-300 text-xs">Cancel</button>
                             </div>
                           </div>
                         ) : (
-                          <button type="button" onClick={() => setPunishUserId(m.userId)} className="px-2 py-1 rounded bg-[#272a2f] text-gray-300 text-xs">Note</button>
+                          <button type="button" onClick={() => setPunishUserId(m.userId)} className="px-2 py-1 rounded bg-ura-panel-2 text-gray-300 text-xs">Note</button>
                         )}
                       </div>
                     )}
@@ -339,7 +339,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
             ) : (
               <ul className="space-y-3">
                 {joinableChallenges.map((c) => (
-                  <li key={c.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3">
+                  <li key={c.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3">
                     <div className="flex justify-between items-start gap-2">
                       <p className="font-medium text-white text-sm">{c.taskName}</p>
                       <span className={`shrink-0 text-xs px-2 py-0.5 rounded ${c.status === 'pending' ? 'bg-amber-500/20 text-amber-300' : c.status === 'active' ? 'bg-sky-500/20 text-sky-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
@@ -353,7 +353,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
                       </p>
                     )}
                     {(c.status === 'active' || c.status === 'completed') && (
-                      <div className="mt-2 pt-2 border-t border-[#2d2f38]">
+                      <div className="mt-2 pt-2 border-t border-ura-border/85">
                         <p className="text-xs text-gray-400">Progress (since start): <span className="text-sky-300">{c.creatorProgress.toLocaleString()}</span> vs <span className="text-amber-300">{c.opponentProgress.toLocaleString()}</span></p>
                         {c.endsAt && <p className="text-xs text-gray-500 mt-0.5">Ends: {new Date(c.endsAt).toLocaleString()}</p>}
                         {c.status === 'completed' && (c.winnerTeamId || c.winnerLeagueId) && (
@@ -376,7 +376,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
             ) : (
               <ul className="space-y-2">
                 {joinRequests.map((r) => (
-                  <li key={r.id} className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-3 flex flex-wrap items-center justify-between gap-2">
+                  <li key={r.id} className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-3 flex flex-wrap items-center justify-between gap-2">
                     <div>
                       <span className="text-white font-medium">{r.userName}</span>
                       <p className="text-xs text-gray-500 mt-0.5">{new Date(r.createdAt).toLocaleString()}</p>
@@ -394,9 +394,9 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
 
         {tab === 'communicate' && (
           <div className="space-y-4">
-            <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-4">
+            <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-4">
               <label className="block text-sm font-medium text-gray-300 mb-2">Post announcement to all members</label>
-              <textarea value={announcementText} onChange={(e) => setAnnouncementText(e.target.value)} placeholder="Write your message…" rows={3} className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm resize-none" />
+              <textarea value={announcementText} onChange={(e) => setAnnouncementText(e.target.value)} placeholder="Write your message…" rows={3} className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm resize-none" />
               <button type="button" onClick={postAnnouncement} disabled={posting || !announcementText.trim()} className="mt-2 px-4 py-2 rounded-lg bg-sky-600 text-white font-medium text-sm disabled:opacity-50">Post</button>
             </div>
             <div>
@@ -404,7 +404,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
               {announcements.length === 0 ? <p className="text-gray-500 text-sm">No announcements yet.</p> : (
                 <ul className="space-y-2">
                   {announcements.slice(0, 20).map((a) => (
-                    <li key={a.id} className="rounded-lg bg-[#1a1c22] border border-[#2d2f38] p-3">
+                    <li key={a.id} className="rounded-lg bg-ura-panel-2 border border-ura-border/85 p-3">
                       <p className="text-white text-sm">{a.text}</p>
                       <p className="text-xs text-gray-500 mt-1">{a.authorName} · {new Date(a.createdAt).toLocaleString()}</p>
                     </li>
@@ -417,10 +417,10 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
 
         {tab === 'opinions' && (
           <div className="space-y-4">
-            <div className="rounded-xl bg-[#1a1c22] border border-[#2d2f38] p-4">
+            <div className="rounded-xl bg-ura-panel-2 border border-ura-border/85 p-4">
               <label className="block text-sm font-medium text-gray-300 mb-2">Raise an opinion (proposal for the team)</label>
-              <input type="text" value={opinionTitle} onChange={(e) => setOpinionTitle(e.target.value)} placeholder="Title" className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm mb-2" />
-              <textarea value={opinionBody} onChange={(e) => setOpinionBody(e.target.value)} placeholder="Description (optional)" rows={2} className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm resize-none" />
+              <input type="text" value={opinionTitle} onChange={(e) => setOpinionTitle(e.target.value)} placeholder="Title" className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm mb-2" />
+              <textarea value={opinionBody} onChange={(e) => setOpinionBody(e.target.value)} placeholder="Description (optional)" rows={2} className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm resize-none" />
               <button type="button" onClick={createOpinion} disabled={posting || !opinionTitle.trim()} className="mt-2 px-4 py-2 rounded-lg bg-amber-600 text-white font-medium text-sm disabled:opacity-50">Create opinion</button>
             </div>
             <div>
@@ -428,7 +428,7 @@ export default function TeamManagementDashboardPopup({ teamId, teamName, onClose
               {opinions.length === 0 ? <p className="text-gray-500 text-sm">No opinions yet.</p> : (
                 <ul className="space-y-2">
                   {opinions.map((o) => (
-                    <li key={o.id} className="rounded-lg bg-[#1a1c22] border border-[#2d2f38] p-3">
+                    <li key={o.id} className="rounded-lg bg-ura-panel-2 border border-ura-border/85 p-3">
                       <p className="text-white font-medium text-sm">{o.title}</p>
                       {o.body && <p className="text-gray-400 text-xs mt-1">{o.body}</p>}
                       <p className="text-xs text-gray-500 mt-1">{o.authorName} · {new Date(o.createdAt).toLocaleString()}</p>

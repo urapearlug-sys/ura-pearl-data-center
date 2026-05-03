@@ -195,10 +195,10 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const defaultSuspensionMessage = 'Cheating is bad. Your account has been suspended.';
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white h-screen font-bold flex flex-col max-w-xl relative">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white h-screen font-bold flex flex-col max-w-xl relative">
         {isFrozen && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 px-4">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-ura-navy/95 px-4">
             <div className="w-full max-w-2xl mx-auto text-center">
               <div className="mb-6 flex justify-center">
                 {/* Put your image in public/images/suspended-bot.png */}
@@ -231,8 +231,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
 
         <NotificationBanner />
 
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
             <div className="px-4 pt-1 pb-24">
 
               <button

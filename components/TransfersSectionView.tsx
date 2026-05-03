@@ -26,7 +26,7 @@ const TAB_LABELS: Record<string, string> = { send: 'Send', receive: 'Receive', m
 export default function TransfersSectionView(props: TransfersSectionViewProps) {
   const tabsRow = React.createElement(
     'div',
-    { className: 'flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-4' },
+    { className: 'flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-4' },
     ...TABS.map((tab) =>
       React.createElement(
         'button',
@@ -34,7 +34,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
           key: tab,
           type: 'button',
           onClick: () => props.onTabClick(tab),
-          className: `flex-1 py-2 px-2 rounded-lg text-xs font-semibold capitalize ${props.activeTab === tab ? 'bg-[#f3ba2f] text-black' : 'text-gray-400 hover:text-white hover:bg-[#272a2f]'}`,
+          className: `flex-1 py-2 px-2 rounded-lg text-xs font-semibold capitalize ${props.activeTab === tab ? 'bg-ura-gold text-black' : 'text-gray-400 hover:text-white hover:bg-ura-panel-2'}`,
         },
         TAB_LABELS[tab] ?? tab
       )
@@ -47,14 +47,14 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
       props.amount && Number(props.amount) >= TRANSFER_MIN
         ? React.createElement(
             'div',
-            { className: 'rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-sm' },
+            { className: 'rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-sm' },
             React.createElement('p', { className: 'text-gray-400' }, 'Fee ', TRANSFER_FEE_PERCENT, '%: ', React.createElement('span', { className: 'text-[#f3ba2f]' }, formatNumber(Math.floor((Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' PEARLS')),
             React.createElement('p', { className: 'text-gray-300 mt-0.5' }, 'Recipient gets: ', React.createElement('span', { className: 'text-emerald-400' }, formatNumber(Math.floor(Number(props.amount) - (Number(props.amount) * TRANSFER_FEE_PERCENT) / 100)), ' PEARLS'))
           )
         : null;
     sendTab = React.createElement(
       'div',
-      { className: 'bg-[#272a2f] rounded-xl p-4 space-y-4' },
+      { className: 'bg-ura-panel-2 rounded-xl p-4 space-y-4' },
       React.createElement(
         'div',
         null,
@@ -64,7 +64,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
           value: props.recipientTelegramId,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) => props.setRecipientTelegramId(e.target.value.replace(/\D/g, '')),
           placeholder: 'e.g. 123456789',
-          className: 'w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white',
+          className: 'w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white',
         })
       ),
       React.createElement(
@@ -78,7 +78,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
           placeholder: `${formatNumber(TRANSFER_MIN)} - ${formatNumber(TRANSFER_MAX)}`,
           min: TRANSFER_MIN,
           max: TRANSFER_MAX,
-          className: 'w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white',
+          className: 'w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white',
         })
       ),
       feeBlock,
@@ -86,7 +86,7 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
       React.createElement('button', {
         onClick: props.onSend,
         disabled: props.isSending || !props.recipientTelegramId.trim() || !props.amount,
-        className: 'w-full py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed',
+        className: 'w-full py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed',
       }, props.isSending ? 'Sending...' : 'Send PEARLS')
     );
   }
@@ -95,11 +95,11 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
   if (props.activeTab === 'receive') {
     receiveTab = React.createElement(
       'div',
-      { className: 'bg-[#272a2f] rounded-xl p-4' },
+      { className: 'bg-ura-panel-2 rounded-xl p-4' },
       React.createElement('p', { className: 'text-gray-400 text-sm mb-3' }, 'Share your Telegram ID so others can send you PEARLS.'),
       React.createElement(
         'button',
-        { onClick: props.onCopyTelegramId, className: 'w-full flex items-center justify-between py-3 px-4 bg-[#1d2025] rounded-lg border border-[#3d4046]' },
+        { onClick: props.onCopyTelegramId, className: 'w-full flex items-center justify-between py-3 px-4 bg-ura-panel rounded-lg border border-ura-border/75' },
         React.createElement('span', { className: 'font-mono text-white' }, props.myTelegramId ?? '-'),
         React.createElement(Copy, { className: props.copied ? 'text-emerald-500' : 'text-[#8b8e93]' })
       )
@@ -109,20 +109,20 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
   let myTab = null;
   if (props.activeTab === 'my') {
     if (props.isLoadingMe) {
-      myTab = React.createElement('div', { className: 'bg-[#272a2f] rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'Loading...'));
+      myTab = React.createElement('div', { className: 'bg-ura-panel-2 rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'Loading...'));
     } else if (props.myTransfers.length === 0) {
-      myTab = React.createElement('div', { className: 'bg-[#272a2f] rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'No transfers yet'));
+      myTab = React.createElement('div', { className: 'bg-ura-panel-2 rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'No transfers yet'));
     } else {
       myTab = React.createElement(
         'div',
-        { className: 'bg-[#272a2f] rounded-xl p-4' },
+        { className: 'bg-ura-panel-2 rounded-xl p-4' },
         React.createElement(
           'div',
           { className: 'space-y-2 max-h-48 overflow-y-auto' },
           ...props.myTransfers.map((t) =>
             React.createElement(
               'div',
-              { key: t.id, className: 'py-2 px-3 rounded-lg bg-[#1d2025]' },
+              { key: t.id, className: 'py-2 px-3 rounded-lg bg-ura-panel' },
               React.createElement(
                 'div',
                 { className: 'flex justify-between items-center' },
@@ -147,22 +147,22 @@ export default function TransfersSectionView(props: TransfersSectionViewProps) {
   let recentTab = null;
   if (props.activeTab === 'recent') {
     if (props.isLoadingRecent) {
-      recentTab = React.createElement('div', { className: 'bg-[#272a2f] rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'Loading...'));
+      recentTab = React.createElement('div', { className: 'bg-ura-panel-2 rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'Loading...'));
     } else if (props.recentError) {
-      recentTab = React.createElement('div', { className: 'bg-[#272a2f] rounded-xl p-4' }, React.createElement('p', { className: 'text-amber-400 text-center py-4 text-sm' }, props.recentError));
+      recentTab = React.createElement('div', { className: 'bg-ura-panel-2 rounded-xl p-4' }, React.createElement('p', { className: 'text-amber-400 text-center py-4 text-sm' }, props.recentError));
     } else if (props.recentTransfers.length === 0) {
-      recentTab = React.createElement('div', { className: 'bg-[#272a2f] rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'No recent transactions'));
+      recentTab = React.createElement('div', { className: 'bg-ura-panel-2 rounded-xl p-4' }, React.createElement('p', { className: 'text-gray-400 text-center py-4' }, 'No recent transactions'));
     } else {
       recentTab = React.createElement(
         'div',
-        { className: 'bg-[#272a2f] rounded-xl p-4' },
+        { className: 'bg-ura-panel-2 rounded-xl p-4' },
         React.createElement(
           'div',
           { className: 'space-y-2 max-h-64 overflow-y-auto' },
           ...props.recentTransfers.map((t) =>
             React.createElement(
               'div',
-              { key: t.id, className: 'py-2 px-3 rounded-lg bg-[#1d2025]' },
+              { key: t.id, className: 'py-2 px-3 rounded-lg bg-ura-panel' },
               React.createElement(
                 'div',
                 { className: 'flex justify-between items-center' },

@@ -166,8 +166,8 @@ export default function TapChallengePopup({ onClose, onSuccess }: TapChallengePo
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start">
           <div>
             <h2 className="text-xl font-bold text-white">Umeme Run</h2>

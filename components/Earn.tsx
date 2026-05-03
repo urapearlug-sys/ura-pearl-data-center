@@ -265,10 +265,10 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
 
   if (minimalOnly) {
     return (
-      <div className="bg-black flex justify-center min-h-screen">
-        <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-          <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-            <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+      <div className="bg-ura-page flex justify-center min-h-screen">
+        <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+          <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+            <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
               <div className="px-4 pt-6 pb-24">
                 <div className="flex justify-center mb-4">
                   <Image
@@ -280,7 +280,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                     priority
                   />
                 </div>
-                <div className="mb-4 rounded-xl border border-[#2d2f38] bg-[#161923] p-1 grid grid-cols-2 gap-1">
+                <div className="mb-4 rounded-xl border border-ura-border/85 bg-[#161923] p-1 grid grid-cols-2 gap-1">
                   {[
                     { key: 'earn' as const, label: 'Earn' },
                     { key: 'wallet' as const, label: 'Wallet' },
@@ -331,10 +331,10 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   }
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
             <div className="px-4 pt-1 pb-24">
               <div className="relative mt-4">
                 <div className="flex justify-center mb-4">
@@ -354,7 +354,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                 {/* Activities section – tabbed list (scroll down to see) */}
                 <section
                   id="earn-activities"
-                  className="mt-10 pt-6 border-t border-[#2d2f38]"
+                  className="mt-10 pt-6 border-t border-ura-border/85"
                   aria-label="Activities"
                 >
                   <h2 className="text-xl font-bold text-white mb-4">Activities</h2>
@@ -362,7 +362,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                     <div className="text-center text-gray-400 py-10">Loading activities...</div>
                   ) : (
                     <>
-                      <div className="flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-4">
+                      <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-4">
                         {tabLabels.map((tab) => (
                           <button
                             key={tab}
@@ -374,7 +374,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                             className={`relative flex-1 min-w-0 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                               activeTab === tab
                                 ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20'
-                                : 'text-gray-400 hover:text-white hover:bg-[#272a2f]'
+                                : 'text-gray-400 hover:text-white hover:bg-ura-panel-2'
                             }`}
                           >
                             {capitalizeFirstLetter(tab)}
@@ -432,7 +432,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeagueLevels(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-amber-500/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-amber-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📊</span>
                                       <div className="min-w-0">
@@ -443,7 +443,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowTeamLevels(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-sky-500/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-sky-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0">
@@ -454,7 +454,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeaguePointsTable(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-[#f3ba2f]/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-[#f3ba2f]/40 transition-colors"
                                     >
                                       <span className="text-2xl">📈</span>
                                       <div className="min-w-0">
@@ -465,7 +465,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeaguesGuide(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-[#f3ba2f]/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-[#f3ba2f]/40 transition-colors"
                                     >
                                       <span className="text-2xl">📖</span>
                                       <div className="min-w-0">
@@ -505,7 +505,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowBrowseTeams(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-sky-500/40 transition-colors"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-sky-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📋</span>
                                       <div className="min-w-0 flex-1">
@@ -572,7 +572,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowBrowseLeagues(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-[#3d4046] text-left hover:border-violet-500/40 transition-colors"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-violet-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📋</span>
                                       <div className="min-w-0 flex-1">
@@ -589,7 +589,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                             key={cl.id}
                                             type="button"
                                             onClick={() => { triggerHapticFeedback(window); setShowLeagueDetailId(cl.id); }}
-                                            className="col-span-2 flex items-center justify-between p-3 rounded-xl bg-[#252836] border border-[#2d2f38] text-left hover:border-violet-500/40"
+                                            className="col-span-2 flex items-center justify-between p-3 rounded-xl bg-[#252836] border border-ura-border/85 text-left hover:border-violet-500/40"
                                           >
                                             <div>
                                               <p className="font-medium text-white">{cl.name}</p>
@@ -658,7 +658,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                             )}
                           </>
                         ) : displayTasks.length === 0 ? (
-                          <div className="text-center text-gray-500 py-10 rounded-xl bg-[#1a1c22]/50 border border-[#2d2f38] px-4">
+                          <div className="text-center text-gray-500 py-10 rounded-xl bg-ura-panel-2/50 border border-ura-border/85 px-4">
                             <p className="font-medium text-gray-400">No activities in this section.</p>
                           </div>
                         ) : (
@@ -668,10 +668,10 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                 key={task.id}
                                 type="button"
                                 onClick={() => openTaskPopup(task)}
-                                className="text-left rounded-xl border border-[#2d2f38] bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 shadow-lg hover:border-violet-500/45 hover:from-[#2a2c38] hover:to-[#22242e] active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+                                className="text-left rounded-xl border border-ura-border/85 bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 shadow-lg hover:border-violet-500/45 hover:from-[#2a2c38] hover:to-[#22242e] active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
                               >
                                 <div className="flex items-start gap-2 flex-1 min-h-0">
-                                  <div className="w-10 h-10 rounded-lg bg-[#1a1c22] flex items-center justify-center shrink-0 border border-[#2d2f38] overflow-hidden">
+                                  <div className="w-10 h-10 rounded-lg bg-ura-panel-2 flex items-center justify-center shrink-0 border border-ura-border/85 overflow-hidden">
                                     {(() => {
                                       const imgSrc = getTaskImageSrc(task.image);
                                       return imgSrc ? (

@@ -121,10 +121,10 @@ export default function AdminExport() {
     };
 
     return (
-        <div className="min-h-screen bg-[#1d2025] text-white p-8">
+        <div className="min-h-screen bg-ura-panel text-white p-8">
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-[#f3ba2f]">Export Info</h1>
-                <div className="bg-[#272a2f] rounded-lg p-6 mb-8">
+                <div className="bg-ura-panel-2 rounded-lg p-6 mb-8">
                     <h2 className="text-2xl font-semibold mb-4">Select fields to export:</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                         {userFields.map((field) => (
@@ -137,7 +137,7 @@ export default function AdminExport() {
                                         onChange={() => handleFieldChange(field)}
                                         className="w-full h-full rounded border-2 border-gray-400 
                                appearance-none cursor-pointer
-                               checked:bg-[#f3ba2f] checked:border-[#f3ba2f]
+                               checked:bg-ura-gold checked:border-[#f3ba2f]
                                transition-colors duration-200 ease-in-out"
                                     />
                                     <svg
@@ -175,7 +175,7 @@ export default function AdminExport() {
                 <button
                     onClick={handleDownload}
                     disabled={isLoading || !isAnyFieldSelected}
-                    className={`bg-[#f3ba2f] text-black px-6 py-3 rounded-lg font-bold text-lg transition-colors 
+                    className={`bg-ura-gold text-black px-6 py-3 rounded-lg font-bold text-lg transition-colors 
                      ${isLoading || !isAnyFieldSelected ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#f4c141]'}`}
                 >
                     {isLoading ? 'Exporting...' : 'Export JSON'}

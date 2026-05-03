@@ -85,12 +85,12 @@ export default function Mine({ setCurrentView }: MineProps) {
     };
 
     return (
-        <div className="bg-black flex justify-center min-h-screen">
-            <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
+        <div className="bg-ura-page flex justify-center min-h-screen">
+            <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
                 <TopInfoSection setCurrentView={setCurrentView} />
 
-                <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-                    <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+                <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+                    <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
                         <div className="px-4 pt-1 pb-24">
                             <h1 className="text-2xl text-center mt-4">Upgrade PEARLS Production</h1>
 
@@ -101,7 +101,7 @@ export default function Mine({ setCurrentView }: MineProps) {
                                 </div>
                             </div>
 
-                            <div className="bg-[#272a2f] rounded-lg p-4 mt-6">
+                            <div className="bg-ura-panel-2 rounded-lg p-4 mt-6">
                                 <div className="flex justify-between items-center mb-4">
                                     <p>Current PEARLS per hour:</p>
                                     <p className="text-[#f3ba2f]">{formatNumber(profitPerHour)}</p>
@@ -119,7 +119,7 @@ export default function Mine({ setCurrentView }: MineProps) {
                             <button
                                 onClick={handleUpgrade}
                                 disabled={pointsBalance < upgradeCost || isLoading}
-                                className={`w-full mt-6 py-3 rounded-lg text-center text-white font-bold ${pointsBalance >= upgradeCost && !isLoading ? 'bg-[#f3ba2f]' : 'bg-gray-500 cursor-not-allowed'
+                                className={`w-full mt-6 py-3 rounded-lg text-center text-white font-bold ${pointsBalance >= upgradeCost && !isLoading ? 'bg-ura-gold' : 'bg-gray-500 cursor-not-allowed'
                                     } relative`}
                             >
                                 {isLoading ? (
@@ -140,7 +140,7 @@ export default function Mine({ setCurrentView }: MineProps) {
                                 <span className="text-xs font-normal text-emerald-300/80">Stake PEARLS for 1 week+ or claim your staked PEARLS</span>
                             </button>
 
-                            <div className="bg-[#272a2f] rounded-lg p-4 mt-6 flex items-start">
+                            <div className="bg-ura-panel-2 rounded-lg p-4 mt-6 flex items-start">
                                 <Info className="w-6 h-6 text-[#f3ba2f] mr-3 flex-shrink-0 mt-1" />
                                 <p className="text-sm text-gray-300">
                                     Your mine automatically produces PEARLS for up to <span className="text-white font-bold">{maxInactiveHours} hours</span> after your last activity. Make sure to check in regularly to maximize your PEARLS production!

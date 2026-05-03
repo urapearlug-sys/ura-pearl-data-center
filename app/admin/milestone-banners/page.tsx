@@ -180,7 +180,7 @@ export default function AdminMilestoneBannersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">
           ← Back to Admin
@@ -190,7 +190,7 @@ export default function AdminMilestoneBannersPage() {
           Create and publish banners that appear <strong>once</strong> on the main game screen when a user opens the app. Use them for player milestones (e.g. 6,800 players), product launches, or other announcements. Only one banner can be active at a time.
         </p>
 
-        <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+        <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">Create new banner</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
@@ -200,7 +200,7 @@ export default function AdminMilestoneBannersPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Congratulations!"
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
             </div>
             <div>
@@ -210,7 +210,7 @@ export default function AdminMilestoneBannersPage() {
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
                 placeholder={DEFAULT_SUBTITLE}
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
             </div>
             <div>
@@ -220,7 +220,7 @@ export default function AdminMilestoneBannersPage() {
                 onChange={(e) => setBody(e.target.value)}
                 placeholder={DEFAULT_BODY}
                 rows={4}
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-y"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white resize-y"
               />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
@@ -235,14 +235,14 @@ export default function AdminMilestoneBannersPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
             >
               {isSubmitting ? 'Creating…' : 'Create banner'}
             </button>
           </form>
         </section>
 
-        <section className="bg-[#272a2f] rounded-xl p-6">
+        <section className="bg-ura-panel-2 rounded-xl p-6">
           <h2 className="text-xl font-semibold mb-4">Existing banners</h2>
           {isLoading ? (
             <p className="text-gray-400">Loading…</p>
@@ -253,7 +253,7 @@ export default function AdminMilestoneBannersPage() {
               {banners.map((b) => (
                 <li
                   key={b.id}
-                  className={`border rounded-lg p-4 ${b.isActive ? 'border-[#f3ba2f]/50 bg-[#f3ba2f]/5' : 'border-[#3d4046]'}`}
+                  className={`border rounded-lg p-4 ${b.isActive ? 'border-[#f3ba2f]/50 bg-ura-gold/5' : 'border-ura-border/75'}`}
                 >
                   {editingId === b.id ? (
                     <form onSubmit={handleSaveEdit} className="space-y-3">
@@ -262,27 +262,27 @@ export default function AdminMilestoneBannersPage() {
                         value={editTitle}
                         onChange={(e) => setEditTitle(e.target.value)}
                         placeholder="Title"
-                        className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm"
+                        className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm"
                       />
                       <input
                         type="text"
                         value={editSubtitle}
                         onChange={(e) => setEditSubtitle(e.target.value)}
                         placeholder="Subtitle"
-                        className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm"
+                        className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm"
                       />
                       <textarea
                         value={editBody}
                         onChange={(e) => setEditBody(e.target.value)}
                         placeholder="Body"
                         rows={3}
-                        className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm resize-y"
+                        className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm resize-y"
                       />
                       <div className="flex gap-2">
                         <button
                           type="submit"
                           disabled={isSavingEdit}
-                          className="px-3 py-1.5 rounded bg-[#f3ba2f] text-black text-sm font-medium disabled:opacity-50"
+                          className="px-3 py-1.5 rounded bg-ura-gold text-black text-sm font-medium disabled:opacity-50"
                         >
                           Save
                         </button>
@@ -301,7 +301,7 @@ export default function AdminMilestoneBannersPage() {
                         <div>
                           <span className="font-semibold text-white">{b.title}</span>
                           {b.isActive && (
-                            <span className="ml-2 text-xs px-2 py-0.5 rounded bg-[#f3ba2f]/20 text-[#f3ba2f]">
+                            <span className="ml-2 text-xs px-2 py-0.5 rounded bg-ura-gold/20 text-[#f3ba2f]">
                               Active
                             </span>
                           )}

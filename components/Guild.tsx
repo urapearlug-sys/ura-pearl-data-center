@@ -234,7 +234,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
                 <button
                   type="button"
                   onClick={handleShare}
-                  className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-[#123f78] text-sm font-bold shadow-sm hover:brightness-105 active:brightness-95"
+                  className="flex-1 py-3 rounded-xl bg-ura-gold text-[#123f78] text-sm font-bold shadow-sm hover:brightness-105 active:brightness-95"
                 >
                   Share invite
                 </button>
@@ -384,7 +384,7 @@ export default function Guild({ setCurrentView }: GuildProps) {
               aria-hidden
             >
               <div className="flex-1 bg-[#0f3c86]" />
-              <div className="flex-1 bg-[#f3ba2f]" />
+              <div className="flex-1 bg-ura-gold" />
               <div className="flex-1 bg-[#2d8acb]" />
             </div>
             <div className="relative z-10 flex size-[7.25rem] shrink-0 items-center justify-center rounded-full border-[5px] border-white/95 bg-white p-1.5 shadow-[0_14px_36px_rgba(0,0,0,0.6)] ring-1 ring-black/35">

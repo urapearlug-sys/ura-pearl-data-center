@@ -290,23 +290,23 @@ export default function AdminNotificationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">
           ← Back to Admin
         </Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">Notifications</h1>
         <p className="text-gray-400 text-sm mb-6">
-          Create notifications that appear in the <strong>in-app notification center</strong> (game screen, top bar) and on user profiles. Optionally post to your Telegram channel if <code className="bg-black/30 px-1 rounded">TELEGRAM_ANNOUNCEMENT_CHANNEL_ID</code> is set. To send a message only to users&apos; bot chats (with link/buttons, no profile), use <strong>Admin → Telegram broadcast</strong>.
+          Create notifications that appear in the <strong>in-app notification center</strong> (game screen, top bar) and on user profiles. Optionally post to your Telegram channel if <code className="bg-ura-navy/30 px-1 rounded">TELEGRAM_ANNOUNCEMENT_CHANNEL_ID</code> is set. To send a message only to users&apos; bot chats (with link/buttons, no profile), use <strong>Admin → Telegram broadcast</strong>.
         </p>
         <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-3 mb-6 text-sm text-amber-200">
-          <strong>Image tip:</strong> Use a <strong>direct image URL</strong> that ends in .jpg, .png, or .webp (e.g. <code className="bg-black/30 px-1 rounded">https://i.imgur.com/xxxxx.png</code>). Do <strong>not</strong> use album/page links like <code className="bg-black/30 px-1 rounded">imgur.com/a/...</code> — they won’t display. On Imgur: open the image, right‑click → “Copy image address”.
+          <strong>Image tip:</strong> Use a <strong>direct image URL</strong> that ends in .jpg, .png, or .webp (e.g. <code className="bg-ura-navy/30 px-1 rounded">https://i.imgur.com/xxxxx.png</code>). Do <strong>not</strong> use album/page links like <code className="bg-ura-navy/30 px-1 rounded">imgur.com/a/...</code> — they won’t display. On Imgur: open the image, right‑click → “Copy image address”.
           <br />
           <strong>Recommended:</strong> 640×320 px, under 500 KB. Upload from PC only persists on servers with disk; use a hosted URL in production.
         </div>
 
         {/* Create form */}
-        <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+        <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">Create notification</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
@@ -316,7 +316,7 @@ export default function AdminNotificationsPage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. New feature: Market coming in Q2"
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
             </div>
             <div>
@@ -326,7 +326,7 @@ export default function AdminNotificationsPage() {
                 onChange={(e) => setBody(e.target.value)}
                 placeholder="Short description or message..."
                 rows={3}
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-none"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white resize-none"
               />
             </div>
             <div>
@@ -337,7 +337,7 @@ export default function AdminNotificationsPage() {
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="URL or path (e.g. /uploads/notifications/… or upload from PC)"
-                  className="flex-1 min-w-[200px] bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                  className="flex-1 min-w-[200px] bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                 />
                 <label className="cursor-pointer bg-[#3d4046] hover:bg-[#4d5056] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap disabled:opacity-50">
                   <input
@@ -360,7 +360,7 @@ export default function AdminNotificationsPage() {
                   value={videoUrl}
                   onChange={(e) => setVideoUrl(e.target.value)}
                   placeholder="URL or path (e.g. /uploads/notifications/… or upload from PC)"
-                  className="flex-1 min-w-[200px] bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                  className="flex-1 min-w-[200px] bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                 />
                 <label className="cursor-pointer bg-[#3d4046] hover:bg-[#4d5056] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap disabled:opacity-50">
                   <input
@@ -397,7 +397,7 @@ export default function AdminNotificationsPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+              className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
             >
               {isSubmitting ? 'Creating…' : 'Create notification'}
             </button>
@@ -405,7 +405,7 @@ export default function AdminNotificationsPage() {
         </section>
 
         {/* List */}
-        <section className="bg-[#272a2f] rounded-xl p-6">
+        <section className="bg-ura-panel-2 rounded-xl p-6">
           <h2 className="text-xl font-semibold mb-4">All notifications</h2>
           {isLoading ? (
             <p className="text-gray-400">Loading…</p>
@@ -416,7 +416,7 @@ export default function AdminNotificationsPage() {
               {notifications.map((n) => (
                 <li
                   key={n.id}
-                  className="bg-[#1d2025] rounded-lg p-4 border border-[#2d2f38] flex flex-wrap items-start justify-between gap-2"
+                  className="bg-ura-panel rounded-lg p-4 border border-ura-border/85 flex flex-wrap items-start justify-between gap-2"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -481,8 +481,8 @@ export default function AdminNotificationsPage() {
 
         {/* Edit modal */}
         {editingId && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-            <div className="bg-[#272a2f] rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ura-navy/70">
+            <div className="bg-ura-panel-2 rounded-xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
               <h2 className="text-xl font-semibold mb-4">Edit notification</h2>
               <form onSubmit={handleSaveEdit} className="space-y-4">
                 <div>
@@ -492,7 +492,7 @@ export default function AdminNotificationsPage() {
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
                     placeholder="e.g. New feature"
-                    className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                    className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
                 <div>
@@ -502,7 +502,7 @@ export default function AdminNotificationsPage() {
                     onChange={(e) => setEditBody(e.target.value)}
                     placeholder="Short description..."
                     rows={3}
-                    className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-none"
+                    className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white resize-none"
                   />
                 </div>
                 <div>
@@ -513,7 +513,7 @@ export default function AdminNotificationsPage() {
                       value={editImageUrl}
                       onChange={(e) => setEditImageUrl(e.target.value)}
                       placeholder="Full URL (https://…) or upload from PC"
-                      className="flex-1 min-w-[200px] bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                      className="flex-1 min-w-[200px] bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                     />
                     <label className="cursor-pointer bg-[#3d4046] hover:bg-[#4d5056] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap disabled:opacity-50">
                       <input
@@ -536,7 +536,7 @@ export default function AdminNotificationsPage() {
                       value={editVideoUrl}
                       onChange={(e) => setEditVideoUrl(e.target.value)}
                       placeholder="URL or upload from PC"
-                      className="flex-1 min-w-[200px] bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                      className="flex-1 min-w-[200px] bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                     />
                     <label className="cursor-pointer bg-[#3d4046] hover:bg-[#4d5056] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap disabled:opacity-50">
                       <input
@@ -554,7 +554,7 @@ export default function AdminNotificationsPage() {
                   <button
                     type="submit"
                     disabled={isSavingEdit}
-                    className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
+                    className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50"
                   >
                     {isSavingEdit ? 'Saving…' : 'Save changes'}
                   </button>

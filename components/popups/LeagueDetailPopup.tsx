@@ -126,27 +126,27 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60">
-        <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up p-8 text-center text-gray-400">Loading…</div>
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-ura-navy/60">
+        <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up p-8 text-center text-gray-400">Loading…</div>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60">
-        <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up p-8 text-center">
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-ura-navy/60">
+        <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up p-8 text-center">
           <p className="text-gray-400 mb-4">League not found</p>
-          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="py-2 px-4 rounded-lg bg-[#272a2f] text-white">Close</button>
+          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="py-2 px-4 rounded-lg bg-ura-panel-2 text-white">Close</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up max-h-[85vh] flex flex-col">
-        <div className="px-4 py-3 flex justify-between items-center border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ura-navy/60">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden animate-slide-up max-h-[85vh] flex flex-col">
+        <div className="px-4 py-3 flex justify-between items-center border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">{data.name}</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -157,8 +157,8 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
           )}
           {data.isCreator && data.inviteCode && (
             <div className="flex gap-2 mb-4">
-              <input type="text" readOnly value={data.inviteCode} className="flex-1 bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm font-mono" />
-              <button type="button" onClick={copyCode} className="py-2 px-3 rounded-lg bg-[#f3ba2f] text-black font-semibold text-sm">Copy code</button>
+              <input type="text" readOnly value={data.inviteCode} className="flex-1 bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm font-mono" />
+              <button type="button" onClick={copyCode} className="py-2 px-3 rounded-lg bg-ura-gold text-black font-semibold text-sm">Copy code</button>
             </div>
           )}
 
@@ -170,7 +170,7 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
               ) : (
                 <ul className="space-y-2 mb-4">
                   {requests.map((r) => (
-                    <li key={r.id} className="flex flex-wrap items-center gap-2 py-2 border-b border-[#2d2f38]/50">
+                    <li key={r.id} className="flex flex-wrap items-center gap-2 py-2 border-b border-ura-border/85/50">
                       <span className="text-white flex-1 min-w-0 truncate">{r.userName}</span>
                       {denyRequestId === r.id ? (
                         <div className="w-full mt-2 flex flex-col gap-2">
@@ -179,7 +179,7 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
                             placeholder="Reason for denial (optional)"
                             value={denyReason}
                             onChange={(e) => setDenyReason(e.target.value)}
-                            className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500"
+                            className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-500"
                           />
                           <div className="flex gap-2">
                             <button
@@ -193,7 +193,7 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
                             <button
                               type="button"
                               onClick={() => { setDenyRequestId(null); setDenyReason(''); }}
-                              className="py-1.5 px-3 rounded-lg bg-[#272a2f] text-gray-300 text-sm"
+                              className="py-1.5 px-3 rounded-lg bg-ura-panel-2 text-gray-300 text-sm"
                             >
                               Cancel
                             </button>
@@ -241,7 +241,7 @@ export default function LeagueDetailPopup({ leagueId, onClose, initData, onCopyI
           <p className="text-gray-400 text-sm mb-2">League ranking by this week&apos;s LP.</p>
           <ul className="space-y-2">
             {data.leaderboard.map((row) => (
-              <li key={row.rank} className="flex justify-between items-center py-2 border-b border-[#2d2f38]/50">
+              <li key={row.rank} className="flex justify-between items-center py-2 border-b border-ura-border/85/50">
                 <span className="text-gray-400 w-8">#{row.rank}</span>
                 <span className="text-white flex-1 truncate ml-2">{row.name}</span>
                 <span className="text-[#f3ba2f] font-medium">{formatNumber(row.leaguePoints)} LP</span>

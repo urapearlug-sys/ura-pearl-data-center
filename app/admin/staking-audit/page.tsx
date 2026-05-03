@@ -130,14 +130,14 @@ export default function StakingAuditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-6xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">Staking audit</h1>
         <p className="text-gray-400 mb-6">
           All stakers and their bonuses below. Section &quot;Wrong bonus %&quot; lists only stakes where stored bonus differed from config (would have overpaid). Correct DB so stored values match.
         </p>
-        <div className="mb-6 p-4 rounded-lg bg-[#272a2f] border border-[#3d4046]">
+        <div className="mb-6 p-4 rounded-lg bg-ura-panel-2 border border-ura-border/75">
           <p className="text-white font-medium mb-1">How do users claim their rewards?</p>
           <ul className="text-gray-400 text-sm space-y-1 list-disc list-inside">
             <li><strong className="text-emerald-400">Claimed? = No</strong> → They claim from the app: open the game, go to <strong>Mine</strong>, tap &quot;Lock PEARLS &amp; Earn Bonus&quot;, then in the popup tap <strong>Claim X PEARLS</strong> on each unlocked stake. No admin action needed.</li>
@@ -163,7 +163,7 @@ export default function StakingAuditPage() {
             <div className="overflow-x-auto mb-10">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#3d4046]">
+                  <tr className="border-b border-ura-border/75">
                     <th className="pb-2 pr-2 text-gray-400">User (name / Telegram ID)</th>
                     <th className="pb-2 pr-2 text-gray-400">Amount locked</th>
                     <th className="pb-2 pr-2 text-gray-400">Duration</th>
@@ -173,7 +173,7 @@ export default function StakingAuditPage() {
                 </thead>
                 <tbody>
                   {activeStakes.map((s) => (
-                    <tr key={s.stakeId} className="border-b border-[#3d4046]/50">
+                    <tr key={s.stakeId} className="border-b border-ura-border/75/50">
                       <td className="py-2 pr-2 text-white">{s.name ?? '—'} / {s.telegramId}</td>
                       <td className="py-2 pr-2">{Number(s.amountLocked).toLocaleString()}</td>
                       <td className="py-2 pr-2">{s.duration}</td>
@@ -199,7 +199,7 @@ export default function StakingAuditPage() {
           <div className="overflow-x-auto mb-10">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#3d4046]">
+                <tr className="border-b border-ura-border/75">
                   <th className="pb-2 pr-2 text-gray-400">User (name / Telegram ID)</th>
                   <th className="pb-2 pr-2 text-gray-400">Amount locked</th>
                   <th className="pb-2 pr-2 text-gray-400">Duration</th>
@@ -213,7 +213,7 @@ export default function StakingAuditPage() {
               </thead>
               <tbody>
                 {allStakes.map((s) => (
-                  <tr key={s.stakeId} className={`border-b border-[#3d4046]/50 ${s.isWrongBonus ? 'bg-amber-950/30' : ''}`}>
+                  <tr key={s.stakeId} className={`border-b border-ura-border/75/50 ${s.isWrongBonus ? 'bg-amber-950/30' : ''}`}>
                     <td className="py-2 pr-2 text-white">{s.name ?? '—'} / {s.telegramId}</td>
                     <td className="py-2 pr-2">{Number(s.amountLocked).toLocaleString()}</td>
                     <td className="py-2 pr-2">{s.duration}</td>
@@ -248,7 +248,7 @@ export default function StakingAuditPage() {
             <div className="overflow-x-auto mb-10">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#3d4046]">
+                  <tr className="border-b border-ura-border/75">
                     <th className="pb-2 pr-2 text-gray-400">User</th>
                     <th className="pb-2 pr-2 text-gray-400">Amount locked</th>
                     <th className="pb-2 pr-2 text-gray-400">Duration</th>
@@ -258,7 +258,7 @@ export default function StakingAuditPage() {
                 </thead>
                 <tbody>
                   {claimedStakes.map((s) => (
-                    <tr key={s.stakeId} className="border-b border-[#3d4046]/50">
+                    <tr key={s.stakeId} className="border-b border-ura-border/75/50">
                       <td className="py-2 pr-2 text-white">{s.name ?? '—'} / {s.telegramId}</td>
                       <td className="py-2 pr-2">{Number(s.amountLocked).toLocaleString()}</td>
                       <td className="py-2 pr-2">{s.duration}</td>
@@ -298,7 +298,7 @@ export default function StakingAuditPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#3d4046]">
+                <tr className="border-b border-ura-border/75">
                   <th className="pb-2 pr-2 text-gray-400">User (name / Telegram ID)</th>
                   <th className="pb-2 pr-2 text-gray-400">Amount locked</th>
                   <th className="pb-2 pr-2 text-gray-400">Duration</th>
@@ -311,7 +311,7 @@ export default function StakingAuditPage() {
               </thead>
               <tbody>
                 {report.map((r) => (
-                  <tr key={r.stakeId} className="border-b border-[#3d4046]/50">
+                  <tr key={r.stakeId} className="border-b border-ura-border/75/50">
                     <td className="py-2 pr-2 text-white">{r.name ?? '—'} / {r.telegramId}</td>
                     <td className="py-2 pr-2">{Number(r.amountLocked).toLocaleString()}</td>
                     <td className="py-2 pr-2">{r.duration}</td>

@@ -41,20 +41,20 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
   const creatorLeagues = myLeagues.filter((l) => l.isCreator);
   if (myLeagues.length === 0) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-        <div className="bg-[#1d2025] rounded-2xl p-6 max-w-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60">
+        <div className="bg-ura-panel rounded-2xl p-6 max-w-sm">
           <p className="text-gray-300 mb-4">Create or join a league first, then you can challenge another league.</p>
-          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="w-full py-2 rounded-lg bg-[#272a2f] text-white">Close</button>
+          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="w-full py-2 rounded-lg bg-ura-panel-2 text-white">Close</button>
         </div>
       </div>
     );
   }
   if (creatorLeagues.length === 0) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-        <div className="bg-[#1d2025] rounded-2xl p-6 max-w-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60">
+        <div className="bg-ura-panel rounded-2xl p-6 max-w-sm">
           <p className="text-gray-300 mb-4">Only the creator of a league can start a challenge. Use a league you created.</p>
-          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="w-full py-2 rounded-lg bg-[#272a2f] text-white">Close</button>
+          <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="w-full py-2 rounded-lg bg-ura-panel-2 text-white">Close</button>
         </div>
       </div>
     );
@@ -123,9 +123,9 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[90vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[90vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Create league challenge</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -137,7 +137,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
             <select
               value={creatorLeagueId}
               onChange={(e) => setCreatorLeagueId(e.target.value)}
-              className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             >
               {creatorLeagues.map((l) => (
                 <option key={l.id} value={l.id}>{l.name}</option>
@@ -153,9 +153,9 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
                 value={opponentCode}
                 onChange={(e) => { setOpponentCode(e.target.value.toUpperCase()); setOpponentLeague(null); }}
                 placeholder="e.g. ABC12XYZ"
-                className="flex-1 bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500 font-mono"
+                className="flex-1 bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500 font-mono"
               />
-              <button type="button" onClick={handleLookup} disabled={lookupLoading} className="py-2 px-4 rounded-lg bg-[#272a2f] text-[#f3ba2f] font-medium disabled:opacity-50">{lookupLoading ? '…' : 'Look up'}</button>
+              <button type="button" onClick={handleLookup} disabled={lookupLoading} className="py-2 px-4 rounded-lg bg-ura-panel-2 text-[#f3ba2f] font-medium disabled:opacity-50">{lookupLoading ? '…' : 'Look up'}</button>
             </div>
             {opponentLeague && <p className="text-sm text-emerald-400 mt-1">Opponent: {opponentLeague.name}</p>}
           </div>
@@ -168,7 +168,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
               max={LEAGUE_CHALLENGE_MAX_TARGET_PEARLS}
               value={targetAlm}
               onChange={(e) => setTargetAlm(Number(e.target.value))}
-              className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             />
             <p className="text-xs text-gray-500 mt-0.5">{formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} - {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)} PEARLS</p>
           </div>
@@ -181,7 +181,7 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
               max={LEAGUE_CHALLENGE_MAX_DAYS}
               value={durationDays}
               onChange={(e) => setDurationDays(Number(e.target.value))}
-              className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             />
           </div>
 
@@ -193,14 +193,14 @@ export default function CreateLeagueChallengePopup({ onClose, initData, myLeague
               max={LEAGUE_CHALLENGE_MAX_STAKE}
               value={stakePerLeague}
               onChange={(e) => setStakePerLeague(Number(e.target.value))}
-              className="w-full bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="w-full bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             />
             <p className="text-xs text-gray-500 mt-0.5">Prize pool = {formatNumber(stakePerLeague * 2)} PEARLS (others can add more)</p>
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="flex-1 py-3 rounded-xl bg-[#272a2f] text-gray-300 font-medium">Cancel</button>
-            <button type="button" onClick={handleSubmit} disabled={submitting || !opponentLeague} className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50">{submitting ? 'Creating…' : 'Create challenge'}</button>
+            <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="flex-1 py-3 rounded-xl bg-ura-panel-2 text-gray-300 font-medium">Cancel</button>
+            <button type="button" onClick={handleSubmit} disabled={submitting || !opponentLeague} className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50">{submitting ? 'Creating…' : 'Create challenge'}</button>
           </div>
         </div>
       </div>

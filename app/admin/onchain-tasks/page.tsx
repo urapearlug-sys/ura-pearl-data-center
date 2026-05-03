@@ -136,11 +136,11 @@ export default function AdminOnchainTasks() {
     };
 
     return (
-        <div className="bg-[#1d2025] text-white min-h-screen p-8">
+        <div className="bg-ura-panel text-white min-h-screen p-8">
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-[#f3ba2f]">Manage Onchain Tasks</h1>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="mb-12 bg-[#272a2f] rounded-lg p-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="mb-12 bg-ura-panel-2 rounded-lg p-6">
                     <h2 className="text-2xl font-semibold mb-6">{editingTask ? 'Edit Onchain Task' : 'Add New Onchain Task'}</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -190,7 +190,7 @@ export default function AdminOnchainTasks() {
                         )}
                         <button
                             type="submit"
-                            className="px-6 py-2 bg-[#f3ba2f] text-black rounded-lg hover:bg-[#f4c141] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                            className="px-6 py-2 bg-ura-gold text-black rounded-lg hover:bg-[#f4c141] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? (
@@ -208,7 +208,7 @@ export default function AdminOnchainTasks() {
                     </div>
                 </form>
 
-                <div className="bg-[#272a2f] rounded-lg p-6">
+                <div className="bg-ura-panel-2 rounded-lg p-6">
                     <h2 className="text-2xl font-semibold mb-6">Existing Onchain Tasks ({onchainTasks.length})</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {isLoadingTasks ? (

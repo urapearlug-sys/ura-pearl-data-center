@@ -155,8 +155,8 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
   const claimedStakes = stakes.filter((s) => s.claimedAt);
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start flex-shrink-0">
           <div>
             <h2 className="text-xl font-bold text-white">Stake PEARLS</h2>
@@ -166,7 +166,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 pb-8">
-          <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
+          <div className="bg-ura-panel-2 rounded-xl p-4 mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400">Available</span>
               <span className="text-[#f3ba2f] font-bold flex items-center gap-1">
@@ -176,7 +176,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
             </div>
           </div>
 
-          <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
+          <div className="bg-ura-panel-2 rounded-xl p-4 mb-4">
             <h3 className="text-base font-bold text-emerald-400 mb-3">Stake PEARLS</h3>
             <p className="text-sm text-gray-400 mb-3">Minimum lock period is 1 week. Choose amount and duration.</p>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -199,7 +199,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                 placeholder={`Min ${formatNumber(minAmountForPackage)} PEARLS`}
                 value={stakeAmount}
                 onChange={(e) => setStakeAmount(e.target.value)}
-                className="flex-1 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="flex-1 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
               <button
                 type="button"
@@ -224,7 +224,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
                 {activeStakes.map((s) => {
                   const isReady = new Date(s.unlocksAt) <= new Date();
                   return (
-                    <div key={s.id} className="bg-[#272a2f] rounded-xl p-4 flex justify-between items-center">
+                    <div key={s.id} className="bg-ura-panel-2 rounded-xl p-4 flex justify-between items-center">
                       <div>
                         <p className="text-white font-bold">{formatNumber(s.amountLocked)} PEARLS</p>
                         <p className="text-sm text-gray-400">
@@ -260,7 +260,7 @@ export default function StakingPopup({ onClose }: StakingPopupProps) {
               <h3 className="text-base font-bold text-gray-400 mb-2">Claimed</h3>
               <div className="space-y-2">
                 {claimedStakes.slice(0, 5).map((s) => (
-                  <div key={s.id} className="bg-[#272a2f]/60 rounded-xl p-3 flex justify-between items-center opacity-75">
+                  <div key={s.id} className="bg-ura-panel-2/60 rounded-xl p-3 flex justify-between items-center opacity-75">
                     <span className="text-gray-400">{formatNumber(s.amountLocked)} PEARLS</span>
                     <span className="text-emerald-500 text-sm">Claimed</span>
                   </div>

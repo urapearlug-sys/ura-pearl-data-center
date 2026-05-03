@@ -6,8 +6,8 @@ import { triggerHapticFeedback } from '@/utils/ui';
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white">
-      <div className="sticky top-0 z-10 bg-[#1d2025] border-b border-[#3d4046] px-4 py-3 flex items-center justify-between">
+    <div className="min-h-screen bg-ura-panel text-white">
+      <div className="sticky top-0 z-10 bg-ura-panel border-b border-ura-border/75 px-4 py-3 flex items-center justify-between">
         <h1 className="text-lg font-bold text-[#f3ba2f]">Privacy Policy</h1>
         <Link
           href="/clicker"

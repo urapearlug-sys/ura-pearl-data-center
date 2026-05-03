@@ -105,7 +105,7 @@ export default function AdminCards() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">
           ← Back to Admin
@@ -116,31 +116,31 @@ export default function AdminCards() {
           <p className="text-gray-400">Loading...</p>
         ) : (
           <>
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Add Card</h2>
               <form onSubmit={handleAddCard} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Slug</label>
-                    <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="starter" className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                    <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="starter" className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                   </div>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Name</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Beginner" className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Beginner" className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Description</label>
-                  <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Start your journey" className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                  <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Start your journey" className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Image key</label>
-                    <input type="text" value={image} onChange={(e) => setImage(e.target.value)} placeholder="dollarCoin" className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                    <input type="text" value={image} onChange={(e) => setImage(e.target.value)} placeholder="dollarCoin" className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                   </div>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Category</label>
-                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                       <option value="Markets">Markets</option>
                       <option value="PR">PR</option>
                       <option value="Legal">Legal</option>
@@ -151,7 +151,7 @@ export default function AdminCards() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Unlock type</label>
-                    <select value={unlockType} onChange={(e) => setUnlockType(e.target.value)} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                    <select value={unlockType} onChange={(e) => setUnlockType(e.target.value)} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                       <option value="starter">Starter</option>
                       <option value="rank">Rank</option>
                       <option value="referrals">Referrals</option>
@@ -162,20 +162,20 @@ export default function AdminCards() {
                   {unlockType === 'rank' && (
                     <div>
                       <label className="block text-sm text-gray-400 mb-1">Rank index (0–9)</label>
-                      <input type="number" value={rankIndex} onChange={(e) => setRankIndex(Number(e.target.value))} min={0} max={9} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                      <input type="number" value={rankIndex} onChange={(e) => setRankIndex(Number(e.target.value))} min={0} max={9} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                     </div>
                   )}
                   {unlockType === 'referrals' && (
                     <div>
                       <label className="block text-sm text-gray-400 mb-1">Referral count</label>
-                      <input type="number" value={referralCount} onChange={(e) => setReferralCount(Number(e.target.value))} min={0} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                      <input type="number" value={referralCount} onChange={(e) => setReferralCount(Number(e.target.value))} min={0} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                     </div>
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Bonus type</label>
-                    <select value={bonusType} onChange={(e) => setBonusType(e.target.value)} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                    <select value={bonusType} onChange={(e) => setBonusType(e.target.value)} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                       <option value="profit_percent">Profit %</option>
                       <option value="max_energy">Max energy</option>
                       <option value="points_percent">Points %</option>
@@ -184,20 +184,20 @@ export default function AdminCards() {
                   </div>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Bonus value</label>
-                    <input type="number" value={bonusValue} onChange={(e) => setBonusValue(Number(e.target.value))} step={0.5} className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                    <input type="number" value={bonusValue} onChange={(e) => setBonusValue(Number(e.target.value))} step={0.5} className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                   </div>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
+                <button type="submit" disabled={isSubmitting} className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
                   Add Card
                 </button>
               </form>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4">Cards ({cards.length})</h2>
               <div className="space-y-2">
                 {cards.map((c) => (
-                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-[#3d4046]/50">
+                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-ura-border/75/50">
                     <div>
                       <span className="font-mono text-[#f3ba2f]">{c.slug}</span>
                       <span className="text-gray-400 ml-2">{c.name}</span>

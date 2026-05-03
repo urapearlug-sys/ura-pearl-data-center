@@ -10,12 +10,12 @@ function PatternGrid({ pattern }: { pattern: string }) {
   const indices = pattern.split('-').map((s) => parseInt(s, 10)).filter((n) => !Number.isNaN(n) && n >= 0 && n < PATTERN_GRID_SIZE);
   const filled = new Set(indices);
   return (
-    <div className="inline-grid grid-cols-4 gap-2 p-4 bg-[#1d2025] rounded-xl border border-[#3d4046]">
+    <div className="inline-grid grid-cols-4 gap-2 p-4 bg-ura-panel rounded-xl border border-ura-border/75">
       {Array.from({ length: PATTERN_GRID_SIZE }, (_, i) => (
         <div
           key={i}
           className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-mono ${
-            filled.has(i) ? 'bg-[#f3ba2f] text-black' : 'bg-[#3d4046] text-gray-500'
+            filled.has(i) ? 'bg-ura-gold text-black' : 'bg-[#3d4046] text-gray-500'
           }`}
         >
           {i}
@@ -113,7 +113,7 @@ export default function AdminDailyPatternPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-2xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">Daily Pattern</h1>
@@ -125,7 +125,7 @@ export default function AdminDailyPatternPage() {
           <p className="text-gray-400">Loading...</p>
         ) : (
           <>
-            <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
+            <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
               <h2 className="text-lg font-semibold mb-2">Game visibility</h2>
               <p className="text-sm text-gray-400 mb-3">
                 {enabled ? 'Daily Pattern is visible on Earn (Daily Pattern card).' : 'Daily Pattern is hidden from users.'}
@@ -150,13 +150,13 @@ export default function AdminDailyPatternPage() {
               </div>
             </div>
 
-            <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
+            <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
               <h2 className="text-lg font-semibold mb-2">Today&apos;s pattern (UTC)</h2>
               <p className="text-sm text-gray-400 mb-3">Sequence: {patternDisplay || '—'} · Reward: {reward.toLocaleString()} PEARLS</p>
               <PatternGrid pattern={pattern} />
             </div>
 
-            <div className="bg-[#272a2f] p-6 rounded-xl">
+            <div className="bg-ura-panel-2 p-6 rounded-xl">
               <h2 className="text-lg font-semibold mb-2">Override for today</h2>
               <p className="text-sm text-gray-400 mb-3">Set any pattern ({PATTERN_MIN_DOTS}–{PATTERN_MAX_DOTS} dots, indices 0–{PATTERN_GRID_SIZE - 1}) and optional reward (PEARLS). Leave reward empty to keep default.</p>
               <form onSubmit={handleSetOverride} className="space-y-3">
@@ -166,7 +166,7 @@ export default function AdminDailyPatternPage() {
                     value={overrideInput}
                     onChange={(e) => setOverrideInput(e.target.value)}
                     placeholder={`0-1-2-4-5-6-8-9 (${PATTERN_MIN_DOTS}–${PATTERN_MAX_DOTS} dots)`}
-                    className="flex-1 min-w-[200px] bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white font-mono"
+                    className="flex-1 min-w-[200px] bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white font-mono"
                   />
                   <input
                     type="number"
@@ -175,10 +175,10 @@ export default function AdminDailyPatternPage() {
                     value={rewardInput}
                     onChange={(e) => setRewardInput(e.target.value)}
                     placeholder="Reward (PEARLS)"
-                    className="w-36 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                    className="w-36 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
-                <button type="submit" disabled={submitting} className="px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">
+                <button type="submit" disabled={submitting} className="px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">
                   {submitting ? 'Setting…' : 'Set override'}
                 </button>
               </form>

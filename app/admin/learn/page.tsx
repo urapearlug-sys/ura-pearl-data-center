@@ -173,13 +173,13 @@ export default function AdminLearnPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-5xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">Learn Content</h1>
         <p className="text-gray-400 mb-6">Manage Learn page categories and full-screen lessons from database content.</p>
 
-        <div className="bg-[#272a2f] p-5 rounded-xl mb-6">
+        <div className="bg-ura-panel-2 p-5 rounded-xl mb-6">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-lg font-semibold">Category editor</h2>
             <div className="flex gap-2">
@@ -188,30 +188,30 @@ export default function AdminLearnPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-            <input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="slug (e.g. general-tax)" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-            <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Title" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-            <input value={form.icon} onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))} placeholder="Icon letters" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-            <input type="number" value={form.sortOrder} onChange={(e) => setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))} placeholder="Sort order" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-            <select value={form.section} onChange={(e) => setForm((f) => ({ ...f, section: e.target.value as 'general' | 'tax-education' }))} className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2">
+            <input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="slug (e.g. general-tax)" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+            <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Title" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+            <input value={form.icon} onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))} placeholder="Icon letters" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+            <input type="number" value={form.sortOrder} onChange={(e) => setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))} placeholder="Sort order" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+            <select value={form.section} onChange={(e) => setForm((f) => ({ ...f, section: e.target.value as 'general' | 'tax-education' }))} className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2">
               <option value="general">General tab</option>
               <option value="tax-education">Tax Education tab</option>
             </select>
           </div>
-          <textarea value={form.summary} onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))} placeholder="Summary" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-          <textarea value={form.topicsText} onChange={(e) => setForm((f) => ({ ...f, topicsText: e.target.value }))} placeholder="Topics comma-separated" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-          <textarea value={form.operationsText} onChange={(e) => setForm((f) => ({ ...f, operationsText: e.target.value }))} placeholder="Operations comma-separated (for General tab items)" rows={2} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2" />
-          <textarea value={form.lessonsText} onChange={(e) => setForm((f) => ({ ...f, lessonsText: e.target.value }))} placeholder='Lessons JSON [{"title":"...","content":"..."}]' rows={8} className="mt-3 w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 font-mono text-xs" />
+          <textarea value={form.summary} onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))} placeholder="Summary" rows={2} className="mt-3 w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+          <textarea value={form.topicsText} onChange={(e) => setForm((f) => ({ ...f, topicsText: e.target.value }))} placeholder="Topics comma-separated" rows={2} className="mt-3 w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+          <textarea value={form.operationsText} onChange={(e) => setForm((f) => ({ ...f, operationsText: e.target.value }))} placeholder="Operations comma-separated (for General tab items)" rows={2} className="mt-3 w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2" />
+          <textarea value={form.lessonsText} onChange={(e) => setForm((f) => ({ ...f, lessonsText: e.target.value }))} placeholder='Lessons JSON [{"title":"...","content":"..."}]' rows={8} className="mt-3 w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 font-mono text-xs" />
           <label className="mt-3 flex items-center gap-2 text-sm text-gray-300">
             <input type="checkbox" checked={form.enabled} onChange={(e) => setForm((f) => ({ ...f, enabled: e.target.checked }))} />
             Enabled
           </label>
-          <button type="button" onClick={saveForm} disabled={saving} className="mt-4 px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">
+          <button type="button" onClick={saveForm} disabled={saving} className="mt-4 px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">
             {saving ? 'Saving...' : form.id ? 'Update category' : 'Create category'}
           </button>
         </div>
 
-        <div className="bg-[#272a2f] rounded-xl overflow-hidden">
-          <h2 className="p-4 text-lg font-semibold border-b border-[#3d4046]">Categories ({categories.length})</h2>
+        <div className="bg-ura-panel-2 rounded-xl overflow-hidden">
+          <h2 className="p-4 text-lg font-semibold border-b border-ura-border/75">Categories ({categories.length})</h2>
           {loading ? (
             <p className="p-4 text-gray-400">Loading...</p>
           ) : (

@@ -71,7 +71,7 @@ function GlobalTasksMainContent(props: {
   } = props;
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
@@ -87,12 +87,12 @@ function GlobalTasksMainContent(props: {
                 type="button"
                 onClick={onSeed}
                 disabled={!!actioningId}
-                className="px-4 py-2 bg-[#f3ba2f] text-black rounded-lg font-medium disabled:opacity-50"
+                className="px-4 py-2 bg-ura-gold text-black rounded-lg font-medium disabled:opacity-50"
               >
                 {actioningId === 'seed' ? 'Creating...' : 'Seed 20 templates'}
               </button>
             )}
-            <button type="button" onClick={onFetchData} className="px-4 py-2 bg-[#272a2f] hover:bg-[#3a3d42] rounded-lg text-sm">
+            <button type="button" onClick={onFetchData} className="px-4 py-2 bg-ura-panel-2 hover:bg-[#3a3d42] rounded-lg text-sm">
               Refresh
             </button>
           </div>
@@ -113,7 +113,7 @@ function GlobalTasksMainContent(props: {
             <h2 className="text-xl font-bold text-white mb-3">Templates ({templates.length})</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
               {templates.map((t) => (
-                <div key={t.id} className="bg-[#272a2f] rounded-lg p-3 border border-[#3d4046]">
+                <div key={t.id} className="bg-ura-panel-2 rounded-lg p-3 border border-ura-border/75">
                   <p className="font-medium text-white">{t.name}</p>
                   <p className="text-gray-400">{t.targetLabel} · {t.durationDays}d · {t.managementBonusPercent}% bonus</p>
                 </div>
@@ -129,7 +129,7 @@ function GlobalTasksMainContent(props: {
           ) : (
             <div className="space-y-4">
               {challenges.map((c) => (
-                <div key={c.id} className="bg-[#272a2f] rounded-xl border border-[#3d4046] p-4">
+                <div key={c.id} className="bg-ura-panel-2 rounded-xl border border-ura-border/75 p-4">
                   <div className="flex flex-wrap justify-between gap-2 mb-2">
                     <div>
                       <p className="font-medium text-white">{c.taskName}</p>
@@ -151,7 +151,7 @@ function GlobalTasksMainContent(props: {
                       <select
                         value={winnerSelect[c.id] ?? ''}
                         onChange={(e) => onWinnerSelectChange(c.id, e.target.value)}
-                        className="bg-[#1a1c22] border border-[#3d4046] rounded-lg px-3 py-2 text-white text-sm"
+                        className="bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white text-sm"
                       >
                         <option value="">Select winner...</option>
                         {c.creatorTeamId && (
@@ -319,7 +319,7 @@ export default function AdminGlobalTasksPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1d2025] text-white p-8">
+      <div className="min-h-screen bg-ura-panel text-white p-8">
         <div className="max-w-5xl mx-auto">
           <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">Back to Admin</Link>
           <p className="text-gray-400">Loading...</p>
@@ -330,7 +330,7 @@ export default function AdminGlobalTasksPage() {
 
   if (sectionPasswordRequired) {
     return (
-      <div className="min-h-screen bg-[#1d2025] text-white p-8">
+      <div className="min-h-screen bg-ura-panel text-white p-8">
         <div className="max-w-5xl mx-auto">
           <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">Back to Admin</Link>
           <p className="text-amber-400 mb-2">Section password required.</p>

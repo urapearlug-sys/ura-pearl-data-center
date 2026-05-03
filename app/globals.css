@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  background-color: #000000;
+/* URA app shell: deep navy (official palette uses navy, gold #f3ba2f, blue accents) */
+html,
+body {
+  background-color: var(--ura-page-bg);
+  color: var(--ura-white);
 }
 
 /* Telegram Mini App: avoid content under status bar/notch when opened fullscreen (Open button) */
@@ -19,26 +22,42 @@ html, body {
 
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  /* URA primary palette (from loading circles) */
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 5, 11, 20;
+  --background-end-rgb: 6, 15, 28;
+  /* URA primary palette — navy base, gold accent, sky blue highlights (ura.go.ug aligned) */
   --ura-white: #ffffff;
   --ura-blue-medium: #5fa8ff;
   --ura-blue-dark: #1f3f8f;
   --ura-yellow: #f3ba2f;
+  --ura-yellow-deep: #d9a31e;
+  --ura-page-bg: #050b14;
+  --ura-navy-deep: #020810;
+  --ura-navy: #060f1f;
+  --ura-elevated: #0a1628;
+  --ura-surface: #0f1829;
+  --ura-surface-2: #121f35;
+  --ura-surface-3: #172642;
+  --ura-border-subtle: #2a4168;
+  --ura-border-muted: #243552;
+  --ura-accent-line: rgba(95, 168, 255, 0.22);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 5, 11, 20;
+    --background-end-rgb: 6, 15, 28;
   }
 }
 
 .progress-gradient {
-  background: linear-gradient(to right, #90ef89, #d692dd, #726edd);
+  background: linear-gradient(
+    to right,
+    var(--ura-blue-medium),
+    var(--ura-yellow),
+    var(--ura-blue-dark)
+  );
 }
 
 .top-glow {
@@ -73,7 +92,7 @@ html, body {
 }
 
 .circle-outer {
-  background: linear-gradient(to bottom, #575def, #202731);
+  background: linear-gradient(to bottom, var(--ura-blue-dark), var(--ura-navy));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,11 +104,11 @@ html, body {
 }
 
 .circle-inner {
-  background: radial-gradient(circle, #4960b2, #282e3e);
+  background: radial-gradient(circle, #2a4a8f, var(--ura-surface-3));
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   aspect-ratio: 1;
 }
 
@@ -196,10 +215,10 @@ html, body {
 
 /* URA profile / dashboard: dark geometric background */
 .ura-profile-main-bg {
-  background-color: #0c0e12;
+  background-color: var(--ura-page-bg);
   background-image:
-    linear-gradient(125deg, rgba(31, 63, 143, 0.14) 0%, transparent 42%),
-    linear-gradient(295deg, rgba(95, 168, 255, 0.08) 0%, transparent 48%),
+    linear-gradient(125deg, rgba(31, 63, 143, 0.18) 0%, transparent 42%),
+    linear-gradient(295deg, rgba(95, 168, 255, 0.1) 0%, transparent 48%),
     repeating-linear-gradient(
       -58deg,
       transparent,
@@ -264,10 +283,10 @@ html, body {
 /* Ecosystem radial dashboard: tap ripple + floating particles */
 @keyframes ecosystem-module-ripple {
   0% {
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 0 0 rgba(95, 168, 255, 0.45);
   }
   100% {
-    box-shadow: 0 0 0 16px rgba(56, 189, 248, 0);
+    box-shadow: 0 0 0 16px rgba(95, 168, 255, 0);
   }
 }
 

@@ -46,7 +46,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} min-h-dvh bg-ura-page text-white antialiased`}>
         <ToastProvider>
           {children}
         </ToastProvider>

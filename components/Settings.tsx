@@ -125,7 +125,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
       <button
         type="button"
         onClick={() => toggleAccordion(id)}
-        className="w-full flex items-center justify-between px-4 py-3.5 rounded-lg bg-[#2a2d38] border border-[#3d4046] text-left text-white text-sm font-medium"
+        className="w-full flex items-center justify-between px-4 py-3.5 rounded-lg bg-[#2a2d38] border border-ura-border/75 text-left text-white text-sm font-medium"
       >
         <span>{title}</span>
         <span className="text-gray-400">{open ? '⌄' : '›'}</span>
@@ -148,7 +148,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               <button
                 type="button"
                 onClick={() => showToast('Screen reader mode coming soon', 'success')}
-                className="p-2 rounded-lg border border-[#3d4046] text-[var(--ura-white)] flex-shrink-0"
+                className="p-2 rounded-lg border border-ura-border/75 text-[var(--ura-white)] flex-shrink-0"
                 aria-label="Accessibility"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -169,7 +169,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               <span>›</span>
             </button>
 
-            <div className="rounded-lg bg-[#1a1d26] border border-[#2d2f38] p-3 mb-4">
+            <div className="rounded-lg bg-[#1a1d26] border border-ura-border/85 p-3 mb-4">
               <h3 className="text-sm font-bold text-white mb-2">PEARL CATEGORIES</h3>
               <div className="grid grid-cols-3 gap-2 mb-2">
                 {[
@@ -177,7 +177,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                   { label: 'Blue', color: 'text-[#5fa8ff]', image: pearlBlue },
                   { label: 'Goldish', color: 'text-[var(--ura-yellow)]', image: pearlGolden },
                 ].map((item) => (
-                  <div key={item.label} className="rounded-md border border-[#2d2f38] bg-[#12141a] p-1.5 text-center">
+                  <div key={item.label} className="rounded-md border border-ura-border/85 bg-ura-panel/95 p-1.5 text-center">
                     <Image src={item.image} alt={`${item.label} pearl`} width={28} height={28} className="mx-auto object-contain" />
                     <p className={`text-[10px] mt-1 font-semibold ${item.color}`}>{item.label}</p>
                   </div>
@@ -196,25 +196,25 @@ export default function Settings({ setCurrentView }: SettingsProps) {
             <div className="space-y-2 flex-1 overflow-y-auto no-scrollbar pb-4">
               <AccordionRow id="personal" title="My personal details" />
               {openAccordion === 'personal' && (
-                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
                   Name and contact details will appear here once linked to your URA profile.
                 </div>
               )}
               <AccordionRow id="favorites" title="My favorites" />
               {openAccordion === 'favorites' && (
-                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
                   Saved services and shortcuts will show here.
                 </div>
               )}
               <AccordionRow id="addresses" title="My addresses" />
               {openAccordion === 'addresses' && (
-                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
                   No addresses on file yet.
                 </div>
               )}
               <AccordionRow id="receipts" title="My receipts" />
               {openAccordion === 'receipts' && (
-                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-[#2d2f38]">
+                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
                   Transaction history will appear here.
                 </div>
               )}
@@ -267,7 +267,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
         return (
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-white">Settings</h2>
-            <div className="rounded-lg border border-[#3d4046] bg-[#2a2d38] p-4 space-y-4">
+            <div className="rounded-lg border border-ura-border/75 bg-[#2a2d38] p-4 space-y-4">
               <div className="flex justify-between items-center">
                 <p className="text-sm text-white">Touch vibration</p>
                 <Toggle
@@ -300,7 +300,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                 <Link
                   href="/clicker/privacy"
                   onClick={() => triggerHapticFeedback(window)}
-                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-ura-border/75"
                 >
                   <span className="text-white text-sm">Privacy Policy</span>
                   <span className="text-[var(--ura-yellow)]">→</span>
@@ -308,7 +308,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                 <Link
                   href="/clicker/terms"
                   onClick={() => triggerHapticFeedback(window)}
-                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+                  className="flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-ura-border/75"
                 >
                   <span className="text-white text-sm">Terms of Service</span>
                   <span className="text-[var(--ura-yellow)]">→</span>
@@ -322,7 +322,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                 if (typeof window !== 'undefined') window.sessionStorage.setItem('openHowToPlay', '1');
                 setCurrentView('game');
               }}
-              className="w-full flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-[#3d4046]"
+              className="w-full flex items-center justify-between bg-[#2a2d38] rounded-lg p-3 text-left border border-ura-border/75"
             >
               <span className="text-white text-sm">How to play</span>
               <span>📖</span>
@@ -364,9 +364,9 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   };
 
   return (
-    <div className="bg-black flex justify-center min-h-screen text-white">
+    <div className="bg-ura-page flex justify-center min-h-screen text-white">
       <div className="w-full max-w-xl flex min-h-screen">
-        <aside className="w-[76px] flex-shrink-0 bg-black border-r border-[#1f2228] flex flex-col items-center py-4 gap-1 z-20">
+        <aside className="w-[76px] flex-shrink-0 bg-ura-page border-r border-[#1f2228] flex flex-col items-center py-4 gap-1 z-20">
           {SIDEBAR.map((item) => {
             const isActive = active === item.key;
             return (
@@ -391,7 +391,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
         </aside>
 
         <div className="flex-1 flex flex-col min-w-0 ura-profile-main-bg">
-          <div className="flex items-center justify-between px-3 py-3 border-b border-[#2a2d38] bg-black/40 backdrop-blur-sm">
+          <div className="flex items-center justify-between px-3 py-3 border-b border-[#2a2d38] bg-ura-navy/40 backdrop-blur-sm">
             <button
               type="button"
               onClick={goHome}

@@ -220,21 +220,21 @@ export default function ShopSection({
         <button
           type="button"
           onClick={() => { triggerHapticFeedback(window); onBack(); }}
-          className="p-2 rounded-lg bg-[#272a2f] text-white"
+          className="p-2 rounded-lg bg-ura-panel-2 text-white"
         >
           <Angle className="w-5 h-5 rotate-180" />
         </button>
         <h2 className="text-xl font-bold text-[#f3ba2f]">Shop (Match 2 Earn)</h2>
       </div>
 
-      <div className="flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-4">
+      <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-4">
         {(['browse', 'my-listings', 'list'] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => { triggerHapticFeedback(window); setTab(t); }}
             className={`flex-1 py-2.5 px-2 rounded-lg text-sm font-semibold capitalize ${
-              tab === t ? 'bg-[#f3ba2f] text-black' : 'text-gray-400 hover:text-white hover:bg-[#272a2f]'
+              tab === t ? 'bg-ura-gold text-black' : 'text-gray-400 hover:text-white hover:bg-ura-panel-2'
             }`}
           >
             {t === 'my-listings' ? 'My listings' : t === 'list' ? 'List product' : 'Browse'}
@@ -247,11 +247,11 @@ export default function ShopSection({
           {loading ? (
             <div className="grid grid-cols-2 gap-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-[#272a2f] rounded-xl animate-pulse" />
+                <div key={i} className="aspect-square bg-ura-panel-2 rounded-xl animate-pulse" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="py-12 text-center text-gray-400 rounded-xl bg-[#272a2f] border border-[#3d4046]">
+            <div className="py-12 text-center text-gray-400 rounded-xl bg-ura-panel-2 border border-ura-border/75">
               No products yet. Be the first to list one!
             </div>
           ) : (
@@ -261,9 +261,9 @@ export default function ShopSection({
                   key={p.id}
                   type="button"
                   onClick={() => { triggerHapticFeedback(window); setSelectedProduct(p); }}
-                  className="rounded-xl overflow-hidden bg-[#272a2f] border border-[#3d4046] text-left hover:border-[#f3ba2f]/50 transition-colors"
+                  className="rounded-xl overflow-hidden bg-ura-panel-2 border border-ura-border/75 text-left hover:border-[#f3ba2f]/50 transition-colors"
                 >
-                  <div className="aspect-square relative bg-[#1d2025]">
+                  <div className="aspect-square relative bg-ura-panel">
                     <Image
                       src={p.bannerImageUrl || p.imageUrls[0] || '/images/placeholder.png'}
                       alt={p.title}
@@ -292,7 +292,7 @@ export default function ShopSection({
           {myLoading ? (
             <div className="py-8 text-center text-gray-400">Loading…</div>
           ) : myProducts.length === 0 ? (
-            <div className="py-12 text-center text-gray-400 rounded-xl bg-[#272a2f] border border-[#3d4046]">
+            <div className="py-12 text-center text-gray-400 rounded-xl bg-ura-panel-2 border border-ura-border/75">
               You have no listings. List a product to sell for PEARLS.
             </div>
           ) : (
@@ -300,9 +300,9 @@ export default function ShopSection({
               {myProducts.map((p) => (
                 <div
                   key={p.id}
-                  className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046] flex gap-3"
+                  className="p-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 flex gap-3"
                 >
-                  <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-[#1d2025]">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-ura-panel">
                     <Image
                       src={p.bannerImageUrl || p.imageUrls[0] || '/images/placeholder.png'}
                       alt={p.title}
@@ -332,7 +332,7 @@ export default function ShopSection({
       )}
 
       {tab === 'list' && (
-        <div className="space-y-4 rounded-xl bg-[#272a2f] border border-[#3d4046] p-4">
+        <div className="space-y-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 p-4">
           <p className="text-sm text-gray-400">List your product. After admin approval it will appear in the shop. Price in PEARLS.</p>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Title</label>
@@ -341,7 +341,7 @@ export default function ShopSection({
               value={listForm.title}
               onChange={(e) => setListForm((f) => ({ ...f, title: e.target.value }))}
               placeholder="Product name"
-              className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+              className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
             />
           </div>
           <div>
@@ -351,7 +351,7 @@ export default function ShopSection({
               onChange={(e) => setListForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="Describe your product"
               rows={3}
-              className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none resize-none"
+              className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none resize-none"
             />
           </div>
           <div>
@@ -362,7 +362,7 @@ export default function ShopSection({
               value={listForm.priceAlm}
               onChange={(e) => setListForm((f) => ({ ...f, priceAlm: e.target.value }))}
               placeholder="e.g. 1000"
-              className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+              className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
             />
           </div>
           <div>
@@ -410,7 +410,7 @@ export default function ShopSection({
             type="button"
             onClick={submitListing}
             disabled={submitting || uploading}
-            className="w-full bg-[#f3ba2f] text-black font-bold py-3 rounded-xl disabled:opacity-50"
+            className="w-full bg-ura-gold text-black font-bold py-3 rounded-xl disabled:opacity-50"
           >
             {submitting ? 'Submitting…' : 'Submit for review'}
           </button>
@@ -419,20 +419,20 @@ export default function ShopSection({
 
       {/* Product detail modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#272a2f] rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-[#272a2f] p-4 border-b border-gray-700 flex justify-between items-start">
+        <div className="fixed inset-0 z-50 bg-ura-navy/80 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-ura-panel-2 rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-ura-panel-2 p-4 border-b border-gray-700 flex justify-between items-start">
               <h3 className="text-lg font-bold text-white pr-8">{selectedProduct.title}</h3>
               <button
                 type="button"
                 onClick={() => setSelectedProduct(null)}
-                className="p-2 rounded-full bg-[#1d2025] text-gray-400 hover:text-white"
+                className="p-2 rounded-full bg-ura-panel text-gray-400 hover:text-white"
               >
                 <Cross className="w-5 h-5" />
               </button>
             </div>
             <div className="p-4 space-y-4">
-              <div className="relative aspect-[2/1] rounded-xl overflow-hidden bg-[#1d2025]">
+              <div className="relative aspect-[2/1] rounded-xl overflow-hidden bg-ura-panel">
                 <Image
                   src={selectedProduct.bannerImageUrl || selectedProduct.imageUrls[0] || '/images/placeholder.png'}
                   alt={selectedProduct.title}
@@ -464,7 +464,7 @@ export default function ShopSection({
                   type="button"
                   onClick={handleBuy}
                   disabled={buying || (pointsBalance ?? 0) < selectedProduct.priceAlm}
-                  className="flex-1 bg-[#f3ba2f] text-black font-bold py-3 rounded-xl disabled:opacity-50"
+                  className="flex-1 bg-ura-gold text-black font-bold py-3 rounded-xl disabled:opacity-50"
                 >
                   {buying ? 'Processing…' : 'Buy with PEARLS'}
                 </button>

@@ -142,7 +142,7 @@ export default function LeagueManagementPage() {
   const formatNum = (n: number) => (n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1) + 'K' : String(n));
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -165,14 +165,14 @@ export default function LeagueManagementPage() {
           <button
             type="button"
             onClick={() => setTab('teams')}
-            className={`px-4 py-2 rounded-lg font-medium ${tab === 'teams' ? 'bg-[#f3ba2f] text-black' : 'bg-[#272a2f] text-gray-300 hover:bg-[#3a3d42]'}`}
+            className={`px-4 py-2 rounded-lg font-medium ${tab === 'teams' ? 'bg-ura-gold text-black' : 'bg-ura-panel-2 text-gray-300 hover:bg-[#3a3d42]'}`}
           >
             Teams ({teams.length})
           </button>
           <button
             type="button"
             onClick={() => setTab('leagues')}
-            className={`px-4 py-2 rounded-lg font-medium ${tab === 'leagues' ? 'bg-[#f3ba2f] text-black' : 'bg-[#272a2f] text-gray-300 hover:bg-[#3a3d42]'}`}
+            className={`px-4 py-2 rounded-lg font-medium ${tab === 'leagues' ? 'bg-ura-gold text-black' : 'bg-ura-panel-2 text-gray-300 hover:bg-[#3a3d42]'}`}
           >
             Leagues ({leagues.length})
           </button>
@@ -186,14 +186,14 @@ export default function LeagueManagementPage() {
               <button
                 type="button"
                 onClick={() => { setShowAddTeam(true); setUserSearch(''); setUsers([]); }}
-                className="px-4 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium hover:bg-[#f4c141]"
+                className="px-4 py-2 rounded-lg bg-ura-gold text-black font-medium hover:bg-[#f4c141]"
               >
                 Add team
               </button>
             </div>
-            <div className="overflow-x-auto rounded-lg border border-[#3d4046]">
+            <div className="overflow-x-auto rounded-lg border border-ura-border/75">
               <table className="w-full text-left text-sm">
-                <thead className="bg-[#272a2f] border-b border-[#3d4046]">
+                <thead className="bg-ura-panel-2 border-b border-ura-border/75">
                   <tr>
                     <th className="py-3 px-4 font-semibold">Name</th>
                     <th className="py-3 px-4 font-semibold">Invite code</th>
@@ -204,7 +204,7 @@ export default function LeagueManagementPage() {
                 </thead>
                 <tbody className="text-gray-300">
                   {teams.map((t) => (
-                    <tr key={t.id} className="border-b border-[#2d2f38] hover:bg-[#272a2f]/50">
+                    <tr key={t.id} className="border-b border-ura-border/85 hover:bg-ura-panel-2/50">
                       <td className="py-3 px-4 font-medium text-white">{t.name}</td>
                       <td className="py-3 px-4 font-mono text-xs">{t.inviteCode}</td>
                       <td className="py-3 px-4">{t.creatorName || t.creatorTelegramId}</td>
@@ -236,14 +236,14 @@ export default function LeagueManagementPage() {
               <button
                 type="button"
                 onClick={() => { setShowAddLeague(true); setUserSearch(''); setUsers([]); }}
-                className="px-4 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium hover:bg-[#f4c141]"
+                className="px-4 py-2 rounded-lg bg-ura-gold text-black font-medium hover:bg-[#f4c141]"
               >
                 Add league
               </button>
             </div>
-            <div className="overflow-x-auto rounded-lg border border-[#3d4046]">
+            <div className="overflow-x-auto rounded-lg border border-ura-border/75">
               <table className="w-full text-left text-sm">
-                <thead className="bg-[#272a2f] border-b border-[#3d4046]">
+                <thead className="bg-ura-panel-2 border-b border-ura-border/75">
                   <tr>
                     <th className="py-3 px-4 font-semibold">Name</th>
                     <th className="py-3 px-4 font-semibold">Week</th>
@@ -256,7 +256,7 @@ export default function LeagueManagementPage() {
                 </thead>
                 <tbody className="text-gray-300">
                   {leagues.map((l) => (
-                    <tr key={l.id} className="border-b border-[#2d2f38] hover:bg-[#272a2f]/50">
+                    <tr key={l.id} className="border-b border-ura-border/85 hover:bg-ura-panel-2/50">
                       <td className="py-3 px-4 font-medium text-white">{l.name}</td>
                       <td className="py-3 px-4">{l.weekKey}</td>
                       <td className="py-3 px-4 font-mono text-xs">{l.inviteCode}</td>
@@ -416,8 +416,8 @@ function AddTeamModal({
   const [name, setName] = useState('');
   const handleSearch = () => searchUsers(userSearch);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-4">Add team</h2>
         <p className="text-gray-400 text-sm mb-4">Team will be created for the selected user (no PEARLS fee). Creator is auto-joined.</p>
         <div className="space-y-4">
@@ -429,7 +429,7 @@ function AddTeamModal({
                 value={userSearch}
                 onChange={(e) => setUserSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="flex-1 rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                className="flex-1 rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
                 placeholder="Type and press Enter"
               />
               <button type="button" onClick={handleSearch} className="px-3 py-2 rounded-lg bg-[#3d4046] text-white">Search</button>
@@ -439,7 +439,7 @@ function AddTeamModal({
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                className="mt-2 w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                className="mt-2 w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
               >
                 <option value="">Select user</option>
                 {users.map((u) => (
@@ -454,7 +454,7 @@ function AddTeamModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+              className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
               placeholder="Team name"
             />
           </div>
@@ -465,7 +465,7 @@ function AddTeamModal({
             type="button"
             onClick={() => selectedUserId && name.trim() && onSubmit(selectedUserId, name.trim())}
             disabled={!selectedUserId || !name.trim()}
-            className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
           >
             Create team
           </button>
@@ -508,8 +508,8 @@ function AddLeagueModal({
     }
   }, [selectedUserId, teams]);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-md w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-4">Add league</h2>
         <p className="text-gray-400 text-sm mb-4">League will be created with the selected team as creator (no PEARLS fee).</p>
         <div className="space-y-4">
@@ -521,7 +521,7 @@ function AddLeagueModal({
                 value={userSearch}
                 onChange={(e) => setUserSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="flex-1 rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                className="flex-1 rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
               />
               <button type="button" onClick={handleSearch} className="px-3 py-2 rounded-lg bg-[#3d4046] text-white">Search</button>
             </div>
@@ -529,7 +529,7 @@ function AddLeagueModal({
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                className="mt-2 w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                className="mt-2 w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
               >
                 <option value="">Select user</option>
                 {users.map((u) => (
@@ -544,7 +544,7 @@ function AddLeagueModal({
               <select
                 value={teamId}
                 onChange={(e) => setTeamId(e.target.value)}
-                className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
               >
                 <option value="">Select team</option>
                 {creatorTeams.map((t) => (
@@ -556,11 +556,11 @@ function AddLeagueModal({
           )}
           <div>
             <label className="block text-sm text-gray-400 mb-1">League name</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white" placeholder="League name" />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white" placeholder="League name" />
           </div>
           <div>
             <label className="block text-sm text-gray-400 mb-1">Week key (optional, e.g. 2025-W08)</label>
-            <input type="text" value={weekKey} onChange={(e) => setWeekKey(e.target.value)} className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white" placeholder="Leave blank for current week" />
+            <input type="text" value={weekKey} onChange={(e) => setWeekKey(e.target.value)} className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white" placeholder="Leave blank for current week" />
           </div>
         </div>
         <div className="flex gap-2 mt-6">
@@ -569,7 +569,7 @@ function AddLeagueModal({
             type="button"
             onClick={() => selectedUserId && teamId && name.trim() && onSubmit(selectedUserId, teamId, name.trim(), weekKey.trim())}
             disabled={!selectedUserId || !teamId || !name.trim()}
-            className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
           >
             Create league
           </button>
@@ -582,8 +582,8 @@ function AddLeagueModal({
 function DonateModal({ team, onClose, onSubmit }: { team: TeamRow; onClose: () => void; onSubmit: (amount: number) => void }) {
   const [amount, setAmount] = useState('');
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-2">Donate to team</h2>
         <p className="text-gray-400 text-sm mb-4">PEARLS will be added to the team creator&apos;s balance: {team.creatorName || team.creatorTelegramId}</p>
         <input
@@ -591,7 +591,7 @@ function DonateModal({ team, onClose, onSubmit }: { team: TeamRow; onClose: () =
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Amount PEARLS"
-          className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white mb-4"
+          className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white mb-4"
         />
         <div className="flex gap-2">
           <button type="button" onClick={onClose} className="flex-1 py-2 rounded-lg bg-[#3d4046] text-white">Cancel</button>
@@ -602,7 +602,7 @@ function DonateModal({ team, onClose, onSubmit }: { team: TeamRow; onClose: () =
               if (Number.isFinite(n) && n > 0) onSubmit(n);
             }}
             disabled={!Number.isFinite(Number(amount)) || Number(amount) <= 0}
-            className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
           >
             Donate
           </button>
@@ -627,14 +627,14 @@ function AddTeamToLeagueModal({
   const available = teams.filter((t) => !alreadyInLeague.has(t.id));
   const [teamId, setTeamId] = useState(available[0]?.id ?? '');
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-2">Add team to league</h2>
         <p className="text-gray-400 text-sm mb-4">League: {league.name}</p>
         <select
           value={teamId}
           onChange={(e) => setTeamId(e.target.value)}
-          className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white mb-4"
+          className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white mb-4"
         >
           <option value="">Select team</option>
           {available.map((t) => (
@@ -648,7 +648,7 @@ function AddTeamToLeagueModal({
             type="button"
             onClick={() => teamId && onSubmit(teamId)}
             disabled={!teamId}
-            className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
           >
             Add team
           </button>
@@ -669,14 +669,14 @@ function RemoveTeamFromLeagueModal({
 }) {
   const [teamId, setTeamId] = useState(league.teams[0]?.id ?? '');
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-2">Remove team from league</h2>
         <p className="text-gray-400 text-sm mb-4">League: {league.name}</p>
         <select
           value={teamId}
           onChange={(e) => setTeamId(e.target.value)}
-          className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white mb-4"
+          className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white mb-4"
         >
           <option value="">Select team</option>
           {league.teams.map((t) => (
@@ -713,14 +713,14 @@ function EditNameModal({
 }) {
   const [name, setName] = useState(currentName);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-sm w-full mx-4 p-6 shadow-xl">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-4">{title}</h2>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white mb-4"
+          className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white mb-4"
           placeholder="Name"
         />
         <div className="flex gap-2">
@@ -729,7 +729,7 @@ function EditNameModal({
             type="button"
             onClick={() => name.trim() && onSubmit(name.trim())}
             disabled={!name.trim()}
-            className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
           >
             Save
           </button>
@@ -749,9 +749,9 @@ function MembersModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-[#272a2f] rounded-xl max-w-md w-full mx-4 max-h-[80vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between p-4 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/70">
+      <div className="bg-ura-panel-2 rounded-xl max-w-md w-full mx-4 max-h-[80vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between p-4 border-b border-ura-border/75 shrink-0">
           <h2 className="text-xl font-bold text-[#f3ba2f]">{title}</h2>
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -759,7 +759,7 @@ function MembersModal({
           <p className="text-gray-400 text-sm mb-2">Members ({members.length})</p>
           <ul className="space-y-2">
             {members.map((m) => (
-              <li key={m.userId} className="flex justify-between items-center py-2 border-b border-[#2d2f38]/50 text-sm">
+              <li key={m.userId} className="flex justify-between items-center py-2 border-b border-ura-border/85/50 text-sm">
                 <span className="text-white truncate">{m.name || 'Anonymous'}</span>
                 <span className="text-gray-400 font-mono text-xs shrink-0 ml-2">{m.telegramId}</span>
               </li>
@@ -767,7 +767,7 @@ function MembersModal({
           </ul>
           {members.length === 0 && <p className="text-gray-500 py-4">No members.</p>}
         </div>
-        <div className="p-4 border-t border-[#3d4046] shrink-0">
+        <div className="p-4 border-t border-ura-border/75 shrink-0">
           <button type="button" onClick={onClose} className="w-full py-2 rounded-lg bg-[#3d4046] text-white">Close</button>
         </div>
       </div>

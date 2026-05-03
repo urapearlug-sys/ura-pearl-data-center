@@ -183,15 +183,15 @@ export default function NotificationCenter() {
       >
         <Image src={announcements} alt="Notifications" width={24} height={24} className="w-6 h-6" />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] px-1 rounded-full bg-[#f3ba2f] text-black text-[10px] font-bold flex items-center justify-center" title="Unread notifications">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] px-1 rounded-full bg-ura-gold text-black text-[10px] font-bold flex items-center justify-center" title="Unread notifications">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute top-full right-0 mt-2 w-[min(320px,calc(100vw-2rem))] max-h-[70vh] overflow-hidden rounded-xl border border-[#2d2f38] bg-[#1d2025] shadow-xl z-50 flex flex-col">
-          <div className="p-3 border-b border-[#2d2f38] flex items-center justify-between">
+        <div className="absolute top-full right-0 mt-2 w-[min(320px,calc(100vw-2rem))] max-h-[70vh] overflow-hidden rounded-xl border border-ura-border/85 bg-ura-panel shadow-xl z-50 flex flex-col">
+          <div className="p-3 border-b border-ura-border/85 flex items-center justify-between">
             <span className="font-semibold text-white">
               Notifications
               {unreadCount > 0 && (
@@ -220,7 +220,7 @@ export default function NotificationCenter() {
                   const isTile = !isExpanded;
 
                   return (
-                    <li key={n.id} className={isTile ? '' : 'p-3 hover:bg-[#272a2f]'}>
+                    <li key={n.id} className={isTile ? '' : 'p-3 hover:bg-ura-panel-2'}>
                       {isTile ? (
                         <button
                           type="button"
@@ -228,7 +228,7 @@ export default function NotificationCenter() {
                             triggerHapticFeedback(window);
                             setExpandedId(isNewest ? null : n.id);
                           }}
-                          className="w-full text-left px-3 py-2.5 hover:bg-[#272a2f] flex items-center justify-between gap-2"
+                          className="w-full text-left px-3 py-2.5 hover:bg-ura-panel-2 flex items-center justify-between gap-2"
                         >
                           <span className="font-medium text-white text-sm truncate flex-1">{n.title}</span>
                           <span className="text-[10px] text-gray-500 flex-shrink-0">{formatDate(n.createdAt)}</span>
@@ -236,7 +236,7 @@ export default function NotificationCenter() {
                       ) : (
                         <>
                           {n.imageUrl && (
-                            <div className="mb-2 rounded-lg overflow-hidden bg-[#1d2025]">
+                            <div className="mb-2 rounded-lg overflow-hidden bg-ura-panel">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={resolveMediaUrl(n.imageUrl)}
@@ -247,7 +247,7 @@ export default function NotificationCenter() {
                             </div>
                           )}
                           {n.videoUrl && (
-                            <div className="mb-2 rounded-lg overflow-hidden bg-[#1d2025]">
+                            <div className="mb-2 rounded-lg overflow-hidden bg-ura-panel">
                               <video
                                 src={resolveMediaUrl(n.videoUrl)}
                                 controls

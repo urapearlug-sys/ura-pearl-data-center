@@ -32,7 +32,7 @@ export default function RoleFilterTabs({ activeRole, onRoleChange }: Props) {
               className={[
                 'flex-shrink-0 rounded-full border px-2.5 py-1 text-[9px] font-semibold transition-all duration-200',
                 active
-                  ? 'border-[#f3ba2f]/60 bg-[#f3ba2f]/15 text-[#f3ba2f] shadow-[0_0_12px_rgba(243,186,47,0.2)]'
+                  ? 'border-[#f3ba2f]/60 bg-ura-gold/15 text-[#f3ba2f] shadow-[0_0_12px_rgba(243,186,47,0.2)]'
                   : 'border-white/15 bg-white/[0.04] text-white/60 hover:border-cyan-400/30 hover:text-white',
               ].join(' ')}
             >

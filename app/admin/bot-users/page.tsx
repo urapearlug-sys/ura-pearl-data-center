@@ -178,7 +178,7 @@ export default function BotUsersAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -193,7 +193,7 @@ export default function BotUsersAdminPage() {
         </div>
 
         {/* Search individual account */}
-        <div className="bg-[#272a2f] p-4 rounded-lg mb-6">
+        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6">
           <label className="block text-sm font-semibold text-gray-300 mb-2">Search by name or Telegram ID</label>
           <div className="flex gap-2">
             <input
@@ -202,11 +202,11 @@ export default function BotUsersAdminPage() {
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (setPage(1), fetchUsers())}
               placeholder="Name or Telegram ID..."
-              className="flex-1 bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+              className="flex-1 bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
             />
             <button
               onClick={() => { setPage(1); fetchUsers(); }}
-              className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-semibold"
+              className="bg-ura-gold text-black px-4 py-2 rounded-lg font-semibold"
             >
               Search
             </button>
@@ -214,31 +214,31 @@ export default function BotUsersAdminPage() {
         </div>
 
         {/* View toggle: Suspected only vs All users */}
-        <div className="bg-[#272a2f] p-4 rounded-lg mb-6 flex flex-wrap items-center gap-4">
+        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6 flex flex-wrap items-center gap-4">
           <span className="text-gray-400 font-medium">Show:</span>
           <button
             onClick={() => { setViewAll(false); setPage(1); }}
-            className={`px-4 py-2 rounded-lg font-semibold ${!viewAll ? 'bg-amber-600 text-white' : 'bg-[#1d2025] text-gray-400 hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg font-semibold ${!viewAll ? 'bg-amber-600 text-white' : 'bg-ura-panel text-gray-400 hover:text-white'}`}
           >
             Suspected only
           </button>
           <button
             onClick={() => { setViewAll(true); setPage(1); }}
-            className={`px-4 py-2 rounded-lg font-semibold ${viewAll ? 'bg-amber-600 text-white' : 'bg-[#1d2025] text-gray-400 hover:text-white'}`}
+            className={`px-4 py-2 rounded-lg font-semibold ${viewAll ? 'bg-amber-600 text-white' : 'bg-ura-panel text-gray-400 hover:text-white'}`}
           >
             All users
           </button>
         </div>
 
         {/* Weekly Challenge Top 20 */}
-        <div className="bg-[#272a2f] rounded-lg overflow-hidden mb-8">
+        <div className="bg-ura-panel-2 rounded-lg overflow-hidden mb-8">
           <h2 className="text-xl font-bold text-[#f3ba2f] p-4 border-b border-gray-700">Weekly Challenge — Top 20</h2>
           {weeklyTopLoading ? (
             <div className="p-8 flex justify-center"><div className="w-8 h-8 border-4 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" /></div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-[#1d2025]">
+                <thead className="bg-ura-panel">
                   <tr>
                     <th className="p-2 text-left">#</th>
                     <th className="p-2 text-left">Name</th>
@@ -284,7 +284,7 @@ export default function BotUsersAdminPage() {
         )}
 
         {/* Custom suspension message */}
-        <div className="bg-[#272a2f] p-4 rounded-lg mb-6">
+        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6">
           <label className="block text-sm font-semibold text-gray-300 mb-2">
             Suspension message (shown on game screen when freezing for cheating)
           </label>
@@ -293,7 +293,7 @@ export default function BotUsersAdminPage() {
             value={suspensionMessage}
             onChange={(e) => setSuspensionMessage(e.target.value)}
             placeholder={DEFAULT_CHEATING_MESSAGE}
-            className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+            className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
           />
         </div>
 
@@ -349,8 +349,8 @@ export default function BotUsersAdminPage() {
 
         {/* Confirmation modal */}
         {confirmAction && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#272a2f] rounded-lg p-6 max-w-md w-full">
+          <div className="fixed inset-0 bg-ura-navy/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-ura-panel-2 rounded-lg p-6 max-w-md w-full">
               <p className="text-lg mb-4">{confirmAction.label}</p>
               {confirmAction.action === 'freeze_cheating' && (
                 <p className="text-gray-400 text-sm mb-4">
@@ -385,7 +385,7 @@ export default function BotUsersAdminPage() {
         )}
 
         {/* Table */}
-        <div className="bg-[#272a2f] rounded-lg overflow-hidden">
+        <div className="bg-ura-panel-2 rounded-lg overflow-hidden">
           {loading ? (
             <div className="p-8 flex justify-center">
               <div className="w-8 h-8 border-4 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
@@ -393,7 +393,7 @@ export default function BotUsersAdminPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-[#1d2025]">
+                <thead className="bg-ura-panel">
                   <tr>
                     <th className="p-3 text-left">
                       <input
@@ -492,7 +492,7 @@ export default function BotUsersAdminPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="bg-[#272a2f] px-4 py-2 rounded-lg disabled:opacity-50"
+              className="bg-ura-panel-2 px-4 py-2 rounded-lg disabled:opacity-50"
             >
               Previous
             </button>
@@ -502,7 +502,7 @@ export default function BotUsersAdminPage() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="bg-[#272a2f] px-4 py-2 rounded-lg disabled:opacity-50"
+              className="bg-ura-panel-2 px-4 py-2 rounded-lg disabled:opacity-50"
             >
               Next
             </button>
@@ -512,9 +512,9 @@ export default function BotUsersAdminPage() {
         {/* Per-user detail drawer */}
         {detailUserId && (
           <div className="fixed inset-0 z-50 flex justify-end">
-            <div className="absolute inset-0 bg-black/60" onClick={() => setDetailUserId(null)} aria-hidden />
-            <div className="relative w-full max-w-lg bg-[#272a2f] shadow-xl overflow-y-auto flex flex-col">
-              <div className="sticky top-0 bg-[#272a2f] border-b border-gray-700 p-4 flex items-center justify-between">
+            <div className="absolute inset-0 bg-ura-navy/60" onClick={() => setDetailUserId(null)} aria-hidden />
+            <div className="relative w-full max-w-lg bg-ura-panel-2 shadow-xl overflow-y-auto flex flex-col">
+              <div className="sticky top-0 bg-ura-panel-2 border-b border-gray-700 p-4 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-[#f3ba2f]">User detail</h3>
                 <button type="button" onClick={() => setDetailUserId(null)} className="text-2xl text-gray-400 hover:text-white leading-none">×</button>
               </div>

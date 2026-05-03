@@ -173,7 +173,7 @@ export default function AdminDailyCombo() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">
           ← Back to Admin
@@ -184,7 +184,7 @@ export default function AdminDailyCombo() {
           <p className="text-gray-400">Loading...</p>
         ) : (
           <>
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Set Override for Date</h2>
               <p className="text-gray-400 text-sm mb-4">Pick 3 card slugs (from pool below). Same combo for everyone that day.</p>
               <form onSubmit={handleSetOverride} className="flex flex-wrap gap-4 items-end">
@@ -194,7 +194,7 @@ export default function AdminDailyCombo() {
                     type="date"
                     value={overrideDate}
                     onChange={(e) => setOverrideDate(e.target.value)}
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                   />
                 </div>
                 <div>
@@ -204,7 +204,7 @@ export default function AdminDailyCombo() {
                     value={overrideSlug1}
                     onChange={(e) => setOverrideSlug1(e.target.value)}
                     placeholder="e.g. youtube"
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-28"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-28"
                   />
                 </div>
                 <div>
@@ -214,7 +214,7 @@ export default function AdminDailyCombo() {
                     value={overrideSlug2}
                     onChange={(e) => setOverrideSlug2(e.target.value)}
                     placeholder="e.g. telegram"
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-28"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-28"
                   />
                 </div>
                 <div>
@@ -224,16 +224,16 @@ export default function AdminDailyCombo() {
                     value={overrideSlug3}
                     onChange={(e) => setOverrideSlug3(e.target.value)}
                     placeholder="e.g. friends"
-                    className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-28"
+                    className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-28"
                   />
                 </div>
-                <button type="submit" disabled={isSubmitting} className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
+                <button type="submit" disabled={isSubmitting} className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
                   Save Override
                 </button>
               </form>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Bulk Import Templates</h2>
               <p className="text-gray-400 text-sm mb-4">One combo per line: slug1, slug2, slug3</p>
               <form onSubmit={handleBulkTemplates} className="space-y-4">
@@ -242,48 +242,48 @@ export default function AdminDailyCombo() {
                   onChange={(e) => setBulkTemplates(e.target.value)}
                   placeholder="youtube, telegram, friends&#10;binance, telegram, license"
                   rows={4}
-                  className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white resize-none font-mono text-sm"
+                  className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white resize-none font-mono text-sm"
                 />
-                <button type="submit" disabled={isSubmitting} className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
+                <button type="submit" disabled={isSubmitting} className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">
                   Import Templates
                 </button>
               </form>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Add Card</h2>
               <form onSubmit={handleAddCard} className="flex flex-wrap gap-4 items-end">
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Slug</label>
-                  <input type="text" value={newCardSlug} onChange={(e) => setNewCardSlug(e.target.value)} placeholder="youtube" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-24" />
+                  <input type="text" value={newCardSlug} onChange={(e) => setNewCardSlug(e.target.value)} placeholder="youtube" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-24" />
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Label</label>
-                  <input type="text" value={newCardLabel} onChange={(e) => setNewCardLabel(e.target.value)} placeholder="YouTube" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-28" />
+                  <input type="text" value={newCardLabel} onChange={(e) => setNewCardLabel(e.target.value)} placeholder="YouTube" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-28" />
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Image key</label>
-                  <input type="text" value={newCardImage} onChange={(e) => setNewCardImage(e.target.value)} placeholder="youtube" className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white w-24" />
+                  <input type="text" value={newCardImage} onChange={(e) => setNewCardImage(e.target.value)} placeholder="youtube" className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white w-24" />
                 </div>
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Category</label>
-                  <select value={newCardCategory} onChange={(e) => setNewCardCategory(e.target.value)} className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                  <select value={newCardCategory} onChange={(e) => setNewCardCategory(e.target.value)} className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                     <option value="Markets">Markets</option>
                     <option value="PR">PR</option>
                     <option value="Legal">Legal</option>
                     <option value="Specials">Specials</option>
                   </select>
                 </div>
-                <button type="submit" disabled={isSubmitting} className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">Add Card</button>
+                <button type="submit" disabled={isSubmitting} className="bg-ura-gold text-black px-4 py-2 rounded-lg font-medium disabled:opacity-50">Add Card</button>
               </form>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Recent Combos</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-left text-gray-400 border-b border-[#3d4046]">
+                    <tr className="text-left text-gray-400 border-b border-ura-border/75">
                       <th className="pb-2 pr-4">Date</th>
                       <th className="pb-2 pr-4">Cards</th>
                       <th className="pb-2">Type</th>
@@ -291,7 +291,7 @@ export default function AdminDailyCombo() {
                   </thead>
                   <tbody>
                     {combos.slice(0, 14).map((c) => (
-                      <tr key={c.id} className="border-b border-[#3d4046]/50">
+                      <tr key={c.id} className="border-b border-ura-border/75/50">
                         <td className="py-2 pr-4">{formatDate(c.date)}</td>
                         <td className="py-2 pr-4 font-mono">{c.cardSlugs.join(', ')}</td>
                         <td className="py-2">{c.isOverride ? <span className="text-amber-400">Override</span> : <span className="text-gray-500">Auto</span>}</td>
@@ -302,18 +302,18 @@ export default function AdminDailyCombo() {
               </div>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6 mb-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6 mb-6">
               <h2 className="text-xl font-semibold mb-4">Card Pool ({cards.length})</h2>
               <div className="flex flex-wrap gap-2">
                 {cards.map((c) => (
-                  <span key={c.id} className="bg-[#1d2025] px-2 py-1 rounded text-sm font-mono">
+                  <span key={c.id} className="bg-ura-panel px-2 py-1 rounded text-sm font-mono">
                     {c.slug} ({c.category})
                   </span>
                 ))}
               </div>
             </section>
 
-            <section className="bg-[#272a2f] rounded-xl p-6">
+            <section className="bg-ura-panel-2 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4">Templates ({templates.length})</h2>
               <div className="space-y-1 text-sm font-mono text-gray-300">
                 {templates.slice(0, 20).map((t) => (

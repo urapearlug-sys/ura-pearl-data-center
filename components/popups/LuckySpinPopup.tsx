@@ -79,7 +79,7 @@ export default function LuckySpinPopup({ onClose, onSuccess, claimedToday }: Luc
       </div>
       {/* Arrow on top, wheel below it */}
       <div className="flex-1 flex flex-col items-center justify-center min-h-0 py-4">
-        <div className="bg-[#1d2025] rounded-xl p-4 shadow-xl flex flex-col items-center">
+        <div className="bg-ura-panel rounded-xl p-4 shadow-xl flex flex-col items-center">
           {/* Wheel – spins on Spin click */}
           <div
             className="transition-transform duration-[2500ms] ease-out"
@@ -114,12 +114,12 @@ export default function LuckySpinPopup({ onClose, onSuccess, claimedToday }: Luc
               type="button"
               onClick={handleSpin}
               disabled={claimedToday || isSpinning}
-              className="flex-1 py-2.5 px-4 rounded-lg bg-[#f3ba2f] text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-2.5 px-4 rounded-lg bg-ura-gold text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSpinning ? 'Spinning…' : 'Spin'}
             </button>
           )}
-          <button type="button" onClick={handleClose} className="py-2.5 px-4 rounded-lg bg-[#272a2f] text-gray-300 font-medium">
+          <button type="button" onClick={handleClose} className="py-2.5 px-4 rounded-lg bg-ura-panel-2 text-gray-300 font-medium">
             Close
           </button>
         </div>

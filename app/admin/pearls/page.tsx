@@ -61,7 +61,7 @@ export default function AdminPearlsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-6 md:p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between gap-4 mb-6">
           <div>
@@ -72,7 +72,7 @@ export default function AdminPearlsPage() {
           </div>
           <Link
             href="/admin"
-            className="inline-flex items-center rounded-lg bg-[#272a2f] px-4 py-2 text-sm hover:bg-[#3a3d42] transition-colors"
+            className="inline-flex items-center rounded-lg bg-ura-panel-2 px-4 py-2 text-sm hover:bg-[#3a3d42] transition-colors"
           >
             Back to Admin
           </Link>
@@ -82,22 +82,22 @@ export default function AdminPearlsPage() {
         {error ? <p className="text-rose-400 mb-4">{error}</p> : null}
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-4">
+          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
             <p className="text-xs uppercase tracking-wide text-gray-400">White pearls</p>
             <p className="text-2xl font-bold mt-1">{Math.floor(totals.white).toLocaleString()}</p>
             <p className="text-xs text-gray-400 mt-2">Activities like Karibu Daily, Quiz, and non-approval tasks.</p>
           </div>
-          <div className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-4">
+          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
             <p className="text-xs uppercase tracking-wide text-[#5fa8ff]">Blue pearls</p>
             <p className="text-2xl font-bold mt-1">{Math.floor(totals.bluePending).toLocaleString()} pending</p>
             <p className="text-xs text-gray-400 mt-2">Receipt Rush, Whistle blower, IFRIS/reporting and similar activities.</p>
           </div>
-          <div className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-4">
+          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
             <p className="text-xs uppercase tracking-wide text-[#5fa8ff]">Blue approved total</p>
             <p className="text-2xl font-bold mt-1">{Math.floor(totals.blueApproved).toLocaleString()}</p>
             <p className="text-xs text-gray-400 mt-2">Historical approved Blue pearls.</p>
           </div>
-          <div className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-4">
+          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
             <p className="text-xs uppercase tracking-wide text-[#f3ba2f]">Goldish pearls</p>
             <p className="text-2xl font-bold mt-1">{Math.floor(totals.goldish).toLocaleString()}</p>
             <p className="text-xs text-gray-400 mt-2">Auto-converted from approved White/Blue pearls and cashout source.</p>
@@ -105,14 +105,14 @@ export default function AdminPearlsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <section className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-5">
+          <section className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
             <h2 className="text-xl font-semibold">Conversion Rules</h2>
             <div className="mt-4 space-y-2">
-              <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 text-sm">
+              <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 px-3 py-2 text-sm">
                 <span className="font-semibold">50</span> White ={' '}
                 <span className="font-semibold text-[#f3ba2f]">1 Goldish</span>
               </div>
-              <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 text-sm">
+              <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 px-3 py-2 text-sm">
                 <span className="font-semibold">25</span> Blue ={' '}
                 <span className="font-semibold text-[#f3ba2f]">1 Goldish</span> (after admin approval)
               </div>
@@ -122,7 +122,7 @@ export default function AdminPearlsPage() {
             </p>
           </section>
 
-          <section className="rounded-xl border border-[#2d2f38] bg-[#272a2f] p-5">
+          <section className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
             <h2 className="text-xl font-semibold">Required Histories</h2>
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               <li>White pearls accumulated and converted to Goldish.</li>
@@ -134,14 +134,14 @@ export default function AdminPearlsPage() {
           </section>
         </div>
 
-        <section className="mt-6 rounded-xl border border-[#2d2f38] bg-[#272a2f] p-5">
+        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
           <h2 className="text-xl font-semibold">Blue Approval Queue</h2>
           <div className="mt-3 space-y-2">
             {pendingBlueActivities.length === 0 ? (
               <p className="text-sm text-gray-400">No pending blue-pearl activities.</p>
             ) : (
               pendingBlueActivities.map((item) => (
-                <div key={item.id} className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+                <div key={item.id} className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
                   <p className="font-medium text-white">{item.sourceLabel}</p>
                   <p className="text-xs text-gray-400 mt-1">
                     {item.user.name || 'User'} ({item.user.telegramId}) · {Math.floor(item.amount)} Blue
@@ -168,14 +168,14 @@ export default function AdminPearlsPage() {
           </div>
         </section>
 
-        <section className="mt-6 rounded-xl border border-[#2d2f38] bg-[#272a2f] p-5">
+        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
           <h2 className="text-xl font-semibold">Withdrawal Queue</h2>
           <div className="mt-3 space-y-2">
             {pendingWithdrawals.length === 0 ? (
               <p className="text-sm text-gray-400">No pending withdrawals.</p>
             ) : (
               pendingWithdrawals.map((item) => (
-                <div key={item.id} className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+                <div key={item.id} className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
                   <p className="font-medium text-white">{item.user.name || 'User'} ({item.user.telegramId})</p>
                   <p className="text-xs text-gray-400 mt-1">
                     {Math.floor(item.goldishAmount)} Goldish {item.cashAmount ? `· Cash ${item.cashAmount}` : ''}
@@ -209,19 +209,19 @@ export default function AdminPearlsPage() {
           </div>
         </section>
 
-        <section className="mt-6 rounded-xl border border-[#2d2f38] bg-[#272a2f] p-5">
+        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
           <h2 className="text-xl font-semibold">Admin Operations Checklist</h2>
           <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
               Approve or reject Blue-pearl activities.
             </div>
-            <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
               Auto-convert approved Blue/White pearls to Goldish by configured ratios.
             </div>
-            <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
               Validate transfer and withdrawal requests.
             </div>
-            <div className="rounded-lg border border-[#3a3d42] bg-[#1f2229] p-3">
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
               Keep complete audit history for all pearl lifecycle events.
             </div>
           </div>

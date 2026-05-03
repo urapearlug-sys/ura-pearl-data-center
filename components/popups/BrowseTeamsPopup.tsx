@@ -84,29 +84,29 @@ export default function BrowseTeamsPopup({ onClose, initData, onOpenJoinTeam }: 
   }, [initData, agreedToTerms, showToast, fetchTeams]);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Browse teams</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <div className="p-4 flex flex-col gap-3 shrink-0">
           <p className="text-sm text-gray-400">Teams you can join. To join a team, get the invite code from the team creator and use <strong className="text-white">Join team</strong>.</p>
           {onOpenJoinTeam && (
-            <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); onOpenJoinTeam(); }} className="w-full py-3 rounded-xl bg-[#f3ba2f] text-black font-bold">
+            <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); onOpenJoinTeam(); }} className="w-full py-3 rounded-xl bg-ura-gold text-black font-bold">
               Join team (enter code)
             </button>
           )}
         </div>
         {confirmRequestTeamId && (
-          <div className="p-4 border-t border-[#3d4046] bg-[#252836]">
+          <div className="p-4 border-t border-ura-border/75 bg-[#252836]">
             <p className="text-sm text-gray-300 mb-2">By requesting to join you agree to the Teams &amp; Leagues Terms.</p>
             <label className="flex items-start gap-2 cursor-pointer mb-3">
               <input
                 type="checkbox"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="mt-1 rounded border-[#3d4046] bg-[#272a2f] text-[#f3ba2f] focus:ring-[#f3ba2f]"
+                className="mt-1 rounded border-ura-border/75 bg-ura-panel-2 text-[#f3ba2f] focus:ring-[#f3ba2f]"
               />
               <span className="text-sm text-gray-300">{TERMS_AGREEMENT_LABEL_MEMBER}</span>
             </label>
@@ -114,7 +114,7 @@ export default function BrowseTeamsPopup({ onClose, initData, onOpenJoinTeam }: 
               <button
                 type="button"
                 onClick={() => { triggerHapticFeedback(window); setConfirmRequestTeamId(null); }}
-                className="flex-1 py-2 rounded-lg bg-[#272a2f] text-gray-300 text-sm font-medium"
+                className="flex-1 py-2 rounded-lg bg-ura-panel-2 text-gray-300 text-sm font-medium"
               >
                 Cancel
               </button>
@@ -122,7 +122,7 @@ export default function BrowseTeamsPopup({ onClose, initData, onOpenJoinTeam }: 
                 type="button"
                 disabled={requestingId === confirmRequestTeamId || !agreedToTerms}
                 onClick={() => confirmRequestTeamId && handleRequestJoin(confirmRequestTeamId)}
-                className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black text-sm font-semibold disabled:opacity-50"
+                className="flex-1 py-2 rounded-lg bg-ura-gold text-black text-sm font-semibold disabled:opacity-50"
               >
                 {requestingId === confirmRequestTeamId ? 'Sending…' : 'Send request'}
               </button>
@@ -137,7 +137,7 @@ export default function BrowseTeamsPopup({ onClose, initData, onOpenJoinTeam }: 
           ) : (
             <ul className="space-y-2">
               {teams.map((t) => (
-                <li key={t.id} className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+                <li key={t.id} className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium text-white">{t.name}</p>
@@ -153,7 +153,7 @@ export default function BrowseTeamsPopup({ onClose, initData, onOpenJoinTeam }: 
                           type="button"
                           disabled={!initData || requestingId === t.id}
                           onClick={() => { triggerHapticFeedback(window); openRequestConfirm(t.id); }}
-                          className="text-sm py-1.5 px-3 rounded-lg bg-[#f3ba2f] text-black font-medium disabled:opacity-50"
+                          className="text-sm py-1.5 px-3 rounded-lg bg-ura-gold text-black font-medium disabled:opacity-50"
                         >
                           {requestingId === t.id ? '…' : 'Request to join'}
                         </button>

@@ -423,7 +423,7 @@ export default function AdminQuizPage() {
     : [{ id: '', name: '(No branch)', order: 0 }];
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-3xl font-bold text-[#f3ba2f] mb-2">URA Quiz</h1>
@@ -433,7 +433,7 @@ export default function AdminQuizPage() {
         </p>
 
         {/* Time until next quiz goes live (UTC midnight) */}
-        <div className="bg-[#272a2f] border border-[#3d4046] rounded-xl p-4 mb-6 flex items-center gap-3">
+        <div className="bg-ura-panel-2 border border-ura-border/75 rounded-xl p-4 mb-6 flex items-center gap-3">
           <span className="text-gray-400">Time until new quiz goes live (19:36 UTC / 7:36 PM UTC):</span>
           <span className="text-[#f3ba2f] font-mono font-semibold tabular-nums">
             {timeUntilNextQuiz !== null ? formatTimeRemaining(timeUntilNextQuiz) : '—'}
@@ -441,7 +441,7 @@ export default function AdminQuizPage() {
         </div>
 
         {/* Automated rotation (Mon / Thu UTC default) */}
-        <div className="bg-[#272a2f] p-6 rounded-xl mb-6 border border-emerald-500/25">
+        <div className="bg-ura-panel-2 p-6 rounded-xl mb-6 border border-emerald-500/25">
           <h2 className="text-lg font-semibold mb-2 text-emerald-200">Automated question sets (UTC)</h2>
           <p className="text-sm text-gray-400 mb-3">
             When enabled, the first public quiz load on each chosen weekday (UTC) picks a fresh random set from your pool
@@ -470,7 +470,7 @@ export default function AdminQuizPage() {
                   type="button"
                   onClick={() => toggleWeekdayInSchedule(day)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border ${
-                    active ? 'bg-emerald-600/40 border-emerald-400 text-white' : 'bg-[#1d2025] border-[#3d4046] text-gray-400'
+                    active ? 'bg-emerald-600/40 border-emerald-400 text-white' : 'bg-ura-panel border-ura-border/75 text-gray-400'
                   }`}
                 >
                   {label}
@@ -485,7 +485,7 @@ export default function AdminQuizPage() {
                 type="text"
                 value={autoRotationWeekdays}
                 onChange={(e) => setAutoRotationWeekdays(e.target.value)}
-                className="block mt-1 w-40 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="block mt-1 w-40 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                 placeholder="1,4"
               />
             </label>
@@ -497,7 +497,7 @@ export default function AdminQuizPage() {
                 max={20}
                 value={autoRotationQuestionCount}
                 onChange={(e) => setAutoRotationQuestionCount(Math.min(20, Math.max(1, Number(e.target.value) || 5)))}
-                className="block mt-1 w-24 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="block mt-1 w-24 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
             </label>
           </div>
@@ -527,14 +527,14 @@ export default function AdminQuizPage() {
         </div>
 
         {/* Blockchain question pool */}
-        <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
+        <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
           <h2 className="text-lg font-semibold mb-2">Question pool (seed + daily set)</h2>
           <p className="text-sm text-gray-400 mb-3">
             Load ~100 sample blockchain/crypto questions into the pool (inactive), then use random sets or automation.
             Add your own URA / tax items above. Toggle Active per question to override.
           </p>
           <div className="flex flex-wrap gap-3">
-            <button type="button" onClick={handleSeedBlockchainPool} disabled={poolSeeding || submitting} className="px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">
+            <button type="button" onClick={handleSeedBlockchainPool} disabled={poolSeeding || submitting} className="px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">
               {poolSeeding ? 'Loading…' : 'Load 100 blockchain questions'}
             </button>
             <button type="button" onClick={handleSetRandomDaily} disabled={dailySetting || submitting || questions.length === 0} className="px-4 py-2 bg-[#3d4046] hover:bg-[#4d5056] rounded-lg font-medium disabled:opacity-50">
@@ -548,7 +548,7 @@ export default function AdminQuizPage() {
         </div>
 
         {/* Completion bonus */}
-        <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
+        <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
           <h2 className="text-lg font-semibold mb-2">Completion bonus (all correct)</h2>
           <p className="text-sm text-gray-400 mb-3">Extra PEARLS awarded when the user gets every question right.</p>
           <div className="flex gap-2 items-center">
@@ -557,15 +557,15 @@ export default function AdminQuizPage() {
               min={0}
               value={completionBonusPoints}
               onChange={(e) => setCompletionBonusPoints(Number(e.target.value) || 0)}
-              className="w-32 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="w-32 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             />
             <span className="text-gray-400">PEARLS</span>
-            <button type="button" onClick={handleSaveCompletionBonus} disabled={submitting} className="px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">Save</button>
+            <button type="button" onClick={handleSaveCompletionBonus} disabled={submitting} className="px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">Save</button>
           </div>
         </div>
 
         {/* Branches */}
-        <div className="bg-[#272a2f] p-6 rounded-xl mb-6">
+        <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
           <h2 className="text-lg font-semibold mb-2">Branches</h2>
           <p className="text-sm text-gray-400 mb-3">Group questions into branches. Select a preset or type a custom name.</p>
           <div className="mb-3">
@@ -593,14 +593,14 @@ export default function AdminQuizPage() {
               value={newBranchName}
               onChange={(e) => setNewBranchName(e.target.value)}
               placeholder="Or type custom branch name"
-              className="flex-1 max-w-xs bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+              className="flex-1 max-w-xs bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
             />
             <button type="button" onClick={() => handleCreateBranch(newBranchName)} disabled={submitting} className="px-4 py-2 bg-[#3d4046] hover:bg-[#4d5056] rounded-lg font-medium disabled:opacity-50">Add custom</button>
           </div>
           {branches.length > 0 && (
             <ul className="space-y-2">
               {branches.map((b) => (
-                <li key={b.id} className="flex items-center justify-between py-2 border-b border-[#3d4046] last:border-0">
+                <li key={b.id} className="flex items-center justify-between py-2 border-b border-ura-border/75 last:border-0">
                   <span className="font-medium">{b.name}</span>
                   <button type="button" onClick={() => handleDeleteBranch(b.id)} disabled={submitting} className="text-red-400 hover:text-red-300 text-sm">Delete</button>
                 </li>
@@ -610,7 +610,7 @@ export default function AdminQuizPage() {
         </div>
 
         {/* Add/Edit question */}
-        <form onSubmit={handleSubmit} className="bg-[#272a2f] p-6 rounded-xl mb-8">
+        <form onSubmit={handleSubmit} className="bg-ura-panel-2 p-6 rounded-xl mb-8">
           <h2 className="text-lg font-semibold mb-4">{editingId ? 'Edit question' : 'Add question'}</h2>
           <div className="space-y-4">
             <div>
@@ -620,7 +620,7 @@ export default function AdminQuizPage() {
                 value={formQuestion}
                 onChange={(e) => setFormQuestion(e.target.value)}
                 placeholder="Question text"
-                className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white"
               />
             </div>
             <div>
@@ -628,7 +628,7 @@ export default function AdminQuizPage() {
               {formOptions.map((opt, i) => (
                 <div key={i} className="flex gap-2 mb-2">
                   <input type="radio" name="correct" checked={formCorrectIndex === i} onChange={() => setFormCorrectIndex(i)} disabled={!opt.trim()} className="mt-2" />
-                  <input type="text" value={opt} onChange={(e) => setOption(i, e.target.value)} placeholder={`Option ${i + 1}`} className="flex-1 bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white" />
+                  <input type="text" value={opt} onChange={(e) => setOption(i, e.target.value)} placeholder={`Option ${i + 1}`} className="flex-1 bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white" />
                   {formOptions.length > 2 && <button type="button" onClick={() => removeOption(i)} className="text-red-400 hover:text-red-300 px-2">×</button>}
                 </div>
               ))}
@@ -637,18 +637,18 @@ export default function AdminQuizPage() {
             <div className="flex flex-wrap gap-4 items-center">
               <label className="flex items-center gap-2">
                 <span className="text-sm text-gray-400">Points (PEARLS) for correct:</span>
-                <input type="number" min={0} value={formPoints} onChange={(e) => setFormPoints(Number(e.target.value) || 0)} className="w-24 bg-[#1d2025] border border-[#3d4046] rounded px-2 py-1 text-white" />
+                <input type="number" min={0} value={formPoints} onChange={(e) => setFormPoints(Number(e.target.value) || 0)} className="w-24 bg-ura-panel border border-ura-border/75 rounded px-2 py-1 text-white" />
               </label>
               <label className="flex items-center gap-2">
                 <span className="text-sm text-gray-400">Branch:</span>
-                <select value={formBranchId} onChange={(e) => setFormBranchId(e.target.value)} className="bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                <select value={formBranchId} onChange={(e) => setFormBranchId(e.target.value)} className="bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                   {byBranch.map((b) => (
                     <option key={b.id || 'none'} value={b.id}>{b.name}</option>
                   ))}
                 </select>
               </label>
               <label className="flex items-center gap-2">
-                <input type="number" value={formOrder} onChange={(e) => setFormOrder(Number(e.target.value))} min={0} className="w-20 bg-[#1d2025] border border-[#3d4046] rounded px-2 py-1 text-white" />
+                <input type="number" value={formOrder} onChange={(e) => setFormOrder(Number(e.target.value))} min={0} className="w-20 bg-ura-panel border border-ura-border/75 rounded px-2 py-1 text-white" />
                 <span className="text-sm text-gray-400">Order</span>
               </label>
               <label className="flex items-center gap-2">
@@ -658,14 +658,14 @@ export default function AdminQuizPage() {
             </div>
           </div>
           <div className="flex gap-2 mt-4">
-            <button type="submit" disabled={submitting} className="px-4 py-2 bg-[#f3ba2f] text-black font-semibold rounded-lg disabled:opacity-50">{submitting ? 'Saving…' : editingId ? 'Update' : 'Add'}</button>
+            <button type="submit" disabled={submitting} className="px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">{submitting ? 'Saving…' : editingId ? 'Update' : 'Add'}</button>
             {editingId && <button type="button" onClick={resetForm} className="px-4 py-2 bg-[#3d4046] rounded-lg">Cancel</button>}
           </div>
         </form>
 
         {/* Questions list by branch */}
-        <div className="bg-[#272a2f] rounded-xl overflow-hidden">
-          <h2 className="p-4 text-lg font-semibold border-b border-[#3d4046]">Questions ({questions.length})</h2>
+        <div className="bg-ura-panel-2 rounded-xl overflow-hidden">
+          <h2 className="p-4 text-lg font-semibold border-b border-ura-border/75">Questions ({questions.length})</h2>
           {loading ? (
             <div className="p-8 text-center text-gray-400">Loading…</div>
           ) : questions.length === 0 ? (
@@ -677,7 +677,7 @@ export default function AdminQuizPage() {
                 if (branchQuestions.length === 0) return null;
                 return (
                   <div key={branch.id || 'none'}>
-                    <div className="px-4 py-2 bg-[#1d2025] text-[#f3ba2f] font-medium">{branch.name}</div>
+                    <div className="px-4 py-2 bg-ura-panel text-[#f3ba2f] font-medium">{branch.name}</div>
                     <ul>
                       {branchQuestions.map((q) => (
                         <li key={q.id} className="p-4 flex flex-wrap items-start justify-between gap-2">

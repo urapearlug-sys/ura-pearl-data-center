@@ -235,7 +235,7 @@ export function MarketplaceSection() {
 
   return (
     <div className="relative mt-4">
-                <div className="flex items-center justify-center gap-4 mb-6 p-4 rounded-2xl bg-[#272a2f] border border-[#3d4046]">
+                <div className="flex items-center justify-center gap-4 mb-6 p-4 rounded-2xl bg-ura-panel-2 border border-ura-border/75">
                   <div className="text-center">
                     <p className="text-gray-400 text-xs">Available</p>
                     <p className="text-[#f3ba2f] font-bold flex items-center justify-center gap-1">
@@ -250,7 +250,7 @@ export function MarketplaceSection() {
                   </div>
                 </div>
 
-                <div className="flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-4">
+                <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-4">
                   {(['buy', 'sell', 'activity'] as Tab[]).map((t) => (
                     <button
                       key={t}
@@ -259,7 +259,7 @@ export function MarketplaceSection() {
                       className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold capitalize ${
                         tab === t
                           ? 'bg-gradient-to-r from-amber-600 to-[#f3ba2f] text-black'
-                          : 'text-gray-400 hover:text-white hover:bg-[#272a2f]'
+                          : 'text-gray-400 hover:text-white hover:bg-ura-panel-2'
                       }`}
                     >
                       {t === 'activity' ? 'My activity' : t}
@@ -267,7 +267,7 @@ export function MarketplaceSection() {
                   ))}
                 </div>
 
-                <div className="mb-6 p-4 rounded-xl bg-[#272a2f]/80 border border-amber-500/30">
+                <div className="mb-6 p-4 rounded-xl bg-ura-panel-2/80 border border-amber-500/30">
                   <p className="text-amber-400/90 font-semibold text-sm mb-2">How it works</p>
                   <p className="text-gray-300 text-xs leading-relaxed mb-2">
                     <span className="text-white font-medium">Sell:</span> Connect TON wallet (Drops tab) → set amount PEARLS and price (TON per 1000 PEARLS) → List for TON → PEARLS is escrowed until sold or cancelled.
@@ -283,7 +283,7 @@ export function MarketplaceSection() {
                     {isLoadingListings ? (
                       <p className="text-center text-gray-400 py-8">Loading listings...</p>
                     ) : listings.length === 0 ? (
-                      <div className="text-center py-8 rounded-xl bg-[#1a1c22]/50 border border-[#2d2f38]">
+                      <div className="text-center py-8 rounded-xl bg-ura-panel-2/50 border border-ura-border/85">
                         <p className="text-gray-400">No listings yet. Be the first to sell!</p>
                       </div>
                     ) : (
@@ -293,7 +293,7 @@ export function MarketplaceSection() {
                           return (
                             <div
                               key={l.id}
-                              className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046]"
+                              className="p-4 rounded-xl bg-ura-panel-2 border border-ura-border/75"
                             >
                               <div className="flex justify-between items-start mb-2">
                                 <span className="text-white font-semibold">{formatNumber(l.amount)} PEARLS</span>
@@ -309,12 +309,12 @@ export function MarketplaceSection() {
                                     value={buyAmount}
                                     onChange={(e) => setBuyAmount(e.target.value)}
                                     placeholder="Amount PEARLS"
-                                    className="flex-1 rounded-lg bg-[#1d2025] border border-[#3d4046] px-3 py-2 text-white"
+                                    className="flex-1 rounded-lg bg-ura-panel border border-ura-border/75 px-3 py-2 text-white"
                                   />
                                   <button
                                     onClick={() => handleBuy(l, Math.floor(Number(buyAmount)))}
                                     disabled={isBuying || !buyAmount || Number(buyAmount) <= 0}
-                                    className="py-2 px-4 rounded-lg bg-[#f3ba2f] text-black font-bold disabled:opacity-50"
+                                    className="py-2 px-4 rounded-lg bg-ura-gold text-black font-bold disabled:opacity-50"
                                   >
                                     {isBuying ? '...' : 'Pay TON'}
                                   </button>
@@ -347,7 +347,7 @@ export function MarketplaceSection() {
                     {!tonWalletAddress && (
                       <p className="text-amber-400/90 text-sm mb-3">Connect your TON wallet in the Drops tab first.</p>
                     )}
-                    <div className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046] mb-4">
+                    <div className="p-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 mb-4">
                       <label className="block text-gray-400 text-sm mb-2">Amount to sell (PEARLS)</label>
                       <input
                         type="number"
@@ -355,7 +355,7 @@ export function MarketplaceSection() {
                         value={sellAmount}
                         onChange={(e) => setSellAmount(e.target.value)}
                         placeholder={MARKETPLACE_MIN_LISTING.toLocaleString()}
-                        className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-4 py-3 text-white mb-3"
+                        className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-4 py-3 text-white mb-3"
                       />
                       <label className="block text-gray-400 text-sm mb-2">Price (TON per 1000 PEARLS)</label>
                       <input
@@ -365,7 +365,7 @@ export function MarketplaceSection() {
                         value={sellPriceTon}
                         onChange={(e) => setSellPriceTon(e.target.value)}
                         placeholder="0.001"
-                        className="w-full rounded-lg bg-[#1d2025] border border-[#3d4046] px-4 py-3 text-white mb-3"
+                        className="w-full rounded-lg bg-ura-panel border border-ura-border/75 px-4 py-3 text-white mb-3"
                       />
                       <p className="text-gray-400 text-xs mb-3">Min {MARKETPLACE_MIN_LISTING.toLocaleString()} PEARLS. You receive TON to your connected wallet.</p>
                       <button
@@ -389,7 +389,7 @@ export function MarketplaceSection() {
                     ) : (
                       <div className="space-y-2 mb-6">
                         {myListings.map((l) => (
-                          <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-[#272a2f] border border-[#3d4046]">
+                          <div key={l.id} className="flex items-center justify-between p-3 rounded-xl bg-ura-panel-2 border border-ura-border/75">
                             <div>
                               <span className="text-[#f3ba2f] font-semibold">{formatNumber(l.remainingAmount)}</span>
                               <span className="text-gray-400 text-sm"> / {formatNumber(l.amount)} PEARLS</span>
@@ -413,7 +413,7 @@ export function MarketplaceSection() {
                     ) : (
                       <div className="space-y-2">
                         {myTrades.map((t) => (
-                          <div key={t.id} className="p-3 rounded-xl bg-[#272a2f] border border-[#3d4046]">
+                          <div key={t.id} className="p-3 rounded-xl bg-ura-panel-2 border border-ura-border/75">
                             <span className="text-emerald-400 font-semibold">+{formatNumber(t.amount)} PEARLS</span>
                             <span className="text-gray-400 text-sm"> (paid {t.currency === 'ton' ? `${Number(t.amountPaid).toFixed(4)} TON` : `${formatNumber(t.amountPaid)} PEARLS`})</span>
                             <p className="text-gray-500 text-xs mt-1">{new Date(t.createdAt).toLocaleString()}</p>

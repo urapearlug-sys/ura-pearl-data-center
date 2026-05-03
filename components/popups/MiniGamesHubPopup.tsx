@@ -42,15 +42,15 @@ function GameDetailModal({
   const { intro, implemented } = game;
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-ura-navy/60 p-4"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="bg-[#1d2025] rounded-2xl max-w-md w-full max-h-[85vh] overflow-hidden shadow-xl border border-[#3d4046]"
+        className="bg-ura-panel rounded-2xl max-w-md w-full max-h-[85vh] overflow-hidden shadow-xl border border-ura-border/75"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-5 pb-4 border-b border-[#3d4046] flex items-start justify-between gap-3">
+        <div className="p-5 pb-4 border-b border-ura-border/75 flex items-start justify-between gap-3">
           <div className="min-w-0">
             <span className="text-4xl block mb-1">{game.emoji}</span>
             <h2 className="text-xl font-bold text-white truncate">{game.name}</h2>
@@ -91,7 +91,7 @@ function GameDetailModal({
             </div>
           )}
         </div>
-        <div className="p-5 pt-4 border-t border-[#3d4046] flex gap-2">
+        <div className="p-5 pt-4 border-t border-ura-border/75 flex gap-2">
           <button
             type="button"
             onClick={onClose}
@@ -103,12 +103,12 @@ function GameDetailModal({
             <button
               type="button"
               onClick={() => { triggerHapticFeedback(window); onPlay(); }}
-              className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold"
+              className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold"
             >
               Play
             </button>
           ) : (
-            <span className="flex-1 py-3 rounded-xl bg-[#272a2f] text-amber-400 text-center font-medium flex items-center justify-center">
+            <span className="flex-1 py-3 rounded-xl bg-ura-panel-2 text-amber-400 text-center font-medium flex items-center justify-center">
               Coming soon
             </span>
           )}
@@ -196,9 +196,9 @@ export default function MiniGamesHubPopup({ onClose }: MiniGamesHubPopupProps) {
   const selectedGame = selectedGameId ? getGameById(selectedGameId) : null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl animate-slide-up sm:animate-none">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl animate-slide-up sm:animate-none">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <div>
             <h2 className="text-lg font-bold text-white">Mini Games</h2>
             <p className="text-xs text-gray-400">URAPearls Tap2Earn · Tap a game for details</p>
@@ -226,8 +226,8 @@ export default function MiniGamesHubPopup({ onClose }: MiniGamesHubPopupProps) {
                     onClick={() => handleGameCardClick(game.id)}
                     className={`flex flex-col items-center text-center p-4 rounded-xl border transition-all ${
                       isImplemented
-                        ? 'bg-[#272a2f] border-[#3d4046] hover:border-[#f3ba2f]/50 hover:bg-[#2d3038]'
-                        : 'bg-[#252836] border-[#2d2f38] opacity-90 hover:opacity-100'
+                        ? 'bg-ura-panel-2 border-ura-border/75 hover:border-[#f3ba2f]/50 hover:bg-[#2d3038]'
+                        : 'bg-[#252836] border-ura-border/85 opacity-90 hover:opacity-100'
                     }`}
                   >
                     <span className="text-3xl mb-1">{game.emoji}</span>

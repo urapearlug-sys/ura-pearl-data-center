@@ -235,10 +235,10 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
   }, [pointsBalance, energyLimitLevelIndex]);
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
             <div className="px-4 pt-1 pb-24">
               <div className="px-4 mt-4 flex justify-center">
                 <div className="px-4 py-2 flex items-center space-x-2">
@@ -250,7 +250,7 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
               <h2 className="text-base mt-8">Free daily boosters</h2>
               <div className="mt-4">
                 <button
-                  className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4"
+                  className="w-full flex justify-between items-center bg-ura-panel-2 rounded-lg p-4"
                   onClick={handleEnergyRefill}
                   disabled={!isEnergyRefillAvailable}
                 >
@@ -278,7 +278,7 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
 
               <h2 className="text-base mt-8">Boosters</h2>
               <div className="mt-4">
-                <button className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4" onClick={handleMultitapUpgrade}
+                <button className="w-full flex justify-between items-center bg-ura-panel-2 rounded-lg p-4" onClick={handleMultitapUpgrade}
                   disabled={isLoadingMultitap || !isMultitapAffordable}>
                   <div className="flex items-center">
                     <Image src={pearlWhite} alt="PEARLS Multitap" width={40} height={40} className="rounded-full" />
@@ -300,7 +300,7 @@ export default function Boost({ currentView, setCurrentView }: BoostProps) {
                     <span className="text-[#f3ba2f]">Upgrade</span>
                   )}
                 </button>
-                <button className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4 mt-2" onClick={handleEnergyLimitUpgrade} disabled={isLoadingEnergyLimit || !isEnergyLimitAffordable}>
+                <button className="w-full flex justify-between items-center bg-ura-panel-2 rounded-lg p-4 mt-2" onClick={handleEnergyLimitUpgrade} disabled={isLoadingEnergyLimit || !isEnergyLimitAffordable}>
                   <div className="flex items-center">
                     <Image src={pearlWhite} alt="PEARLS Energy limit" width={40} height={40} className="rounded-full" />
                     <div className="flex flex-col ml-2">

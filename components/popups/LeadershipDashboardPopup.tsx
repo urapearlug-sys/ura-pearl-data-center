@@ -54,8 +54,8 @@ export default function LeadershipDashboardPopup({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col bg-[#0f1115] min-h-[100dvh]">
-      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-[#2d2f38] bg-[#1a1c22]">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-ura-navy-deep/90 min-h-[100dvh]">
+      <header className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-ura-border/85 bg-ura-panel-2">
         <div>
           <h1 className="text-lg font-bold text-white">Leadership</h1>
           <p className="text-xs text-gray-400">Manage your teams and leagues</p>
@@ -63,7 +63,7 @@ export default function LeadershipDashboardPopup({
         <button
           type="button"
           onClick={() => { triggerHapticFeedback(window); onClose(); }}
-          className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#272a2f]"
+          className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-ura-panel-2"
         >
           <span className="text-2xl">&times;</span>
         </button>
@@ -80,7 +80,7 @@ export default function LeadershipDashboardPopup({
                   <button
                     type="button"
                     onClick={() => { triggerHapticFeedback(window); setOpenManage({ type: 'team', teamId: t.id, teamName: t.name }); }}
-                    className="w-full flex items-center justify-between p-4 rounded-xl bg-[#1a1c22] border border-[#2d2f38] hover:border-sky-500/50 text-left transition-colors"
+                    className="w-full flex items-center justify-between p-4 rounded-xl bg-ura-panel-2 border border-ura-border/85 hover:border-sky-500/50 text-left transition-colors"
                   >
                     <span className="text-2xl">👥</span>
                     <div className="min-w-0 flex-1 mx-3">
@@ -105,7 +105,7 @@ export default function LeadershipDashboardPopup({
                   <button
                     type="button"
                     onClick={() => { triggerHapticFeedback(window); setOpenManage({ type: 'league', leagueId: l.id, leagueName: l.name }); }}
-                    className="w-full flex items-center justify-between p-4 rounded-xl bg-[#1a1c22] border border-[#2d2f38] hover:border-amber-500/50 text-left transition-colors"
+                    className="w-full flex items-center justify-between p-4 rounded-xl bg-ura-panel-2 border border-ura-border/85 hover:border-amber-500/50 text-left transition-colors"
                   >
                     <span className="text-2xl">🏆</span>
                     <div className="min-w-0 flex-1 mx-3">

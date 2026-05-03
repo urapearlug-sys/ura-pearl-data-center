@@ -106,9 +106,9 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Browse leagues</h2>
           <button
             type="button"
@@ -120,14 +120,14 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
           </button>
         </div>
         {confirmRequestLeagueId && (
-          <div className="p-4 border-b border-[#3d4046] bg-[#252836] shrink-0">
+          <div className="p-4 border-b border-ura-border/75 bg-[#252836] shrink-0">
             <p className="text-sm text-gray-300 mb-2">By requesting to join you agree to the Teams &amp; Leagues Terms.</p>
             <label className="flex items-start gap-2 cursor-pointer mb-3">
               <input
                 type="checkbox"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="mt-1 rounded border-[#3d4046] bg-[#272a2f] text-[#f3ba2f] focus:ring-[#f3ba2f]"
+                className="mt-1 rounded border-ura-border/75 bg-ura-panel-2 text-[#f3ba2f] focus:ring-[#f3ba2f]"
               />
               <span className="text-sm text-gray-300">{TERMS_AGREEMENT_LABEL_MEMBER}</span>
             </label>
@@ -135,7 +135,7 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
               <button
                 type="button"
                 onClick={() => { triggerHapticFeedback(window); setConfirmRequestLeagueId(null); }}
-                className="flex-1 py-2 rounded-lg bg-[#272a2f] text-gray-300 text-sm font-medium"
+                className="flex-1 py-2 rounded-lg bg-ura-panel-2 text-gray-300 text-sm font-medium"
               >
                 Cancel
               </button>
@@ -143,7 +143,7 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
                 type="button"
                 disabled={requestingId === confirmRequestLeagueId || !agreedToTerms}
                 onClick={() => confirmRequestLeagueId && handleRequestJoin(confirmRequestLeagueId)}
-                className="flex-1 py-2 rounded-lg bg-[#f3ba2f] text-black text-sm font-semibold disabled:opacity-50"
+                className="flex-1 py-2 rounded-lg bg-ura-gold text-black text-sm font-semibold disabled:opacity-50"
               >
                 {requestingId === confirmRequestLeagueId ? 'Sending…' : 'Send request'}
               </button>
@@ -152,7 +152,7 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
         )}
         <div className="flex-1 overflow-y-auto p-4">
           {myRequests.length > 0 && (
-            <div className="mb-4 p-3 rounded-xl bg-[#272a2f] border border-[#3d4046]">
+            <div className="mb-4 p-3 rounded-xl bg-ura-panel-2 border border-ura-border/75">
               <p className="text-xs font-semibold text-gray-400 mb-2">My requests</p>
               <ul className="space-y-1.5">
                 {myRequests.slice(0, 10).map((r) => (
@@ -181,7 +181,7 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
               {leagues.map((item) => (
                 <li
                   key={item.id}
-                  className={`rounded-xl border bg-[#252836] overflow-hidden ${(item.status === 'member' || item.status === 'creator') ? 'border-[#3d4046] cursor-pointer hover:border-[#f3ba2f]/40' : 'border-[#2d2f38]'}`}
+                  className={`rounded-xl border bg-[#252836] overflow-hidden ${(item.status === 'member' || item.status === 'creator') ? 'border-ura-border/75 cursor-pointer hover:border-[#f3ba2f]/40' : 'border-ura-border/85'}`}
                 >
                   <div
                     className="p-3 flex flex-wrap items-center gap-2"
@@ -208,7 +208,7 @@ export default function LeagueListPopup({ onClose, initData, onOpenLeague }: Lea
                           type="button"
                           disabled={requestingId === item.id || item.memberCount >= item.maxMembers}
                           onClick={(e) => { e.stopPropagation(); openRequestConfirm(item.id); }}
-                          className="py-1.5 px-3 rounded-lg bg-[#f3ba2f] text-black font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="py-1.5 px-3 rounded-lg bg-ura-gold text-black font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {requestingId === item.id ? 'Sending…' : 'Request to join'}
                         </button>

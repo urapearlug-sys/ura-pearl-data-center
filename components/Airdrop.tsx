@@ -80,10 +80,10 @@ export default function Airdrop() {
   }, []);
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
             <div className="px-4 pt-1 pb-24">
               <div className="relative mt-4">
                 <div className="flex justify-center mb-4">
@@ -94,11 +94,11 @@ export default function Airdrop() {
                   Complete challenges to qualify for Drops. View country rankings.
                 </p>
 
-                <div className="flex gap-1 p-1 rounded-xl bg-[#1a1c22] border border-[#2d2f38] mb-6">
+                <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-6">
                   <button
                     type="button"
                     aria-current="page"
-                    className="flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold bg-[#f3ba2f] text-black"
+                    className="flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold bg-ura-gold text-black"
                   >
                     Drops
                   </button>
@@ -120,10 +120,10 @@ export default function Airdrop() {
                     triggerHapticFeedback(window);
                     setShowRankings(true);
                   }}
-                  className="w-full bg-gradient-to-r from-[#f3ba2f] to-[#e6a422] text-black font-bold py-4 px-6 rounded-xl mb-6 flex items-center justify-between hover:from-[#e6a422] hover:to-[#d99a1c] transition-all shadow-lg"
+                  className="w-full bg-gradient-to-r from-ura-gold to-ura-gold-deep text-black font-bold py-4 px-6 rounded-xl mb-6 flex items-center justify-between hover:from-ura-gold-deep hover:to-ura-gold-deep transition-all shadow-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center text-xl">🏆</div>
+                    <div className="w-10 h-10 bg-ura-navy/20 rounded-full flex items-center justify-center text-xl">🏆</div>
                     <div className="text-left">
                       <div className="text-lg">Country Ranking</div>
                       <div className="text-sm opacity-75">View players by country</div>
@@ -139,7 +139,7 @@ export default function Airdrop() {
                     <button
                       key={task.id}
                       type="button"
-                      className="w-full flex justify-between items-center bg-[#272a2f] rounded-lg p-4"
+                      className="w-full flex justify-between items-center bg-ura-panel-2 rounded-lg p-4"
                       onClick={() => handleOnchainTaskClick(task)}
                     >
                       <div className="flex items-center">

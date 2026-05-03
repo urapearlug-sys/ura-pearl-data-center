@@ -201,16 +201,16 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
   const task = inviteTaskId ? templates.find((t) => t.id === inviteTaskId) : null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Competitions</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
         <p className="px-4 py-2 text-sm text-gray-400 shrink-0">
           Invite another team or league. When they accept, both stake PEARLS; first to reach target in time wins. Management adds 30% to the pool.
         </p>
-        <div className="flex border-b border-[#3d4046] px-2 shrink-0">
+        <div className="flex border-b border-ura-border/75 px-2 shrink-0">
           <button type="button" onClick={() => { setTab('browse'); setInviteTaskId(null); setAcceptChallengeId(null); }} className={`px-4 py-2 text-sm font-medium ${tab === 'browse' ? 'border-b-2 border-[#f3ba2f] text-[#f3ba2f]' : 'text-gray-400'}`}>
             Browse
           </button>
@@ -228,7 +228,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
                 <>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Your team</label>
-                    <select value={inviteCreatorTeamId} onChange={(e) => setInviteCreatorTeamId(e.target.value)} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                    <select value={inviteCreatorTeamId} onChange={(e) => setInviteCreatorTeamId(e.target.value)} className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                       <option value="">Select</option>
                       {creatorTeams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                     </select>
@@ -241,7 +241,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
                       <select
                         value={inviteOpponentTeamId}
                         onChange={(e) => setInviteOpponentTeamId(e.target.value)}
-                        className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                        className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                       >
                         <option value="">Select a team</option>
                         {allTeams.filter((t) => !creatorTeams.some((c) => c.id === t.id)).map((t) => (
@@ -257,7 +257,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
                 <>
                   <div>
                     <label className="block text-sm text-gray-400 mb-1">Your league</label>
-                    <select value={inviteCreatorLeagueId} onChange={(e) => setInviteCreatorLeagueId(e.target.value)} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white">
+                    <select value={inviteCreatorLeagueId} onChange={(e) => setInviteCreatorLeagueId(e.target.value)} className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white">
                       <option value="">Select</option>
                       {creatorLeagues.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
                     </select>
@@ -270,7 +270,7 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
                       <select
                         value={inviteOpponentLeagueId}
                         onChange={(e) => setInviteOpponentLeagueId(e.target.value)}
-                        className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                        className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                       >
                         <option value="">Select a league</option>
                         {allLeagues.filter((l) => !creatorLeagues.some((c) => c.id === l.id)).map((l) => (
@@ -284,10 +284,10 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
               )}
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Your stake (PEARLS)</label>
-                <input type="text" value={inviteStake} onChange={(e) => setInviteStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500" />
+                <input type="text" value={inviteStake} onChange={(e) => setInviteStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500" />
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={submitInvite} disabled={sending} className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50">{sending ? 'Sending…' : 'Send invite'}</button>
+                <button type="button" onClick={submitInvite} disabled={sending} className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50">{sending ? 'Sending…' : 'Send invite'}</button>
                 <button type="button" onClick={() => setInviteTaskId(null)} className="px-4 py-3 rounded-xl bg-[#252836] text-gray-300">Cancel</button>
               </div>
             </div>
@@ -296,10 +296,10 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
               <p className="text-white font-medium">Accept and stake to start</p>
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Your stake (PEARLS)</label>
-                <input type="text" value={acceptStake} onChange={(e) => setAcceptStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500" />
+                <input type="text" value={acceptStake} onChange={(e) => setAcceptStake(e.target.value.replace(/\D/g, ''))} placeholder={`${formatNumber(GLOBAL_TASK_MIN_STAKE)}–${formatNumber(GLOBAL_TASK_MAX_STAKE)}`} className="w-full bg-[#252836] border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500" />
               </div>
               <div className="flex gap-2">
-                <button type="button" onClick={submitAccept} disabled={accepting} className="flex-1 py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50">{accepting ? 'Accepting…' : 'Accept'}</button>
+                <button type="button" onClick={submitAccept} disabled={accepting} className="flex-1 py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50">{accepting ? 'Accepting…' : 'Accept'}</button>
                 <button type="button" onClick={() => { setAcceptChallengeId(null); setAcceptStake(''); }} className="px-4 py-3 rounded-xl bg-[#252836] text-gray-300">Cancel</button>
               </div>
             </div>
@@ -309,12 +309,12 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
             ) : (
               <ul className="space-y-3 py-2">
                 {challenges.map((c) => (
-                  <li key={c.id} className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+                  <li key={c.id} className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
                     <p className="font-medium text-white">{c.taskName}</p>
                     <p className="text-xs text-gray-400">{c.creatorName} vs {c.opponentName} · {c.targetLabel}</p>
                     <p className="text-xs text-gray-500 mt-1">Progress: {c.creatorProgress.toLocaleString()} vs {c.opponentProgress.toLocaleString()} · {c.status}</p>
                     {c.status === 'pending' && c.canAccept && (
-                      <button type="button" onClick={() => { setAcceptChallengeId(c.id); setAcceptStake(''); }} className="mt-2 text-sm py-1.5 px-3 rounded-lg bg-[#f3ba2f] text-black font-medium">
+                      <button type="button" onClick={() => { setAcceptChallengeId(c.id); setAcceptStake(''); }} className="mt-2 text-sm py-1.5 px-3 rounded-lg bg-ura-gold text-black font-medium">
                         Accept & stake
                       </button>
                     )}
@@ -327,14 +327,14 @@ export default function GlobalTasksPopup({ onClose, initData, myTeams, myLeagues
           ) : (
             <ul className="space-y-3">
               {templates.map((t) => (
-                <li key={t.id} className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+                <li key={t.id} className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
                   <div className="flex justify-between items-start gap-2">
                     <div>
                       <p className="font-medium text-white">{t.name}</p>
                       <p className="text-xs text-gray-400">{t.targetLabel} · {t.durationDays} days · 30% bonus</p>
                     </div>
                     {(t.participantType === 'team' && creatorTeams.length > 0) || (t.participantType === 'league' && creatorLeagues.length > 0) ? (
-                      <button type="button" onClick={() => openInvite(t)} className="shrink-0 text-sm py-1.5 px-3 rounded-lg bg-[#f3ba2f] text-black font-medium">Invite</button>
+                      <button type="button" onClick={() => openInvite(t)} className="shrink-0 text-sm py-1.5 px-3 rounded-lg bg-ura-gold text-black font-medium">Invite</button>
                     ) : (
                       <span className="text-xs text-gray-500">{t.participantType === 'team' ? 'Create a team' : 'Create a league'}</span>
                     )}

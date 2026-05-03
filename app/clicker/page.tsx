@@ -48,7 +48,7 @@ import Services from '@/components/Services';
 import Guild from '@/components/Guild';
 
 function EmptyPrimaryPage() {
-    return <div className="bg-black min-h-screen" />;
+    return <div className="bg-ura-page min-h-screen" />;
 }
 
 const MORE_VIEWS = new Set(['game', 'mine', 'collection', 'friends', 'airdrop', 'guild']);
@@ -108,7 +108,7 @@ function ClickerPage() {
     }, [currentView, isInitialized]);
 
     return (
-        <div className="bg-black min-h-screen text-white tg-safe-area-padding">
+        <div className="bg-ura-page min-h-screen text-white tg-safe-area-padding">
             {
                 isInitialized &&
                 <>
@@ -121,7 +121,7 @@ function ClickerPage() {
                 <button
                     type="button"
                     onClick={() => setCurrentView('earn')}
-                    className="fixed top-4 left-4 z-50 rounded-lg bg-black/65 border border-[#3d4046] px-3 py-1.5 text-sm font-semibold text-white"
+                    className="fixed top-4 left-4 z-50 rounded-lg bg-ura-navy/65 border border-ura-border/75 px-3 py-1.5 text-sm font-semibold text-white"
                 >
                     ← Back
                 </button>
@@ -184,7 +184,7 @@ export default function ClickerPageClientOnly() {
     }, []);
     if (!mounted) {
         return (
-            <div className="bg-black min-h-screen text-white flex items-center justify-center tg-safe-area-padding">
+            <div className="bg-ura-page min-h-screen text-white flex items-center justify-center tg-safe-area-padding">
                 <div className="w-8 h-8 border-4 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
             </div>
         );

@@ -76,7 +76,7 @@ const AdminPanel = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#1d2025] text-white p-8">
+        <div className="min-h-screen bg-ura-panel text-white p-8">
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-4xl font-bold text-[#f3ba2f]">Admin Panel</h1>
@@ -84,7 +84,7 @@ const AdminPanel = () => {
                         <button
                             type="button"
                             onClick={() => setShowMore((prev) => !prev)}
-                            className="text-sm px-4 py-2 rounded-lg bg-[#272a2f] hover:bg-[#3a3d42] transition-colors"
+                            className="text-sm px-4 py-2 rounded-lg bg-ura-panel-2 hover:bg-[#3a3d42] transition-colors"
                         >
                             {showMore ? 'Hide More' : 'More'}
                         </button>
@@ -107,14 +107,14 @@ const AdminPanel = () => {
                     {pearlSections.map((section) => (
                         <div
                             key={section.path}
-                            className="bg-[#272a2f] rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
+                            className="bg-ura-panel-2 rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
                             onClick={() => router.push(section.path)}
                         >
                             <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
                             <p className="text-gray-400 mb-4">{section.description}</p>
                             <Link
                                 href={section.path}
-                                className="inline-block bg-[#f3ba2f] text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
+                                className="inline-block bg-ura-gold text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
                             >
                                 Go to {section.title}
                             </Link>
@@ -132,14 +132,14 @@ const AdminPanel = () => {
                     {earnScreenSections.map((section) => (
                         <div
                             key={section.path}
-                            className="bg-[#272a2f] rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer border border-[#3f4248]"
+                            className="bg-ura-panel-2 rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer border border-[#3f4248]"
                             onClick={() => router.push(section.path)}
                         >
                             <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
                             <p className="text-gray-400 mb-4">{section.description}</p>
                             <Link
                                 href={section.path}
-                                className="inline-block bg-[#f3ba2f] text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
+                                className="inline-block bg-ura-gold text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
                             >
                                 Go to {section.title}
                             </Link>
@@ -159,14 +159,14 @@ const AdminPanel = () => {
                             {adminSections.map((section) => (
                                 <div
                                     key={section.path}
-                                    className="bg-[#272a2f] rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
+                                    className="bg-ura-panel-2 rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
                                     onClick={() => router.push(section.path)}
                                 >
                                     <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
                                     <p className="text-gray-400 mb-4">{section.description}</p>
                                     <Link
                                         href={section.path}
-                                        className="inline-block bg-[#f3ba2f] text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
+                                        className="inline-block bg-ura-gold text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
                                     >
                                         Go to {section.title}
                                     </Link>

@@ -69,14 +69,14 @@ export default function Navigation({ currentView, setCurrentView }: NavigationPr
     }
 
     return (
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] w-full max-w-xl bg-[#272a2f] flex justify-around items-center z-40 text-xs border-t border-[#43433b] max-h-24">
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] w-full max-w-xl bg-ura-panel-2 flex justify-around items-center z-40 text-xs border-t border-ura-border/60 max-h-24">
             {navItems.map((item) => (
                 <button
                     key={item.name}
                     onClick={() => handleViewChange(item.view)}
                     className="flex-1"
                 >
-                    <div className={`flex flex-col items-center justify-center ${currentView === item.view ? 'text-white bg-[#1c1f24]' : 'text-[#85827d]'} h-16 m-1 p-2 rounded-2xl`}>
+                    <div className={`flex flex-col items-center justify-center ${currentView === item.view ? 'text-white bg-ura-panel-3/80' : 'text-gray-400'} h-16 m-1 p-2 rounded-2xl`}>
                         <div className="w-8 h-8 relative">
                             {item.image && (
                                 <div className="w-full h-full relative">

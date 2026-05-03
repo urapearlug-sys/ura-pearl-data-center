@@ -258,8 +258,8 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-      <div className={`bg-[#272a2f] rounded-t-3xl p-6 w-full max-w-xl ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}>
+    <div className="fixed inset-0 bg-ura-page bg-opacity-50 flex items-end justify-center z-50">
+      <div className={`bg-ura-panel-2 rounded-t-3xl p-6 w-full max-w-xl ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}>
         <div className="flex justify-between items-center mb-4 gap-2">
           <button
             type="button"
@@ -285,7 +285,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
           return imgSrc ? (
             <Image src={imgSrc} alt={localTask.title} width={80} height={80} className="mx-auto mb-4 rounded-lg object-contain" />
           ) : (
-            <div className="w-20 h-20 mx-auto mb-4 rounded-lg bg-[#272a2f] flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-lg bg-ura-panel-2 flex items-center justify-center">
               <IceCube className="w-10 h-10 text-[#f3ba2f]" />
             </div>
           );
@@ -340,7 +340,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
               value={answerInput}
               onChange={(e) => setAnswerInput(e.target.value)}
               placeholder="Enter the answer from the video"
-              className="w-full bg-[#1d2025] border border-[#3d4046] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-[#f3ba2f] focus:outline-none"
+              className="w-full bg-ura-panel border border-ura-border/75 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-[#f3ba2f] focus:outline-none"
               autoComplete="off"
             />
           </div>
@@ -353,7 +353,7 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
               value={redeemCodeInput}
               onChange={(e) => setRedeemCodeInput(e.target.value)}
               placeholder="Enter the code"
-              className="w-full bg-[#1d2025] border border-[#3d4046] rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-[#f3ba2f] focus:outline-none"
+              className="w-full bg-ura-panel border border-ura-border/75 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-[#f3ba2f] focus:outline-none"
               autoComplete="off"
             />
           </div>

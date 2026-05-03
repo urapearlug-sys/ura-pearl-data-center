@@ -72,8 +72,8 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start flex-shrink-0">
           <div>
             <h2 className="text-xl font-bold text-white">Donation Center</h2>
@@ -83,7 +83,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 pb-8">
-          <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
+          <div className="bg-ura-panel-2 rounded-xl p-4 mb-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-400">Available</span>
               <span className="text-[#f3ba2f] font-bold flex items-center gap-1">
@@ -103,7 +103,7 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder={`Min ${formatNumber(DONATION_MIN)} PEARLS`}
-              className="w-full bg-[#272a2f] rounded-lg px-4 py-3 text-white placeholder-gray-500"
+              className="w-full bg-ura-panel-2 rounded-lg px-4 py-3 text-white placeholder-gray-500"
               min={DONATION_MIN}
             />
             <button
@@ -124,9 +124,9 @@ export default function DonationPopup({ onClose }: DonationPopupProps) {
           ) : donors.length === 0 ? (
             <p className="text-gray-500 text-sm">No donors yet. Be the first!</p>
           ) : (
-            <div className="space-y-2 max-h-56 overflow-y-auto rounded-xl bg-[#272a2f] p-3">
+            <div className="space-y-2 max-h-56 overflow-y-auto rounded-xl bg-ura-panel-2 p-3">
               {donors.map((d, i) => (
-                <div key={`donor-${i}-${d.totalDonatedPoints}-${String(d.name).slice(0, 20)}`} className="flex justify-between items-center py-2 px-3 rounded-lg bg-[#1d2025]">
+                <div key={`donor-${i}-${d.totalDonatedPoints}-${String(d.name).slice(0, 20)}`} className="flex justify-between items-center py-2 px-3 rounded-lg bg-ura-panel">
                   <span className="text-white font-medium truncate">{d.name}</span>
                   <span className="text-[#f3ba2f] font-semibold text-sm whitespace-nowrap ml-2">
                     {formatNumber(Number(d.totalDonatedPoints) || 0)} PEARLS

@@ -117,8 +117,8 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-        <div className="bg-[#1d2025] rounded-xl p-8 flex flex-col items-center gap-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60">
+        <div className="bg-ura-panel rounded-xl p-8 flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-2 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
           <p className="text-gray-400">Loading Matrix…</p>
         </div>
@@ -127,11 +127,11 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-[#1d2025] rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
-        <div className="p-4 border-b border-gray-700 flex justify-between items-center sticky top-0 bg-[#1d2025] z-10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60 p-4">
+      <div className="bg-ura-panel rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
+        <div className="p-4 border-b border-gray-700 flex justify-between items-center sticky top-0 bg-ura-panel z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#272a2f] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-ura-panel-2 flex items-center justify-center">
               <Image src={dailyCombo} alt="Matrix" width={24} height={24} className="rounded" />
             </div>
             <div>
@@ -162,7 +162,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
                 <span className="text-[#f3ba2f]">+{formatNumber(status.reward)} PEARLS</span>
               </div>
 
-              <div className="bg-[#272a2f] rounded-xl p-3 min-h-[52px] border border-[#3d4046]">
+              <div className="bg-ura-panel-2 rounded-xl p-3 min-h-[52px] border border-ura-border/75">
                 <p className="text-gray-500 text-xs mb-1">Your combo (click to remove)</p>
                 <div className="flex flex-wrap gap-2 items-center">
                   {selected.map((slug, i) => {
@@ -173,7 +173,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
                         key={`${slug}-${i}`}
                         type="button"
                         onClick={() => removeAt(i)}
-                        className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-[#1d2025] text-white text-sm font-medium hover:bg-red-500/20"
+                        className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-ura-panel text-white text-sm font-medium hover:bg-red-500/20"
                       >
                         {imgSrc ? <Image src={imgSrc} alt={card?.label ?? slug} width={24} height={24} className="rounded object-cover" /> : null}
                         <span>{card?.label ?? slug}</span>
@@ -195,9 +195,9 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
                       type="button"
                       onClick={() => addCard(card.slug)}
                       disabled={selected.length >= 3}
-                      className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-[#272a2f] text-white font-medium border border-[#3d4046] hover:border-[#f3ba2f]/50 disabled:opacity-50 disabled:cursor-not-allowed min-w-0 w-full"
+                      className="flex flex-col items-center justify-center gap-1 p-2 rounded-xl bg-ura-panel-2 text-white font-medium border border-ura-border/75 hover:border-[#f3ba2f]/50 disabled:opacity-50 disabled:cursor-not-allowed min-w-0 w-full"
                     >
-                      <span className="w-10 h-10 flex items-center justify-center shrink-0 rounded-lg bg-[#1d2025] overflow-hidden">
+                      <span className="w-10 h-10 flex items-center justify-center shrink-0 rounded-lg bg-ura-panel overflow-hidden">
                         {imgSrc ? (
                           <Image src={imgSrc} alt={card.label} width={40} height={40} className="rounded-lg object-contain w-10 h-10" />
                         ) : (
@@ -217,7 +217,7 @@ export default function DailyComboPopup({ onClose }: DailyComboPopupProps) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={selected.length !== 3 || isSubmitting}
-                className="w-full py-3 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Checking…' : 'Submit combo'}
               </button>

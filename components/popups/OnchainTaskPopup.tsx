@@ -134,8 +134,8 @@ const OnchainTaskPopup: React.FC<OnchainTaskPopupProps> = React.memo(({ task, on
     }, [onClose]);
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-            <div className={`bg-[#272a2f] rounded-t-3xl p-6 w-full max-w-xl ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}>
+        <div className="fixed inset-0 bg-ura-page bg-opacity-50 flex items-end justify-center z-50">
+            <div className={`bg-ura-panel-2 rounded-t-3xl p-6 w-full max-w-xl ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}>
                 <div className="flex justify-between items-center mb-4">
                     <div className="w-8"></div>
                     <h2 className="text-3xl text-white text-center font-bold">{task.collectionMetadata.name}</h2>

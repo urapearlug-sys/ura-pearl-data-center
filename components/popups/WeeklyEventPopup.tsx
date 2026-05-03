@@ -107,8 +107,8 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
     (t.referrals == null || t.referrals <= 0 || referralsThisWeek >= t.referrals);
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-      <div className="bg-[#1d2025] rounded-t-3xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col animate-slide-up">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+      <div className="bg-ura-panel rounded-t-3xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col animate-slide-up">
         <div className="px-5 pt-6 pb-4 flex justify-between items-start flex-shrink-0">
           <div>
             <h2 className="text-xl font-bold text-white">Weekly Challenge</h2>
@@ -122,7 +122,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
             <p className="text-center text-gray-400 py-8">Loading...</p>
           ) : (
             <>
-              <div className="bg-[#272a2f] rounded-xl p-4 mb-4">
+              <div className="bg-ura-panel-2 rounded-xl p-4 mb-4">
                 <p className="text-gray-400 text-sm">Your progress (this week only)</p>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
                   <span>{formatNumber(progress.taps)} taps</span>
@@ -144,7 +144,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
                     <div
                       key={i}
                       className={`rounded-xl p-4 flex justify-between items-center ${
-                        claimed ? 'bg-emerald-500/20 border border-emerald-500/40' : unlocked ? 'bg-[#f3ba2f]/20 border border-[#f3ba2f]/40' : 'bg-[#272a2f]'
+                        claimed ? 'bg-emerald-500/20 border border-emerald-500/40' : unlocked ? 'bg-ura-gold/20 border border-[#f3ba2f]/40' : 'bg-ura-panel-2'
                       }`}
                     >
                       <div>
@@ -162,7 +162,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
                           <button
                             onClick={() => handleClaim(tierNum)}
                             disabled={claimingTier === tierNum}
-                            className="px-4 py-2 rounded-lg bg-[#f3ba2f] text-black font-bold text-sm disabled:opacity-50"
+                            className="px-4 py-2 rounded-lg bg-ura-gold text-black font-bold text-sm disabled:opacity-50"
                           >
                             {claimingTier === tierNum ? '...' : 'Claim'}
                           </button>
@@ -184,7 +184,7 @@ export default function WeeklyEventPopup({ onClose }: WeeklyEventPopupProps) {
               )}
               <div className="space-y-1 max-h-48 overflow-y-auto">
                 {leaderboard.map((e) => (
-                  <div key={e.rank} className="flex justify-between items-center py-2 px-3 rounded-lg bg-[#272a2f]">
+                  <div key={e.rank} className="flex justify-between items-center py-2 px-3 rounded-lg bg-ura-panel-2">
                     <span className="font-bold w-8">#{e.rank}</span>
                     <span className="flex-1 truncate mx-2">{e.name || 'Anonymous'}</span>
                     <span className="text-[#f3ba2f] text-sm">{formatNumber(e.taps)} taps</span>

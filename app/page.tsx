@@ -23,7 +23,7 @@ import SupportChatWidget from '@/components/SupportChatWidget';
 
 export default function Home() {
   return (
-    <div className="relative bg-[#1d2025] flex justify-center items-center min-h-screen min-h-[100dvh]">
+    <div className="relative bg-ura-page flex justify-center items-center min-h-screen min-h-[100dvh]">
       <div className="w-full max-w-xl text-white flex flex-col items-center px-4 py-8">
         <div className="w-64 h-64 rounded-full circle-outer p-2 mb-8">
           <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">

@@ -271,12 +271,12 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
   const e = embedded;
 
   return (
-    <div className={embedded ? '' : 'bg-black flex justify-center min-h-screen'}>
-      <div className={embedded ? 'w-full text-white flex flex-col' : 'w-full bg-black text-white flex flex-col max-w-xl pb-24'}>
+    <div className={embedded ? '' : 'bg-ura-page flex justify-center min-h-screen'}>
+      <div className={embedded ? 'w-full text-white flex flex-col' : 'w-full bg-ura-page text-white flex flex-col max-w-xl pb-24'}>
         <div className={embedded ? 'space-y-3' : 'px-4 pt-4 space-y-4'}>
           <h1 className={`font-bold text-center ${e ? 'text-lg' : 'text-2xl'}`}>My Assets</h1>
 
-          <div className={`rounded-3xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] ${e ? 'p-3' : 'p-4'}`}>
+          <div className={`rounded-3xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 ${e ? 'p-3' : 'p-4'}`}>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className={`text-gray-400 ${e ? 'text-xs' : 'text-sm'}`}>Total Assets</p>
@@ -300,7 +300,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               type="button"
               onClick={handleWithdraw}
               disabled={withdrawing}
-              className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] text-center ${e ? 'py-2' : 'py-3'}`}
+              className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 text-center ${e ? 'py-2' : 'py-3'}`}
             >
               <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>{withdrawing ? 'Submitting...' : 'Withdraw'}</p>
             </button>
@@ -308,7 +308,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               type="button"
               onClick={handleConvert}
               disabled={converting || !canConvert}
-              className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] text-center disabled:opacity-60 ${e ? 'py-2' : 'py-3'}`}
+              className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 text-center disabled:opacity-60 ${e ? 'py-2' : 'py-3'}`}
             >
               <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>{converting ? 'Converting...' : 'White→Blue'}</p>
             </button>
@@ -318,7 +318,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                 triggerHapticFeedback(window);
                 setCurrentView('airdrop');
               }}
-              className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] text-center ${e ? 'py-2' : 'py-3'}`}
+              className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 text-center ${e ? 'py-2' : 'py-3'}`}
             >
               <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>Drops</p>
             </button>
@@ -333,7 +333,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             ].map((item) => (
               <div
                 key={item.code}
-                className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] px-3 flex items-center justify-between gap-3 ${e ? 'py-2' : 'py-3'}`}
+                className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 px-3 flex items-center justify-between gap-3 ${e ? 'py-2' : 'py-3'}`}
               >
                 <div className={`flex items-center min-w-0 ${e ? 'gap-2' : 'gap-3'}`}>
                   <Image
@@ -353,9 +353,9 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             ))}
           </section>
 
-          <section className={`rounded-2xl border border-[#2d2f38] bg-[#050608] ${e ? 'p-3' : 'p-4'}`}>
+          <section className={`rounded-2xl border border-ura-border/85 bg-ura-navy-deep/95 ${e ? 'p-3' : 'p-4'}`}>
             <h2 className={`font-bold text-white ${e ? 'text-sm mb-2' : 'text-base mb-3'}`}>Conversions</h2>
-            <div className="rounded-full border border-[#1f2227] bg-[#0f1115] p-1 grid grid-cols-2 gap-1">
+            <div className="rounded-full border border-ura-line/70 bg-ura-navy-deep/90 p-1 grid grid-cols-2 gap-1">
               <button
                 type="button"
                 onClick={() => {
@@ -391,7 +391,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             </div>
 
             {exchangeMode === 'whiteBlue' ? (
-              <div className={`rounded-2xl border border-[#1f2227] bg-[#0f1115] divide-y divide-[#22252d] overflow-hidden ${e ? 'mt-3' : 'mt-5'}`}>
+              <div className={`rounded-2xl border border-ura-line/70 bg-ura-navy-deep/90 divide-y divide-ura-line/55 overflow-hidden ${e ? 'mt-3' : 'mt-5'}`}>
                 <div className={`flex items-center justify-between gap-3 ${e ? 'p-2.5' : 'p-3'}`}>
                   <div className={`flex items-center min-w-0 ${e ? 'gap-2' : 'gap-3'}`}>
                     <Image
@@ -438,7 +438,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                 </div>
               </div>
             ) : (
-              <div className={`rounded-2xl border border-[#1f2227] bg-[#0f1115] divide-y divide-[#22252d] overflow-hidden ${e ? 'mt-3' : 'mt-5'}`}>
+              <div className={`rounded-2xl border border-ura-line/70 bg-ura-navy-deep/90 divide-y divide-ura-line/55 overflow-hidden ${e ? 'mt-3' : 'mt-5'}`}>
                 <div className={`flex items-center justify-between gap-3 ${e ? 'p-2.5' : 'p-3'}`}>
                   <div className={`flex items-center min-w-0 ${e ? 'gap-2' : 'gap-3'}`}>
                     <Image
@@ -498,7 +498,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                 (exchangeMode === 'whiteBlue' && !canConvert) ||
                 (exchangeMode === 'whiteGolden' && !canWhiteToGolden)
               }
-              className={`mt-4 w-full rounded-full bg-[#0e1014] border border-[#1f2227] font-semibold text-gray-300 disabled:opacity-50 ${e ? 'py-2.5 text-sm' : 'py-3 text-base'}`}
+              className={`mt-4 w-full rounded-full bg-ura-navy-deep border border-ura-line/70 font-semibold text-gray-300 disabled:opacity-50 ${e ? 'py-2.5 text-sm' : 'py-3 text-base'}`}
             >
               {converting ? 'Processing...' : 'Convert'}
             </button>
@@ -513,10 +513,10 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             )}
           </section>
 
-          <section className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] ${e ? 'p-3' : 'p-4'}`}>
+          <section className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 ${e ? 'p-3' : 'p-4'}`}>
             <h2 className={`font-bold leading-tight ${e ? 'text-base' : 'text-3xl'}`}>Send &amp; Receive Pearls</h2>
 
-            <div className={`rounded-2xl border border-[#2d2f38] bg-[#171b24] p-1 grid grid-cols-4 gap-1 ${e ? 'mt-3' : 'mt-4'}`}>
+            <div className={`rounded-2xl border border-ura-border/85 bg-ura-panel-2 p-1 grid grid-cols-4 gap-1 ${e ? 'mt-3' : 'mt-4'}`}>
               {transferTabs.map((tab) => (
                 <button
                   key={tab.key}
@@ -529,7 +529,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                     e ? 'py-2 text-[10px] leading-tight px-0.5' : 'py-2.5 text-sm'
                   } ${
                     transferTab === tab.key
-                      ? 'bg-[#f3ba2f] text-black'
+                      ? 'bg-ura-gold text-black'
                       : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -538,12 +538,12 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               ))}
             </div>
 
-            <div className={`rounded-2xl border border-[#2d2f38] bg-[#222731] ${e ? 'mt-3 p-3' : 'mt-4 p-4'}`}>
+            <div className={`rounded-2xl border border-ura-border/85 bg-ura-panel-2 ${e ? 'mt-3 p-3' : 'mt-4 p-4'}`}>
               {transferTab === 'send' && (
                 <div className={e ? 'space-y-3' : 'space-y-4'}>
                   <div>
                     <p className={`font-semibold text-[#b0b6c2] ${e ? 'text-sm' : 'text-lg'}`}>Recipient Telegram ID</p>
-                    <div className={`rounded-2xl border border-[#3c424f] bg-[#1a1f28] ${e ? 'mt-2 px-3 py-2.5' : 'mt-3 px-5 py-4'}`}>
+                    <div className={`rounded-2xl border border-ura-border/70 bg-ura-panel/85 ${e ? 'mt-2 px-3 py-2.5' : 'mt-3 px-5 py-4'}`}>
                       <input
                         type="text"
                         value={sendRecipientTelegramId}
@@ -556,7 +556,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
 
                   <div>
                     <p className={`font-semibold text-[#b0b6c2] ${e ? 'text-sm' : 'text-lg'}`}>Amount (pearls)</p>
-                    <div className={`rounded-2xl border border-[#3c424f] bg-[#1a1f28] ${e ? 'mt-2 px-3 py-2.5' : 'mt-3 px-5 py-4'}`}>
+                    <div className={`rounded-2xl border border-ura-border/70 bg-ura-panel/85 ${e ? 'mt-2 px-3 py-2.5' : 'mt-3 px-5 py-4'}`}>
                       <input
                         type="number"
                         min={1}
@@ -569,7 +569,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                     <p className={`text-gray-400 ${e ? 'text-xs mt-1.5' : 'text-sm mt-2'}`}>Min 1 pearl. Send by Telegram ID.</p>
                   </div>
 
-                  <label className={`block rounded-xl border border-[#3a3d42] bg-[#1f2229] ${e ? 'p-2' : 'p-3'}`}>
+                  <label className={`block rounded-xl border border-ura-line/80 bg-ura-panel/90 ${e ? 'p-2' : 'p-3'}`}>
                     <span className="inline-flex items-center">
                       <Image
                         src={sendPearlType === 'white' ? pearlWhite : pearlGolden}
@@ -584,8 +584,8 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                       onChange={(e) => setSendPearlType(e.target.value as PearlType)}
                       className={`mt-1 w-full bg-transparent outline-none ${e ? 'text-sm' : 'text-lg'}`}
                     >
-                      <option value="white" className="bg-[#1f2229]">White Pearl</option>
-                      <option value="goldish" className="bg-[#1f2229]">Golden Pearl</option>
+                      <option value="white" className="bg-ura-panel/90">White Pearl</option>
+                      <option value="goldish" className="bg-ura-panel/90">Golden Pearl</option>
                     </select>
                   </label>
 
@@ -593,7 +593,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
                     type="button"
                     onClick={handleSend}
                     disabled={sending}
-                    className={`w-full rounded-2xl bg-[#f3ba2f] text-black font-semibold disabled:opacity-60 ${e ? 'py-2.5 text-sm' : 'py-3 text-lg'}`}
+                    className={`w-full rounded-2xl bg-ura-gold text-black font-semibold disabled:opacity-60 ${e ? 'py-2.5 text-sm' : 'py-3 text-lg'}`}
                   >
                     {sending ? 'Sending...' : 'Send Now'}
                   </button>
@@ -603,7 +603,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               {transferTab === 'receive' && (
                 <div className="space-y-3">
                   <p className={`text-gray-300 ${e ? 'text-sm' : 'text-xl'}`}>Receive using your Telegram ID.</p>
-                  <div className={`rounded-2xl border border-[#3c424f] bg-[#1a1f28] ${e ? 'px-3 py-3' : 'px-5 py-4'}`}>
+                  <div className={`rounded-2xl border border-ura-border/70 bg-ura-panel/85 ${e ? 'px-3 py-3' : 'px-5 py-4'}`}>
                     <p className={`text-gray-400 ${e ? 'text-xs' : 'text-sm'}`}>Your Telegram ID</p>
                     <p className={`font-semibold mt-1 tabular-nums break-all ${e ? 'text-lg' : 'text-3xl'}`}>
                       {myTelegramId || 'Not detected yet'}
@@ -622,7 +622,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               {transferTab === 'history' && (
                 <div className="space-y-2">
                   {history.map((h) => (
-                    <div key={h.id} className="text-sm rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 flex items-center justify-between gap-2">
+                    <div key={h.id} className="text-sm rounded-lg border border-ura-line/80 bg-ura-panel/90 px-3 py-2 flex items-center justify-between gap-2">
                       <span className="text-gray-300 truncate">{h.eventType || 'EVENT'}</span>
                       <span className="text-white tabular-nums">{Math.floor(h.amount || 0)}</span>
                     </div>
@@ -634,7 +634,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               {transferTab === 'recent' && (
                 <div className="space-y-2">
                   {history.slice(0, 5).map((h) => (
-                    <div key={h.id} className="text-sm rounded-lg border border-[#3a3d42] bg-[#1f2229] px-3 py-2 flex items-center justify-between gap-2">
+                    <div key={h.id} className="text-sm rounded-lg border border-ura-line/80 bg-ura-panel/90 px-3 py-2 flex items-center justify-between gap-2">
                       <span className="text-gray-300 truncate">{h.eventType || 'EVENT'}</span>
                       <span className="text-white tabular-nums">{Math.floor(h.amount || 0)}</span>
                     </div>
@@ -645,14 +645,14 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
             </div>
           </section>
 
-          <section className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] ${e ? 'p-2.5' : 'p-3'}`}>
+          <section className={`rounded-2xl border border-ura-border/85 bg-gradient-to-r from-ura-panel-2 via-ura-panel-3 to-ura-panel-2 ${e ? 'p-2.5' : 'p-3'}`}>
             <div className="flex items-center justify-between">
               <h2 className={`font-bold ${e ? 'text-sm' : 'text-base'}`}>History</h2>
               {loading ? <span className={`text-gray-400 ${e ? 'text-[10px]' : 'text-xs'}`}>Loading...</span> : null}
             </div>
             <div className="mt-2 space-y-1.5">
               {history.slice(0, 6).map((h) => (
-                <div key={h.id} className="text-xs rounded-lg border border-[#3a3d42] bg-[#1f2229] px-2 py-1.5 flex items-center justify-between gap-2">
+                <div key={h.id} className="text-xs rounded-lg border border-ura-line/80 bg-ura-panel/90 px-2 py-1.5 flex items-center justify-between gap-2">
                   <span className="text-gray-300 truncate">{h.eventType || 'EVENT'}</span>
                   <span className="text-white tabular-nums">{Math.floor(h.amount || 0)}</span>
                 </div>

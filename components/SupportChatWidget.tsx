@@ -154,7 +154,7 @@ export default function SupportChatWidget({ placement = 'landing' }: SupportChat
             {error ? <p className="text-[11px] text-amber-300/95 px-1">{error}</p> : null}
           </div>
 
-          <div className="border-t border-white/10 px-2 py-2 space-y-2 bg-[#0f1115]">
+          <div className="border-t border-white/10 px-2 py-2 space-y-2 bg-ura-navy-deep/90">
             <button
               type="button"
               onClick={() => {
@@ -253,7 +253,7 @@ export default function SupportChatWidget({ placement = 'landing' }: SupportChat
       >
         <span className="text-sm font-bold tracking-tight drop-shadow-sm">Help</span>
         <span
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-black/30 text-[1.35rem] leading-none"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-ura-navy/30 text-[1.35rem] leading-none"
           aria-hidden
         >
           💬

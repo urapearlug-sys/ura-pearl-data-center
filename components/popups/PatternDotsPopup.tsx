@@ -226,7 +226,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
               <button
                 type="button"
                 onClick={handleClear}
-                className="px-5 py-2.5 rounded-xl bg-[#272a2f] border border-[#3d4046] text-gray-300 font-medium hover:bg-[#3a3d42] transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-gray-300 font-medium hover:bg-[#3a3d42] transition-colors"
               >
                 Clear
               </button>
@@ -234,7 +234,7 @@ export default function PatternDotsPopup({ onClose, onSuccess, claimedToday, rew
                 type="button"
                 onClick={handleSubmit}
                 disabled={path.length < PATTERN_MIN_DOTS || path.length > PATTERN_MAX_DOTS || isSubmitting}
-                className="px-6 py-2.5 rounded-xl bg-[#f3ba2f] text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#f4c141] transition-colors"
+                className="px-6 py-2.5 rounded-xl bg-ura-gold text-black font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#f4c141] transition-colors"
               >
                 {isSubmitting ? 'Checking…' : `Submit (${path.length} dots)`}
               </button>

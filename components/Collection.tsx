@@ -110,8 +110,8 @@ export default function Collection({ setCurrentView }: CollectionProps) {
   const ownedCount = cards.filter((c) => c.owned).length;
 
   return (
-    <div className="bg-black min-h-screen">
-      <div className="w-full max-w-xl mx-auto bg-[#1d2025] min-h-screen">
+    <div className="bg-ura-page min-h-screen">
+      <div className="w-full max-w-xl mx-auto bg-ura-panel min-h-screen">
         <div className="pt-4 pb-24 px-4">
           <h1 className="text-2xl font-bold text-center text-white mb-2">Collection</h1>
           <p className="text-gray-400 text-center text-sm mb-6">
@@ -137,10 +137,10 @@ export default function Collection({ setCurrentView }: CollectionProps) {
                         className={`rounded-xl p-3 flex flex-col items-center border-2 transition-all ${
                           owned
                             ? 'border-emerald-500/50 bg-emerald-500/10'
-                            : 'border-[#3d4046] bg-[#272a2f] opacity-70'
+                            : 'border-ura-border/75 bg-ura-panel-2 opacity-70'
                         }`}
                       >
-                        <div className="w-12 h-12 rounded-lg bg-[#1d2025] flex items-center justify-center mb-2 overflow-hidden">
+                        <div className="w-12 h-12 rounded-lg bg-ura-panel flex items-center justify-center mb-2 overflow-hidden">
                           {img ? (
                             <Image src={img} alt={displayName} width={40} height={40} className="rounded" />
                           ) : (

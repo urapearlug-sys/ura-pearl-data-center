@@ -364,7 +364,7 @@ export default function AdminTasks() {
     };
 
     return (
-        <div className="bg-[#1d2025] text-white min-h-screen p-8">
+        <div className="bg-ura-panel text-white min-h-screen p-8">
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-[#f3ba2f]">Manage Tasks</h1>
 
@@ -373,7 +373,7 @@ export default function AdminTasks() {
                         const msg = getFirstErrorMessage(err as Record<string, unknown>);
                         showToast(msg || 'Please fill all required fields and fix any errors below.', 'error');
                     })}
-                    className="mb-12 bg-[#272a2f] rounded-lg p-6"
+                    className="mb-12 bg-ura-panel-2 rounded-lg p-6"
                 >
                     <h2 className="text-2xl font-semibold mb-6">{editingTask ? 'Edit Task' : 'Add New Task'}</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -436,7 +436,7 @@ export default function AdminTasks() {
                                         key={cat}
                                         type="button"
                                         onClick={() => { setValue("category", cat, { shouldValidate: true }); }}
-                                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${watch("category") === cat ? 'bg-[#f3ba2f]/20 ring-2 ring-[#f3ba2f] text-white' : 'bg-[#3a3d42] hover:bg-[#4a4d52]'}`}
+                                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${watch("category") === cat ? 'bg-ura-gold/20 ring-2 ring-[#f3ba2f] text-white' : 'bg-[#3a3d42] hover:bg-[#4a4d52]'}`}
                                     >
                                         {cat}
                                     </button>
@@ -488,7 +488,7 @@ export default function AdminTasks() {
                                         type="button"
                                         onClick={() => handleImageClick(name)}
                                         className={`p-1 rounded transition-colors ${imageValue === name
-                                            ? 'bg-[#f3ba2f] hover:bg-[#f4c141]'
+                                            ? 'bg-ura-gold hover:bg-[#f4c141]'
                                             : 'bg-[#3a3d42] hover:bg-[#4a4d52]'
                                             }`}
                                         title={imageDisplayNames[name] || name}
@@ -564,7 +564,7 @@ export default function AdminTasks() {
                                     className="w-full bg-[#3a3d42] p-3 rounded-lg border border-amber-500/30 text-white mb-3"
                                 >
                                     {VIDEO_ANSWER_PRESETS.map((p) => (
-                                        <option key={p.id} value={p.id} className="bg-[#1d2025]">
+                                        <option key={p.id} value={p.id} className="bg-ura-panel">
                                             {p.label}
                                         </option>
                                     ))}
@@ -665,15 +665,15 @@ export default function AdminTasks() {
                                 Cancel
                             </button>
                         )}
-                        <button type="submit" className="px-6 py-2 bg-[#f3ba2f] text-black rounded-lg hover:bg-[#f4c141] transition-colors">
+                        <button type="submit" className="px-6 py-2 bg-ura-gold text-black rounded-lg hover:bg-[#f4c141] transition-colors">
                             {editingTask ? 'Update Task' : 'Add Task'}
                         </button>
                     </div>
                 </form>
 
-                <div className="bg-[#272a2f] rounded-lg p-6">
+                <div className="bg-ura-panel-2 rounded-lg p-6">
                     {tasks.some((t) => t.type === TaskType.VISIT && (t.taskData as { correctAnswer?: string })?.correctAnswer) && (
-                        <div className="mb-6 p-4 rounded-xl bg-[#1d2025] border border-[#3d4046]">
+                        <div className="mb-6 p-4 rounded-xl bg-ura-panel border border-ura-border/75">
                             <h3 className="text-lg font-semibold text-[#f3ba2f] mb-3">Video task answers (quick reference)</h3>
                             <p className="text-sm text-gray-400 mb-3">Correct answers set for Special / video tasks. Users must enter these after watching to get the reward.</p>
                             <div className="space-y-2">
@@ -778,7 +778,7 @@ export default function AdminTasks() {
                                 if (sectorTasks.length === 0) return null;
                                 return (
                                     <div key={sector}>
-                                        <h3 className="text-lg font-semibold text-[#f3ba2f] mb-4 pb-2 border-b border-[#3d4046]">
+                                        <h3 className="text-lg font-semibold text-[#f3ba2f] mb-4 pb-2 border-b border-ura-border/75">
                                             {sector} ({sectorTasks.length})
                                         </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -837,7 +837,7 @@ export default function AdminTasks() {
                                                         <button
                                                             type="button"
                                                             onClick={() => handleEdit(task)}
-                                                            className="flex-1 min-w-0 px-4 py-2 bg-[#f3ba2f] text-black rounded-lg hover:bg-[#f4c141] transition-colors"
+                                                            className="flex-1 min-w-0 px-4 py-2 bg-ura-gold text-black rounded-lg hover:bg-[#f4c141] transition-colors"
                                                         >
                                                             Edit
                                                         </button>

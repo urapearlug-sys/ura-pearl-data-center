@@ -135,17 +135,17 @@ export default function Friends() {
   }, [userTelegramInitData, showToast]);
 
   return (
-    <div className="bg-black flex justify-center min-h-screen">
-      <div className="w-full bg-black text-white font-bold flex flex-col max-w-xl">
-        <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-          <div className="mt-[2px] bg-[#1d2025] rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
             <div className="px-4 pt-1 pb-36">
               <div className="relative">
                 <h1 className="text-2xl text-center mt-4 mb-2">Invite Friends!</h1>
                 <p className="text-center text-gray-400 mb-8">You and your friend will receive bonuses</p>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center bg-[#272a2f] rounded-lg p-4">
+                  <div className="flex justify-between items-center bg-ura-panel-2 rounded-lg p-4">
                     <div className="flex items-center">
                       <Image src={baseGift} alt="Gift" width={40} height={40} />
                       <div className="flex flex-col ml-2">
@@ -158,7 +158,7 @@ export default function Friends() {
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center bg-[#272a2f] rounded-lg p-4">
+                  <div className="flex justify-between items-center bg-ura-panel-2 rounded-lg p-4">
                     <div className="flex items-center">
                       <Image src={bigGift} alt="Premium Gift" width={40} height={40} />
                       <div className="flex flex-col ml-2">
@@ -192,7 +192,7 @@ export default function Friends() {
                       </div>
                     </div>
                     {LEVELS.slice(1).map((level, index) => (
-                      <div key={index} className="flex items-center bg-[#272a2f] rounded-lg p-4">
+                      <div key={index} className="flex items-center bg-ura-panel-2 rounded-lg p-4">
                         <div className="flex items-center flex-1">
                           <Image src={level.smallImage} alt={level.name} width={40} height={40} className="rounded-lg mr-2" />
                           <span className="font-medium text-white">{level.name}</span>
@@ -231,7 +231,7 @@ export default function Friends() {
                       // Skeleton loading animation
                       <div className="space-y-2 animate-pulse">
                         {[...Array(3)].map((_, index) => (
-                          <div key={index} className="flex justify-between items-center bg-[#272a2f] rounded-lg p-4">
+                          <div key={index} className="flex justify-between items-center bg-ura-panel-2 rounded-lg p-4">
                             <div className="flex items-center space-x-3">
                               <div className="w-12 h-12 bg-gray-700 rounded-full"></div>
                               <div className="space-y-2">
@@ -246,7 +246,7 @@ export default function Friends() {
                     ) : referrals.length > 0 ? (
                       <ul className="space-y-2">
                         {referrals.map((referral: Referral) => (
-                          <li key={referral.id} className="flex justify-between items-center bg-[#272a2f] rounded-lg p-4">
+                          <li key={referral.id} className="flex justify-between items-center bg-ura-panel-2 rounded-lg p-4">
                             <div className="flex items-center space-x-3">
                               <Image src={referral.levelImage} alt={referral.levelName} width={48} height={48} className="rounded-full" />
                               <div>
@@ -259,7 +259,7 @@ export default function Friends() {
                         ))}
                       </ul>
                     ) : (
-                      <div className="text-center text-gray-400 bg-[#272a2f] rounded-lg p-4">
+                      <div className="text-center text-gray-400 bg-ura-panel-2 rounded-lg p-4">
                         You haven&apos;t invited anyone yet
                       </div>
                     )}

@@ -14,9 +14,9 @@ export default function TeamLevelsPopup({ onClose }: TeamLevelsPopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Teams – how it works</h2>
           <button
             type="button"
@@ -32,16 +32,16 @@ export default function TeamLevelsPopup({ onClose }: TeamLevelsPopupProps) {
             Teams do not have tiers like leagues. Anyone can create or join a team. Only teams can create leagues.
           </p>
           <ul className="space-y-3 text-sm text-gray-300">
-            <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+            <li className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
               <strong className="text-white">Create team</strong> – 1,000,000 PEARLS commitment (team is lower rank than league). You get an invite code to share so others can join your team.
             </li>
-            <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+            <li className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
               <strong className="text-white">Join team</strong> – Enter the team invite code (no fee). Get the code from the person who created the team, or use Browse teams to discover teams.
             </li>
-            <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+            <li className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
               <strong className="text-white">Create league</strong> – Only a team can create a league (10M PEARLS). Create a team first, then use it to create a league.
             </li>
-            <li className="p-3 rounded-xl bg-[#252836] border border-[#2d2f38]">
+            <li className="p-3 rounded-xl bg-[#252836] border border-ura-border/85">
               <strong className="text-white">League levels</strong> – Leagues use tiers (Bronze to Legend). Tap &quot;League levels&quot; in the Leagues tab to see all tiers.
             </li>
           </ul>

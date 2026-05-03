@@ -80,7 +80,7 @@ export default function AdminFeesCollection() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1d2025] text-white p-8">
+      <div className="min-h-screen bg-ura-panel text-white p-8">
         <div className="max-w-5xl mx-auto">
           <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">← Back to Admin</Link>
           <p className="text-gray-400">Loading fees collection data...</p>
@@ -91,7 +91,7 @@ export default function AdminFeesCollection() {
 
   if (sectionPasswordRequired) {
     return (
-      <div className="min-h-screen bg-[#1d2025] text-white p-8">
+      <div className="min-h-screen bg-ura-panel text-white p-8">
         <div className="max-w-5xl mx-auto">
           <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">← Back to Admin</Link>
           <p className="text-amber-400 mb-2">Section password required.</p>
@@ -103,7 +103,7 @@ export default function AdminFeesCollection() {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-[#1d2025] text-white p-8">
+      <div className="min-h-screen bg-ura-panel text-white p-8">
         <div className="max-w-5xl mx-auto">
           <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">← Back to Admin</Link>
           <p className="text-red-400">Failed to load data.</p>
@@ -138,7 +138,7 @@ export default function AdminFeesCollection() {
   const tabAmount = tabTransactions.reduce((sum, t) => sum + t.amount, 0);
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
@@ -151,7 +151,7 @@ export default function AdminFeesCollection() {
           <button
             type="button"
             onClick={fetchData}
-            className="px-4 py-2 bg-[#272a2f] hover:bg-[#3a3d42] rounded-lg text-sm"
+            className="px-4 py-2 bg-ura-panel-2 hover:bg-[#3a3d42] rounded-lg text-sm"
           >
             Refresh
           </button>
@@ -159,22 +159,22 @@ export default function AdminFeesCollection() {
 
         {/* Summary cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#272a2f] rounded-xl p-5">
+          <div className="bg-ura-panel-2 rounded-xl p-5">
             <p className="text-gray-400 text-sm">Current wallet balance</p>
             <p className="text-2xl font-bold text-[#f3ba2f]">{formatNumber(feeRecipient.pointsBalance)} PEARLS</p>
           </div>
-          <div className="bg-[#272a2f] rounded-xl p-5">
+          <div className="bg-ura-panel-2 rounded-xl p-5">
             <p className="text-gray-400 text-sm">Total received (fees + donations + upgrades)</p>
             <p className="text-2xl font-bold text-white">{formatNumber(totalAmount)} PEARLS</p>
           </div>
-          <div className="bg-[#272a2f] rounded-xl p-5">
+          <div className="bg-ura-panel-2 rounded-xl p-5">
             <p className="text-gray-400 text-sm">Number of transactions</p>
             <p className="text-2xl font-bold text-white">{totalCount}</p>
           </div>
         </div>
 
         {/* Tabs: Fees | Donations | Upgrades */}
-        <div className="flex gap-1 p-1 rounded-xl bg-[#272a2f] border border-[#3d4046] mb-6">
+        <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/75 mb-6">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -182,7 +182,7 @@ export default function AdminFeesCollection() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === tab.id
-                  ? 'bg-[#f3ba2f] text-black'
+                  ? 'bg-ura-gold text-black'
                   : 'text-gray-400 hover:text-white hover:bg-[#3d4046]'
               }`}
             >
@@ -192,14 +192,14 @@ export default function AdminFeesCollection() {
         </div>
 
         {/* Tab summary */}
-        <div className="bg-[#272a2f] rounded-xl p-5 mb-6">
+        <div className="bg-ura-panel-2 rounded-xl p-5 mb-6">
           <p className="text-gray-400 text-sm">
             {TABS.find((t) => t.id === activeTab)?.label} — {tabTransactions.length} transaction{tabTransactions.length !== 1 ? 's' : ''}, {formatNumber(tabAmount)} PEARLS
           </p>
         </div>
 
         {/* By date (for active tab) */}
-        <div className="bg-[#272a2f] rounded-xl p-6 mb-8">
+        <div className="bg-ura-panel-2 rounded-xl p-6 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">By date ({TABS.find((t) => t.id === activeTab)?.label})</h2>
           {tabByDate.length === 0 ? (
             <p className="text-gray-400">No transactions in this category yet.</p>
@@ -207,7 +207,7 @@ export default function AdminFeesCollection() {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="border-b border-[#3d4046]">
+                  <tr className="border-b border-ura-border/75">
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Date</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium text-right">Count</th>
                     <th className="pb-3 text-gray-400 font-medium text-right">Amount (PEARLS)</th>
@@ -215,7 +215,7 @@ export default function AdminFeesCollection() {
                 </thead>
                 <tbody>
                   {tabByDate.map((row) => (
-                    <tr key={row.date} className="border-b border-[#3d4046]/50">
+                    <tr key={row.date} className="border-b border-ura-border/75/50">
                       <td className="py-3 pr-4 text-white">{row.date}</td>
                       <td className="py-3 pr-4 text-right text-white">{row.count}</td>
                       <td className="py-3 text-right text-[#f3ba2f] font-medium">{formatNumber(row.amount)}</td>
@@ -228,15 +228,15 @@ export default function AdminFeesCollection() {
         </div>
 
         {/* Transactions list (active tab only) */}
-        <div className="bg-[#272a2f] rounded-xl p-6">
+        <div className="bg-ura-panel-2 rounded-xl p-6">
           <h2 className="text-xl font-semibold text-white mb-4">{TABS.find((t) => t.id === activeTab)?.label} (newest first)</h2>
           {tabTransactions.length === 0 ? (
             <p className="text-gray-400">No transactions in this category yet.</p>
           ) : (
             <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
               <table className="w-full text-left">
-                <thead className="sticky top-0 bg-[#272a2f] z-10">
-                  <tr className="border-b border-[#3d4046]">
+                <thead className="sticky top-0 bg-ura-panel-2 z-10">
+                  <tr className="border-b border-ura-border/75">
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Date & time</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium">Type</th>
                     <th className="pb-3 pr-4 text-gray-400 font-medium">From</th>
@@ -246,7 +246,7 @@ export default function AdminFeesCollection() {
                 </thead>
                 <tbody>
                   {tabTransactions.map((t) => (
-                    <tr key={t.id} className="border-b border-[#3d4046]/50">
+                    <tr key={t.id} className="border-b border-ura-border/75/50">
                       <td className="py-2 pr-4 text-gray-300 text-sm">
                         {new Date(t.createdAt).toLocaleString()}
                       </td>

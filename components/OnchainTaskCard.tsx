@@ -127,7 +127,7 @@ const OnchainTaskCard: React.FC<OnchainTaskCardProps> = ({ task, onEdit }) => {
 
                 <button
                     onClick={() => onEdit(task)}
-                    className="w-full mt-6 px-4 py-2 bg-[#f3ba2f] text-black rounded-lg hover:bg-[#f4c141] transition-colors font-semibold"
+                    className="w-full mt-6 px-4 py-2 bg-ura-gold text-black rounded-lg hover:bg-[#f4c141] transition-colors font-semibold"
                 >
                     Edit
                 </button>

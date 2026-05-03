@@ -373,7 +373,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
           @keyframes combo-lost-in { 0% { transform: scale(0.8); opacity: 0; } 20% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
         `}</style>
         <div className="absolute inset-0 bg-gradient-to-b from-amber-950/30 via-[#0a0c0e] to-emerald-950/25 pointer-events-none" />
-        <div className="shrink-0 flex items-center justify-between px-4 py-4 border-b border-amber-900/40 bg-[#0f1115]/95 backdrop-blur-sm">
+        <div className="shrink-0 flex items-center justify-between px-4 py-4 border-b border-amber-900/40 bg-ura-navy-deep/90/95 backdrop-blur-sm">
           <div className="flex items-center gap-3">
             <span className="text-3xl drop-shadow-lg" aria-hidden>🦒</span>
             <div>
@@ -384,7 +384,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
           <button type="button" onClick={handleClose} className="p-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 text-xl" aria-label="Close">&times;</button>
         </div>
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
-          <section className="rounded-2xl bg-[#12141a] border border-amber-900/40 p-4 shadow-xl">
+          <section className="rounded-2xl bg-ura-panel/95 border border-amber-900/40 p-4 shadow-xl">
             <h2 className="text-sm font-semibold text-amber-200 uppercase tracking-wider mb-3">How to play</h2>
             <ul className="space-y-2.5 text-sm text-gray-300">
               <li className="flex items-start gap-2">
@@ -401,13 +401,13 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
               </li>
             </ul>
           </section>
-          <section className="rounded-2xl bg-[#12141a] border border-amber-900/40 p-4 shadow-xl">
+          <section className="rounded-2xl bg-ura-panel/95 border border-amber-900/40 p-4 shadow-xl">
             <h2 className="text-sm font-semibold text-amber-200 uppercase tracking-wider mb-2">Rewards</h2>
             <p className="text-sm text-gray-400">One session = {DURATION_SEC}s. Score → PEARLS (max {formatNumber(config.maxReward ?? 40000)}/session). Min {MIN_SCORE} pts to claim. <strong className="text-amber-200">{sessionsLeft != null ? `${sessionsLeft} sessions` : '…'} left today</strong>.</p>
           </section>
         </div>
-        <div className="p-4 border-t border-amber-900/40 bg-[#0f1115]/95 flex gap-3">
-          <button type="button" onClick={handleClose} className="flex-1 py-3.5 rounded-xl bg-[#272a2f] text-gray-300 font-medium hover:bg-[#2d3038]">Close</button>
+        <div className="p-4 border-t border-amber-900/40 bg-ura-navy-deep/90/95 flex gap-3">
+          <button type="button" onClick={handleClose} className="flex-1 py-3.5 rounded-xl bg-ura-panel-2 text-gray-300 font-medium hover:bg-[#2d3038]">Close</button>
           <button
             type="button"
             onClick={startGame}
@@ -454,10 +454,10 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
           @keyframes combo-pop { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
           @keyframes combo-lost-in { 0% { transform: scale(0.8); opacity: 0; } 20% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
         `}</style>
-        <header className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-[#0f1115]/95 border-b border-amber-900/30">
+        <header className="shrink-0 flex flex-wrap items-center justify-between gap-2 px-4 py-3 bg-ura-navy-deep/90/95 border-b border-amber-900/30">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-amber-400 font-bold tabular-nums text-lg">{Math.ceil(timeLeft)}s</span>
-            <div className="h-2 w-20 rounded-full bg-[#272a2f] overflow-hidden">
+            <div className="h-2 w-20 rounded-full bg-ura-panel-2 overflow-hidden">
               <div className="h-full bg-amber-500 rounded-full transition-all duration-100" style={{ width: `${timePercent}%` }} />
             </div>
             <span className="text-white font-bold tabular-nums">Score: {score}</span>
@@ -577,7 +577,7 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
   return (
     <div className="fixed inset-0 z-[60] flex flex-col bg-[#0a0c0e]">
       <div className="absolute inset-0 bg-gradient-to-b from-amber-950/25 via-transparent to-emerald-950/20 pointer-events-none" />
-      <div className="shrink-0 flex items-center justify-between px-4 py-4 border-b border-amber-900/40 bg-[#0f1115]/95">
+      <div className="shrink-0 flex items-center justify-between px-4 py-4 border-b border-amber-900/40 bg-ura-navy-deep/90/95">
         <h1 className="text-lg font-bold text-amber-50">Session over</h1>
         <button type="button" onClick={handleClose} className="p-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 text-xl" aria-label="Close">&times;</button>
       </div>
@@ -600,8 +600,8 @@ export default function SavannaHuntPopup({ onClose, onSuccess }: SavannaHuntPopu
           <p className="mt-6 text-gray-500 text-sm">{sessionsLeft} session{sessionsLeft !== 1 ? 's' : ''} left today</p>
         )}
       </div>
-      <div className="p-4 border-t border-amber-900/40 bg-[#0f1115]/95 flex gap-3">
-        <button type="button" onClick={handleClose} className="flex-1 py-3.5 rounded-xl bg-[#272a2f] text-gray-300 font-medium hover:bg-[#2d3038]">Close</button>
+      <div className="p-4 border-t border-amber-900/40 bg-ura-navy-deep/90/95 flex gap-3">
+        <button type="button" onClick={handleClose} className="flex-1 py-3.5 rounded-xl bg-ura-panel-2 text-gray-300 font-medium hover:bg-[#2d3038]">Close</button>
         <button
           type="button"
           onClick={startGame}

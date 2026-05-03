@@ -267,7 +267,7 @@ export default function Learn() {
               <ul className="mt-2 space-y-2">
                 {selectedCategory.topics.map((topic) => (
                   <li key={topic} className="text-sm text-gray-200 flex items-start gap-2">
-                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#f3ba2f] flex-shrink-0" />
+                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-ura-gold flex-shrink-0" />
                     <span>{topic}</span>
                   </li>
                 ))}

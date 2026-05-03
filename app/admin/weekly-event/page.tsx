@@ -102,7 +102,7 @@ export default function AdminWeeklyEvent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-2xl">
         <Link href="/admin" className="text-[#f3ba2f] mb-4 inline-block">← Back to Admin</Link>
         <h1 className="text-2xl font-bold mb-6">Weekly Event Override</h1>
@@ -116,7 +116,7 @@ export default function AdminWeeklyEvent() {
               value={weekKey}
               onChange={(e) => setWeekKey(e.target.value)}
               placeholder={currentWeek}
-              className="w-full bg-[#272a2f] rounded-lg px-4 py-2 text-white"
+              className="w-full bg-ura-panel-2 rounded-lg px-4 py-2 text-white"
             />
           </div>
           <div>
@@ -125,13 +125,13 @@ export default function AdminWeeklyEvent() {
               value={tiersJson}
               onChange={(e) => setTiersJson(e.target.value)}
               rows={10}
-              className="w-full bg-[#272a2f] rounded-lg px-4 py-2 text-white font-mono text-sm"
+              className="w-full bg-ura-panel-2 rounded-lg px-4 py-2 text-white font-mono text-sm"
             />
           </div>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-[#f3ba2f] text-black rounded-lg font-bold disabled:opacity-50"
+            className="px-4 py-2 bg-ura-gold text-black rounded-lg font-bold disabled:opacity-50"
           >
             {isSubmitting ? 'Saving...' : 'Save Override'}
           </button>
@@ -146,7 +146,7 @@ export default function AdminWeeklyEvent() {
               referrals: t.referrals ?? i + 1,
             }));
             return (
-              <div key={o.id} className="bg-[#272a2f] rounded-lg p-4">
+              <div key={o.id} className="bg-ura-panel-2 rounded-lg p-4">
                 <p className="font-bold">{o.weekKey}</p>
                 <pre className="text-sm text-gray-400 mt-1 overflow-x-auto">
                   {JSON.stringify(tiersWithRefs, null, 2)}

@@ -195,7 +195,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
   if (!isAppropriateDevice) {
     return (
-      <div className="bg-[#1d2025] flex justify-center items-center h-screen">
+      <div className="bg-ura-panel flex justify-center items-center h-screen">
         <div className="w-full max-w-xl text-white flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-4">Play on your mobile</h1>
           <Image
@@ -214,7 +214,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
   if (isDataLoaded && !hasAcceptedLegal()) {
     return (
-      <div className="bg-[#1d2025] flex justify-center items-center min-h-screen px-4">
+      <div className="bg-ura-panel flex justify-center items-center min-h-screen px-4">
         <div className="w-full max-w-xl text-white flex flex-col items-center text-center">
           <h1 className="text-2xl font-bold mb-2">Welcome to URAPearls</h1>
           <p className="text-gray-400 text-sm mb-6">
@@ -224,14 +224,14 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
             <Link
               href="/clicker/privacy"
               onClick={() => triggerHapticFeedback(window)}
-              className="py-3 px-4 rounded-xl bg-[#272a2f] border border-[#3d4046] text-[#f3ba2f] font-medium text-sm"
+              className="py-3 px-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-[#f3ba2f] font-medium text-sm"
             >
               Privacy Policy
             </Link>
             <Link
               href="/clicker/terms"
               onClick={() => triggerHapticFeedback(window)}
-              className="py-3 px-4 rounded-xl bg-[#272a2f] border border-[#3d4046] text-[#f3ba2f] font-medium text-sm"
+              className="py-3 px-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-[#f3ba2f] font-medium text-sm"
             >
               Terms of Service
             </Link>
@@ -244,7 +244,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
               setCurrentView('home');
               setIsInitialized(true);
             }}
-            className="w-full max-w-xs py-4 rounded-xl bg-gradient-to-r from-[#f3ba2f] to-amber-500 text-black font-bold"
+            className="w-full max-w-xs py-4 rounded-xl bg-gradient-to-r from-ura-gold to-amber-500 text-black font-bold"
           >
             I Accept
           </button>
@@ -255,7 +255,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
   if (loadError) {
     return (
-      <div className="bg-[#1d2025] flex justify-center items-center min-h-screen px-4 py-8">
+      <div className="bg-ura-panel flex justify-center items-center min-h-screen px-4 py-8">
         <div className="w-full max-w-xl text-white flex flex-col items-center text-center">
           <div className="w-64 h-64 rounded-full circle-outer p-2 mb-6">
             <div className="w-full h-full rounded-full circle-inner overflow-hidden relative">
@@ -269,24 +269,24 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
             type="button"
             onClick={handleRetry}
             disabled={isRetrying}
-            className="w-full max-w-xs px-6 py-3 bg-[#272a2f] border border-[#3d4046] text-gray-200 font-semibold rounded-xl hover:bg-[#2d3038] disabled:opacity-50 transition-colors mb-4"
+            className="w-full max-w-xs px-6 py-3 bg-ura-panel-2 border border-ura-border/75 text-gray-200 font-semibold rounded-xl hover:bg-[#2d3038] disabled:opacity-50 transition-colors mb-4"
           >
             {isRetrying ? 'Retrying…' : 'Retry'}
           </button>
-          <div className="w-full max-w-xs border-t border-[#3d4046] pt-6 mt-2">
+          <div className="w-full max-w-xs border-t border-ura-border/75 pt-6 mt-2">
             <p className="text-gray-400 text-sm mb-3">Accept terms and continue to the app</p>
             <div className="flex flex-col gap-3 mb-4">
               <Link
                 href="/clicker/privacy"
                 onClick={() => triggerHapticFeedback(window)}
-                className="py-2.5 px-4 rounded-xl bg-[#272a2f] border border-[#3d4046] text-[#f3ba2f] font-medium text-sm"
+                className="py-2.5 px-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-[#f3ba2f] font-medium text-sm"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/clicker/terms"
                 onClick={() => triggerHapticFeedback(window)}
-                className="py-2.5 px-4 rounded-xl bg-[#272a2f] border border-[#3d4046] text-[#f3ba2f] font-medium text-sm"
+                className="py-2.5 px-4 rounded-xl bg-ura-panel-2 border border-ura-border/75 text-[#f3ba2f] font-medium text-sm"
               >
                 Terms of Service
               </Link>
@@ -299,7 +299,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
                 handleRetry();
               }}
               disabled={isRetrying}
-              className="w-full max-w-xs py-4 rounded-xl bg-gradient-to-r from-[#f3ba2f] to-amber-500 text-black font-bold disabled:opacity-50 hover:opacity-95 transition-opacity"
+              className="w-full max-w-xs py-4 rounded-xl bg-gradient-to-r from-ura-gold to-amber-500 text-black font-bold disabled:opacity-50 hover:opacity-95 transition-opacity"
             >
               I Accept and continue
             </button>
@@ -310,9 +310,9 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   }
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
+    <div className="relative h-screen w-full overflow-hidden bg-ura-page">
       <Image src={uraLanding} alt="URA Landing" fill priority style={{ objectFit: 'cover', objectPosition: 'center' }} />
-      <div className="absolute inset-0 bg-black/35" />
+      <div className="absolute inset-0 bg-ura-navy/35" />
       <div className="absolute inset-0 flex flex-col items-center justify-end text-white px-4 text-center pb-28">
         <div className="w-full max-w-xs flex items-center gap-3" aria-label="Loading">
           <span className="text-base font-semibold tracking-wide">Loading</span>

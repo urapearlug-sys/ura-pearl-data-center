@@ -58,13 +58,13 @@ export default function ItemPasswordGate({ pathname }: { pathname: string }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-ura-panel flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <h2 className="text-xl font-bold text-[#f3ba2f] mb-2 text-center">Section password</h2>
         <p className="text-gray-400 text-sm mb-6 text-center">
           Enter the password to access <strong className="text-white">{sectionName}</strong>.
         </p>
-        <form onSubmit={handleSubmit} className="bg-[#272a2f] rounded-xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-ura-panel-2 rounded-xl p-6 space-y-4">
           <div>
             <label htmlFor="item-password" className="block text-sm text-gray-400 mb-1">
               Password
@@ -75,7 +75,7 @@ export default function ItemPasswordGate({ pathname }: { pathname: string }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Section password"
-              className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500"
+              className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500"
               autoFocus
               required
               disabled={loading}
@@ -85,7 +85,7 @@ export default function ItemPasswordGate({ pathname }: { pathname: string }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#f3ba2f] text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-ura-gold text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Checking…' : 'Continue'}
           </button>

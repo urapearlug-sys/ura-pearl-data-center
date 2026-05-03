@@ -162,7 +162,7 @@ export default function AccountsAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -194,21 +194,21 @@ export default function AccountsAdminPage() {
         {/* Summary Stats */}
         {summary && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-[#272a2f] p-4 rounded-lg">
+            <div className="bg-ura-panel-2 p-4 rounded-lg">
               <div className="text-sm text-gray-400">Total Users</div>
               <div className="text-2xl font-bold">{formatNumber(summary.totalUsers)}</div>
             </div>
-            <div className="bg-[#272a2f] p-4 rounded-lg">
+            <div className="bg-ura-panel-2 p-4 rounded-lg">
               <div className="text-sm text-gray-400">Total Points</div>
               <div className="text-2xl font-bold text-[#f3ba2f]">
                 {formatNumber(summary.totalPoints)}
               </div>
             </div>
-            <div className="bg-[#272a2f] p-4 rounded-lg">
+            <div className="bg-ura-panel-2 p-4 rounded-lg">
               <div className="text-sm text-gray-400">Frozen Accounts</div>
               <div className="text-2xl font-bold text-red-400">{summary.frozenCount}</div>
             </div>
-            <div className="bg-[#272a2f] p-4 rounded-lg">
+            <div className="bg-ura-panel-2 p-4 rounded-lg">
               <div className="text-sm text-gray-400">Hidden Accounts</div>
               <div className="text-2xl font-bold text-gray-400">{summary.hiddenCount}</div>
             </div>
@@ -216,7 +216,7 @@ export default function AccountsAdminPage() {
         )}
 
         {/* Bulk Actions - All Users + Delete selected */}
-        <div className="bg-[#272a2f] p-4 rounded-lg mb-6">
+        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6">
           <h2 className="text-lg font-semibold mb-4 text-red-400">
             ⚠️ Bulk Actions (All Users) - Testing Only
           </h2>
@@ -324,7 +324,7 @@ export default function AccountsAdminPage() {
         </div>
 
         {/* Search & Filters */}
-        <div className="bg-[#272a2f] p-4 rounded-lg mb-6">
+        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="flex-1 min-w-[200px]">
               <input
@@ -333,7 +333,7 @@ export default function AccountsAdminPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && fetchAccounts()}
-                className="w-full bg-[#1d2025] text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
+                className="w-full bg-ura-panel text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#f3ba2f] outline-none"
               />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
@@ -365,7 +365,7 @@ export default function AccountsAdminPage() {
                 setPage(1);
                 fetchAccounts();
               }}
-              className="bg-[#f3ba2f] text-black px-4 py-2 rounded-lg font-semibold"
+              className="bg-ura-gold text-black px-4 py-2 rounded-lg font-semibold"
             >
               Search
             </button>
@@ -430,7 +430,7 @@ export default function AccountsAdminPage() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-[#272a2f] rounded-lg overflow-hidden">
+        <div className="bg-ura-panel-2 rounded-lg overflow-hidden">
           {loading ? (
             <div className="p-8 flex justify-center">
               <div className="w-8 h-8 border-4 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
@@ -438,7 +438,7 @@ export default function AccountsAdminPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-[#1d2025]">
+                <thead className="bg-ura-panel">
                   <tr>
                     <th className="p-3 text-left">
                       <input
@@ -596,7 +596,7 @@ export default function AccountsAdminPage() {
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-4 py-2 bg-[#272a2f] text-white rounded-lg disabled:opacity-50"
+              className="px-4 py-2 bg-ura-panel-2 text-white rounded-lg disabled:opacity-50"
             >
               Previous
             </button>
@@ -606,7 +606,7 @@ export default function AccountsAdminPage() {
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-4 py-2 bg-[#272a2f] text-white rounded-lg disabled:opacity-50"
+              className="px-4 py-2 bg-ura-panel-2 text-white rounded-lg disabled:opacity-50"
             >
               Next
             </button>
@@ -615,8 +615,8 @@ export default function AccountsAdminPage() {
 
         {/* Confirmation Modal */}
         {confirmAction && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-            <div className="bg-[#272a2f] rounded-xl p-6 max-w-md w-full">
+          <div className="fixed inset-0 bg-ura-navy/80 flex items-center justify-center p-4 z-50">
+            <div className="bg-ura-panel-2 rounded-xl p-6 max-w-md w-full">
               <h3 className="text-xl font-bold mb-4 text-red-400">Confirm Action</h3>
               <p className="text-gray-300 mb-6">
                 Are you sure you want to <strong>{confirmAction.label}</strong>?

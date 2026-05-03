@@ -149,7 +149,7 @@ export function ShopPageView() {
         <Link href="/admin" className="hover:underline mb-4 inline-block" style={{ color: ACCENT_YELLOW }}>Back to Admin</Link>
         <h1 className="text-3xl font-bold mb-2" style={{ color: ACCENT_YELLOW }}>Shop (Match 2 Earn)</h1>
         <p className="text-gray-400 mb-4">Review and approve or reject product listings. Approved products appear in the in-app Shop.</p>
-        <div className="flex flex-wrap items-center gap-3 mb-6 p-4 rounded-xl border border-[#3d4046]" style={{ backgroundColor: BG_CARD }}>
+        <div className="flex flex-wrap items-center gap-3 mb-6 p-4 rounded-xl border border-ura-border/75" style={{ backgroundColor: BG_CARD }}>
           <span className="text-gray-300 font-medium">Shop visible in user app (Market tab):</span>
           <button
             type="button"

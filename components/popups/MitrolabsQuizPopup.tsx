@@ -169,7 +169,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#1d2025] p-4">
+      <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ura-panel p-4">
         <div className="flex items-center gap-2 text-gray-400">
           <IceCube className="w-8 h-8 animate-pulse" />
           <span>Loading URA Quiz…</span>
@@ -181,20 +181,20 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
 
   if (questions.length === 0 && !hasCompleted) {
     return (
-      <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[#1d2025] p-4">
+      <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-ura-panel p-4">
         <h2 className="text-xl font-bold text-white mb-2">URA Quiz</h2>
         <p className="text-gray-400 text-center mb-6 max-w-sm">
           No active questions yet. Admins can add items under Admin → URA Quiz, load the question pool, and optionally
           turn on automated sets every Monday &amp; Thursday (UTC).
         </p>
-        <button type="button" onClick={onClose} className="px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
+        <button type="button" onClick={onClose} className="px-6 py-3 bg-ura-gold text-black font-semibold rounded-xl">Close</button>
       </div>
     );
   }
 
   if (hasCompleted && !result) {
     return (
-      <div className="fixed inset-0 z-[60] flex flex-col bg-[#1d2025] p-6">
+      <div className="fixed inset-0 z-[60] flex flex-col bg-ura-panel p-6">
         <div className="flex justify-end">
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl" aria-label="Close">&times;</button>
         </div>
@@ -204,7 +204,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           {lastAttempt && (
             <p className="text-gray-400 text-sm">Score: {lastAttempt.correctCount}/{lastAttempt.totalCount} · +{formatNumber(lastAttempt.pointsAwarded)} PEARLS claimed</p>
           )}
-          <button type="button" onClick={onClose} className="mt-8 px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
+          <button type="button" onClick={onClose} className="mt-8 px-6 py-3 bg-ura-gold text-black font-semibold rounded-xl">Close</button>
         </div>
       </div>
     );
@@ -217,7 +217,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
     const noAnswersAttended = result.totalCount > 0 && result.correctCount === 0 && result.pointsAwarded === 0;
 
     return (
-      <div className="fixed inset-0 z-[60] flex flex-col bg-[#1d2025] p-6">
+      <div className="fixed inset-0 z-[60] flex flex-col bg-ura-panel p-6">
         <div className="flex justify-end">
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl" aria-label="Close">&times;</button>
         </div>
@@ -245,7 +245,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           {!noAnswersAttended && result.pointsAwarded === 0 && result.totalCount > 0 && (
             <p className="text-gray-400 text-sm mb-4">+0 PEARLS this time.</p>
           )}
-          <button type="button" onClick={onClose} className="px-6 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl">Close</button>
+          <button type="button" onClick={onClose} className="px-6 py-3 bg-ura-gold text-black font-semibold rounded-xl">Close</button>
         </div>
       </div>
     );
@@ -256,7 +256,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
   const selected = answers[currentIndex];
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col bg-[#1d2025] p-6">
+    <div className="fixed inset-0 z-[60] flex flex-col bg-ura-panel p-6">
       <div className="flex items-center justify-between mb-4">
         <span className="text-gray-400 text-sm">Question {currentIndex + 1} of {questions.length}</span>
         <div className="flex items-center gap-3">
@@ -276,8 +276,8 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
             disabled={timeLeft === 0 || submitting}
             className={`w-full text-left p-4 rounded-xl border-2 transition-colors ${
               selected === i
-                ? 'border-[#f3ba2f] bg-[#f3ba2f]/10 text-white'
-                : 'border-[#3d4046] bg-[#272a2f] text-gray-300 hover:border-[#4d5056]'
+                ? 'border-[#f3ba2f] bg-ura-gold/10 text-white'
+                : 'border-ura-border/75 bg-ura-panel-2 text-gray-300 hover:border-[#4d5056]'
             }`}
           >
             {opt}
@@ -286,13 +286,13 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
       </div>
       <div className="flex gap-3 mt-6">
         {currentIndex > 0 && (
-          <button type="button" onClick={handlePrev} className="px-4 py-3 bg-[#272a2f] text-white rounded-xl font-medium">Previous</button>
+          <button type="button" onClick={handlePrev} className="px-4 py-3 bg-ura-panel-2 text-white rounded-xl font-medium">Previous</button>
         )}
         <button
           type="button"
           onClick={() => handleNext()}
           disabled={(selected === undefined && !timeUp) || submitting}
-          className="flex-1 py-3 bg-[#f3ba2f] text-black font-semibold rounded-xl disabled:opacity-50"
+          className="flex-1 py-3 bg-ura-gold text-black font-semibold rounded-xl disabled:opacity-50"
         >
           {submitting ? 'Submitting…' : timeLeft === 0 ? 'Time\'s up!' : currentIndex < questions.length - 1 ? 'Next' : 'Submit'}
         </button>

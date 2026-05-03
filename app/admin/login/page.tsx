@@ -34,11 +34,11 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-ura-panel flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <h1 className="text-2xl font-bold text-[#f3ba2f] mb-2 text-center">Admin Login</h1>
         <p className="text-gray-400 text-sm mb-6 text-center">Enter the admin password to continue.</p>
-        <form onSubmit={handleSubmit} className="bg-[#272a2f] rounded-xl p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-ura-panel-2 rounded-xl p-6 space-y-4">
           <div>
             <label htmlFor="password" className="block text-sm text-gray-400 mb-1">
               Password
@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Admin password"
-              className="w-full bg-[#1d2025] border border-[#3d4046] rounded-lg px-3 py-2 text-white placeholder-gray-500"
+              className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500"
               autoFocus
               required
               disabled={loading}
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#f3ba2f] text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-ura-gold text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Checking…' : 'Log in'}
           </button>

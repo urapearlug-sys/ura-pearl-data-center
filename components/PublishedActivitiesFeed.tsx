@@ -60,7 +60,7 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
   }, []);
 
   return (
-    <section className="mt-8 border-t border-[#2d2f38] pt-6" aria-label="Published activities">
+    <section className="mt-8 border-t border-ura-border/85 pt-6" aria-label="Published activities">
       <h2 className="text-lg font-bold text-white tracking-tight mb-1">Activities</h2>
       <p className="text-[11px] text-gray-500 mb-4">New updates appear at the top.</p>
 
@@ -69,7 +69,7 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
       ) : error ? (
         <p className="text-sm text-rose-400/90 py-2">{error}</p>
       ) : items.length === 0 ? (
-        <p className="text-sm text-gray-500 py-3 rounded-xl border border-dashed border-[#2d2f38] px-3 text-center">
+        <p className="text-sm text-gray-500 py-3 rounded-xl border border-dashed border-ura-border/85 px-3 text-center">
           No updates yet. Admins can add announcements under Published activities or earn tasks under Manage
           tasks.
         </p>
@@ -80,7 +80,7 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
               return (
                 <article
                   key={item.id}
-                  className="col-span-2 rounded-xl border border-[#2d2f38] bg-[#141821] p-3 text-left shadow-sm"
+                  className="col-span-2 rounded-xl border border-ura-border/85 bg-[#141821] p-3 text-left shadow-sm"
                 >
                   <h3 className="text-sm font-bold text-white leading-snug">{item.title}</h3>
                   <p className="text-xs text-gray-300 mt-2 whitespace-pre-wrap leading-relaxed">{item.body}</p>
@@ -121,10 +121,10 @@ export default function PublishedActivitiesFeed({ tasks = [], onOpenTask }: Prop
                 key={item.id}
                 type="button"
                 onClick={onActivate}
-                className="rounded-xl border border-[#2d2f38] bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 text-left shadow-lg hover:border-violet-500/45 active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+                className="rounded-xl border border-ura-border/85 bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 text-left shadow-lg hover:border-violet-500/45 active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
               >
                 <div className="flex items-start gap-2 flex-1 min-h-0">
-                  <div className="w-10 h-10 rounded-lg bg-[#1a1c22] flex items-center justify-center shrink-0 border border-[#2d2f38] overflow-hidden">
+                  <div className="w-10 h-10 rounded-lg bg-ura-panel-2 flex items-center justify-center shrink-0 border border-ura-border/85 overflow-hidden">
                     {imgSrc ? (
                       <Image src={imgSrc} alt="" width={36} height={36} className="object-cover w-9 h-9 rounded-md" />
                     ) : (

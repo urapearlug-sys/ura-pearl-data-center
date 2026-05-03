@@ -116,7 +116,7 @@ export default function AdminPublishedActivitiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1d2025] text-white p-8">
+    <div className="min-h-screen bg-ura-panel text-white p-8">
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <Link href="/admin" className="text-sm text-[#f3ba2f] hover:underline">
@@ -130,32 +130,32 @@ export default function AdminPublishedActivitiesPage() {
           </p>
         </div>
 
-        <form onSubmit={handleCreate} className="rounded-xl border border-[#3a3d46] bg-[#272a2f] p-4 space-y-3 mb-10">
+        <form onSubmit={handleCreate} className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 space-y-3 mb-10">
           <h2 className="text-lg font-semibold">New activity</h2>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
-            className="w-full rounded-lg border border-[#3a3d46] bg-[#1a1c22] px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel-2 px-3 py-2 text-sm"
           />
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Body (plain text)"
             rows={4}
-            className="w-full rounded-lg border border-[#3a3d46] bg-[#1a1c22] px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel-2 px-3 py-2 text-sm"
           />
           <input
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="Optional link URL"
-            className="w-full rounded-lg border border-[#3a3d46] bg-[#1a1c22] px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel-2 px-3 py-2 text-sm"
           />
           <input
             value={linkLabel}
             onChange={(e) => setLinkLabel(e.target.value)}
             placeholder="Link button label"
-            className="w-full rounded-lg border border-[#3a3d46] bg-[#1a1c22] px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel-2 px-3 py-2 text-sm"
           />
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
@@ -164,7 +164,7 @@ export default function AdminPublishedActivitiesPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-lg bg-[#f3ba2f] text-black px-4 py-2 text-sm font-semibold disabled:opacity-50"
+            className="rounded-lg bg-ura-gold text-black px-4 py-2 text-sm font-semibold disabled:opacity-50"
           >
             {submitting ? 'Saving…' : 'Create activity'}
           </button>
@@ -178,7 +178,7 @@ export default function AdminPublishedActivitiesPage() {
             {rows.map((r) => (
               <li
                 key={r.id}
-                className="rounded-xl border border-[#3a3d46] bg-[#272a2f] p-4 flex flex-col gap-2"
+                className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 flex flex-col gap-2"
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>

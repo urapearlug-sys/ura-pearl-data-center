@@ -26,12 +26,12 @@ export default function HowToPlayPopup({ onClose }: HowToPlayPopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center">
+    <div className="fixed inset-0 z-[60] bg-ura-navy/80 flex items-center justify-center">
       <div
-        className="bg-[#1d2025] w-full h-full max-w-xl flex flex-col shadow-xl"
+        className="bg-ura-panel w-full h-full max-w-xl flex flex-col shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">How to play URAPearls</h2>
           <button
             type="button"

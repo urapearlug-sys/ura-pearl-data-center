@@ -124,11 +124,11 @@ export default function Services() {
         description="Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links."
         icon={navServices}
       />
-      <div className="flex-1 flex justify-center bg-black min-h-0">
+      <div className="flex-1 flex justify-center bg-ura-page min-h-0">
         <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
         {/* Main content */}
         <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
-          <div className="sticky top-0 z-20 bg-black/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
+          <div className="sticky top-0 z-20 bg-ura-navy/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
             <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-1">
               Pick a category on the right or search below.
             </p>

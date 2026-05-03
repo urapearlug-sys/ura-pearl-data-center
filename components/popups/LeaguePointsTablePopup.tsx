@@ -19,9 +19,9 @@ interface LeaguePointsTablePopupProps {
 
 export default function LeaguePointsTablePopup({ onClose }: LeaguePointsTablePopupProps) {
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Team Points (TP) &amp; League Points (LP)</h2>
           <button
             type="button"
@@ -40,17 +40,17 @@ export default function LeaguePointsTablePopup({ onClose }: LeaguePointsTablePop
           <div>
             <h3 className="text-sky-300 font-semibold text-sm mb-2">Team activities (TP only)</h3>
             <p className="text-gray-500 text-xs mb-2">If you are in a team but not in a league, you earn only TP.</p>
-            <div className="rounded-xl border border-[#3d4046] overflow-hidden">
+            <div className="rounded-xl border border-ura-border/75 overflow-hidden">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-[#272a2f] border-b border-[#3d4046]">
+                  <tr className="bg-ura-panel-2 border-b border-ura-border/75">
                     <th className="py-3 px-4 text-sm font-semibold text-white">Activity</th>
                     <th className="py-3 px-4 text-sm font-semibold text-right text-sky-300">TP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {ROWS.map((row) => (
-                    <tr key={row.key} className="border-b border-[#2d2f38] last:border-b-0">
+                    <tr key={row.key} className="border-b border-ura-border/85 last:border-b-0">
                       <td className="py-3 px-4 text-white text-sm">{row.activity}</td>
                       <td className="py-3 px-4 text-right text-sm font-medium text-sky-300">
                         {row.key === 'streakPerDay' ? `+${row.points}/day` : `+${row.points}`}
@@ -65,17 +65,17 @@ export default function LeaguePointsTablePopup({ onClose }: LeaguePointsTablePop
           <div>
             <h3 className="text-[#f3ba2f] font-semibold text-sm mb-2">League activities (TP + LP)</h3>
             <p className="text-gray-500 text-xs mb-2">If you are in a league (your team joined a league), you earn TP and LP ({LEAGUE_POINTS_MULTIPLIER}× base as LP).</p>
-            <div className="rounded-xl border border-[#3d4046] overflow-hidden">
+            <div className="rounded-xl border border-ura-border/75 overflow-hidden">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-[#272a2f] border-b border-[#3d4046]">
+                  <tr className="bg-ura-panel-2 border-b border-ura-border/75">
                     <th className="py-3 px-4 text-sm font-semibold text-white">Activity</th>
                     <th className="py-3 px-4 text-sm font-semibold text-right text-[#f3ba2f]">TP + LP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {ROWS.map((row) => (
-                    <tr key={row.key} className="border-b border-[#2d2f38] last:border-b-0">
+                    <tr key={row.key} className="border-b border-ura-border/85 last:border-b-0">
                       <td className="py-3 px-4 text-white text-sm">{row.activity}</td>
                       <td className="py-3 px-4 text-right text-sm font-medium text-[#f3ba2f]">
                         {row.key === 'streakPerDay'

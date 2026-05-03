@@ -24,9 +24,9 @@ export default function LeagueLevelsPopup({ onClose }: LeagueLevelsPopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">All league levels</h2>
           <button
             type="button"
@@ -47,9 +47,9 @@ export default function LeagueLevelsPopup({ onClose }: LeagueLevelsPopupProps) {
               return (
                 <li
                   key={tier}
-                  className="flex gap-3 p-3 rounded-xl bg-[#252836] border border-[#2d2f38]"
+                  className="flex gap-3 p-3 rounded-xl bg-[#252836] border border-ura-border/85"
                 >
-                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-[#1d2025] flex items-center justify-center text-gray-500 font-bold">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-ura-panel flex items-center justify-center text-gray-500 font-bold">
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">

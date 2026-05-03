@@ -49,9 +49,9 @@ export default function TeamChallengesPopup({ onClose, initData, onCreateChallen
   }, [fetchChallenges]);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Team vs Team</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -60,7 +60,7 @@ export default function TeamChallengesPopup({ onClose, initData, onCreateChallen
           <button
             type="button"
             onClick={() => { triggerHapticFeedback(window); onCreateChallenge(); }}
-            className="w-full py-3 rounded-xl bg-[#f3ba2f] text-black font-bold"
+            className="w-full py-3 rounded-xl bg-ura-gold text-black font-bold"
           >
             Create challenge
           </button>
@@ -77,7 +77,7 @@ export default function TeamChallengesPopup({ onClose, initData, onCreateChallen
                   <button
                     type="button"
                     onClick={() => { triggerHapticFeedback(window); onViewChallenge(c.id); }}
-                    className="w-full text-left p-3 rounded-xl bg-[#252836] border border-[#2d2f38] hover:border-[#f3ba2f]/40 transition-colors"
+                    className="w-full text-left p-3 rounded-xl bg-[#252836] border border-ura-border/85 hover:border-[#f3ba2f]/40 transition-colors"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="min-w-0">

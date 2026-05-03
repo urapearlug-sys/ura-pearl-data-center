@@ -107,8 +107,8 @@ export default function DailyLoginPopup({ onClose }: DailyLoginPopupProps) {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
-        <div className="bg-[#1d2025] rounded-t-3xl p-6 w-full max-w-xl min-h-[320px] flex items-center justify-center">
+      <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
+        <div className="bg-ura-panel rounded-t-3xl p-6 w-full max-w-xl min-h-[320px] flex items-center justify-center">
           <div className="w-10 h-10 border-2 border-[#f3ba2f] border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
@@ -116,14 +116,14 @@ export default function DailyLoginPopup({ onClose }: DailyLoginPopupProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-end justify-center z-50">
+    <div className="fixed inset-0 bg-ura-navy/60 flex items-end justify-center z-50">
       <div
-        className={`bg-[#1d2025] rounded-t-3xl w-full max-w-xl overflow-hidden ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}
+        className={`bg-ura-panel rounded-t-3xl w-full max-w-xl overflow-hidden ${isClosing ? 'animate-slide-down' : 'animate-slide-up'}`}
       >
         <div className="bg-gradient-to-b from-[#2a2d33] to-[#1d2025] px-5 pt-6 pb-2">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#272a2f] flex items-center justify-center ring-2 ring-[#f3ba2f]/40">
+              <div className="w-12 h-12 rounded-xl bg-ura-panel-2 flex items-center justify-center ring-2 ring-[#f3ba2f]/40">
                 <Image src={dailyReward} alt="Karibu Daily" width={28} height={28} className="rounded" />
               </div>
               <div>
@@ -159,7 +159,7 @@ export default function DailyLoginPopup({ onClose }: DailyLoginPopupProps) {
                     ${isClaimed ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}
                     ${isToday && canClaim ? 'bg-gradient-to-b from-amber-500/25 to-[#f3ba2f]/15 border-2 border-[#f3ba2f] shadow-lg shadow-amber-500/20 pulse-animation' : ''}
                     ${isToday && status.claimedToday ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}
-                    ${isFuture ? 'bg-[#272a2f]/80 border border-[#3d4046] opacity-60' : ''}
+                    ${isFuture ? 'bg-ura-panel-2/80 border border-ura-border/75 opacity-60' : ''}
                   `}
                 >
                   <span

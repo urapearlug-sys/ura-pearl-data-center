@@ -53,7 +53,7 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
 
     const leftBlock = (
         <div className="flex items-center space-x-2">
-            <div className="p-1 rounded-lg bg-[#1d2025]">
+            <div className="p-1 rounded-lg bg-ura-panel">
                 <Image src={LEVELS[safeLevelIndex].smallImage} width={24} height={24} alt="Rank Icon" />
             </div>
             <div>

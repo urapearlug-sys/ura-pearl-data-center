@@ -235,7 +235,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
 
       {morePopupOpen ? (
         <div
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/75 backdrop-blur-[1px]"
+          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-ura-navy/75 backdrop-blur-[1px]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="earn-more-popup-title"
@@ -244,10 +244,10 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
           }}
         >
           <div
-            className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl border border-[#3d4046] bg-[#13161d] shadow-xl overflow-hidden"
+            className="w-full max-w-md max-h-[85vh] flex flex-col rounded-2xl border border-ura-border/75 bg-[#13161d] shadow-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#2d2f38] shrink-0">
+            <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-ura-border/85 shrink-0">
               <h3 id="earn-more-popup-title" className="text-lg font-bold text-white">
                 More options
               </h3>

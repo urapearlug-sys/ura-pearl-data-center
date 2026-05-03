@@ -105,8 +105,8 @@ export default function TeamChallengeDetailPopup({ challengeId, onClose, initDat
     }
   };
 
-  if (loading) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"><div className="bg-[#1d2025] rounded-2xl p-8 text-gray-400">Loading…</div></div>;
-  if (!data) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"><div className="bg-[#1d2025] rounded-2xl p-8"><p className="text-gray-400 mb-4">Challenge not found</p><button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="py-2 px-4 rounded-lg bg-[#272a2f] text-white">Close</button></div></div>;
+  if (loading) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60"><div className="bg-ura-panel rounded-2xl p-8 text-gray-400">Loading…</div></div>;
+  if (!data) return <div className="fixed inset-0 z-50 flex items-center justify-center bg-ura-navy/60"><div className="bg-ura-panel rounded-2xl p-8"><p className="text-gray-400 mb-4">Challenge not found</p><button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="py-2 px-4 rounded-lg bg-ura-panel-2 text-white">Close</button></div></div>;
 
   const pct1 = data.targetAlm > 0 ? Math.min(100, (data.progressCreator.totalGrowth / data.targetAlm) * 100) : 0;
   const pct2 = data.targetAlm > 0 ? Math.min(100, (data.progressOpponent.totalGrowth / data.targetAlm) * 100) : 0;
@@ -114,9 +114,9 @@ export default function TeamChallengeDetailPopup({ challengeId, onClose, initDat
   const daysLeft = Math.ceil(timeLeft / (24 * 60 * 60 * 1000));
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[90vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[90vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">Team vs Team</h2>
           <button type="button" onClick={() => { triggerHapticFeedback(window); onClose(); }} className="p-2 rounded-full text-gray-400 hover:text-white text-2xl">&times;</button>
         </div>
@@ -137,14 +137,14 @@ export default function TeamChallengeDetailPopup({ challengeId, onClose, initDat
               <p className="text-gray-400 text-sm">Time left: ~{daysLeft} day(s)</p>
               <div>
                 <p className="text-xs text-gray-400 mb-1">{data.creatorTeamName}</p>
-                <div className="h-6 rounded-full bg-[#272a2f] overflow-hidden">
+                <div className="h-6 rounded-full bg-ura-panel-2 overflow-hidden">
                   <div className="h-full bg-emerald-500/80 rounded-full transition-all" style={{ width: `${pct1}%` }} />
                 </div>
                 <p className="text-xs text-emerald-300 mt-0.5">{formatNumber(data.progressCreator.totalGrowth)} PEARLS · {data.progressCreator.participants} participants</p>
               </div>
               <div>
                 <p className="text-xs text-gray-400 mb-1">{data.opponentTeamName ?? 'Opponent'}</p>
-                <div className="h-6 rounded-full bg-[#272a2f] overflow-hidden">
+                <div className="h-6 rounded-full bg-ura-panel-2 overflow-hidden">
                   <div className="h-full bg-violet-500/80 rounded-full transition-all" style={{ width: `${pct2}%` }} />
                 </div>
                 <p className="text-xs text-violet-300 mt-0.5">{formatNumber(data.progressOpponent.totalGrowth)} PEARLS · {data.progressOpponent.participants} participants</p>
@@ -158,9 +158,9 @@ export default function TeamChallengeDetailPopup({ challengeId, onClose, initDat
                     placeholder={TEAM_CHALLENGE_MIN_CONTRIBUTION.toLocaleString()}
                     value={contributeAmount}
                     onChange={(e) => setContributeAmount(e.target.value)}
-                    className="flex-1 bg-[#272a2f] border border-[#3d4046] rounded-lg px-3 py-2 text-white"
+                    className="flex-1 bg-ura-panel-2 border border-ura-border/75 rounded-lg px-3 py-2 text-white"
                   />
-                  <button type="button" onClick={handleContribute} disabled={contributing} className="py-2 px-4 rounded-lg bg-[#f3ba2f] text-black font-bold disabled:opacity-50">{contributing ? '…' : 'Contribute'}</button>
+                  <button type="button" onClick={handleContribute} disabled={contributing} className="py-2 px-4 rounded-lg bg-ura-gold text-black font-bold disabled:opacity-50">{contributing ? '…' : 'Contribute'}</button>
                 </div>
               </div>
             </>

@@ -182,9 +182,9 @@ export default function LeagueCompetitionsPopup({
   const endedList = competitions.filter((c) => c.status === 'ended');
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 sm:items-center">
-      <div className="bg-[#1d2025] rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#3d4046] shrink-0">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-ura-navy/60 sm:items-center">
+      <div className="bg-ura-panel rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden animate-slide-up sm:animate-none max-h-[85vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ura-border/75 shrink-0">
           <h2 className="text-lg font-bold text-white">
             {view === 'list' && 'League Competition'}
             {view === 'detail' && 'Competition'}
@@ -241,7 +241,7 @@ export default function LeagueCompetitionsPopup({
                             <button
                               type="button"
                               onClick={() => openDetail(c.id)}
-                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-[#3d4046] hover:border-amber-500/40 transition-colors"
+                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-ura-border/75 hover:border-amber-500/40 transition-colors"
                             >
                               <div className="flex justify-between items-start gap-2">
                                 <div>
@@ -270,7 +270,7 @@ export default function LeagueCompetitionsPopup({
                             <button
                               type="button"
                               onClick={() => openDetail(c.id)}
-                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-[#3d4046] hover:border-violet-500/40 transition-colors"
+                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-ura-border/75 hover:border-violet-500/40 transition-colors"
                             >
                               <div className="flex justify-between items-start gap-2">
                                 <div>
@@ -301,7 +301,7 @@ export default function LeagueCompetitionsPopup({
                             <button
                               type="button"
                               onClick={() => openDetail(c.id)}
-                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-[#2d2f38]"
+                              className="w-full text-left p-3 rounded-xl bg-[#252836] border border-ura-border/85"
                             >
                               <div className="flex justify-between items-start gap-2">
                                 <div>
@@ -338,7 +338,7 @@ export default function LeagueCompetitionsPopup({
                 <p className="text-gray-400 text-center py-8">Loading…</p>
               ) : detail ? (
                 <div className="space-y-4">
-                  <div className="p-3 rounded-xl bg-[#252836] border border-[#3d4046]">
+                  <div className="p-3 rounded-xl bg-[#252836] border border-ura-border/75">
                     <p className="font-bold text-white text-center">
                       {detail.creatorLeague.name} vs {detail.opponentLeague.name}
                     </p>
@@ -367,7 +367,7 @@ export default function LeagueCompetitionsPopup({
                           {formatNumber(detail.creatorProgress)} / {formatNumber(detail.targetAlm)} PEARLS
                         </span>
                       </div>
-                      <div className="h-2 rounded-full bg-[#1a1c22] overflow-hidden">
+                      <div className="h-2 rounded-full bg-ura-panel-2 overflow-hidden">
                         <div
                           className="h-full rounded-full bg-amber-500/80 transition-all"
                           style={{
@@ -384,7 +384,7 @@ export default function LeagueCompetitionsPopup({
                           {formatNumber(detail.opponentProgress)} / {formatNumber(detail.targetAlm)} PEARLS
                         </span>
                       </div>
-                      <div className="h-2 rounded-full bg-[#1a1c22] overflow-hidden">
+                      <div className="h-2 rounded-full bg-ura-panel-2 overflow-hidden">
                         <div
                           className="h-full rounded-full bg-violet-500/80 transition-all"
                           style={{
@@ -408,7 +408,7 @@ export default function LeagueCompetitionsPopup({
                   )}
 
                   {detail.status === 'active' && (
-                    <div className="p-3 rounded-xl bg-[#1a1c22] border border-[#2d2f38]">
+                    <div className="p-3 rounded-xl bg-ura-panel-2 border border-ura-border/85">
                       <p className="text-sm font-medium text-white mb-2">Add to prize pool</p>
                       <p className="text-xs text-gray-400 mb-2">Anyone can contribute; the pool grows for the winner.</p>
                       <div className="flex gap-2">
@@ -418,7 +418,7 @@ export default function LeagueCompetitionsPopup({
                           placeholder="PEARLS amount"
                           value={contributeAmount}
                           onChange={(e) => setContributeAmount(e.target.value)}
-                          className="flex-1 px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white placeholder-gray-500"
+                          className="flex-1 px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white placeholder-gray-500"
                         />
                         <button
                           type="button"
@@ -551,7 +551,7 @@ function CreateChallengeForm({
         <select
           value={creatorLeagueId}
           onChange={(e) => setCreatorLeagueId(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
+          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white"
         >
           {myCreatorLeagues.length === 0 ? (
             <option value="">You must create a league first</option>
@@ -571,7 +571,7 @@ function CreateChallengeForm({
           value={opponentInviteCode}
           onChange={(e) => setOpponentInviteCode(e.target.value)}
           placeholder="e.g. ABC12XYZ"
-          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white placeholder-gray-500"
+          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white placeholder-gray-500"
         />
       </div>
       <div>
@@ -582,7 +582,7 @@ function CreateChallengeForm({
           max={LEAGUE_CHALLENGE_MAX_TARGET_PEARLS}
           value={targetAlm}
           onChange={(e) => setTargetAlm(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
+          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white"
         />
         <p className="text-xs text-gray-500 mt-0.5">
           {formatNumber(LEAGUE_CHALLENGE_MIN_TARGET_PEARLS)} – {formatNumber(LEAGUE_CHALLENGE_MAX_TARGET_PEARLS)}
@@ -596,7 +596,7 @@ function CreateChallengeForm({
           max={LEAGUE_CHALLENGE_MAX_STAKE}
           value={stakePerLeague}
           onChange={(e) => setStakePerLeague(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
+          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white"
         />
         <p className="text-xs text-gray-500 mt-0.5">Your balance: {formatNumber(Math.floor(userBalance))} PEARLS</p>
       </div>
@@ -608,7 +608,7 @@ function CreateChallengeForm({
           max={LEAGUE_CHALLENGE_MAX_DAYS}
           value={durationDays}
           onChange={(e) => setDurationDays(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-[#3d4046] text-white"
+          className="w-full px-3 py-2 rounded-lg bg-[#252836] border border-ura-border/75 text-white"
         />
       </div>
       <button

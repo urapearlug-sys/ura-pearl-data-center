@@ -81,8 +81,8 @@ export default function NotificationBanner() {
         </span>
       </div>
       {/* Pill-shaped banner (dark theme, icon left, title + body, now + X) */}
-      <div className="w-full max-w-xl rounded-2xl bg-[#272a2f] border border-[#3d4046] shadow-lg flex items-center gap-3 px-3 py-2.5">
-        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#1d2025] flex items-center justify-center gap-0.5 overflow-hidden border border-[#3d4046]">
+      <div className="w-full max-w-xl rounded-2xl bg-ura-panel-2 border border-ura-border/75 shadow-lg flex items-center gap-3 px-3 py-2.5">
+        <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-ura-panel flex items-center justify-center gap-0.5 overflow-hidden border border-ura-border/75">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={imageUrl} alt="" className="w-full h-full object-cover" />
