@@ -124,23 +124,20 @@ export default function Services() {
         description="Official portals and tools — domestic tax, customs, Single Window (UESW), legal, careers, research, and partner links."
         icon={navServices}
       />
-      <div className="flex-1 flex justify-center bg-ura-page min-h-0">
-        <div className="w-full max-w-xl flex text-white min-h-0 items-stretch">
-        {/* Main content */}
-        <main className="flex-1 min-w-0 flex flex-col border-r border-white/[0.06]">
-          <div className="sticky top-0 z-20 bg-ura-navy/90 backdrop-blur-md border-b border-white/[0.08] px-3 pt-4 pb-3">
-            <p className="text-[11px] text-slate-500 mt-0.5 px-1 mb-1">
-              Pick a category on the right or search below.
-            </p>
+      <div className="w-full max-w-xl mx-auto flex flex-1 min-h-0 items-stretch px-4 pt-2">
+        {/* Main content — same light-panel language as Citizen Guild */}
+        <main className="flex-1 min-w-0 flex flex-col border-r border-[#8bb4ef]/25">
+          <div className="sticky top-0 z-20 rounded-t-xl border border-[#8bb4ef]/35 bg-[#f4f8ff]/95 backdrop-blur-md px-3 pt-3 pb-3 shadow-sm">
+            <p className="text-[11px] text-[#335f97] mt-0.5 px-1 mb-1">Pick a category on the right or search below.</p>
             {!showSearchResults ? (
-              <p className={`text-[10px] font-semibold uppercase tracking-wider px-1 mb-3 ${activeTheme.accentClass}`}>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#123f78] px-1 mb-3">
                 Viewing: {activeCategory.sidebarIcon} {activeCategory.shortLabel}
               </p>
             ) : (
-              <p className="text-[10px] text-slate-600 px-1 mb-3">Search across all categories</p>
+              <p className="text-[10px] text-[#335f97] px-1 mb-3">Search across all categories</p>
             )}
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" aria-hidden>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#335f97] pointer-events-none" aria-hidden>
                 🔍
               </span>
               <input
@@ -148,20 +145,20 @@ export default function Services() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by service, sector…"
-                className="w-full rounded-2xl bg-[#1a1d24] border border-[#2d323c] pl-10 pr-3 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/50"
+                className="w-full rounded-2xl bg-white border border-[#dbe9ff] pl-10 pr-3 py-2.5 text-sm text-[#16427f] placeholder:text-[#8aa0c0] focus:outline-none focus:ring-2 focus:ring-[#f3ba2f]/45 focus:border-[#f3ba2f]/70"
                 autoComplete="off"
               />
             </div>
           </div>
 
-          <div className="flex-1 px-3 py-4">
+          <div className="flex-1 px-0 sm:px-0 py-4">
             {showSearchResults ? (
               <>
-                <h2 className="text-sm font-bold uppercase tracking-wider text-sky-300 mb-3">
+                <h2 className="text-white text-sm font-bold uppercase tracking-wider mb-3">
                   Search results ({searchHits.length})
                 </h2>
                 {searchHits.length === 0 ? (
-                  <p className="text-sm text-slate-500 py-8 text-center rounded-xl border border-dashed border-[#2d323c]">
+                  <p className="text-sm text-[#335f97] py-8 text-center rounded-xl border border-dashed border-[#8bb4ef]/50 bg-[#f4f8ff]/90">
                     No services match “{search.trim()}”. Try another keyword or pick a category on the right.
                   </p>
                 ) : (
@@ -172,11 +169,11 @@ export default function Services() {
                         <section key={category.id} aria-labelledby={`search-cat-${category.id}`}>
                           <h3
                             id={`search-cat-${category.id}`}
-                            className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider mb-2 pb-1 border-b border-white/[0.08] ${th.accentClass}`}
+                            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white mb-2 pb-1 border-b border-[#8bb4ef]/35"
                           >
                             <span aria-hidden>{category.sidebarIcon}</span>
                             {category.shortLabel}
-                            <span className="text-slate-500 font-normal normal-case">({hits.length})</span>
+                            <span className="text-blue-100 font-normal normal-case">({hits.length})</span>
                           </h3>
                           <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                             {hits.map(({ item, categoryId }) => (
@@ -197,22 +194,20 @@ export default function Services() {
               </>
             ) : (
               <>
-                <div className="rounded-xl border border-white/[0.09] bg-[#0e1116] px-3 py-3 mb-4 shadow-inner shadow-black/30">
+                <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-3 py-3 mb-4 shadow-sm">
                   <div className="flex items-start gap-2.5">
                     <span className="text-2xl leading-none shrink-0" aria-hidden>
                       {activeCategory.sidebarIcon}
                     </span>
                     <div className="min-w-0">
-                      <p className={`text-[10px] font-bold uppercase tracking-wider ${activeTheme.accentClass}`}>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[#123f78]">
                         {activeCategory.shortLabel}
                       </p>
-                      <h2 className={`text-base font-bold leading-snug mt-0.5 ${activeTheme.accentClass}`}>
-                        {activeCategory.title}
-                      </h2>
+                      <h2 className="text-base font-bold leading-snug mt-0.5 text-[#16427f]">{activeCategory.title}</h2>
                       {activeCategory.listIntro ? (
-                        <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">{activeCategory.listIntro}</p>
+                        <p className="text-[11px] text-[#335f97] mt-1.5 leading-relaxed">{activeCategory.listIntro}</p>
                       ) : null}
-                      <p className="text-[10px] text-slate-500 mt-2">{activeCategory.services.length} quick links</p>
+                      <p className="text-[10px] text-[#335f97] mt-2">{activeCategory.services.length} quick links</p>
                     </div>
                   </div>
                 </div>
@@ -223,9 +218,7 @@ export default function Services() {
                     return (
                       <section key={`sec-${idx}-${heading ?? 'ungrouped'}`} className="space-y-2">
                         {st ? (
-                          <h3
-                            className={`text-[11px] font-bold uppercase tracking-wide pl-0.5 border-l-2 border-current ${activeTheme.accentClass} opacity-90`}
-                          >
+                          <h3 className="text-[11px] font-bold uppercase tracking-wide text-white pl-0.5 border-l-2 border-[#f3ba2f]">
                             {st}
                           </h3>
                         ) : null}
@@ -248,14 +241,13 @@ export default function Services() {
           </div>
         </main>
 
-        {/* Right rail — category chips, evenly spaced to fill viewport */}
+        {/* Right rail — same deep blue chrome as Guild secondary actions */}
         <aside
-          className="sticky top-0 w-[min(5.75rem,24vw)] sm:w-[7.25rem] shrink-0 bg-[#080a0d] flex flex-col border-l border-white/[0.08] px-1.5 py-3 gap-2 h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)]"
+          className="sticky top-0 w-[min(5.75rem,24vw)] sm:w-[7.25rem] shrink-0 bg-[#0f315f]/90 flex flex-col border-l border-[#8bb4ef]/30 px-1.5 py-3 gap-2 h-[calc(100dvh-7rem)] max-h-[calc(100dvh-7rem)]"
           aria-label="Service categories"
         >
           {URA_SERVICE_CATEGORIES.map((cat) => {
             const isActive = !showSearchResults && cat.id === activeCategoryId;
-            const theme = GROUP_THEME[cat.groupId];
             return (
               <button
                 key={cat.id}
@@ -266,12 +258,14 @@ export default function Services() {
                   setSearch('');
                 }}
                 className={`flex-1 min-h-0 flex flex-col items-center justify-center gap-1 rounded-lg px-1 py-1.5 transition-all duration-200 border ${
-                  isActive ? theme.activeClass : 'border-transparent bg-transparent hover:bg-white/[0.06]'
+                  isActive
+                    ? 'border-[#f3ba2f] bg-[#f4f8ff] shadow-md'
+                    : 'border-transparent bg-transparent hover:bg-white/[0.08]'
                 }`}
               >
                 <span
                   className={`text-xl sm:text-[1.35rem] leading-none transition-colors ${
-                    isActive ? theme.activeIconClass : theme.idleIconClass
+                    isActive ? 'text-[#16427f]' : 'text-blue-100'
                   }`}
                   aria-hidden
                 >
@@ -279,7 +273,7 @@ export default function Services() {
                 </span>
                 <span
                   className={`text-[8px] sm:text-[9px] font-semibold text-center leading-snug px-0.5 ${
-                    isActive ? 'text-white' : 'text-slate-500'
+                    isActive ? 'text-[#123f78]' : 'text-blue-100/90'
                   }`}
                 >
                   {cat.shortLabel}
@@ -288,7 +282,6 @@ export default function Services() {
             );
           })}
         </aside>
-        </div>
       </div>
 
       {taxCalculatorOpen ? (
@@ -314,10 +307,10 @@ function ServiceCard({
       type="button"
       title={item.description}
       onClick={() => onActivate(item)}
-      className="group flex flex-col rounded-xl bg-gradient-to-b from-[#1c1f26] to-[#13161c] border border-[#2a3038] p-1.5 sm:p-2 text-center transition-all duration-200 hover:border-sky-400/30 hover:shadow-md hover:-translate-y-px active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/45"
+      className="group flex flex-col rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-1.5 sm:p-2 text-center shadow-sm transition-all duration-200 hover:border-[#f3ba2f] hover:shadow-md hover:-translate-y-px active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/45"
     >
       <div
-        className="mx-auto mb-1 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg bg-[#0d0f14] border border-white/[0.07] text-[1.35rem] sm:text-[1.45rem] leading-none shadow-inner group-hover:bg-[#12151c] transition-colors"
+        className="mx-auto mb-1 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg bg-white border border-[#dbe9ff] text-[1.35rem] sm:text-[1.45rem] leading-none shadow-sm group-hover:border-[#f3ba2f]/50 transition-colors"
         aria-hidden
       >
         {item.serviceIcon}
@@ -325,7 +318,7 @@ function ServiceCard({
       {badge ? (
         <span className={`text-[7px] font-bold uppercase tracking-wide mb-0.5 ${accentClass}`}>{badge}</span>
       ) : null}
-      <span className="text-[9px] sm:text-[10px] font-medium text-white/95 leading-snug line-clamp-3 min-h-[2.25rem] text-center">
+      <span className="text-[9px] sm:text-[10px] font-semibold text-[#16427f] leading-snug line-clamp-3 min-h-[2.25rem] text-center">
         {item.title}
       </span>
     </button>
