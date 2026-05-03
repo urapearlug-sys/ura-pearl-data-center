@@ -320,7 +320,7 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
               }}
               className={`rounded-2xl border border-[#2d2f38] bg-gradient-to-r from-[#26282f] via-[#2f3033] to-[#25272d] text-center ${e ? 'py-2' : 'py-3'}`}
             >
-              <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>Airdrop</p>
+              <p className={`font-semibold ${e ? 'text-xs' : 'text-[13px]'}`}>Drops</p>
             </button>
           </div>
 

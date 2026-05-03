@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   }
 
   if (!dbUser.tonWalletAddress) {
-    return NextResponse.json({ error: 'Connect your TON wallet (Airdrop tab) to receive TON' }, { status: 400 });
+    return NextResponse.json({ error: 'Connect your TON wallet (Drops tab) to receive TON' }, { status: 400 });
   }
 
   const amt = Number(amount);

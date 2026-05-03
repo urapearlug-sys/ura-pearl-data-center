@@ -12,7 +12,7 @@ const SECTIONS = [
   { id: 'staking', label: 'Stake PEARLS', icon: '🪙', body: 'Lock PEARLS for at least 1 week. When the stake unlocks, claim your principal plus bonus. Stake from the Mine screen.' },
   { id: 'tasks', label: 'Tasks & Earn', icon: '📋', body: 'Earn tab tasks: videos, channels, Zoom code, and more. Complete tasks to earn PEARLS without tapping.' },
   { id: 'minigames', label: 'Mini Games', icon: '🎮', body: 'Umeme Run, Lucky Spin, and daily rewards. Play from the main screen to win extra PEARLS once per day per game.' },
-  { id: 'rewards', label: 'Rewards', icon: '💸', body: 'Season rewards, Lumina ID, wallet and airdrops. Stay active to qualify; connect your wallet when Lumina ID and airdrop payments are available.' },
+  { id: 'rewards', label: 'Rewards', icon: '💸', body: 'Season rewards, Lumina ID, wallet and Drops. Stay active to qualify; connect your wallet when Lumina ID and Drops payments are available.' },
 ] as const;
 
 interface HowToPlayPopupProps {

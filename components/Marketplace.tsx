@@ -114,7 +114,7 @@ export function MarketplaceSection() {
   const handleCreateListing = async () => {
     if (!userTelegramInitData || isCreating) return;
     if (!tonWalletAddress) {
-      showToast('Connect TON wallet in Airdrop tab to receive TON', 'error');
+      showToast('Connect TON wallet in Drops tab to receive TON', 'error');
       return;
     }
     const amt = Math.floor(Number(sellAmount));
@@ -179,7 +179,7 @@ export function MarketplaceSection() {
   const handleBuy = async (listing: ListingItem, amount: number) => {
     if (!userTelegramInitData || isBuying) return;
     if (!tonConnectUI.account) {
-      showToast('Connect your TON wallet (Airdrop tab) to pay', 'error');
+      showToast('Connect your TON wallet (Drops tab) to pay', 'error');
       return;
     }
     if (!listing.sellerTonAddress) {
@@ -270,7 +270,7 @@ export function MarketplaceSection() {
                 <div className="mb-6 p-4 rounded-xl bg-[#272a2f]/80 border border-amber-500/30">
                   <p className="text-amber-400/90 font-semibold text-sm mb-2">How it works</p>
                   <p className="text-gray-300 text-xs leading-relaxed mb-2">
-                    <span className="text-white font-medium">Sell:</span> Connect TON wallet (Airdrop tab) → set amount PEARLS and price (TON per 1000 PEARLS) → List for TON → PEARLS is escrowed until sold or cancelled.
+                    <span className="text-white font-medium">Sell:</span> Connect TON wallet (Drops tab) → set amount PEARLS and price (TON per 1000 PEARLS) → List for TON → PEARLS is escrowed until sold or cancelled.
                   </p>
                   <p className="text-gray-300 text-xs leading-relaxed">
                     <span className="text-white font-medium">Buy:</span> Connect TON wallet → choose listing → enter PEARLS amount → Pay TON → TonConnect sends TON to seller → you receive PEARLS.
@@ -279,7 +279,7 @@ export function MarketplaceSection() {
 
                 {tab === 'buy' && (
                   <>
-                    <p className="text-gray-400 text-sm mb-2">Pay with TON. Connect wallet in Airdrop tab to pay.</p>
+                    <p className="text-gray-400 text-sm mb-2">Pay with TON. Connect wallet in Drops tab to pay.</p>
                     {isLoadingListings ? (
                       <p className="text-center text-gray-400 py-8">Loading listings...</p>
                     ) : listings.length === 0 ? (
@@ -343,9 +343,9 @@ export function MarketplaceSection() {
 
                 {tab === 'sell' && (
                   <>
-                    <p className="text-gray-400 text-sm mb-2">List PEARLS for TON. Connect TON wallet in Airdrop tab to receive payments.</p>
+                    <p className="text-gray-400 text-sm mb-2">List PEARLS for TON. Connect TON wallet in Drops tab to receive payments.</p>
                     {!tonWalletAddress && (
-                      <p className="text-amber-400/90 text-sm mb-3">Connect your TON wallet in the Airdrop tab first.</p>
+                      <p className="text-amber-400/90 text-sm mb-3">Connect your TON wallet in the Drops tab first.</p>
                     )}
                     <div className="p-4 rounded-xl bg-[#272a2f] border border-[#3d4046] mb-4">
                       <label className="block text-gray-400 text-sm mb-2">Amount to sell (PEARLS)</label>
