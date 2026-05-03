@@ -15,9 +15,7 @@
 
 'use client'
 
-import { useToast } from '@/contexts/ToastContext';
 import IceCubes from '@/icons/IceCubes';
-import Settings from '@/icons/Settings';
 import { LEVELS } from '@/utils/consts';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
@@ -30,9 +28,7 @@ interface TopInfoSectionProps {
     onOpenMyProgress?: () => void;
 }
 
-export default function TopInfoSection({ isGamePage = false, setCurrentView, onOpenMyProgress }: TopInfoSectionProps) {
-    const showToast = useToast();
-
+export default function TopInfoSection({ isGamePage = false, setCurrentView: _setCurrentView, onOpenMyProgress }: TopInfoSectionProps) {
     const {
         userTelegramName,
         gameLevelIndex,
@@ -40,11 +36,6 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
         totalDonatedPoints,
     } = useGameStore();
     const safeLevelIndex = Math.min(Math.max(gameLevelIndex, 0), LEVELS.length - 1);
-
-    const handleSettingsClick = () => {
-        triggerHapticFeedback(window);
-        setCurrentView('settings');
-    };
 
     const handleOpenMyProgress = () => {
         triggerHapticFeedback(window);
@@ -80,18 +71,6 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
                     )}
                 </div>
                 <div className={`flex items-center w-fit ${isGamePage ? 'px-4' : 'px-8'} py-[2px] max-w-64`}>
-                    {
-                        isGamePage &&
-                        <>
-                            <div className="flex-1 text-center">
-                                <p className="text-xs text-[#85827d] font-medium">Sync</p>
-                                <div className="flex items-center justify-center space-x-1">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 mt-1"></div>
-                                </div>
-                            </div>
-                            <div className="h-[32px] w-[2px] bg-[#43433b] mx-2"></div>
-                        </>
-                    }
                     <div className="flex-1 text-center">
                         <p className="text-xs text-[#85827d] font-medium whitespace-nowrap overflow-hidden text-ellipsis">PEARLS per hour</p>
                         <div className="flex items-center justify-center space-x-1">
@@ -99,22 +78,14 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView, onO
                             <p className="text-sm">+{formatNumber(profitPerHour)}</p>
                         </div>
                     </div>
-                    {
-                        isGamePage &&
+                    {isGamePage ? (
                         <>
-                            <div className="h-[32px] w-[2px] bg-[#43433b] mx-2"></div>
+                            <div className="h-[32px] w-[2px] bg-[#43433b] mx-2" />
                             <div className="flex-1 flex items-center justify-center">
                                 <NotificationCenter />
                             </div>
-                            <div className="h-[32px] w-[2px] bg-[#43433b] mx-2"></div>
-                            <button
-                                onClick={handleSettingsClick}
-                                className="flex-1 flex items-center justify-center text-white focus:outline-none"
-                            >
-                                <Settings className="w-6 h-6" />
-                            </button>
                         </>
-                    }
+                    ) : null}
                 </div>
             </div>
         </div>

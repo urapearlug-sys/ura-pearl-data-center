@@ -106,7 +106,8 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
   const [showEcosystemDashboard, setShowEcosystemDashboard] = useState(false);
-  const { userTelegramName, points, pointsBalance, userTelegramInitData, setPointsBalance } = useGameStore();
+  const { userTelegramName, points, pointsBalance, userTelegramInitData, setPointsBalance, unsynchronizedPoints } =
+    useGameStore();
   const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
   const [karibuHomeSubtitle, setKaribuHomeSubtitle] = useState('10-day login · 100–1000 white pearls');
@@ -497,22 +498,42 @@ export default function Home({ setCurrentView }: HomeProps) {
 
       <div className="w-full bg-[#0f3c86] text-white flex flex-col max-w-xl pb-24">
         <div className="px-4 pt-4">
-          <button
-            type="button"
-            onClick={() => {
-              triggerHapticFeedback(window);
-              setCurrentView('settings');
-            }}
-            className="w-full rounded-2xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 flex items-center gap-3 text-left hover:border-[#f3ba2f]/55 transition-colors"
-          >
-            <div className="w-10 h-10 rounded-full border border-[#8bb4ef]/50 overflow-hidden bg-white flex-shrink-0 relative">
-              <Image src={defaultProfileAvatar} alt="Profile" fill className="object-cover" sizes="40px" />
+          <div className="w-full rounded-2xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3 flex items-center gap-3 hover:border-[#f3ba2f]/55 transition-colors">
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setCurrentView('settings');
+              }}
+              className="min-w-0 flex-1 flex items-center gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f8ff] rounded-xl"
+            >
+              <div className="w-10 h-10 rounded-full border border-[#8bb4ef]/50 overflow-hidden bg-white flex-shrink-0 relative">
+                <Image src={defaultProfileAvatar} alt="Profile" fill className="object-cover" sizes="40px" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-[#335f97]">URA Platform · Profile</p>
+                <p className="font-semibold truncate text-[#123f78]">{userTelegramName || 'Citizen'}</p>
+              </div>
+            </button>
+            <div
+              className="shrink-0 flex flex-col items-center justify-center px-2 py-1 border-l border-[#8bb4ef]/40 min-w-[4.5rem]"
+              title={
+                unsynchronizedPoints >= 1
+                  ? 'Taps are syncing to the server in the background.'
+                  : 'Progress is in sync with the server.'
+              }
+            >
+              <p className="text-[10px] font-semibold text-[#5a7bb0] uppercase tracking-wide">Sync</p>
+              <div className="flex items-center justify-center mt-1">
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    unsynchronizedPoints >= 1 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500'
+                  }`}
+                  aria-hidden
+                />
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm text-[#335f97]">URA Platform · Profile</p>
-              <p className="font-semibold truncate text-[#123f78]">{userTelegramName || 'Citizen'}</p>
-            </div>
-          </button>
+          </div>
 
           <div className="mt-4 rounded-2xl overflow-hidden border border-[#8bb4ef]/35 bg-[#f5f0e8]">
             <Image
