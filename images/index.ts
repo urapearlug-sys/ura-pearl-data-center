@@ -83,6 +83,7 @@ import navLearn from "./nav-learn.png";
 import navServices from "./nav-services.png";
 import earnRewardsIcon from "./earn-rewards-icon.png";
 import navGuild from "./nav-guild-icon.png";
+import uraLogoCircle from "./ura-logo-circle.png";
 
 
 export {
@@ -143,6 +144,7 @@ export {
     navServices,
     earnRewardsIcon,
     navGuild,
+    uraLogoCircle,
     blockchain,
     afrolumens,
     mitroplus,

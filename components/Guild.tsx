@@ -8,7 +8,7 @@ import { REFERRAL_BONUS_BASE, REFERRAL_BONUS_PREMIUM } from '@/utils/consts';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import { getUserTelegramId } from '@/utils/user';
 import { buildInviteLink } from '@/utils/referral-invite';
-import { navGuild, pearlWhite, baseGift, bigGift } from '@/images';
+import { navGuild, uraLogoCircle, pearlWhite, baseGift, bigGift } from '@/images';
 import Copy from '@/icons/Copy';
 import { useToast } from '@/contexts/ToastContext';
 import GlobalRankingPopup from '@/components/popups/GlobalRankingPopup';
@@ -413,8 +413,15 @@ export default function Guild({ setCurrentView }: GuildProps) {
               <div className="flex-1 bg-[#f3ba2f]" />
               <div className="flex-1 bg-[#b91c1c]" />
             </div>
-            <div className="relative z-10 flex size-[7.25rem] shrink-0 items-center justify-center rounded-full border-[5px] border-white/95 bg-white p-2 shadow-[0_14px_36px_rgba(0,0,0,0.6)] ring-1 ring-black/35">
-              <Image src={navGuild} alt="Citizen Guild" width={72} height={72} className="object-contain" />
+            <div className="relative z-10 flex size-[7.25rem] shrink-0 items-center justify-center rounded-full border-[5px] border-white/95 bg-white p-1.5 shadow-[0_14px_36px_rgba(0,0,0,0.6)] ring-1 ring-black/35">
+              <Image
+                src={uraLogoCircle}
+                alt="Uganda Revenue Authority"
+                width={112}
+                height={112}
+                className="size-full rounded-full object-contain"
+                sizes="116px"
+              />
             </div>
           </div>
           <p className="mt-8 text-left text-[11px] font-medium leading-relaxed text-white/82">
