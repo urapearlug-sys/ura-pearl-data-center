@@ -265,11 +265,11 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
 
   if (minimalOnly) {
     return (
-      <div className="bg-[#0f3c86] flex justify-center min-h-screen">
-        <div className="w-full bg-[#0f3c86] flex flex-col max-w-xl min-h-screen">
-          <div className="flex-grow mt-2 rounded-t-[28px] border border-b-0 border-[#8bb4ef]/35 bg-[#f4f8ff] shadow-[0_-6px_28px_rgba(15,49,95,0.2)]">
-            <div className="h-full overflow-y-auto no-scrollbar">
-              <div className="px-4 pt-6 pb-24 text-[#16427f] font-medium">
+      <div className="bg-ura-page flex justify-center min-h-screen">
+        <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+          <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+            <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+              <div className="px-4 pt-6 pb-24">
                 <div className="flex justify-center mb-4">
                   <Image
                     src={earnRewardsIcon}
@@ -280,7 +280,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                     priority
                   />
                 </div>
-                <div className="mb-4 rounded-xl border border-[#8bb4ef]/35 bg-[#0f315f]/90 p-1 grid grid-cols-2 gap-1">
+                <div className="mb-4 rounded-xl border border-ura-border/85 bg-[#161923] p-1 grid grid-cols-2 gap-1">
                   {[
                     { key: 'earn' as const, label: 'Earn' },
                     { key: 'wallet' as const, label: 'Wallet' },
@@ -293,7 +293,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                         setEarnMainTab(tab.key);
                       }}
                       className={`py-2 rounded-lg text-sm font-semibold transition-colors ${
-                        earnMainTab === tab.key ? 'bg-[#f4f8ff] text-[#123f78] border border-[#f3ba2f]/45' : 'text-blue-100/90'
+                        earnMainTab === tab.key ? 'bg-[var(--ura-blue-dark)] text-white' : 'text-gray-400'
                       }`}
                     >
                       {tab.label}
@@ -331,11 +331,11 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   }
 
   return (
-    <div className="bg-[#0f3c86] flex justify-center min-h-screen">
-      <div className="w-full bg-[#0f3c86] flex flex-col max-w-xl min-h-screen">
-        <div className="flex-grow mt-2 rounded-t-[28px] border border-b-0 border-[#8bb4ef]/35 bg-[#f4f8ff] shadow-[0_-6px_28px_rgba(15,49,95,0.2)]">
-          <div className="h-full overflow-y-auto no-scrollbar">
-            <div className="px-4 pt-1 pb-24 text-[#16427f] font-medium">
+    <div className="bg-ura-page flex justify-center min-h-screen">
+      <div className="w-full bg-ura-page text-white font-bold flex flex-col max-w-xl">
+        <div className="flex-grow mt-4 bg-ura-gold rounded-t-[48px] relative top-glow z-0">
+          <div className="mt-[2px] bg-ura-panel rounded-t-[46px] h-full overflow-y-auto no-scrollbar">
+            <div className="px-4 pt-1 pb-24">
               <div className="relative mt-4">
                 <div className="flex justify-center mb-4">
                   <Image
@@ -347,22 +347,22 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                     priority
                   />
                 </div>
-                <h1 className="text-2xl text-center mb-2 text-[#123f78] font-bold">Earn More PEARLS</h1>
+                <h1 className="text-2xl text-center mb-2">Earn More PEARLS</h1>
                 <p className="text-center text-[#f3ba2f] font-bold mb-4">
                   Balance: {formatNumber(Math.floor(pointsBalance))} PEARLS
                 </p>
                 {/* Activities section – tabbed list (scroll down to see) */}
                 <section
                   id="earn-activities"
-                  className="mt-10 pt-6 border-t border-[#8bb4ef]/30"
+                  className="mt-10 pt-6 border-t border-ura-border/85"
                   aria-label="Activities"
                 >
-                  <h2 className="text-xl font-bold text-[#123f78] mb-4">Activities</h2>
+                  <h2 className="text-xl font-bold text-white mb-4">Activities</h2>
                   {isLoading ? (
-                    <div className="text-center text-[#335f97] py-10">Loading activities...</div>
+                    <div className="text-center text-gray-400 py-10">Loading activities...</div>
                   ) : (
                     <>
-                      <div className="flex gap-1 p-1 rounded-xl bg-[#0f315f]/90 border border-[#8bb4ef]/35 mb-4">
+                      <div className="flex gap-1 p-1 rounded-xl bg-ura-panel-2 border border-ura-border/85 mb-4">
                         {tabLabels.map((tab) => (
                           <button
                             key={tab}
@@ -373,13 +373,13 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                             }}
                             className={`relative flex-1 min-w-0 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                               activeTab === tab
-                                ? 'bg-[#f4f8ff] text-[#123f78] border border-[#f3ba2f]/45 shadow-sm'
-                                : 'text-blue-100/90 hover:text-white hover:bg-white/10'
+                                ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20'
+                                : 'text-gray-400 hover:text-white hover:bg-ura-panel-2'
                             }`}
                           >
                             {capitalizeFirstLetter(tab)}
                             {tabHasPending[tab] && (
-                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[#f4f8ff]" aria-hidden />
+                              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-[#1a1c22]" aria-hidden />
                             )}
                           </button>
                         ))}
@@ -388,89 +388,89 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                         {activeTab === 'Leagues' ? (
                           <>
                             {leaguesLoading ? (
-                              <div className="text-center text-[#335f97] py-10">Loading leagues…</div>
+                              <div className="text-center text-gray-400 py-10">Loading leagues…</div>
                             ) : (
                               <div className="space-y-8">
                                 {/* Grid 1: Your status */}
                                 <section>
-                                  <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Your status</h3>
+                                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Your status</h3>
                                   <div className="grid grid-cols-2 gap-3">
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); if (leaguesData) setShowLeagueDetailId('current'); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50/95 border border-amber-200/55 text-left"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 text-left"
                                     >
                                       <span className="text-3xl">🏆</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">Current league</p>
-                                        <p className="text-sm text-amber-900/75">{leaguesData?.currentTier ?? 'Bronze'} · {leaguesData?.weeklyPoints ?? 0} LP this week{(leaguesData?.weeklyTeamPoints ?? 0) > 0 ? ` · ${leaguesData?.weeklyTeamPoints ?? 0} TP` : ''}</p>
+                                        <p className="font-bold text-white">Current league</p>
+                                        <p className="text-sm text-amber-200/90">{leaguesData?.currentTier ?? 'Bronze'} · {leaguesData?.weeklyPoints ?? 0} LP this week{(leaguesData?.weeklyTeamPoints ?? 0) > 0 ? ` · ${leaguesData?.weeklyTeamPoints ?? 0} TP` : ''}</p>
                                         {leaguesData?.rankInTier != null && (
-                                          <p className="text-xs text-[#335f97]">Rank #{leaguesData.rankInTier} in tier</p>
+                                          <p className="text-xs text-gray-400">Rank #{leaguesData.rankInTier} in tier</p>
                                         )}
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowChampionship(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-rose-50 to-pink-50/95 border border-rose-200/55 text-left"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-rose-500/20 to-pink-500/10 border border-rose-500/30 text-left"
                                     >
                                       <span className="text-3xl">🔥</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">URAPearls Championship</p>
-                                        <p className="text-sm text-rose-900/75">Top 100 Diamond & Legend · Every 8 weeks</p>
+                                        <p className="font-bold text-white">URAPearls Championship</p>
+                                        <p className="text-sm text-rose-200/90">Top 100 Diamond & Legend · Every 8 weeks</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                   </div>
                                 </section>
 
                                 {/* Grid 2: Learn & levels */}
                                 <section>
-                                  <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Learn & levels</h3>
+                                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Learn & levels</h3>
                                   <div className="grid grid-cols-2 gap-3">
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeagueLevels(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-amber-500/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-amber-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📊</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">League levels</p>
-                                        <p className="text-xs text-[#335f97]">Bronze to Legend</p>
+                                        <p className="font-bold text-white">League levels</p>
+                                        <p className="text-xs text-gray-400">Bronze to Legend</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowTeamLevels(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-sky-500/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-sky-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">Team levels</p>
-                                        <p className="text-xs text-[#335f97]">How teams work</p>
+                                        <p className="font-bold text-white">Team levels</p>
+                                        <p className="text-xs text-gray-400">How teams work</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeaguePointsTable(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-[#f3ba2f]/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-[#f3ba2f]/40 transition-colors"
                                     >
                                       <span className="text-2xl">📈</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">How to earn LP</p>
-                                        <p className="text-xs text-[#335f97]">Activity table</p>
+                                        <p className="font-bold text-white">How to earn LP</p>
+                                        <p className="text-xs text-gray-400">Activity table</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeaguesGuide(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-[#f3ba2f]/40 transition-colors"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-[#f3ba2f]/40 transition-colors"
                                     >
                                       <span className="text-2xl">📖</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">User guide</p>
-                                        <p className="text-xs text-[#335f97]">Tiers, LP, leagues</p>
+                                        <p className="font-bold text-white">User guide</p>
+                                        <p className="text-xs text-gray-400">Tiers, LP, leagues</p>
                                       </div>
                                     </button>
                                   </div>
@@ -478,124 +478,124 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
 
                                 {/* Grid 3: Teams */}
                                 <section>
-                                  <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Teams</h3>
+                                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Teams</h3>
                                   <div className="grid grid-cols-2 gap-3">
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowCreateTeam(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-sky-50 to-indigo-50/95 border border-sky-200/55 text-left"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-sky-500/20 to-indigo-500/10 border border-sky-500/30 text-left"
                                     >
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">Create team</p>
-                                        <p className="text-xs text-sky-900/75">1M PEARLS · Required for leagues</p>
+                                        <p className="font-bold text-white">Create team</p>
+                                        <p className="text-xs text-sky-200/90">1M PEARLS · Required for leagues</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowJoinTeam(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-white border border-sky-500/30 text-left hover:border-sky-500/50"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-sky-500/30 text-left hover:border-sky-500/50"
                                     >
                                       <span className="text-2xl">🔗</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">Join team</p>
-                                        <p className="text-xs text-[#335f97]">Invite code · No fee</p>
+                                        <p className="font-bold text-white">Join team</p>
+                                        <p className="text-xs text-gray-400">Invite code · No fee</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowBrowseTeams(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-sky-500/40 transition-colors"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-sky-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📋</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">Browse teams</p>
-                                        <p className="text-sm text-[#335f97]">List · Request to join or get invite code</p>
+                                        <p className="font-bold text-white">Browse teams</p>
+                                        <p className="text-sm text-gray-400">List · Request to join or get invite code</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                     {memberTeam && (
                                       <button
                                         type="button"
                                         onClick={() => { triggerHapticFeedback(window); setShowTeamMemberDashboardId(memberTeam.id); }}
-                                        className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-sky-50 to-indigo-50/95 border border-sky-200/55 text-left"
+                                        className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-sky-500/20 to-indigo-500/10 border border-sky-500/30 text-left"
                                       >
                                         <span className="text-2xl">📊</span>
                                         <div className="min-w-0 flex-1">
-                                          <p className="font-bold text-[#123f78]">Team dashboard</p>
-                                          <p className="text-sm text-sky-900/75">{memberTeam.name} · Announcements, TP/LP, tasks</p>
+                                          <p className="font-bold text-white">Team dashboard</p>
+                                          <p className="text-sm text-sky-200/90">{memberTeam.name} · Announcements, TP/LP, tasks</p>
                                         </div>
-                                        <span className="text-[#5a7bb0]">→</span>
+                                        <span className="text-gray-400">→</span>
                                       </button>
                                     )}
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowTeamChallenges(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50/95 border border-cyan-200/55 text-left"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 text-left"
                                     >
                                       <span className="text-2xl">👥</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">Team vs Team</p>
-                                        <p className="text-sm text-cyan-900/75">Challenge another team · First to target PEARLS wins prize</p>
+                                        <p className="font-bold text-white">Team vs Team</p>
+                                        <p className="text-sm text-cyan-200/90">Challenge another team · First to target PEARLS wins prize</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                   </div>
                                 </section>
 
                                 {/* Grid 4: Leagues */}
                                 <section>
-                                  <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Leagues</h3>
+                                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Leagues</h3>
                                   <div className="grid grid-cols-2 gap-3">
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowCreateLeague(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50/95 border border-emerald-200/55 text-left"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-left"
                                     >
                                       <span className="text-2xl">➕</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">Create league</p>
-                                        <p className="text-xs text-emerald-900/75">10M PEARLS · Need a team</p>
+                                        <p className="font-bold text-white">Create league</p>
+                                        <p className="text-xs text-emerald-200/90">10M PEARLS · Need a team</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setJoinLeagueInitialCode(''); setShowJoinLeague(true); }}
-                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-violet-50 to-indigo-50/95 border border-violet-200/55 text-left"
+                                      className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-violet-500/20 to-indigo-500/10 border border-violet-500/30 text-left"
                                     >
                                       <span className="text-2xl">🔗</span>
                                       <div className="min-w-0">
-                                        <p className="font-bold text-[#123f78]">Join league</p>
-                                        <p className="text-xs text-violet-900/75">Enter invite code</p>
+                                        <p className="font-bold text-white">Join league</p>
+                                        <p className="text-xs text-violet-200/90">Enter invite code</p>
                                       </div>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowBrowseLeagues(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-violet-500/40 transition-colors"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-[#252836] border border-ura-border/75 text-left hover:border-violet-500/40 transition-colors"
                                     >
                                       <span className="text-2xl">📋</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">Browse leagues</p>
-                                        <p className="text-sm text-[#335f97]">List, performance, members · Request to join</p>
+                                        <p className="font-bold text-white">Browse leagues</p>
+                                        <p className="text-sm text-gray-400">List, performance, members · Request to join</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                     {leaguesData?.customLeagues && leaguesData.customLeagues.length > 0 && (
                                       <>
-                                        <p className="col-span-2 text-xs font-medium text-[#335f97] mt-1">My leagues</p>
+                                        <p className="col-span-2 text-xs font-medium text-gray-500 mt-1">My leagues</p>
                                         {leaguesData.customLeagues.map((cl) => (
                                           <button
                                             key={cl.id}
                                             type="button"
                                             onClick={() => { triggerHapticFeedback(window); setShowLeagueDetailId(cl.id); }}
-                                            className="col-span-2 flex items-center justify-between p-3 rounded-xl bg-white border border-[#8bb4ef]/30 text-left hover:border-violet-500/40"
+                                            className="col-span-2 flex items-center justify-between p-3 rounded-xl bg-[#252836] border border-ura-border/85 text-left hover:border-violet-500/40"
                                           >
                                             <div>
-                                              <p className="font-medium text-[#123f78]">{cl.name}</p>
-                                              <p className="text-xs text-[#335f97]">{cl.memberCount} members{cl.myRank != null ? ` · Rank #${cl.myRank}` : ''}{cl.myPoints != null ? ` · ${cl.myPoints} LP` : ''}</p>
+                                              <p className="font-medium text-white">{cl.name}</p>
+                                              <p className="text-xs text-gray-400">{cl.memberCount} members{cl.myRank != null ? ` · Rank #${cl.myRank}` : ''}{cl.myPoints != null ? ` · ${cl.myPoints} LP` : ''}</p>
                                             </div>
-                                            <span className="text-[#5a7bb0]">→</span>
+                                            <span className="text-gray-500">→</span>
                                           </button>
                                         ))}
                                       </>
@@ -603,33 +603,33 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowLeagueChallenges(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50/95 border border-amber-200/55 text-left"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 text-left"
                                     >
                                       <span className="text-2xl">⚔️</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">League Competition</p>
-                                        <p className="text-sm text-amber-900/75">Teams competing · First to target PEARLS wins prize</p>
+                                        <p className="font-bold text-white">League Competition</p>
+                                        <p className="text-sm text-amber-200/90">Teams competing · First to target PEARLS wins prize</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                   </div>
                                 </section>
 
                                 {/* Grid 5: Global competitions */}
                                 <section>
-                                  <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Global competitions</h3>
+                                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Global competitions</h3>
                                   <div className="grid grid-cols-2 gap-3">
                                     <button
                                       type="button"
                                       onClick={() => { triggerHapticFeedback(window); setShowGlobalTasks(true); }}
-                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50/95 border border-emerald-200/55 text-left"
+                                      className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-left"
                                     >
                                       <span className="text-2xl">🏆</span>
                                       <div className="min-w-0 flex-1">
-                                        <p className="font-bold text-[#123f78]">Joinable tasks</p>
-                                        <p className="text-sm text-emerald-900/75">10 team + 10 league · Browse, invite opponent, stake · First to target wins</p>
+                                        <p className="font-bold text-white">Joinable tasks</p>
+                                        <p className="text-sm text-emerald-200/90">10 team + 10 league · Browse, invite opponent, stake · First to target wins</p>
                                       </div>
-                                      <span className="text-[#5a7bb0]">→</span>
+                                      <span className="text-gray-400">→</span>
                                     </button>
                                   </div>
                                 </section>
@@ -637,19 +637,19 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                 {/* Grid 6: Management (if owner) */}
                                 {hasLeadership && (
                                   <section>
-                                    <h3 className="text-xs font-semibold text-[#335f97] uppercase tracking-wider mb-3">Management</h3>
+                                    <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Management</h3>
                                     <div className="grid grid-cols-2 gap-3">
                                       <button
                                         type="button"
                                         onClick={() => { triggerHapticFeedback(window); setShowLeadershipDashboard(true); }}
-                                        className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-violet-50 to-indigo-50/95 border border-violet-200/55 text-left"
+                                        className="col-span-2 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br from-violet-500/20 to-indigo-500/10 border border-violet-500/30 text-left"
                                       >
                                         <span className="text-2xl">⚙️</span>
                                         <div className="min-w-0 flex-1">
-                                          <p className="font-bold text-[#123f78]">Team / League management</p>
-                                          <p className="text-sm text-violet-900/75">Members, announcements, mute, ban, opinions</p>
+                                          <p className="font-bold text-white">Team / League management</p>
+                                          <p className="text-sm text-violet-200/90">Members, announcements, mute, ban, opinions</p>
                                         </div>
-                                        <span className="text-[#5a7bb0]">→</span>
+                                        <span className="text-gray-400">→</span>
                                       </button>
                                     </div>
                                   </section>
@@ -658,8 +658,8 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                             )}
                           </>
                         ) : displayTasks.length === 0 ? (
-                          <div className="text-center text-[#335f97] py-10 rounded-xl bg-white/70 border border-[#8bb4ef]/30 px-4">
-                            <p className="font-medium text-[#335f97]">No activities in this section.</p>
+                          <div className="text-center text-gray-500 py-10 rounded-xl bg-ura-panel-2/50 border border-ura-border/85 px-4">
+                            <p className="font-medium text-gray-400">No activities in this section.</p>
                           </div>
                         ) : (
                           <div className="grid grid-cols-2 gap-3">
@@ -668,10 +668,10 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                 key={task.id}
                                 type="button"
                                 onClick={() => openTaskPopup(task)}
-                                className="text-left rounded-xl border border-[#8bb4ef]/35 bg-gradient-to-br from-white to-[#e8f1ff] p-3 shadow-lg hover:border-[#f3ba2f]/50 hover:from-[#f4f8ff] hover:to-[#dce9fc] active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
+                                className="text-left rounded-xl border border-ura-border/85 bg-gradient-to-br from-[#252836] to-[#1e2029] p-3 shadow-lg hover:border-violet-500/45 hover:from-[#2a2c38] hover:to-[#22242e] active:scale-[0.99] transition-all flex flex-col min-h-[104px]"
                               >
                                 <div className="flex items-start gap-2 flex-1 min-h-0">
-                                  <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center shrink-0 border border-[#8bb4ef]/35 overflow-hidden">
+                                  <div className="w-10 h-10 rounded-lg bg-ura-panel-2 flex items-center justify-center shrink-0 border border-ura-border/85 overflow-hidden">
                                     {(() => {
                                       const imgSrc = getTaskImageSrc(task.image);
                                       return imgSrc ? (
@@ -682,9 +682,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                     })()}
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <p className="text-[11px] font-bold text-[#123f78] leading-snug line-clamp-3">{task.title}</p>
+                                    <p className="text-[11px] font-bold text-white leading-snug line-clamp-3">{task.title}</p>
                                     {task.type === 'REFERRAL' && task.taskData?.friendsNumber != null && (
-                                      <p className="text-[10px] text-[#335f97] mt-0.5 line-clamp-2">
+                                      <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-2">
                                         Friends needed: {Number(task.taskData.friendsNumber)}
                                       </p>
                                     )}
@@ -703,7 +703,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                                         </svg>
                                       </span>
                                     ) : (
-                                      <span className="text-[#5a7bb0] text-lg leading-none">›</span>
+                                      <span className="text-gray-500 text-lg leading-none">›</span>
                                     )}
                                   </span>
                                 </div>
