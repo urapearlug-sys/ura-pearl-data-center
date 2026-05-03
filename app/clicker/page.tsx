@@ -117,7 +117,7 @@ function ClickerPage() {
                 </>
             }
             {renderCurrentView()}
-            {isInitialized && MORE_VIEWS.has(currentView) && (
+            {isInitialized && MORE_VIEWS.has(currentView) && currentView !== 'guild' && (
                 <button
                     type="button"
                     onClick={() => setCurrentView('earn')}
