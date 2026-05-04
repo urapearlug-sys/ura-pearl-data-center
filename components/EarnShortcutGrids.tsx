@@ -47,11 +47,11 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
 const PRIMARY_SHORTCUT_IDS: string[] = [
   'ura-quiz',
   'receipt-rush',
-  'whistle-blower',
   'true-false',
   'voice-reports',
-  'words-of-the-day',
   'earn-your-tenure',
+  'words-of-the-day',
+  'whistle-blower',
 ];
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
