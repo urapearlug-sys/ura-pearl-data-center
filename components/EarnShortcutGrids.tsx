@@ -15,31 +15,32 @@ export type EarnShortcutGridsProps = {
 
 type ShortcutItem = { id: string; title: string; subtitle: string; onClick: () => void };
 
+/** URA shell colours: navy surfaces (#0a1628–#172642), accent #5fa8ff, gold #f3ba2f (see globals.css). */
 const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
-  tasks: { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '✅' },
-  decode: { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '🔐' },
-  matrix: { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
-  'collection-cards': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🗂️' },
-  'weekly-event': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎁' },
-  'global-joinable-tasks': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#3ad1a7]/50', icon: '🌍' },
-  'ura-quiz': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📝' },
-  'receipt-rush': { tone: 'from-[#17334d] to-[#234a6d] border-[#6eb4ff]/50', icon: '🧾' },
-  'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
-  'whistle-blower': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#5eead4]/50', icon: '🛡️' },
-  'voice-reports': { tone: 'from-[#3b2a5a] to-[#4a3680] border-[#a78bfa]/50', icon: '🎤' },
-  'words-of-the-day': { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '📖' },
-  'earn-your-tenure': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
-  leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
-  'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
-  'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
-  'pearls-collection': { tone: 'from-[#26345d] to-[#3a4a78] border-[#8ea3df]/45', icon: '🧊' },
-  'citizen-network': { tone: 'from-[#224b58] to-[#2a6170] border-[#71c9dd]/45', icon: '👥' },
-  'pearls-airdrop': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '🎈' },
-  'mini-games': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🕹️' },
-  'tax-trivia-live': { tone: 'from-[#5a1f3a] to-[#732445] border-[#ff6f97]/50', icon: '🎤' },
-  'spin-wheel': { tone: 'from-[#1f314f] to-[#28456e] border-[#78a8ff]/50', icon: '🎡' },
+  tasks: { tone: 'from-[#172642] to-[#0a1628] border-[#5fa8ff]/45', icon: '✅' },
+  decode: { tone: 'from-[#1f3f72] to-[#0e1a2e] border-[#5fa8ff]/42', icon: '🔐' },
+  matrix: { tone: 'from-[#1a3058] to-[#0c1829] border-[#f3ba2f]/45', icon: '🎴' },
+  'collection-cards': { tone: 'from-[#152a48] to-[#0a1628] border-[#5fa8ff]/38', icon: '🗂️' },
+  'weekly-event': { tone: 'from-[#1e3460] to-[#0f1a2e] border-[#f3ba2f]/50', icon: '🎁' },
+  'global-joinable-tasks': { tone: 'from-[#172642] to-[#050b14] border-[#2a4168]', icon: '🌍' },
+  'ura-quiz': { tone: 'from-[#1f3f8f] to-[#101e32] border-[#f3ba2f]/55', icon: '📝' },
+  'receipt-rush': { tone: 'from-[#1a3058] to-[#0a1628] border-[#5fa8ff]/48', icon: '🧾' },
+  'true-false': { tone: 'from-[#162844] to-[#0a1424] border-[#f3ba2f]/42', icon: '⚖️' },
+  'whistle-blower': { tone: 'from-[#121f35] to-[#0a1628] border-[#5fa8ff]/40', icon: '🛡️' },
+  'voice-reports': { tone: 'from-[#1e3460] to-[#0d1829] border-[#5fa8ff]/44', icon: '🎤' },
+  'words-of-the-day': { tone: 'from-[#1f3f72] to-[#0c1829] border-[#5fa8ff]/46', icon: '📖' },
+  'earn-your-tenure': { tone: 'from-[#1a3058] to-[#0f1a2e] border-[#f3ba2f]/48', icon: '🎴' },
+  leaderboard: { tone: 'from-[#172642] to-[#0a1628] border-[#2a4168]', icon: '🏆' },
+  'karibu-daily': { tone: 'from-[#1e3460] to-[#0c1829] border-[#f3ba2f]/52', icon: '📅' },
+  'mine-flow': { tone: 'from-[#152a48] to-[#0a1628] border-[#5fa8ff]/36', icon: '⛏️' },
+  'pearls-collection': { tone: 'from-[#1a2850] to-[#0d1829] border-[#5fa8ff]/42', icon: '🧊' },
+  'citizen-network': { tone: 'from-[#172642] to-[#050b14] border-[#5fa8ff]/40', icon: '👥' },
+  'pearls-airdrop': { tone: 'from-[#1e3460] to-[#0f1a2e] border-[#f3ba2f]/46', icon: '🎈' },
+  'mini-games': { tone: 'from-[#1f3f72] to-[#0e1a2e] border-[#f3ba2f]/40', icon: '🕹️' },
+  'tax-trivia-live': { tone: 'from-[#1a3058] to-[#0c1829] border-[#f3ba2f]/44', icon: '🎤' },
+  'spin-wheel': { tone: 'from-[#162844] to-[#0a1628] border-[#5fa8ff]/45', icon: '🎡' },
   /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
-  'earn-more': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '➕' },
+  'earn-more': { tone: 'from-[#1f3f8f] to-[#0a1628] border-[#f3ba2f]/58', icon: '➕' },
 };
 
 /** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
@@ -141,7 +142,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'earn-your-tenure',
       title: 'Earn your Tenure',
-      subtitle: 'Matrix combo · daily card challenge',
+      subtitle: 'Reward & protection',
       onClick: () => goEarn({ openDailyCombo: true }),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
@@ -225,7 +226,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   const renderHighlightButton = (item: ShortcutItem, opts?: { closePopupAfter?: boolean }) => {
     const closeAfter = opts?.closePopupAfter ?? false;
     const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
-      tone: 'from-[#1e365a] to-[#2c4f7d] border-[#82b4ff]/50',
+      tone: 'from-[#172642] to-[#0a1628] border-[#5fa8ff]/45',
       icon: '⭐',
     };
     return (
@@ -236,12 +237,12 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
         className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
       >
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#0a1628]/90 border border-[#5fa8ff]/22 text-xl shadow-inner shadow-black/20">
             {appearance.icon}
           </span>
           <div className="min-w-0">
             <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-            <p className="text-sm text-blue-100/95 mt-1 leading-snug">{item.subtitle}</p>
+            <p className="text-sm text-[#b8d4ff]/92 mt-1 leading-snug">{item.subtitle}</p>
           </div>
         </div>
       </button>
@@ -264,7 +265,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
           className={`w-full rounded-xl border px-3 py-3 text-left transition-colors ${
             variant === 'learn'
               ? 'border-[var(--ura-yellow)]/55 bg-[var(--ura-yellow)]/10 hover:border-[var(--ura-yellow)]'
-              : 'border-cyan-500/50 bg-cyan-900/20 hover:border-cyan-400'
+              : 'border-[#5fa8ff]/40 bg-[#0a1628]/85 hover:border-[#5fa8ff]/65 hover:bg-[#121f35]/90'
           }`}
         >
           <p className="text-sm font-bold text-white">{item.title}</p>
@@ -299,12 +300,12 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                 className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
               >
                 <div className="flex items-start gap-2">
-                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#111621]/75 border border-white/20 text-xl">
+                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#0a1628]/90 border border-[#5fa8ff]/22 text-xl shadow-inner shadow-black/20">
                     {appearance.icon}
                   </span>
                   <div className="min-w-0">
                     <p className="text-base font-extrabold text-white leading-tight">More</p>
-                    <p className="text-sm text-blue-100/95 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
+                    <p className="text-sm text-[#b8d4ff]/92 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
                   </div>
                 </div>
               </button>
