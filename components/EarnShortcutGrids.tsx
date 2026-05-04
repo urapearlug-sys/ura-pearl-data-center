@@ -56,6 +56,9 @@ const PRIMARY_SHORTCUT_IDS: string[] = [
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
 
+/** Shared tagline for Earn your Tenure + Whistle blower shortcut tiles. */
+const REWARD_AND_PROTECTION_SUBTITLE = 'Reward & protection';
+
 function useKaribuEarnSubtitle() {
   const { userTelegramInitData } = useGameStore();
   const [subtitle, setSubtitle] = useState('10-day streak · 100–1000 white pearls');
@@ -118,7 +121,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'whistle-blower',
       title: 'Whistle blower',
-      subtitle: 'Reward & protection',
+      subtitle: REWARD_AND_PROTECTION_SUBTITLE,
       onClick: () => goEarn({ activeTabAll: true }),
     },
     {
@@ -142,7 +145,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'earn-your-tenure',
       title: 'Earn your Tenure',
-      subtitle: 'Matrix combo · daily card challenge',
+      subtitle: REWARD_AND_PROTECTION_SUBTITLE,
       onClick: () => goEarn({ openDailyCombo: true }),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
