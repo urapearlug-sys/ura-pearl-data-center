@@ -16,6 +16,16 @@ interface QuizQuestion {
   order: number;
 }
 
+type QuizAnswerReviewItem = {
+  questionId: string;
+  questionText: string;
+  userAnswerIndex: number;
+  userAnswerText: string | null;
+  correctAnswerIndex: number;
+  correctAnswerText: string | null;
+  isCorrect: boolean;
+};
+
 interface MitrolabsQuizPopupProps {
   onClose: () => void;
 }
@@ -39,6 +49,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
     pointsAwarded: number;
     pointsFromQuestions?: number;
     completionBonus?: number;
+    answerReview?: QuizAnswerReviewItem[];
   } | null>(null);
   const showToast = useToast();
 
@@ -153,6 +164,7 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           pointsAwarded: data.pointsAwarded,
           pointsFromQuestions: data.pointsFromQuestions,
           completionBonus: data.completionBonus,
+          answerReview: Array.isArray(data.answerReview) ? data.answerReview : [],
         });
         const awarded = Math.floor(Number(data.pointsAwarded));
         const hasAward = Number.isFinite(awarded) && awarded > 0;
@@ -225,12 +237,14 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
     const showBreakdown = result.pointsAwarded > 0 && (fromQuestions > 0 || bonus > 0);
     const noAnswersAttended = result.totalCount > 0 && result.correctCount === 0 && result.pointsAwarded === 0;
 
+    const review = Array.isArray(result.answerReview) ? result.answerReview : [];
     return (
       <div className="fixed inset-0 z-[60] flex flex-col bg-ura-panel p-6">
         <div className="flex justify-end">
           <button type="button" onClick={onClose} className="text-gray-400 hover:text-white text-2xl" aria-label="Close">&times;</button>
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center text-center">
+        <div className="flex-1 flex flex-col text-center overflow-y-auto no-scrollbar">
+          <div className="flex flex-col items-center justify-center">
           <h2 className="text-2xl font-bold text-[#f3ba2f] mb-2">URA Quiz complete</h2>
           <p className="text-white text-lg mb-1">{result.correctCount} / {result.totalCount} correct</p>
           {noAnswersAttended && (
@@ -253,6 +267,35 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           )}
           {!noAnswersAttended && result.pointsAwarded === 0 && result.totalCount > 0 && (
             <p className="text-gray-400 text-sm mb-4">+0 PEARLS this time.</p>
+          )}
+          </div>
+          {review.length > 0 && (
+            <div className="mt-4 text-left space-y-2">
+              <p className="text-sm font-semibold text-[#f3ba2f]">Answer review</p>
+              {review.map((item, index) => (
+                <div
+                  key={item.questionId}
+                  className={`rounded-xl border px-3 py-3 ${
+                    item.isCorrect ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-red-500/40 bg-red-500/10'
+                  }`}
+                >
+                  <p className="text-xs text-gray-300 mb-1 flex items-center gap-1.5">
+                    <span aria-hidden>{item.isCorrect ? '✅' : '❌'}</span>
+                    <span>Q{index + 1}</span>
+                  </p>
+                  <p className="text-sm font-semibold text-white">{item.questionText}</p>
+                  <p className={`text-xs mt-2 ${item.isCorrect ? 'text-emerald-300' : 'text-red-300'}`}>
+                    {item.isCorrect ? 'Correct' : 'Wrong'}
+                  </p>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Your answer: <span className="text-white">{item.userAnswerText ?? 'Not answered'}</span>
+                  </p>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Right answer: <span className="text-emerald-300">{item.correctAnswerText ?? 'N/A'}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
           )}
           <button type="button" onClick={onClose} className="px-6 py-3 bg-ura-gold text-black font-semibold rounded-xl">Close</button>
         </div>

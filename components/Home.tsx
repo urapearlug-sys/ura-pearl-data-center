@@ -519,14 +519,14 @@ export default function Home({ setCurrentView }: HomeProps) {
               title={
                 unsynchronizedPoints >= 1
                   ? 'Taps are syncing to the server in the background.'
-                  : 'Progress is in sync with the server.'
+                  : 'Connected to server (sync active).'
               }
             >
               <p className="text-[10px] font-semibold text-[#5a7bb0] uppercase tracking-wide">Sync</p>
               <div className="flex items-center justify-center mt-1">
                 <span
                   className={`w-2.5 h-2.5 rounded-full ${
-                    unsynchronizedPoints >= 1 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500'
+                    unsynchronizedPoints >= 1 ? 'bg-amber-400 animate-pulse' : 'bg-red-500 animate-pulse'
                   }`}
                   aria-hidden
                 />

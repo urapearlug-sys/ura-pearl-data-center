@@ -71,7 +71,7 @@ export async function POST(req: Request) {
     const questions = await prisma.quizQuestion.findMany({
       where: { isActive: true },
       orderBy: [{ branch: { order: 'asc' } }, { order: 'asc' }],
-      select: { id: true, correctIndex: true, points: true },
+      select: { id: true, questionText: true, options: true, correctIndex: true, points: true },
     });
 
     if (questions.length === 0) {
@@ -81,14 +81,25 @@ export async function POST(req: Request) {
     const answerArray = Array.isArray(answers) ? answers : [];
     let correctCount = 0;
     let pointsFromQuestions = 0;
-    questions.forEach((q, i) => {
-      const correct = typeof answerArray[i] === 'number' && answerArray[i] === q.correctIndex;
-      if (correct) {
+    const answerReview = questions.map((q, i) => {
+      const userAnswerIndex = typeof answerArray[i] === 'number' ? answerArray[i] : -1;
+      const correctAnswerIndex = q.correctIndex;
+      const optionList = Array.isArray(q.options) ? q.options.map((x) => String(x)) : [];
+      const isCorrect = userAnswerIndex === correctAnswerIndex;
+      if (isCorrect) {
         correctCount += 1;
         pointsFromQuestions += effectivePointsPerQuestion(q.points);
       }
+      return {
+        questionId: q.id,
+        questionText: q.questionText,
+        userAnswerIndex,
+        userAnswerText: userAnswerIndex >= 0 ? (optionList[userAnswerIndex] ?? null) : null,
+        correctAnswerIndex,
+        correctAnswerText: optionList[correctAnswerIndex] ?? null,
+        isCorrect,
+      };
     });
-
     const totalCount = questions.length;
     const allCorrect = correctCount === totalCount;
     const settings = await prisma.quizSettings.findFirst();
@@ -128,6 +139,7 @@ export async function POST(req: Request) {
       completionBonus: allCorrect ? completionBonus : 0,
       points: refreshed != null ? Math.floor(Number(refreshed.points)) : undefined,
       pointsBalance: refreshed != null ? Math.floor(Number(refreshed.pointsBalance)) : undefined,
+      answerReview,
     });
   } catch (error) {
     console.error('Quiz submit error:', error);
