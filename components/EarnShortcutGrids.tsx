@@ -25,6 +25,10 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'ura-quiz': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📝' },
   'receipt-rush': { tone: 'from-[#17334d] to-[#234a6d] border-[#6eb4ff]/50', icon: '🧾' },
   'true-false': { tone: 'from-[#24434c] to-[#2b5b68] border-[#74d1e2]/50', icon: '⚖️' },
+  'whistle-blower': { tone: 'from-[#1a4b3f] to-[#1f6554] border-[#5eead4]/50', icon: '🛡️' },
+  'voice-reports': { tone: 'from-[#3b2a5a] to-[#4a3680] border-[#a78bfa]/50', icon: '🎤' },
+  'words-of-the-day': { tone: 'from-[#0f3f55] to-[#10506b] border-[#2ac4e0]/55', icon: '📖' },
+  'earn-your-tenure': { tone: 'from-[#2b235a] to-[#3b2e7a] border-[#8a6dff]/55', icon: '🎴' },
   leaderboard: { tone: 'from-[#273046] to-[#364465] border-[#93a8d8]/45', icon: '🏆' },
   'karibu-daily': { tone: 'from-[#4a3a16] to-[#6b5118] border-[#d9a63a]/60', icon: '📅' },
   'mine-flow': { tone: 'from-[#274b44] to-[#2d6258] border-[#69c9b2]/50', icon: '⛏️' },
@@ -42,9 +46,11 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
 const PRIMARY_SHORTCUT_IDS: string[] = [
   'ura-quiz',
   'receipt-rush',
-  'karibu-daily',
+  'whistle-blower',
   'true-false',
-  'pearls-airdrop',
+  'voice-reports',
+  'words-of-the-day',
+  'earn-your-tenure',
 ];
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
@@ -106,20 +112,42 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   };
 
   const highlights: ShortcutItem[] = [
-    { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
-    { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', onClick: () => goEarn({ openDailyCipher: true }) },
-    { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', onClick: () => goEarn({ openDailyCombo: true }) },
-    { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView('collection') },
-    { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => goEarn({ openWeeklyEvent: true }) },
-    { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => goEarn({ openGlobalTasks: true }) },
     { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => goEarn({ openMitrolabsQuiz: true }) },
     { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => goEarn({ activeTabAll: true }) },
+    {
+      id: 'whistle-blower',
+      title: 'Whistle blower',
+      subtitle: 'Protected reporting tasks',
+      onClick: () => goEarn({ activeTabAll: true }),
+    },
     {
       id: 'true-false',
       title: 'True or False – Uganda Tax Edition',
       subtitle: 'Tax knowledge challenge',
       onClick: () => goEarn({ activeTabAll: true }),
     },
+    {
+      id: 'voice-reports',
+      title: 'Voice reports',
+      subtitle: 'Approval-required blue pearls',
+      onClick: () => goEarn({ activeTabAll: true }),
+    },
+    {
+      id: 'words-of-the-day',
+      title: 'Words of the Day',
+      subtitle: 'Daily cipher · guess the word',
+      onClick: () => goEarn({ openDailyCipher: true }),
+    },
+    {
+      id: 'earn-your-tenure',
+      title: 'Earn your Tenure',
+      subtitle: 'Matrix combo · daily card challenge',
+      onClick: () => goEarn({ openDailyCombo: true }),
+    },
+    { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
+    { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView('collection') },
+    { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => goEarn({ openWeeklyEvent: true }) },
+    { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', onClick: () => goEarn({ openGlobalTasks: true }) },
     { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', onClick: () => setCurrentView('game') },
     {
       id: 'karibu-daily',
@@ -136,18 +164,17 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     { id: 'pearls-airdrop', title: 'PEARLS Drops', subtitle: 'Drops and campaign rewards', onClick: () => setCurrentView('airdrop') },
   ];
 
-  const learningFun: ShortcutItem[] = [
-    { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => goEarn({ activeTabAll: true }) },
-    { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => goEarn({ openWeeklyEvent: true }) },
+  const moreGames: ShortcutItem[] = [
     { id: 'mini-games', title: 'Mini games', subtitle: 'Open mini games hub', onClick: () => goEarn({ openMiniGamesHub: true }) },
-    { id: 'decode', title: 'Decode', subtitle: 'Cipher challenge mode', onClick: () => goEarn({ openDailyCipher: true }) },
     { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => goEarn({ openLuckySpin: true }) },
+    { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => goEarn({ openWeeklyEvent: true }) },
   ];
 
-  const earnPlatform: ShortcutItem[] = [
-    { id: 'voice-reports', title: 'Voice reports', subtitle: 'Approval-required blue pearls', onClick: () => goEarn({ activeTabAll: true }) },
-    { id: 'whistle-blower', title: 'Whistle blower', subtitle: 'Protected reporting tasks', onClick: () => goEarn({ activeTabAll: true }) },
+  const learningFun: ShortcutItem[] = [
+    { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => goEarn({ activeTabAll: true }) },
   ];
+
+  const earnPlatform: ShortcutItem[] = [];
 
   const byId = new Map<string, ShortcutItem>();
   for (const item of highlights) {
@@ -169,6 +196,10 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   const morePearlClassic = pearlClassic.filter((p) => !PRIMARY_ID_SET.has(p.id));
   const moreLearning = learningFun.filter(
     (l) => !PRIMARY_ID_SET.has(l.id) && !moreHighlights.some((h) => h.id === l.id)
+  );
+
+  const moreGamesFiltered = moreGames.filter(
+    (g) => !PRIMARY_ID_SET.has(g.id) && !moreHighlights.some((h) => h.id === g.id)
   );
 
   const closeMorePopup = useCallback(() => setMorePopupOpen(false), []);
@@ -247,7 +278,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     <div className="mt-2 space-y-6">
       <div>
         <h2 className="text-white text-lg font-bold tracking-tight">Pearls, games & activities</h2>
-        <p className="text-gray-400 text-xs mt-1">Tap a shortcut below. Open More for the full list.</p>
+        <p className="text-gray-400 text-xs mt-1">Tap a shortcut below. Open More for Karibu, collections, mini games, and the rest.</p>
       </div>
 
       <section aria-labelledby="earn-primary-shortcuts-heading">
@@ -273,7 +304,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                   </span>
                   <div className="min-w-0">
                     <p className="text-base font-extrabold text-white leading-tight">More</p>
-                    <p className="text-sm text-blue-100/95 mt-1 leading-snug">Tasks, decode, collection, leagues & more</p>
+                    <p className="text-sm text-blue-100/95 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
                   </div>
                 </div>
               </button>
@@ -326,6 +357,14 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                     Pearl Classic
                   </h4>
                   {renderHighlightGrid(morePearlClassic, { closePopupAfter: true })}
+                </section>
+              ) : null}
+              {moreGamesFiltered.length > 0 ? (
+                <section aria-labelledby="earn-more-games-heading">
+                  <h4 id="earn-more-games-heading" className="text-sm font-bold uppercase tracking-wide text-violet-300/95 mb-3">
+                    More games
+                  </h4>
+                  {renderHighlightGrid(moreGamesFiltered, { closePopupAfter: true })}
                 </section>
               ) : null}
               {moreLearning.length > 0 ? (
