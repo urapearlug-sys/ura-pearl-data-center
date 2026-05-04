@@ -20,7 +20,6 @@ import { LEVELS } from '@/utils/consts';
 import { useGameStore } from '@/utils/game-mechanics';
 import { formatNumber, triggerHapticFeedback } from '@/utils/ui';
 import Image from 'next/image';
-import NotificationCenter from '@/components/NotificationCenter';
 
 interface TopInfoSectionProps {
     isGamePage?: boolean;
@@ -78,14 +77,6 @@ export default function TopInfoSection({ isGamePage = false, setCurrentView: _se
                             <p className="text-sm">+{formatNumber(profitPerHour)}</p>
                         </div>
                     </div>
-                    {isGamePage ? (
-                        <>
-                            <div className="h-[32px] w-[2px] bg-[#43433b] mx-2" />
-                            <div className="flex-1 flex items-center justify-center">
-                                <NotificationCenter />
-                            </div>
-                        </>
-                    ) : null}
                 </div>
             </div>
         </div>

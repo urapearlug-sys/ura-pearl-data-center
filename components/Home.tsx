@@ -14,6 +14,7 @@ import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-boot
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
 import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 import SupportChatWidget from '@/components/SupportChatWidget';
+import NotificationCenter from '@/components/NotificationCenter';
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -360,7 +361,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   };
 
   const renderMostUsedPinnedGrid = () => (
-    <div className="mt-3 grid grid-cols-2 gap-3">
+    <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-4">
       {HOME_MOST_USED_GRID.map((item) => {
         const chrome = HOME_MOST_USED_GRID_CHROME[item.id] ?? { emoji: '⭐', border: 'border-ura-border/85' };
         return (
@@ -508,6 +509,11 @@ export default function Home({ setCurrentView }: HomeProps) {
                 <p className="font-semibold truncate text-[#123f78]">{userTelegramName || 'Citizen'}</p>
               </div>
             </button>
+            <div className="shrink-0 flex items-center justify-center pl-1 pr-2 border-l border-[#8bb4ef]/40">
+              <div className="rounded-full bg-[#e8eef9] border border-[#8bb4ef]/55 p-1 shadow-sm">
+                <NotificationCenter />
+              </div>
+            </div>
             <div
               className="shrink-0 flex flex-col items-center justify-center px-2 py-1 border-l border-[#8bb4ef]/40 min-w-[4.5rem]"
               title={
@@ -680,10 +686,10 @@ export default function Home({ setCurrentView }: HomeProps) {
             <div className="mt-4 space-y-2">
               {activeActionTab === 'most-used' ? (
                 <>
-                  <div className="space-y-0">
+                  <>
                     {renderMostUsedPinnedKaribu()}
                     {renderMostUsedPinnedGrid()}
-                  </div>
+                  </>
                   {mostUsedRest.length > 0 ? (
                     <>
                       <p className="mt-4 pt-1 text-[11px] font-semibold uppercase tracking-wide text-blue-100/80">Your most used</p>

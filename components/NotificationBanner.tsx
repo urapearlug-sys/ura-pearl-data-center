@@ -71,7 +71,7 @@ export default function NotificationBanner() {
 
   return (
     <div className="px-4 pt-2 pb-1 flex flex-col items-center">
-      {/* Arrow pointing up to notification icon in top bar */}
+      {/* Hint: open the full list from the bell on Home (profile strip) */}
       <div className="flex justify-end w-full max-w-xl mb-0.5">
         <span className="text-[10px] text-gray-500 flex items-center gap-0.5" aria-hidden>
           <svg className="w-3.5 h-3.5 text-[#f3ba2f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
