@@ -526,7 +526,7 @@ export default function Home({ setCurrentView }: HomeProps) {
               <div className="flex items-center justify-center mt-1">
                 <span
                   className={`w-2.5 h-2.5 rounded-full ${
-                    unsynchronizedPoints >= 1 ? 'bg-amber-400 animate-pulse' : 'bg-red-500 animate-pulse'
+                    unsynchronizedPoints >= 1 ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500 animate-pulse'
                   }`}
                   aria-hidden
                 />
