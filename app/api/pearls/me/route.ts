@@ -22,6 +22,8 @@ export async function POST(req: Request) {
       bluePearlsPending: true,
       bluePearlsApprovedTotal: true,
       goldishPearls: true,
+      points: true,
+      pointsBalance: true,
     },
   });
   if (!fresh) {
@@ -64,6 +66,8 @@ export async function POST(req: Request) {
       blueApprovedTotal,
       blueTotal: bluePending + blueApprovedTotal,
       goldish: Math.floor(fresh.goldishPearls),
+      points: Math.floor(Number(fresh.points ?? 0)),
+      pointsBalance: Math.floor(Number(fresh.pointsBalance ?? 0)),
     },
     recentAudits,
     recentActivities,

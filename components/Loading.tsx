@@ -80,6 +80,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         gameLevelIndex: calculateLevelIndex(userData.points as number, totalTaps),
         points: userData.points as number,
         pointsBalance: userData.pointsBalance as number,
+        bluePearlsTotal: 0,
         totalTaps,
         unsynchronizedPoints,
         multitapLevelIndex: userData.multitapLevelIndex as number,

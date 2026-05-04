@@ -26,6 +26,8 @@ export interface InitialGameState {
   gameLevelIndex: number;
   points: number;
   pointsBalance: number;
+  /** Pending + approved blue pearls (server); updated from /api/pearls/me and wallet actions. */
+  bluePearlsTotal: number;
   totalTaps: number;
   unsynchronizedPoints: number;
   multitapLevelIndex: number;
@@ -52,6 +54,7 @@ export interface GameState extends InitialGameState {
   setTotalTaps: (totalTaps: number) => void
   clickTriggered: () => void
   setPointsBalance: (points: number) => void
+  setBluePearlsTotal: (n: number) => void
   incrementPoints: (amount: number) => void
   decrementPointsBalance: (amount: number) => void
   resetUnsynchronizedPoints: (syncedPoints: number) => void;
@@ -156,9 +159,12 @@ export const createGameStore = (initialState: InitialGameState) => create<GameSt
   setPointsBalance: (pointsBalance) => set((state) => {
     return { pointsBalance };
   }),
+  setBluePearlsTotal: (bluePearlsTotal) => set({ bluePearlsTotal: Math.max(0, Math.floor(Number(bluePearlsTotal) || 0)) }),
   incrementPoints: (amount) => set((state) => {
-    const newPoints = state.points + amount;
-    const newPointsBalance = state.pointsBalance + amount;
+    const delta = Math.floor(Number(amount));
+    const inc = Number.isFinite(delta) ? delta : 0;
+    const newPoints = state.points + inc;
+    const newPointsBalance = state.pointsBalance + inc;
     const newLevelIndex = calculateLevelIndex(newPoints, state.totalTaps);
     return { points: newPoints, pointsBalance: newPointsBalance, gameLevelIndex: newLevelIndex };
   }),
@@ -232,6 +238,7 @@ export const useGameStore = createGameStore({
   gameLevelIndex: 0,
   points: 10000,
   pointsBalance: 10000,
+  bluePearlsTotal: 0,
   totalTaps: 0,
   unsynchronizedPoints: 0,
   multitapLevelIndex: 0,

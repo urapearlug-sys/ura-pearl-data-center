@@ -163,12 +163,16 @@ const TaskPopup: React.FC<TaskPopupProps> = React.memo(({ task, onClose, onUpdat
         const updatedTask = { ...localTask, isCompleted: data.isCompleted };
         setLocalTask(updatedTask);
         onUpdate(updatedTask);
-        const reward = data.reward ?? localTask.points ?? 0;
-        if (typeof data.points === 'number' && typeof data.pointsBalance === 'number') {
-          setPoints(data.points);
-          setPointsBalance(data.pointsBalance);
-        } else {
-          incrementPoints(reward);
+        const rewardRaw = data.reward ?? localTask.points ?? 0;
+        const reward = Math.floor(Number(rewardRaw));
+        const rewardDelta = Number.isFinite(reward) ? reward : 0;
+        const pts = Number(data.points);
+        const bal = Number(data.pointsBalance);
+        if (Number.isFinite(pts) && Number.isFinite(bal)) {
+          setPoints(Math.floor(pts));
+          setPointsBalance(Math.floor(bal));
+        } else if (rewardDelta > 0) {
+          incrementPoints(rewardDelta);
         }
         showToast(data.message || 'Task completed successfully!', 'success');
         notifyPearlBalancesRefresh();

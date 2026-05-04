@@ -18,7 +18,8 @@
 import { useEffect, useCallback, useRef, useState } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
-import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
+import { notifyPearlBalancesRefresh, PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
+import { applyPearlsMeClientPayload } from '@/utils/apply-pearls-me-client';
 
 // Same pattern as Settings/NotificationCenter: persist to localStorage so data survives close/reopen
 const PENDING_SYNC_KEY = 'clicker_pending_sync';
@@ -85,8 +86,10 @@ export function PointSynchronizer() {
             console.log("Data from server: ", data);
 
             resetUnsynchronizedPoints(pointsToSync);
-            if (typeof data.updatedPoints === 'number') setPoints(data.updatedPoints);
-            if (typeof data.updatedPointsBalance === 'number') setPointsBalance(data.updatedPointsBalance);
+            const updPts = Number(data.updatedPoints);
+            const updBal = Number(data.updatedPointsBalance);
+            if (Number.isFinite(updPts)) setPoints(Math.floor(updPts));
+            if (Number.isFinite(updBal)) setPointsBalance(Math.floor(updBal));
             // Taps: use server value if present, else add taps from this sync so total never drops after sync
             const tapsFromThisSync = pointsPerClick > 0 ? Math.floor(pointsToSync / pointsPerClick) : 0;
             const minimumTotalTaps = totalTaps + tapsFromThisSync;
@@ -104,6 +107,31 @@ export function PointSynchronizer() {
             setIsSyncing(false);
         }
     }, [energy, isSyncing, points, pointsBalance, pointsPerClick, resetUnsynchronizedPoints, setPoints, setPointsBalance, setTotalTaps, setFrozenState, showToast, totalTaps, unsynchronizedPoints, userTelegramInitData]);
+
+    /** Keeps lifetime points, white balance, and blue total in sync when Home is not mounted (e.g. Earn → Wallet). */
+    useEffect(() => {
+        if (!userTelegramInitData) return;
+        const pullPearls = async () => {
+            try {
+                const res = await fetch('/api/pearls/me', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ initData: userTelegramInitData }),
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                applyPearlsMeClientPayload(data, useGameStore.getState());
+            } catch {
+                // ignore
+            }
+        };
+        void pullPearls();
+        const onPearlRefresh = () => {
+            void pullPearls();
+        };
+        window.addEventListener(PEARLS_BALANCE_REFRESH_EVENT, onPearlRefresh);
+        return () => window.removeEventListener(PEARLS_BALANCE_REFRESH_EVENT, onPearlRefresh);
+    }, [userTelegramInitData]);
 
     // Sync every 600ms when there's pending
     useEffect(() => {

@@ -118,7 +118,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'whistle-blower',
       title: 'Whistle blower',
-      subtitle: 'Protected reporting tasks',
+      subtitle: 'Reward & protection',
       onClick: () => goEarn({ activeTabAll: true }),
     },
     {
@@ -142,7 +142,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'earn-your-tenure',
       title: 'Earn your Tenure',
-      subtitle: 'Reward & protection',
+      subtitle: 'Matrix combo · daily card challenge',
       onClick: () => goEarn({ openDailyCombo: true }),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
@@ -242,7 +242,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
           </span>
           <div className="min-w-0">
             <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-            <p className="text-sm text-[#b8d4ff]/92 mt-1 leading-snug">{item.subtitle}</p>
+            <p className="text-xs text-[#b8d4ff]/90 mt-1 leading-snug">{item.subtitle}</p>
           </div>
         </div>
       </button>
@@ -305,7 +305,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                   </span>
                   <div className="min-w-0">
                     <p className="text-base font-extrabold text-white leading-tight">More</p>
-                    <p className="text-sm text-[#b8d4ff]/92 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
+                    <p className="text-xs text-[#b8d4ff]/90 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
                   </div>
                 </div>
               </button>

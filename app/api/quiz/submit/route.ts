@@ -114,6 +114,11 @@ export async function POST(req: Request) {
       await creditWhitePearlsInstant(tx, dbUser.id, pointsToAward, 'quiz_daily', 'Learn · Quiz');
     });
 
+    const refreshed = await prisma.user.findUnique({
+      where: { id: dbUser.id },
+      select: { points: true, pointsBalance: true },
+    });
+
     return NextResponse.json({
       success: true,
       correctCount,
@@ -121,6 +126,8 @@ export async function POST(req: Request) {
       pointsAwarded: pointsToAward,
       pointsFromQuestions,
       completionBonus: allCorrect ? completionBonus : 0,
+      points: refreshed != null ? Math.floor(Number(refreshed.points)) : undefined,
+      pointsBalance: refreshed != null ? Math.floor(Number(refreshed.pointsBalance)) : undefined,
     });
   } catch (error) {
     console.error('Quiz submit error:', error);

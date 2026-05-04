@@ -93,7 +93,7 @@ const useFetchTasks = (userTelegramInitData: string) => {
 };
 
 export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly = false }: EarnProps) {
-  const { userTelegramInitData, pointsBalance } = useGameStore();
+  const { userTelegramInitData, pointsBalance, bluePearlsTotal } = useGameStore();
   const { tasks, setTasks, isLoading } = useFetchTasks(userTelegramInitData);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showDailyCipher, setShowDailyCipher] = useState(false);
@@ -347,8 +347,11 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
                   />
                 </div>
                 <h1 className="text-2xl text-center mb-2">Earn More PEARLS</h1>
-                <p className="text-center text-[#f3ba2f] font-bold mb-4">
-                  Balance: {formatNumber(Math.floor(pointsBalance))} PEARLS
+                <p className="text-center text-[#f3ba2f] font-bold mb-1">
+                  Balance: {formatNumber(Math.floor(pointsBalance))} white PEARLS
+                </p>
+                <p className="text-center text-gray-400 text-sm font-medium mb-4">
+                  Blue PEARLS (pending + approved): {formatNumber(Math.floor(bluePearlsTotal))}
                 </p>
                 {/* Activities section – tabbed list (scroll down to see) */}
                 <section

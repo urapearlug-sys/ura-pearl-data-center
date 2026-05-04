@@ -8,6 +8,7 @@ import { LEVELS } from '@/utils/consts';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
+import { applyPearlsMeClientPayload } from '@/utils/apply-pearls-me-client';
 import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
@@ -106,9 +107,8 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [customFavorites, setCustomFavorites] = useState<ActionItem[]>([]);
   const [showRanksPopup, setShowRanksPopup] = useState(false);
   const [showEcosystemDashboard, setShowEcosystemDashboard] = useState(false);
-  const { userTelegramName, points, pointsBalance, userTelegramInitData, setPointsBalance, unsynchronizedPoints } =
+  const { userTelegramName, points, pointsBalance, bluePearlsTotal, userTelegramInitData, unsynchronizedPoints } =
     useGameStore();
-  const [bluePearls, setBluePearls] = useState(0);
   const [goldishPearls, setGoldishPearls] = useState(0);
   const [karibuHomeSubtitle, setKaribuHomeSubtitle] = useState('10-day login · 100–1000 white pearls');
 
@@ -190,15 +190,8 @@ export default function Home({ setCurrentView }: HomeProps) {
         });
         if (!res.ok) return;
         const data = await res.json();
-        const bp = Math.floor(data?.balances?.bluePending ?? 0);
-        const ba = Math.floor(data?.balances?.blueApprovedTotal ?? 0);
-        const bt =
-          typeof data?.balances?.blueTotal === 'number'
-            ? Math.floor(data.balances.blueTotal)
-            : bp + ba;
-        setBluePearls(bt);
+        applyPearlsMeClientPayload(data, useGameStore.getState());
         setGoldishPearls(Math.floor(data?.balances?.goldish ?? 0));
-        setPointsBalance(Math.floor(data?.balances?.white ?? 0));
       } catch {
         // Keep UI responsive with zero fallback if pearls API is unavailable.
       }
@@ -630,7 +623,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                 <div className="mt-4 space-y-2">
                   {[
                     { key: 'white', label: 'White pearl', value: liveWhitePearls, color: 'text-[#335f97]', hint: 'From taps & instant approved tasks', image: pearlWhite },
-                    { key: 'blue', label: 'Blue pearl', value: bluePearls, color: 'text-[#2563c4]', hint: 'Pending + approved (includes wallet white→blue)', image: pearlBlue },
+                    { key: 'blue', label: 'Blue pearl', value: bluePearlsTotal, color: 'text-[#2563c4]', hint: 'Pending + approved (includes wallet white→blue)', image: pearlBlue },
                     { key: 'goldish', label: 'Golden Pearl', value: goldishPearls, color: 'text-[#c9a227]', hint: 'Approved & withdraw-ready pearls', image: pearlGolden },
                   ].map((item) => (
                     <div key={item.key} className="rounded-lg border border-[#dbe9ff] bg-white px-2.5 py-2 flex items-center gap-2">

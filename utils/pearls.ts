@@ -34,7 +34,7 @@ export async function createPearlAudit(
   });
 }
 
-/** Server-side instant white pearl credit: same ledger as POST /api/pearls/activity (white). Call inside the same DB transaction as PEARLS points. */
+/** Server-side instant white pearl credit (ledger + whitePearls only). Callers must already increment `points` / `pointsBalance` when those totals should move; do not double-count `pointsBalance` here. */
 export async function creditWhitePearlsInstant(
   tx: Prisma.TransactionClient,
   userId: string,
@@ -61,7 +61,6 @@ export async function creditWhitePearlsInstant(
     where: { id: userId },
     data: {
       whitePearls: { increment: amt },
-      pointsBalance: { increment: amt },
     },
   });
   await createPearlAudit(tx, {

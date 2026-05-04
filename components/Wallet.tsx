@@ -18,7 +18,7 @@ type PearlType = 'white' | 'goldish';
 
 export default function Wallet({ setCurrentView, embedded = false }: WalletProps) {
   const showToast = useToast();
-  const { userTelegramInitData, setPointsBalance } = useGameStore();
+  const { userTelegramInitData, setPointsBalance, setBluePearlsTotal } = useGameStore();
 
   const [loading, setLoading] = useState(true);
   const [white, setWhite] = useState(0);
@@ -68,8 +68,10 @@ export default function Wallet({ setCurrentView, embedded = false }: WalletProps
     const bp = Math.floor(b.bluePending);
     const ba = Math.floor(b.blueApprovedTotal ?? (typeof b.blueTotal === 'number' ? Math.max(0, b.blueTotal - bp) : 0));
     setBluePending(bp);
-    setBlueApproved(Number.isFinite(ba) ? ba : 0);
+    const baSafe = Number.isFinite(ba) ? ba : 0;
+    setBlueApproved(baSafe);
     setGolden(Math.floor(b.goldish));
+    setBluePearlsTotal(bp + baSafe);
     if (typeof b.pointsBalance === 'number' && Number.isFinite(b.pointsBalance)) {
       setPointsBalance(Math.floor(b.pointsBalance));
     }

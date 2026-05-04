@@ -21,7 +21,7 @@ interface MitrolabsQuizPopupProps {
 }
 
 export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps) {
-  const { userTelegramInitData, incrementPoints } = useGameStore();
+  const { userTelegramInitData, incrementPoints, setPoints, setPointsBalance } = useGameStore();
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [lastAttempt, setLastAttempt] = useState<{ correctCount: number; totalCount: number; pointsAwarded: number } | null>(null);
@@ -154,9 +154,18 @@ export default function MitrolabsQuizPopup({ onClose }: MitrolabsQuizPopupProps)
           pointsFromQuestions: data.pointsFromQuestions,
           completionBonus: data.completionBonus,
         });
-        if (data.pointsAwarded > 0) {
-          incrementPoints(data.pointsAwarded);
-          showToast(`+${formatNumber(data.pointsAwarded)} PEARLS!`, 'success');
+        const awarded = Math.floor(Number(data.pointsAwarded));
+        const hasAward = Number.isFinite(awarded) && awarded > 0;
+        if (hasAward) {
+          const pts = Number(data.points);
+          const bal = Number(data.pointsBalance);
+          if (Number.isFinite(pts) && Number.isFinite(bal)) {
+            setPoints(Math.floor(pts));
+            setPointsBalance(Math.floor(bal));
+          } else {
+            incrementPoints(awarded);
+          }
+          showToast(`+${formatNumber(awarded)} PEARLS!`, 'success');
           notifyPearlBalancesRefresh();
         }
       }
