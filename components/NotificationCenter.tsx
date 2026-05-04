@@ -52,10 +52,16 @@ export default function NotificationCenter() {
   const [loading, setLoading] = useState(false);
   const [seenIds, setSeenIds] = useState<Set<string>>(() => getSeenIds());
   const panelRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   // null = newest (first) is expanded; otherwise the id of the expanded older notification
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const prevUnreadRef = useRef(0);
+  const [panelStyle, setPanelStyle] = useState<{ top: number; left: number; width: number }>({
+    top: 56,
+    left: 8,
+    width: 320,
+  });
 
   // When notifications load or change, default to newest expanded
   useEffect(() => {
@@ -147,6 +153,36 @@ export default function NotificationCenter() {
     setOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (!open) return;
+    const updatePanelPosition = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const margin = 8;
+      const width = Math.min(320, Math.max(260, viewportWidth - margin * 2));
+      const preferredLeft = rect.right - width;
+      const left = Math.min(
+        Math.max(margin, preferredLeft),
+        Math.max(margin, viewportWidth - width - margin)
+      );
+      setPanelStyle({
+        top: Math.round(rect.bottom + 8),
+        left: Math.round(left),
+        width: Math.round(width),
+      });
+    };
+
+    updatePanelPosition();
+    window.addEventListener('resize', updatePanelPosition);
+    window.addEventListener('scroll', updatePanelPosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePanelPosition);
+      window.removeEventListener('scroll', updatePanelPosition, true);
+    };
+  }, [open]);
+
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
@@ -176,6 +212,7 @@ export default function NotificationCenter() {
   return (
     <div className="relative flex items-center" ref={panelRef}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={toggle}
         className="inline-flex h-8 w-8 items-center justify-center text-white focus:outline-none relative"
@@ -190,7 +227,14 @@ export default function NotificationCenter() {
       </button>
 
       {open && (
-        <div className="absolute top-full right-0 mt-2 w-[min(320px,calc(100vw-2rem))] max-h-[70vh] overflow-hidden rounded-xl border border-ura-border/85 bg-ura-panel shadow-xl z-50 flex flex-col">
+        <div
+          className="fixed max-h-[70vh] overflow-hidden rounded-xl border border-ura-border/85 bg-ura-panel shadow-xl z-[70] flex flex-col"
+          style={{
+            top: panelStyle.top,
+            left: panelStyle.left,
+            width: panelStyle.width,
+          }}
+        >
           <div className="p-3 border-b border-ura-border/85 flex items-center justify-between">
             <span className="font-semibold text-white">
               Notifications
