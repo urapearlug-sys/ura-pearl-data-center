@@ -11,12 +11,8 @@ const PRESET_BRANCHES = [
   'URA & compliance',
   'Tax basics',
   'Technical',
-  'DeFi',
   'NFTs',
   'Security',
-  'Bitcoin',
-  'Ethereum',
-  'Smart Contracts',
 ] as const;
 
 /** Quiz goes live at 19:36 UTC (7:36 PM UTC) each day; 22:36 EAT. */
@@ -302,7 +298,7 @@ export default function AdminQuizPage() {
   };
 
   const handleSeedBlockchainPool = async () => {
-    if (!confirm('Add ~100 blockchain questions to the pool? Existing branches will be reused. Run only once to avoid duplicates.')) return;
+    if (!confirm('Add 500 URA quiz questions to the pool? Existing branches will be reused. Run only once to avoid duplicates.')) return;
     setPoolSeeding(true);
     try {
       const res = await fetch('/api/admin/quiz', {
@@ -530,12 +526,12 @@ export default function AdminQuizPage() {
         <div className="bg-ura-panel-2 p-6 rounded-xl mb-6">
           <h2 className="text-lg font-semibold mb-2">Question pool (seed + daily set)</h2>
           <p className="text-sm text-gray-400 mb-3">
-            Load ~100 sample blockchain/crypto questions into the pool (inactive), then use random sets or automation.
-            Add your own URA / tax items above. Toggle Active per question to override.
+            Load a 500-question URA pool (inactive), then use random sets or automation.
+            Branches: General, URA & compliance, Tax basics, Technical, NFTs, Security.
           </p>
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={handleSeedBlockchainPool} disabled={poolSeeding || submitting} className="px-4 py-2 bg-ura-gold text-black font-semibold rounded-lg disabled:opacity-50">
-              {poolSeeding ? 'Loading…' : 'Load 100 blockchain questions'}
+              {poolSeeding ? 'Loading…' : 'Load 500 URA quiz questions'}
             </button>
             <button type="button" onClick={handleSetRandomDaily} disabled={dailySetting || submitting || questions.length === 0} className="px-4 py-2 bg-[#3d4046] hover:bg-[#4d5056] rounded-lg font-medium disabled:opacity-50">
               {dailySetting ? 'Setting…' : 'Set 5 random for today'}

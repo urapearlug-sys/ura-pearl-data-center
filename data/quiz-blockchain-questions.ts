@@ -1,6 +1,13 @@
 /**
- * Pool of ~100 blockchain/crypto quiz questions for admin to seed.
- * Each has branchName (maps to preset branches), points 10k PEARLS per question.
+ * URA quiz pool used by Admin -> "Load question pool".
+ * Exactly 500 questions, 4 options each, one correct answer.
+ * Allowed branches only:
+ * - General
+ * - URA & compliance
+ * - Tax basics
+ * - Technical
+ * - NFTs
+ * - Security
  */
 
 export interface BlockchainQuizItem {
@@ -11,113 +18,143 @@ export interface BlockchainQuizItem {
   points?: number;
 }
 
-export const BLOCKCHAIN_QUIZ_QUESTIONS: BlockchainQuizItem[] = [
-  // --- General (blockchain basics) ---
-  { questionText: 'What is a blockchain?', options: ['A centralized database', 'A distributed ledger that records transactions across many computers', 'A type of cloud storage', 'A programming language'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What does "immutable" mean in blockchain context?', options: ['Easily editable', 'Cannot be changed once recorded', 'Stored in memory only', 'Encrypted'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a block in a blockchain?', options: ['A physical object', 'A batch of verified transactions grouped together', 'A type of wallet', 'A mining machine'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a hash in blockchain?', options: ['A type of currency', 'A fixed-length fingerprint of data', 'A user password', 'A network node'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is the main benefit of blockchain decentralization?', options: ['Faster single server', 'No single point of failure; trust without one authority', 'Lower storage cost', 'Easier to hack'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a node in a blockchain network?', options: ['A cryptocurrency', 'A participant that keeps a copy of the ledger and validates transactions', 'A type of wallet', 'A mining reward'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is double-spending?', options: ['Paying twice by mistake', 'Spending the same digital asset more than once', 'Using two wallets', 'Mining twice'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a consensus mechanism?', options: ['A type of wallet', 'A way for the network to agree on the state of the ledger', 'A trading strategy', 'An exchange'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What does "on-chain" mean?', options: ['Off the internet', 'Recorded on the blockchain', 'In a private database', 'In a wallet app only'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a fork in blockchain?', options: ['A hardware device', 'A split in the protocol or chain (e.g. rule change or copy)', 'A type of token', 'A wallet backup'], correctIndex: 1, branchName: 'General', points: 10000 },
-  // --- Bitcoin ---
-  { questionText: 'Who created Bitcoin?', options: ['Vitalik Buterin', 'Satoshi Nakamoto (pseudonym)', 'Charlie Lee', 'Ethereum Foundation'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'In what year was the Bitcoin whitepaper published?', options: ['2006', '2008', '2010', '2012'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is the maximum supply of Bitcoin?', options: ['Unlimited', '21 million', '100 million', '18 million'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is the process of creating new Bitcoin called?', options: ['Staking', 'Minting', 'Mining', 'Farming'], correctIndex: 2, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What consensus does Bitcoin use?', options: ['Proof of Stake', 'Proof of Work', 'Proof of Authority', 'Delegated Proof of Stake'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is a satoshi?', options: ['A type of node', 'The smallest unit of Bitcoin (0.00000001 BTC)', 'A mining pool', 'A wallet provider'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is the Bitcoin halving?', options: ['Splitting the chain', 'Periodic reduction of block rewards for miners', 'Dividing the supply', 'A fork'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What does "HODL" mean in crypto slang?', options: ['Hold On for Dear Life (holding through volatility)', 'High Order Digital Ledger', 'Hash Of Data Link', 'None of these'], correctIndex: 0, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is the approximate block time for Bitcoin?', options: ['1 minute', '10 minutes', '2 minutes', '15 minutes'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  { questionText: 'What is a UTXO?', options: ['A type of token', 'Unspent Transaction Output – amount of Bitcoin that can be spent', 'A wallet name', 'A mining algorithm'], correctIndex: 1, branchName: 'Bitcoin', points: 10000 },
-  // --- Ethereum ---
-  { questionText: 'Who founded Ethereum?', options: ['Satoshi Nakamoto', 'Vitalik Buterin', 'CZ (Binance)', 'Andreas Antonopoulos'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is Ether (ETH)?', options: ['A sidechain', 'The native cryptocurrency of the Ethereum network', 'A stablecoin', 'A mining pool'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What are gas fees on Ethereum?', options: ['Fees for physical delivery', 'Fees paid to execute transactions and smart contracts', 'Fees for mining only', 'Fees for staking only'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is the Ethereum Virtual Machine (EVM)?', options: ['A physical server', 'A runtime environment that executes smart contracts', 'A type of wallet', 'A mining device'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'Ethereum transitioned from Proof of Work to which consensus?', options: ['Proof of Authority', 'Proof of Stake', 'Delegated Proof of Stake', 'Proof of Burn'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is gwei?', options: ['A token', 'A unit of ETH used for gas (1 ETH = 10^9 gwei)', 'A wallet', 'A layer-2 chain'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What year did the Ethereum mainnet launch?', options: ['2013', '2015', '2017', '2019'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is an Ethereum Improvement Proposal (EIP)?', options: ['A type of token', 'A standard for proposing changes to Ethereum', 'A wallet standard', 'A mining protocol'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What does "merge" refer to in Ethereum?', options: ['Merging two wallets', 'Merging the execution layer with the PoS beacon chain', 'Merging two tokens', 'Merging two exchanges'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is ERC-20?', options: ['A hardware wallet', 'A standard for fungible tokens on Ethereum', 'A consensus rule', 'A layer-2 protocol'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  // --- Smart Contracts ---
-  { questionText: 'What is a smart contract?', options: ['A legal document', 'Self-executing code on a blockchain that runs when conditions are met', 'A wallet feature', 'A mining contract'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'Which blockchain popularized smart contracts?', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Ripple'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What does "immutable" mean for a deployed smart contract?', options: ['It can be edited anytime', 'Code cannot be changed after deployment (unless using upgradeable pattern)', 'It is encrypted', 'It is private'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is a contract address?', options: ['A user wallet', 'A unique address where a smart contract is deployed', 'An exchange address', 'A mining pool address'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is a dApp?', options: ['A type of token', 'Decentralized application (runs on blockchain/smart contracts)', 'A centralized app', 'A wallet app'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is Solidity?', options: ['A wallet', 'A programming language for writing Ethereum smart contracts', 'A consensus algorithm', 'A layer-2 solution'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is an oracle in blockchain?', options: ['A miner', 'A source that brings off-chain data onto the blockchain', 'A type of wallet', 'A token'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is a reentrancy attack?', options: ['A network attack', 'An exploit where a contract is called again before the first call finishes', 'A mining attack', 'A wallet hack'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What is ERC-721?', options: ['Fungible token standard', 'Non-fungible token (NFT) standard on Ethereum', 'Stablecoin standard', 'Governance standard'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  { questionText: 'What does "upgradeable contract" typically use?', options: ['Changing the code directly', 'Proxy pattern: logic can be replaced while keeping same address', 'Forking the chain', 'Deploying a new chain'], correctIndex: 1, branchName: 'Smart Contracts', points: 10000 },
-  // --- DeFi ---
-  { questionText: 'What does DeFi stand for?', options: ['Decentralized Finance', 'Digital Finance', 'Defined Finance', 'Default Finance'], correctIndex: 0, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is an AMM?', options: ['A type of wallet', 'Automated Market Maker – provides liquidity and price via pools', 'A mining algorithm', 'A consensus mechanism'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is liquidity pooling?', options: ['Mining together', 'Users depositing assets into a pool to enable trading and earn fees', 'Staking only', 'Lending only'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is yield farming?', options: ['Mining cryptocurrency', 'Earning returns by providing liquidity or staking in DeFi protocols', 'Trading only', 'Holding only'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is impermanent loss?', options: ['Permanent wallet loss', 'Temporary loss vs. holding when providing liquidity in an AMM', 'Exchange hack', 'Gas fee loss'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is a DEX?', options: ['Decentralized Exchange', 'Digital Exchange', 'Default Exchange', 'Direct Exchange'], correctIndex: 0, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is collateral in DeFi lending?', options: ['A token reward', 'Assets locked to borrow other assets', 'A type of fee', 'A governance token'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is TVL?', options: ['Total Value Locked – total value of assets in a protocol', 'Total Volume Ledger', 'Token Value Limit', 'Transaction Value Log'], correctIndex: 0, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is a flash loan?', options: ['A long-term loan', 'An uncollateralized loan that must be borrowed and repaid in one transaction', 'A staking reward', 'A mining reward'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is a stablecoin?', options: ['A volatile token', 'A cryptocurrency pegged to a stable asset (e.g. USD)', 'A mining token', 'A governance-only token'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  // --- NFTs ---
-  { questionText: 'What does NFT stand for?', options: ['Non-Fungible Token', 'Network Fund Token', 'New Finance Token', 'Native Fungible Token'], correctIndex: 0, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What does "non-fungible" mean?', options: ['Interchangeable with others', 'Unique; not interchangeable like cash', 'Divisible', 'Mining-related'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is minting an NFT?', options: ['Burning a token', 'Creating and publishing an NFT on a blockchain', 'Selling an NFT', 'Staking an NFT'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is metadata in an NFT?', options: ['The blockchain only', 'Data (name, image, traits) often stored off-chain and linked from the token', 'Mining data', 'Wallet data'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is a royalty in NFTs?', options: ['A one-time fee', 'Percentage of future sales paid to the creator', 'A gas fee', 'A minting fee'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'Which standard is commonly used for NFTs on Ethereum?', options: ['ERC-20', 'ERC-721', 'ERC-1155', 'Both ERC-721 and ERC-1155'], correctIndex: 3, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is IPFS in relation to NFTs?', options: ['A blockchain', 'Decentralized storage often used for NFT media and metadata', 'A wallet', 'An exchange'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is a collection in NFT context?', options: ['A wallet', 'A set of NFTs under one contract or project', 'A type of token', 'A mining pool'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is "floor price" for an NFT collection?', options: ['Highest price', 'Lowest listed price for an item in the collection', 'Average price', 'Mint price'], correctIndex: 1, branchName: 'NFTs', points: 10000 },
-  { questionText: 'What is a burn in NFTs?', options: ['Sending to a dead address to remove from supply', 'Selling an NFT', 'Minting an NFT', 'Staking an NFT'], correctIndex: 0, branchName: 'NFTs', points: 10000 },
-  // --- Security ---
-  { questionText: 'What is a private key?', options: ['A public address', 'A secret that controls access to your crypto assets', 'A password for an exchange', 'A node key'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is phishing in crypto?', options: ['Mining', 'Fake sites/emails to steal keys or passwords', 'Trading', 'Staking'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a hardware wallet?', options: ['A software app', 'A physical device that stores private keys offline', 'A type of exchange', 'A mining device'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What does "not your keys, not your coins" mean?', options: ['Keys are not important', 'If you do not control the private keys, you do not truly own the assets', 'Keys are on the exchange', 'Coins are always safe'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a seed phrase?', options: ['A mining term', 'A series of words that can recover a wallet and its keys', 'A token name', 'A contract address'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a rug pull?', options: ['A type of mining', 'Developers or insiders draining liquidity or stealing funds', 'A consensus attack', 'A wallet upgrade'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is two-factor authentication (2FA)?', options: ['One password', 'Extra step (e.g. app or SMS) to verify login', 'A type of wallet', 'A blockchain'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'Why should you never share your seed phrase?', options: ['It is not important', 'Anyone with it can control the wallet and steal funds', 'It is required by law', 'Exchanges need it'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a smart contract audit?', options: ['A legal audit', 'Review of contract code to find security issues', 'A tax audit', 'A wallet check'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a dust attack?', options: ['Mining attack', 'Sending tiny amounts to link addresses for tracking or phishing', 'Consensus attack', 'Exchange hack'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  // --- Technical ---
-  { questionText: 'What is a Merkle tree?', options: ['A type of wallet', 'A structure that efficiently verifies data in a block', 'A mining algorithm', 'A token standard'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a Layer 2 (L2)?', options: ['A main blockchain', 'A network built on top of a base chain to scale (e.g. rollups)', 'A type of wallet', 'A mining layer'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a rollup?', options: ['A type of miner', 'An L2 that batches transactions and posts data to the main chain', 'A wallet', 'A token'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is finality in blockchain?', options: ['First block', 'When a block/transaction is considered irreversible', 'A type of fee', 'A consensus name'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a mempool?', options: ['A wallet', 'Pool of pending transactions waiting to be included in a block', 'A mining pool', 'A token pool'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is sharding?', options: ['A single chain', 'Splitting the chain into smaller pieces to scale', 'A type of wallet', 'A consensus mechanism'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a bridge in crypto?', options: ['A physical device', 'A protocol that moves assets between chains', 'A type of wallet', 'A mining tool'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is Proof of Stake (PoS)?', options: ['Mining with hardware', 'Validators stake tokens to secure the network and earn rewards', 'A type of contract', 'A wallet type'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is slashing in PoS?', options: ['A reward', 'Penalty (e.g. losing staked funds) for misbehavior', 'A fee', 'A token burn'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a testnet?', options: ['Main blockchain', 'A separate network for testing without real value', 'A type of wallet', 'An exchange'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  // --- Extra to reach 100 ---
-  { questionText: 'What is a whitepaper in crypto?', options: ['A legal document', 'A document describing a project’s technology and goals', 'A wallet manual', 'A mining guide'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is market cap in crypto?', options: ['Trading volume', 'Price × circulating supply', 'Number of coins', 'Total fees'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a bull market?', options: ['Falling prices', 'Prolonged period of rising prices', 'Sideways market', 'No trading'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a bear market?', options: ['Rising prices', 'Prolonged period of falling prices', 'Stable prices', 'New listings only'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is FUD?', options: ['A token', 'Fear, Uncertainty, Doubt – negative sentiment', 'A protocol', 'A wallet'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a cold wallet?', options: ['An exchange account', 'A wallet kept offline for security', 'A hot wallet', 'A mining wallet'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is a hot wallet?', options: ['Offline only', 'A wallet connected to the internet (e.g. exchange or browser)', 'A hardware wallet', 'A paper wallet'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is gas limit?', options: ['Unlimited gas', 'Maximum units of gas a user allows for a transaction', 'Mining limit', 'Staking limit'], correctIndex: 1, branchName: 'Ethereum', points: 10000 },
-  { questionText: 'What is an airdrop?', options: ['A fee', 'Free distribution of tokens to certain addresses', 'A mining reward', 'A loan'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is governance in crypto?', options: ['Mining only', 'Token holders voting on protocol changes or parameters', 'Exchange rules', 'Legal compliance only'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is a block explorer?', options: ['A wallet', 'A tool to view transactions and blocks on a blockchain', 'A mining tool', 'An exchange'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a hard fork?', options: ['A minor update', 'A backward-incompatible protocol change; can create a new chain', 'A soft update', 'A wallet split'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a soft fork?', options: ['New chain created', 'Backward-compatible protocol change', 'A hard fork', 'A wallet upgrade'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a multisig wallet?', options: ['Single key', 'Wallet requiring multiple signatures to approve a transaction', 'A hot wallet', 'A mining wallet'], correctIndex: 1, branchName: 'Security', points: 10000 },
-  { questionText: 'What is MEV?', options: ['Mining reward', 'Maximal Extractable Value – profit from ordering/including transactions', 'Token value', 'Exchange volume'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a DAO?', options: ['A token', 'Decentralized Autonomous Organization – member-governed entity', 'A wallet', 'A mining pool'], correctIndex: 1, branchName: 'DeFi', points: 10000 },
-  { questionText: 'What is the genesis block?', options: ['Latest block', 'The first block in a blockchain', 'A fork', 'A sidechain'], correctIndex: 1, branchName: 'General', points: 10000 },
-  { questionText: 'What is a validator in PoS?', options: ['A miner', 'A node that proposes/attests blocks and stakes tokens', 'A wallet', 'A contract'], correctIndex: 1, branchName: 'Technical', points: 10000 },
-  { questionText: 'What is a burn address?', options: ['A wallet to receive funds', 'An address where sent tokens are unrecoverable (reduced supply)', 'A mining address', 'An exchange address'], correctIndex: 1, branchName: 'General', points: 10000 },
+const QUESTION_POINTS = 10000;
+const TARGET_COUNT = 500;
+const BRANCHES = ['General', 'URA & compliance', 'Tax basics', 'Technical', 'NFTs', 'Security'] as const;
+
+type BranchName = (typeof BRANCHES)[number];
+type Stem = { prompt: string; options: [string, string, string, string]; correctIndex: number };
+
+const GENERAL_STEMS: Stem[] = [
+  { prompt: 'What is the main purpose of a tax authority in a country?', options: ['To run private banks', 'To collect revenue for public services and enforce tax law', 'To set mobile data prices', 'To issue visas only'], correctIndex: 1 },
+  { prompt: 'Why do governments require businesses to keep transaction records?', options: ['For social media posting', 'For tax assessment, audit trail, and compliance checks', 'To increase internet speed', 'To replace invoices'], correctIndex: 1 },
+  { prompt: 'What does compliance usually mean in public finance?', options: ['Ignoring deadlines', 'Following legal, reporting, and payment requirements', 'Paying only when asked', 'Avoiding documentation'], correctIndex: 1 },
+  { prompt: 'Which practice best supports transparent tax reporting?', options: ['Cash-only undocumented sales', 'Accurate books reconciled with source documents', 'Editing reports after filing', 'Using multiple hidden ledgers'], correctIndex: 1 },
+  { prompt: 'What is the safest way to resolve uncertainty about a tax obligation?', options: ['Wait for penalties', 'Use official guidance or contact URA channels', 'Copy social media advice only', 'Ignore notices'], correctIndex: 1 },
+  { prompt: 'What is an audit trail?', options: ['A hiking route', 'A chain of source records showing how figures were produced', 'A marketing plan', 'A bank overdraft'], correctIndex: 1 },
+  { prompt: 'Which behavior reduces compliance risk for individuals and SMEs?', options: ['Late filing every period', 'Timely filing, timely payment, and proper records', 'Filing without reviewing data', 'Deleting receipts monthly'], correctIndex: 1 },
+  { prompt: 'Why is taxpayer education important?', options: ['It replaces all laws', 'It helps taxpayers understand rights, duties, and processes', 'It cancels audits', 'It removes all taxes'], correctIndex: 1 },
+  { prompt: 'What is one impact of tax evasion on the economy?', options: ['Better public hospitals', 'Reduced public revenue and unfair competition', 'Lower need for roads', 'Automatic debt cancellation'], correctIndex: 1 },
+  { prompt: 'What does "file even when nil" usually imply?', options: ['Skip all returns', 'Submit required returns even with no payable amount', 'Pay estimated tax without filing', 'Close the TIN'], correctIndex: 1 },
 ];
+
+const URA_COMPLIANCE_STEMS: Stem[] = [
+  { prompt: 'What should a taxpayer do first after receiving an official URA notice?', options: ['Ignore it for 30 days', 'Read details, verify reference, and respond through official channels', 'Post it online only', 'Delete the message'], correctIndex: 1 },
+  { prompt: 'Which channel is most appropriate for submitting compliance documents?', options: ['Unofficial chat groups', 'URA e-services/approved URA offices', 'Random file-sharing sites', 'Personal blogs'], correctIndex: 1 },
+  { prompt: 'What is the best response to a potential discrepancy flagged by URA?', options: ['Hide records', 'Reconcile records and provide supporting evidence promptly', 'Stop trading immediately', 'Backdate all invoices'], correctIndex: 1 },
+  { prompt: 'How can a business demonstrate VAT compliance during review?', options: ['Only verbal explanations', 'Valid invoices, returns, and reconciled sales/purchase records', 'Screenshots from social media', 'Unsigned spreadsheets only'], correctIndex: 1 },
+  { prompt: 'What should be done when a filing error is discovered after submission?', options: ['Ignore permanently', 'Use available correction/amendment process quickly', 'Submit a different tax type', 'Close business profile'], correctIndex: 1 },
+  { prompt: 'Which action improves readiness for URA compliance checks?', options: ['Storing records in many personal phones', 'Maintaining complete, organized, and retrievable records', 'Using no invoice numbers', 'Removing old records monthly'], correctIndex: 1 },
+  { prompt: 'What is a key reason to use official URA payment references?', options: ['Faster internet', 'Correct allocation and traceability of tax payments', 'Automatic tax exemption', 'Higher sales conversion'], correctIndex: 1 },
+  { prompt: 'What does voluntary disclosure generally support?', options: ['Automatic immunity for all cases', 'Early correction and better compliance outcomes', 'Skipping all filings', 'Deleting previous returns'], correctIndex: 1 },
+  { prompt: 'Why should businesses separate personal and business transactions?', options: ['For social ranking', 'To improve accuracy and compliance evidence', 'To avoid bookkeeping', 'To lower payroll only'], correctIndex: 1 },
+  { prompt: 'What is the safest way to verify URA guidance?', options: ['Forwarded messages only', 'Official URA publications, portals, and support desks', 'Anonymous comments', 'Unverified PDF copies'], correctIndex: 1 },
+];
+
+const TAX_BASICS_STEMS: Stem[] = [
+  { prompt: 'What is taxable income in basic terms?', options: ['Any social media likes', 'Income subject to tax after applying relevant rules', 'Only foreign currency cash', 'Only mobile money deposits'], correctIndex: 1 },
+  { prompt: 'What is withholding tax generally used for?', options: ['Replacing all taxes', 'Collecting part of tax at source on specific payments', 'Increasing bank fees', 'Issuing business licenses'], correctIndex: 1 },
+  { prompt: 'What is VAT in simple terms?', options: ['A tax on land title transfers only', 'A consumption tax added at stages of supply', 'A payroll-only levy', 'A customs-only tariff'], correctIndex: 1 },
+  { prompt: 'Why are due dates important in tax administration?', options: ['They are optional reminders', 'Late filing/payment may trigger penalties and interest', 'They reduce bookkeeping workload', 'They replace tax returns'], correctIndex: 1 },
+  { prompt: 'What is the purpose of a Tax Identification Number (TIN)?', options: ['A marketing code', 'A unique taxpayer identifier for compliance and transactions', 'A bank PIN replacement', 'A vehicle plate number'], correctIndex: 1 },
+  { prompt: 'What is a deductible expense (general concept)?', options: ['Any personal shopping', 'An allowable business expense under tax rules', 'Any cash withdrawal', 'Any donation without records'], correctIndex: 1 },
+  { prompt: 'What does input VAT usually refer to?', options: ['VAT charged on your sales', 'VAT paid on eligible business purchases', 'Annual income tax', 'Customs storage fees'], correctIndex: 1 },
+  { prompt: 'What does output VAT usually refer to?', options: ['VAT on purchases', 'VAT charged on taxable sales', 'Payroll tax', 'Property rates'], correctIndex: 1 },
+  { prompt: 'What is a tax period?', options: ['Lifetime account cycle', 'Defined reporting interval for returns and payment', 'One business day only', 'A random date chosen yearly'], correctIndex: 1 },
+  { prompt: 'What is the best first step before filing a return?', options: ['Guess values quickly', 'Reconcile books, source records, and tax computations', 'Copy last period blindly', 'Leave fields blank'], correctIndex: 1 },
+];
+
+const TECHNICAL_STEMS: Stem[] = [
+  { prompt: 'What is the value of data validation in tax systems?', options: ['It slows all work only', 'It catches errors before filing and improves data integrity', 'It removes legal obligations', 'It replaces accounting records'], correctIndex: 1 },
+  { prompt: 'Why is role-based access important in finance/tax software?', options: ['To give everyone admin rights', 'To restrict actions based on duties and reduce fraud risk', 'To avoid password use', 'To disable audit logs'], correctIndex: 1 },
+  { prompt: 'What does API integration help with in compliance workflows?', options: ['Removing all controls', 'Automating secure data exchange between systems', 'Avoiding reconciliation forever', 'Printing only paper reports'], correctIndex: 1 },
+  { prompt: 'What is the purpose of system audit logs?', options: ['Decorative dashboards', 'Traceability of who changed what and when', 'Automatic tax waivers', 'Network speed tests'], correctIndex: 1 },
+  { prompt: 'Why use backups for financial/tax data?', options: ['To duplicate penalties', 'To ensure recovery from loss, error, or outage', 'To avoid user training', 'To bypass filing deadlines'], correctIndex: 1 },
+  { prompt: 'What is a primary benefit of reconciliation scripts?', options: ['Creating random numbers', 'Comparing datasets to detect mismatches early', 'Deleting historical records', 'Hiding outstanding liabilities'], correctIndex: 1 },
+  { prompt: 'What does encryption at rest protect against?', options: ['Late filing', 'Unauthorized reading of stored data', 'Invoice numbering errors', 'Incorrect VAT rates'], correctIndex: 1 },
+  { prompt: 'Why is version control useful for compliance-related code/config?', options: ['It removes approvals', 'It provides history, review, and safer changes', 'It deletes evidence', 'It bypasses testing'], correctIndex: 1 },
+  { prompt: 'What is a staging environment used for?', options: ['Live taxpayer updates directly', 'Testing changes safely before production release', 'Deleting old returns', 'Manual ledger balancing'], correctIndex: 1 },
+  { prompt: 'What is the best way to handle production incidents in tax systems?', options: ['Silent fixes only', 'Incident response with logging, rollback plan, and postmortem', 'Disable alerts permanently', 'Ignore user reports'], correctIndex: 1 },
+];
+
+const NFTS_STEMS: Stem[] = [
+  { prompt: 'What does NFT stand for?', options: ['Network Finance Token', 'Non-Fungible Token', 'New Filing Template', 'Native Fee Ticket'], correctIndex: 1 },
+  { prompt: 'What is "non-fungible" in NFT context?', options: ['Interchangeable like cash', 'Unique and not directly interchangeable one-to-one', 'Tax-exempt by default', 'Always physical'], correctIndex: 1 },
+  { prompt: 'What is minting an NFT?', options: ['Deleting a token', 'Creating and recording the token on-chain', 'Paying annual income tax', 'Converting VAT to PAYE'], correctIndex: 1 },
+  { prompt: 'What is NFT metadata?', options: ['Payroll form', 'Descriptive data linked to the token (name, media, traits)', 'A tax rate table', 'A bank SWIFT code'], correctIndex: 1 },
+  { prompt: 'What is a collection floor price?', options: ['Highest sale ever', 'Lowest current listing in the collection', 'Average annual return', 'Minting gas cap'], correctIndex: 1 },
+  { prompt: 'What is royalty in NFT marketplaces?', options: ['Telecom levy', 'Creator percentage from secondary sales', 'Monthly server bill', 'A customs fee'], correctIndex: 1 },
+  { prompt: 'Why verify NFT contract addresses before buying?', options: ['To increase gas fees', 'To reduce scam/copycat collection risk', 'To avoid wallet use', 'To skip marketplace checks'], correctIndex: 1 },
+  { prompt: 'What is a burn in NFT systems?', options: ['Selling to highest bidder', 'Sending token to an unrecoverable address', 'Changing metadata locally only', 'Converting to fiat instantly'], correctIndex: 1 },
+  { prompt: 'What is common storage for NFT media references?', options: ['Fax machines', 'Decentralized/file storage links (for example IPFS)', 'Payroll database only', 'SMS inbox'], correctIndex: 1 },
+  { prompt: 'What is an NFT wallet approval risk?', options: ['No risk at all', 'Granting broad transfer permissions to malicious contracts', 'Making metadata larger', 'Reducing image quality'], correctIndex: 1 },
+];
+
+const SECURITY_STEMS: Stem[] = [
+  { prompt: 'What should never be shared with anyone?', options: ['Public wallet address', 'Seed phrase/private key', 'Transaction hash', 'Token symbol'], correctIndex: 1 },
+  { prompt: 'What is phishing?', options: ['A staking strategy', 'Fraud attempts to steal credentials via fake links/messages', 'A tax discount', 'A database backup method'], correctIndex: 1 },
+  { prompt: 'Why enable MFA on important accounts?', options: ['To reduce login security', 'To add a second verification factor beyond password', 'To remove passwords completely', 'To skip account monitoring'], correctIndex: 1 },
+  { prompt: 'What is least-privilege access?', options: ['Everyone gets admin', 'Users get only permissions needed for their role', 'No user accounts', 'Shared root password'], correctIndex: 1 },
+  { prompt: 'How should suspicious URA/payment messages be handled?', options: ['Click first, verify later', 'Verify sender and links via official channels before action', 'Forward widely', 'Disable account alerts'], correctIndex: 1 },
+  { prompt: 'What is the purpose of strong password policy?', options: ['Make sharing easy', 'Reduce brute-force and credential stuffing risk', 'Replace backups', 'Avoid user training'], correctIndex: 1 },
+  { prompt: 'What is endpoint protection used for?', options: ['Color themes', 'Detecting and blocking malware/threat activity', 'Faster tax filing UI', 'Reducing invoice count'], correctIndex: 1 },
+  { prompt: 'Why segment critical systems from general office networks?', options: ['To increase phishing traffic', 'To limit blast radius of breaches', 'To disable monitoring', 'To remove firewalls'], correctIndex: 1 },
+  { prompt: 'What is secure incident reporting culture?', options: ['Hide mistakes', 'Report quickly, preserve evidence, coordinate response', 'Delete logs', 'Notify social media first'], correctIndex: 1 },
+  { prompt: 'What does regular patching primarily reduce?', options: ['File sizes', 'Known vulnerability exposure', 'User count', 'Bank charges'], correctIndex: 1 },
+];
+
+const STEMS_BY_BRANCH: Record<BranchName, Stem[]> = {
+  General: GENERAL_STEMS,
+  'URA & compliance': URA_COMPLIANCE_STEMS,
+  'Tax basics': TAX_BASICS_STEMS,
+  Technical: TECHNICAL_STEMS,
+  NFTs: NFTS_STEMS,
+  Security: SECURITY_STEMS,
+};
+
+const CONTEXTS = [
+  'for an SME filing monthly returns',
+  'during year-end reconciliation',
+  'when preparing records for audit',
+  'while onboarding a new taxpayer account',
+  'in a compliance training session',
+  'for a finance officer reviewing transactions',
+  'during e-service portal submission',
+  'when validating taxpayer documents',
+  'for internal controls review',
+  'during data quality checks',
+];
+
+function buildBranchQuestions(branchName: BranchName, count: number): BlockchainQuizItem[] {
+  const stems = STEMS_BY_BRANCH[branchName];
+  const out: BlockchainQuizItem[] = [];
+  for (let i = 0; i < count; i += 1) {
+    const stem = stems[i % stems.length];
+    const ctx = CONTEXTS[Math.floor(i / stems.length) % CONTEXTS.length];
+    out.push({
+      questionText: `[${branchName} #${i + 1}] ${stem.prompt} (${ctx})`,
+      options: [...stem.options],
+      correctIndex: stem.correctIndex,
+      branchName,
+      points: QUESTION_POINTS,
+    });
+  }
+  return out;
+}
+
+const BRANCH_TARGETS: Record<BranchName, number> = {
+  General: 84,
+  'URA & compliance': 84,
+  'Tax basics': 83,
+  Technical: 83,
+  NFTs: 83,
+  Security: 83,
+};
+
+const generated = BRANCHES.flatMap((branch) => buildBranchQuestions(branch, BRANCH_TARGETS[branch]));
+
+if (generated.length !== TARGET_COUNT) {
+  throw new Error(`Quiz pool must contain exactly ${TARGET_COUNT} questions, got ${generated.length}`);
+}
+
+export const BLOCKCHAIN_QUIZ_QUESTIONS: BlockchainQuizItem[] = generated;
