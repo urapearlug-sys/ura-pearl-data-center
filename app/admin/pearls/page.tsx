@@ -89,6 +89,20 @@ export default function AdminPearlsPage() {
     await loadData();
   };
 
+  const receiptUploads = pendingBlueActivities.filter((x) => x.sourceKey === 'receipt_rush');
+
+  const parseReceiptRushLabel = (sourceLabel: string): Record<string, string> => {
+    const out: Record<string, string> = {};
+    const parts = sourceLabel.split(' · ').map((p) => p.trim()).filter(Boolean);
+    for (const part of parts) {
+      const idx = part.indexOf(':');
+      if (idx > 0) {
+        out[part.slice(0, idx).trim()] = part.slice(idx + 1).trim();
+      }
+    }
+    return out;
+  };
+
   return (
     <div className="min-h-screen bg-ura-panel text-white p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
@@ -142,6 +156,52 @@ export default function AdminPearlsPage() {
 
         <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
           <h2 className="text-xl font-semibold">Blue Approval Queue</h2>
+          {receiptUploads.length > 0 ? (
+            <div className="mt-4 mb-4 rounded-lg border border-cyan-700/35 bg-cyan-950/15 p-3">
+              <p className="text-sm font-semibold text-cyan-300">Receipt Rush uploads (pending review)</p>
+              <div className="mt-2 space-y-2">
+                {receiptUploads.map((item) => {
+                  const parsed = parseReceiptRushLabel(item.sourceLabel);
+                  const receiptUrl = parsed.Image || null;
+                  return (
+                    <div key={`receipt-${item.id}`} className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-white">
+                            {item.user.name || 'User'} ({item.user.telegramId})
+                          </p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            Submitted: {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                          </p>
+                        </div>
+                        <span className="text-xs rounded-full px-2 py-1 bg-[#5fa8ff]/15 border border-[#5fa8ff]/40 text-[#9dc9ff]">
+                          {Math.floor(item.amount)} Blue
+                        </span>
+                      </div>
+                      <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-300">
+                        <p><span className="text-gray-400">Category:</span> {parsed['Receipt Rush'] || parsed['Category'] || 'N/A'}</p>
+                        <p><span className="text-gray-400">Tax type:</span> {parsed['Tax'] || parsed['Tax type'] || 'N/A'}</p>
+                        <p><span className="text-gray-400">Portal:</span> {parsed['Portal'] || 'N/A'}</p>
+                        <p><span className="text-gray-400">Receipt #:</span> {parsed['Ref'] || 'N/A'}</p>
+                        <p><span className="text-gray-400">Date:</span> {parsed['Date'] || 'N/A'}</p>
+                        <p><span className="text-gray-400">Paid amount:</span> {parsed['Paid'] || 'N/A'}</p>
+                      </div>
+                      {receiptUrl ? (
+                        <a
+                          href={receiptUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex text-xs text-cyan-300 underline underline-offset-2"
+                        >
+                          Open uploaded/scanned receipt
+                        </a>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
           <div className="mt-3 space-y-2">
             {pendingBlueActivities.length === 0 ? (
               <p className="text-sm text-gray-400">No pending blue-pearl activities.</p>

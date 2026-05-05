@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '@/utils/game-mechanics';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { RECEIPT_RUSH_CATEGORIES, RECEIPT_RUSH_REWARD_BLUE } from '@/utils/receipt-rush';
@@ -21,10 +21,31 @@ export default function ReceiptRushPopup({ onClose }: Props) {
   const [imageUrl, setImageUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [cameraActive, setCameraActive] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const category = useMemo(
     () => RECEIPT_RUSH_CATEGORIES.find((c) => c.id === categoryId) ?? RECEIPT_RUSH_CATEGORIES[0],
     [categoryId]
   );
+
+  const stopCamera = () => {
+    const stream = streamRef.current;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    setCameraActive(false);
+    setCameraReady(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   const uploadFile = async (file: File) => {
     if (!userTelegramInitData) throw new Error('Open app from Telegram first.');
@@ -87,8 +108,67 @@ export default function ReceiptRushPopup({ onClose }: Props) {
     }
   };
 
+  const startCameraScan = async () => {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+      setCameraError('Camera is not supported on this device/browser.');
+      return;
+    }
+    setCameraError(null);
+    setCameraReady(false);
+    try {
+      // This call triggers browser permission prompt when needed.
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } },
+      });
+      streamRef.current = stream;
+      setCameraActive(true);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Camera permission denied or unavailable.';
+      setCameraError(msg);
+      setCameraActive(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!cameraActive || !videoRef.current || !streamRef.current) return;
+    const v = videoRef.current;
+    v.srcObject = streamRef.current;
+    void v.play().then(() => setCameraReady(true)).catch(() => setCameraReady(false));
+  }, [cameraActive]);
+
+  const captureFromCamera = async () => {
+    const video = videoRef.current;
+    if (!video || video.videoWidth < 2 || video.videoHeight < 2) {
+      setCameraError('Camera is not ready yet. Please wait a second.');
+      return;
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      setCameraError('Failed to process camera frame.');
+      return;
+    }
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+    if (!blob) {
+      setCameraError('Failed to capture receipt image.');
+      return;
+    }
+    const file = new File([blob], `receipt-scan-${Date.now()}.jpg`, { type: 'image/jpeg' });
+    stopCamera();
+    await onPickFile(file);
+  };
+
   return (
-    <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/70 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center bg-black/70 p-4"
+      onClick={() => {
+        stopCamera();
+        onClose();
+      }}
+    >
       <div
         className="w-full max-w-md rounded-2xl border border-ura-border/85 bg-[#13161d] p-4 max-h-[90vh] overflow-y-auto no-scrollbar"
         onClick={(e) => e.stopPropagation()}
@@ -99,6 +179,7 @@ export default function ReceiptRushPopup({ onClose }: Props) {
             type="button"
             onClick={() => {
               triggerHapticFeedback(window);
+              stopCamera();
               onClose();
             }}
             className="px-2 py-1 text-xs rounded bg-ura-panel-2 text-gray-300"
@@ -161,10 +242,39 @@ export default function ReceiptRushPopup({ onClose }: Props) {
             Upload receipt image
             <input type="file" accept="image/*" className="hidden" onChange={(e) => void onPickFile(e.target.files?.[0] ?? null)} />
           </label>
-          <label className="block rounded-lg border border-ura-border/85 bg-ura-panel-2 px-3 py-2 text-sm cursor-pointer">
+          <button
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              void startCameraScan();
+            }}
+            className="w-full text-left rounded-lg border border-ura-border/85 bg-ura-panel-2 px-3 py-2 text-sm"
+          >
             Scan receipt (camera)
-            <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => void onPickFile(e.target.files?.[0] ?? null)} />
-          </label>
+          </button>
+          {cameraError ? <p className="text-[11px] text-rose-300">{cameraError}</p> : null}
+          {cameraActive ? (
+            <div className="rounded-lg border border-ura-border/85 bg-[#0e1118] p-2">
+              <video ref={videoRef} autoPlay playsInline muted className="w-full rounded-md border border-ura-border/70 bg-black" />
+              <div className="mt-2 flex gap-2">
+                <button
+                  type="button"
+                  disabled={!cameraReady || busy}
+                  onClick={() => void captureFromCamera()}
+                  className="flex-1 rounded-md bg-[#5fa8ff] text-[#07111f] font-semibold py-2 disabled:opacity-60"
+                >
+                  Capture
+                </button>
+                <button
+                  type="button"
+                  onClick={stopCamera}
+                  className="flex-1 rounded-md border border-ura-border/85 bg-ura-panel text-gray-200 py-2"
+                >
+                  Cancel camera
+                </button>
+              </div>
+            </div>
+          ) : null}
           {imageUrl ? <p className="text-[11px] text-emerald-300 break-all">Uploaded: {imageUrl}</p> : null}
         </div>
 

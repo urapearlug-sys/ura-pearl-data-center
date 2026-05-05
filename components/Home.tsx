@@ -285,7 +285,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           setCurrentView('earn');
           return;
         case 'receipt':
-          queueEarnBootstrap({ activeTabAll: true });
+          queueEarnBootstrap({ openReceiptRush: true });
           setCurrentView('earn');
           return;
         case 'voice':
