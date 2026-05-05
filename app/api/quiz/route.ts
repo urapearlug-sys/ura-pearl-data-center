@@ -11,10 +11,11 @@ import { maybeApplyAutomatedQuizRotation } from '@/utils/quiz-auto-rotation';
 
 export const dynamic = 'force-dynamic';
 
-/** Legacy DB may have 10 instead of 10k; return 10k when stored value is under 1000 so client shows correct reward. */
+/** Normalize display reward to current per-question default (1,000 PEARLS). */
 function effectivePointsPerQuestion(storedPoints: number | null | undefined): number {
-  const p = storedPoints ?? 0;
-  return p >= 1000 ? p : MITROLABS_QUIZ_REWARD_POINTS;
+  const p = Math.floor(Number(storedPoints ?? 0));
+  if (!Number.isFinite(p) || p <= 0) return MITROLABS_QUIZ_REWARD_POINTS;
+  return Math.min(p, MITROLABS_QUIZ_REWARD_POINTS);
 }
 
 function getStartOfDayUTC(d: Date): Date {

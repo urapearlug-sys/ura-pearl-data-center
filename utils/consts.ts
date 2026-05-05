@@ -199,7 +199,7 @@ export const REFERRAL_BONUS_BASE = 5000;
 export const REFERRAL_BONUS_PREMIUM = 25000;
 
 /** Quiz: default PEARLS reward (admin can set per-question points and completion bonus) */
-export const MITROLABS_QUIZ_REWARD_POINTS = 10_000;
+export const MITROLABS_QUIZ_REWARD_POINTS = 1_000;
 /** Max multiple-choice options per question (2–4) */
 export const MITROLABS_QUIZ_MAX_OPTIONS = 4;
 

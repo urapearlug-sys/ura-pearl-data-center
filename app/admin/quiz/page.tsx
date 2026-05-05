@@ -395,7 +395,7 @@ export default function AdminQuizPage() {
   };
 
   const handleResetAllQuizAttempts = async () => {
-    if (!confirm('Delete all quiz attempts? Everyone will be able to take today\'s quiz again and earn 10k PEARLS per correct answer.')) return;
+    if (!confirm('Delete all quiz attempts? Everyone will be able to take today\'s quiz again and earn 1k PEARLS per correct answer.')) return;
     setResettingAttempts(true);
     try {
       const res = await fetch('/api/admin/quiz', {
@@ -540,7 +540,7 @@ export default function AdminQuizPage() {
               {resettingAttempts ? 'Resetting…' : 'Reset all quiz attempts'}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Run &quot;Load&quot; once. Use &quot;Set 5 random&quot; daily or anytime; toggle Active on individual questions to override. &quot;Reset all quiz attempts&quot; lets everyone take today&apos;s quiz again (10k PEARLS per correct answer).</p>
+          <p className="text-xs text-gray-500 mt-2">Run &quot;Load&quot; once. Use &quot;Set 5 random&quot; daily or anytime; toggle Active on individual questions to override. &quot;Reset all quiz attempts&quot; lets everyone take today&apos;s quiz again (1k PEARLS per correct answer).</p>
         </div>
 
         {/* Completion bonus */}

@@ -18,7 +18,7 @@ export interface BlockchainQuizItem {
   points?: number;
 }
 
-const QUESTION_POINTS = 10000;
+const QUESTION_POINTS = 1000;
 const TARGET_COUNT = 500;
 const BRANCHES = ['General', 'URA & compliance', 'Tax basics', 'Technical', 'NFTs', 'Security'] as const;
 
