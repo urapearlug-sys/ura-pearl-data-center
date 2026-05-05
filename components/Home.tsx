@@ -49,14 +49,14 @@ type ActionItem = {
 
 const ACTION_CATALOG: ActionItem[] = [
   { id: 'quiz', title: 'URA Quiz', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
-  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'play', icon: dailyCombo },
+  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'play', icon: dailyCombo },
   { id: 'truefalse', title: 'True or False — Uganda tax edition', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'play', icon: dailyCipher },
   { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game', group: 'play', icon: dailyCombo },
   { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play', icon: dailyReward },
   { id: 'social-earn', title: 'Earn activities', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn', icon: dailyReward },
   { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn', icon: dailyCipher },
-  { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
-  { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
 ];
 
 /** Full-width row under Action Center → Most used (same chrome as Earn shortcut cards). */
@@ -75,9 +75,9 @@ const HOME_MOST_USED_KARIBU: ActionItem = {
  */
 const HOME_MOST_USED_GRID: ActionItem[] = [
   { id: 'quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
-  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', pearlType: 'blue', group: 'play', icon: dailyCombo },
-  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', group: 'earn', icon: dailyCombo },
-  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', group: 'earn', icon: dailyCombo },
+  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', pearlType: 'blue', route: 'earn', group: 'play', icon: dailyCombo },
+  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
+  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
 ];
 
 const HOME_MOST_USED_KARIBU_CHROME = { emoji: '📅', border: 'border-[#d9a63a]/55' } as const;

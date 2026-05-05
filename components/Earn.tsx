@@ -329,6 +329,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
         {showMitrolabsQuiz && (
           <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
         )}
+        {showReceiptRush && (
+          <ReceiptRushPopup onClose={() => setShowReceiptRush(false)} />
+        )}
       </div>
     );
   }
