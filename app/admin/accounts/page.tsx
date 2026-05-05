@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import ItemPasswordGate from '@/app/admin/ItemPasswordGate';
 
 interface UserAccount {
   rank: number;
@@ -53,6 +54,7 @@ export default function AccountsAdminPage() {
   const [showHidden, setShowHidden] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [itemPasswordRequired, setItemPasswordRequired] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
     action: string;
     label: string;
@@ -75,7 +77,8 @@ export default function AccountsAdminPage() {
 
       if (!res.ok) {
         if (res.status === 403 && (data as { code?: string }).code === 'ITEM_REQUIRED') {
-          setMessage({ type: 'error', text: 'Section password required. Go back to Admin and open Account Management again to enter the password.' });
+          setItemPasswordRequired(true);
+          setMessage(null);
           setUsers([]);
           setSummary(null);
           return;
@@ -160,6 +163,10 @@ export default function AccountsAdminPage() {
     if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
     return num.toString();
   };
+
+  if (itemPasswordRequired) {
+    return <ItemPasswordGate pathname="/admin/accounts" />;
+  }
 
   return (
     <div className="min-h-screen bg-ura-panel text-white p-8">
