@@ -20,10 +20,18 @@ type PendingWithdrawal = {
   user: { telegramId: string; name: string | null };
 };
 
+type AccountsSummary = {
+  totalUsers: number;
+  totalPoints: number;
+  frozenCount: number;
+  hiddenCount: number;
+};
+
 export default function AdminPearlsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totals, setTotals] = useState({ white: 0, bluePending: 0, blueApproved: 0, goldish: 0 });
+  const [accountsSummary, setAccountsSummary] = useState<AccountsSummary>({ totalUsers: 0, totalPoints: 0, frozenCount: 0, hiddenCount: 0 });
   const [pendingBlueActivities, setPendingBlueActivities] = useState<PendingBlueActivity[]>([]);
   const [pendingWithdrawals, setPendingWithdrawals] = useState<PendingWithdrawal[]>([]);
 
@@ -31,18 +39,38 @@ export default function AdminPearlsPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/admin/pearls');
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to load pearls admin data');
-      setTotals(data.totals || { white: 0, bluePending: 0, blueApproved: 0, goldish: 0 });
-      setPendingBlueActivities(data.pendingBlueActivities || []);
-      setPendingWithdrawals(data.pendingWithdrawals || []);
+      const [pearlsRes, accountsRes] = await Promise.all([
+        fetch('/api/admin/pearls'),
+        fetch('/api/admin/accounts?page=1&limit=1'),
+      ]);
+      const pearlsData = await pearlsRes.json();
+      const accountsData = await accountsRes.json();
+      if (!pearlsRes.ok) throw new Error(pearlsData.error || 'Failed to load pearls admin data');
+      setTotals(pearlsData.totals || { white: 0, bluePending: 0, blueApproved: 0, goldish: 0 });
+      setPendingBlueActivities(pearlsData.pendingBlueActivities || []);
+      setPendingWithdrawals(pearlsData.pendingWithdrawals || []);
+      if (accountsRes.ok && accountsData?.summary) {
+        setAccountsSummary({
+          totalUsers: Number(accountsData.summary.totalUsers ?? 0),
+          totalPoints: Number(accountsData.summary.totalPoints ?? 0),
+          frozenCount: Number(accountsData.summary.frozenCount ?? 0),
+          hiddenCount: Number(accountsData.summary.hiddenCount ?? 0),
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load pearls admin data');
     } finally {
       setLoading(false);
     }
   }, []);
+
+  const formatNumber = (num: number): string => {
+    if (num >= 1e12) return (num / 1e12).toFixed(1) + 'T';
+    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+    return Math.floor(num).toString();
+  };
 
   useEffect(() => {
     loadData();
@@ -206,6 +234,52 @@ export default function AdminPearlsPage() {
                 </div>
               ))
             )}
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
+          <h2 className="text-xl font-semibold">Account Management</h2>
+          <p className="text-sm text-gray-400 mt-1">
+            Pearls Overview now includes quick account tools. Use full management for table actions.
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
+              <p className="text-xs text-gray-400 uppercase">Total Users</p>
+              <p className="text-xl font-bold">{formatNumber(accountsSummary.totalUsers)}</p>
+            </div>
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
+              <p className="text-xs text-gray-400 uppercase">Total Points</p>
+              <p className="text-xl font-bold text-[#f3ba2f]">{formatNumber(accountsSummary.totalPoints)}</p>
+            </div>
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
+              <p className="text-xs text-gray-400 uppercase">Frozen Accounts</p>
+              <p className="text-xl font-bold text-rose-400">{accountsSummary.frozenCount}</p>
+            </div>
+            <div className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
+              <p className="text-xs text-gray-400 uppercase">Hidden Accounts</p>
+              <p className="text-xl font-bold">{accountsSummary.hiddenCount}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-lg border border-rose-700/40 bg-rose-950/20 p-3">
+            <p className="text-sm font-semibold text-rose-300">⚠️ Bulk Actions (All Users) - Testing Only</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button type="button" onClick={() => runAction({ action: 'freeze_all', allUsers: true })} className="px-3 py-1.5 text-xs rounded bg-orange-700 hover:bg-orange-600">Freeze All</button>
+              <button type="button" onClick={() => runAction({ action: 'unfreeze_all', allUsers: true })} className="px-3 py-1.5 text-xs rounded bg-emerald-700 hover:bg-emerald-600">Unfreeze All</button>
+              <button type="button" onClick={() => runAction({ action: 'hide_all', allUsers: true })} className="px-3 py-1.5 text-xs rounded bg-slate-700 hover:bg-slate-600">Hide All</button>
+              <button type="button" onClick={() => runAction({ action: 'unhide_all', allUsers: true })} className="px-3 py-1.5 text-xs rounded bg-blue-700 hover:bg-blue-600">Unhide All</button>
+              <button type="button" onClick={() => runAction({ action: 'reset_all', allUsers: true })} className="px-3 py-1.5 text-xs rounded bg-rose-700 hover:bg-rose-600">Reset All Points & Activities</button>
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <Link href="/admin/accounts" className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3 hover:bg-ura-panel transition-colors">
+              Open full Account Management (search, selected-user actions, delete selected, table)
+            </Link>
+            <Link href="/admin/export" className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3 hover:bg-ura-panel transition-colors">
+              Open Export Data (JSON/CSV scope tools)
+            </Link>
           </div>
         </section>
 
