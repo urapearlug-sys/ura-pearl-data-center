@@ -53,6 +53,7 @@ import LeadershipDashboardPopup from './popups/LeadershipDashboardPopup';
 import TeamMemberDashboardPopup from './popups/TeamMemberDashboardPopup';
 import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
+import ReceiptRushPopup from './popups/ReceiptRushPopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
 import { consumeEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
@@ -129,6 +130,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   const [showTeamMemberDashboardId, setShowTeamMemberDashboardId] = useState<string | null>(null);
   const [showGlobalTasks, setShowGlobalTasks] = useState(false);
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
+  const [showReceiptRush, setShowReceiptRush] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
 
@@ -146,6 +148,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       if (p.openWeeklyEvent) setShowWeeklyEvent(true);
       if (p.openGlobalTasks) setShowGlobalTasks(true);
       if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
+      if (p.openReceiptRush) setShowReceiptRush(true);
       if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
       if (p.openMiniGamesHub) setShowMiniGamesHub(true);
       if (p.openLuckySpin) setShowLuckySpin(true);
@@ -256,6 +259,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       if (p.openWeeklyEvent) setShowWeeklyEvent(true);
       if (p.openGlobalTasks) setShowGlobalTasks(true);
       if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
+      if (p.openReceiptRush) setShowReceiptRush(true);
       if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
       if (p.openMiniGamesHub) setShowMiniGamesHub(true);
       if (p.openLuckySpin) setShowLuckySpin(true);
@@ -751,6 +755,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       )}
       {showMitrolabsQuiz && (
         <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
+      )}
+      {showReceiptRush && (
+        <ReceiptRushPopup onClose={() => setShowReceiptRush(false)} />
       )}
       {showWeeklyEvent && (
         <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />

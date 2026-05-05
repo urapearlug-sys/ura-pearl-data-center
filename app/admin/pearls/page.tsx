@@ -6,6 +6,7 @@ import { triggerHapticFeedback } from '@/utils/ui';
 
 type PendingBlueActivity = {
   id: string;
+  sourceKey: string;
   sourceLabel: string;
   amount: number;
   createdAt: string;
@@ -148,6 +149,16 @@ export default function AdminPearlsPage() {
               pendingBlueActivities.map((item) => (
                 <div key={item.id} className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
                   <p className="font-medium text-white">{item.sourceLabel}</p>
+                  {item.sourceKey === 'receipt_rush' && item.sourceLabel.includes('/uploads/receipts/') ? (
+                    <a
+                      href={item.sourceLabel.slice(item.sourceLabel.indexOf('/uploads/receipts/')).split(' · ')[0]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex text-xs text-cyan-300 underline underline-offset-2"
+                    >
+                      Open uploaded receipt
+                    </a>
+                  ) : null}
                   <p className="text-xs text-gray-400 mt-1">
                     {item.user.name || 'User'} ({item.user.telegramId}) · {Math.floor(item.amount)} Blue
                   </p>

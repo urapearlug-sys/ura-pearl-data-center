@@ -117,7 +117,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
 
   const highlights: ShortcutItem[] = [
     { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', onClick: () => goEarn({ openMitrolabsQuiz: true }) },
-    { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', onClick: () => goEarn({ activeTabAll: true }) },
+    { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Upload receipt · +2000 blue on approval', onClick: () => goEarn({ openReceiptRush: true }) },
     {
       id: 'whistle-blower',
       title: 'Whistle blower',

@@ -5,6 +5,7 @@ export const EARN_BOOTSTRAP_KEY = 'ura:earn-bootstrap';
 
 export type EarnBootstrapPayload = {
   activeTabAll?: boolean;
+  openReceiptRush?: boolean;
   openDailyCipher?: boolean;
   openDailyCombo?: boolean;
   openWeeklyEvent?: boolean;

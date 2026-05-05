@@ -432,7 +432,7 @@ export default function Home({ setCurrentView }: HomeProps) {
       { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', icon: ic['weekly-event'], onClick: () => goEarn({openWeeklyEvent: true }) },
       { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', icon: ic['global-joinable-tasks'], onClick: () => goEarn({openGlobalTasks: true }) },
       { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', icon: ic['ura-quiz'], onClick: () => goEarn({openMitrolabsQuiz: true }) },
-      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', icon: ic['receipt-rush'], onClick: () => goEarn({activeTabAll: true }) },
+      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Upload receipt · +2000 blue on approval', icon: ic['receipt-rush'], onClick: () => goEarn({openReceiptRush: true }) },
       {
         id: 'true-false',
         title: 'True or False – Uganda Tax Edition',

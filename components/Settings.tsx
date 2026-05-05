@@ -17,6 +17,16 @@ interface SettingsProps {
   setCurrentView: (view: string) => void;
 }
 
+type ReceiptRushSubmission = {
+  id: string;
+  sourceLabel: string;
+  amount: number;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  createdAt: string;
+  approvedAt?: string | null;
+  rejectionReason?: string | null;
+};
+
 type SidebarKey =
   | 'profile'
   | 'notifications'
@@ -100,6 +110,10 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   const [districtSlug, setDistrictSlug] = useState('');
   const [districtSaving, setDistrictSaving] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const [receiptSubmissions, setReceiptSubmissions] = useState<ReceiptRushSubmission[]>([]);
+  const [receiptLoading, setReceiptLoading] = useState(false);
+  const [receiptError, setReceiptError] = useState<string | null>(null);
+  const [receiptFilter, setReceiptFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
 
   useEffect(() => {
     if (active === 'profile') {
@@ -116,6 +130,35 @@ export default function Settings({ setCurrentView }: SettingsProps) {
     setVibrationEnabled(storedVibration !== 'false');
     setAnimationEnabled(storedAnimation !== 'false');
   }, []);
+
+  useEffect(() => {
+    if (active !== 'profile' || openAccordion !== 'receipts' || !userTelegramInitData) return;
+    let cancelled = false;
+    const load = async () => {
+      setReceiptLoading(true);
+      setReceiptError(null);
+      try {
+        const res = await fetch('/api/receipt-rush/my', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData: userTelegramInitData }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Failed to load receipt submissions');
+        if (!cancelled) {
+          setReceiptSubmissions(Array.isArray(data.submissions) ? (data.submissions as ReceiptRushSubmission[]) : []);
+        }
+      } catch (err) {
+        if (!cancelled) setReceiptError(err instanceof Error ? err.message : 'Failed to load receipt submissions');
+      } finally {
+        if (!cancelled) setReceiptLoading(false);
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [active, openAccordion, userTelegramInitData]);
 
   const displayName = (userTelegramName || 'Citizen').toUpperCase();
 
@@ -144,6 +187,21 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   };
 
   const renderMain = () => {
+    const extractReceiptUrl = (sourceLabel: string): string | null => {
+      const marker = '/uploads/receipts/';
+      const start = sourceLabel.indexOf(marker);
+      if (start === -1) return null;
+      const tail = sourceLabel.slice(start);
+      const end = tail.indexOf(' · ');
+      return end === -1 ? tail : tail.slice(0, end);
+    };
+
+    const statusBadgeClass = (status: ReceiptRushSubmission['status']): string => {
+      if (status === 'APPROVED') return 'border-emerald-500/45 bg-emerald-500/10 text-emerald-300';
+      if (status === 'REJECTED') return 'border-rose-500/45 bg-rose-500/10 text-rose-300';
+      return 'border-amber-500/45 bg-amber-500/10 text-amber-300';
+    };
+
     switch (active) {
       case 'profile':
         return (
@@ -285,8 +343,68 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               )}
               <AccordionRow id="receipts" title="My receipts" />
               {openAccordion === 'receipts' && (
-                <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
-                  Transaction history will appear here.
+                <div className="px-3 py-2 text-xs text-gray-300 rounded-lg bg-[#1a1d26] border border-ura-border/85 space-y-2">
+                  <p className="text-gray-400">My Receipt Rush submissions</p>
+                  {receiptLoading ? (
+                    <p className="text-gray-400">Loading submissions...</p>
+                  ) : receiptError ? (
+                    <p className="text-rose-400">{receiptError}</p>
+                  ) : receiptSubmissions.length === 0 ? (
+                    <p className="text-gray-500">No submissions yet.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        {(['ALL', 'PENDING', 'APPROVED', 'REJECTED'] as const).map((f) => (
+                          <button
+                            key={f}
+                            type="button"
+                            onClick={() => {
+                              triggerHapticFeedback(window);
+                              setReceiptFilter(f);
+                            }}
+                            className={`px-2.5 py-1 rounded-full text-[10px] border transition-colors ${
+                              receiptFilter === f
+                                ? 'border-[#5fa8ff]/60 bg-[#5fa8ff]/20 text-[#b8d4ff]'
+                                : 'border-ura-border/80 bg-ura-panel text-gray-300'
+                            }`}
+                          >
+                            {f === 'ALL' ? 'All' : f[0] + f.slice(1).toLowerCase()}
+                          </button>
+                        ))}
+                      </div>
+                      {receiptSubmissions
+                        .filter((item) => receiptFilter === 'ALL' || item.status === receiptFilter)
+                        .map((item) => {
+                        const receiptUrl = extractReceiptUrl(item.sourceLabel);
+                        return (
+                          <div key={item.id} className="rounded-lg border border-ura-border/75 bg-ura-panel/85 p-2.5">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-[11px] text-white font-semibold">+{Math.floor(item.amount)} blue pearls</p>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] border ${statusBadgeClass(item.status)}`}>
+                                {item.status.toLowerCase()}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-gray-400 mt-1">
+                              Submitted: {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+                            </p>
+                            {item.status === 'REJECTED' && item.rejectionReason ? (
+                              <p className="text-[10px] text-rose-300 mt-1">Reason: {item.rejectionReason}</p>
+                            ) : null}
+                            {receiptUrl ? (
+                              <a
+                                href={receiptUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex mt-1 text-[10px] text-cyan-300 underline underline-offset-2"
+                              >
+                                Open uploaded receipt
+                              </a>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -12,7 +12,14 @@ export async function GET(req: Request) {
     prisma.pearlActivity.findMany({
       where: { pearlType: PearlType.BLUE, status: PearlActivityStatus.PENDING },
       orderBy: { createdAt: 'asc' },
-      include: { user: { select: { id: true, telegramId: true, name: true } } },
+      select: {
+        id: true,
+        sourceKey: true,
+        sourceLabel: true,
+        amount: true,
+        createdAt: true,
+        user: { select: { id: true, telegramId: true, name: true } },
+      },
       take: 200,
     }),
     prisma.pearlWithdrawal.findMany({
