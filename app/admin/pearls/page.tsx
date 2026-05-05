@@ -109,29 +109,6 @@ export default function AdminPearlsPage() {
         {loading ? <p className="text-gray-400 mb-4">Loading pearls data...</p> : null}
         {error ? <p className="text-rose-400 mb-4">{error}</p> : null}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-gray-400">White pearls</p>
-            <p className="text-2xl font-bold mt-1">{Math.floor(totals.white).toLocaleString()}</p>
-            <p className="text-xs text-gray-400 mt-2">Activities like Karibu Daily, Quiz, and non-approval tasks.</p>
-          </div>
-          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-[#5fa8ff]">Blue pearls</p>
-            <p className="text-2xl font-bold mt-1">{Math.floor(totals.bluePending).toLocaleString()} pending</p>
-            <p className="text-xs text-gray-400 mt-2">Receipt Rush, Whistle blower, IFRIS/reporting and similar activities.</p>
-          </div>
-          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-[#5fa8ff]">Blue approved total</p>
-            <p className="text-2xl font-bold mt-1">{Math.floor(totals.blueApproved).toLocaleString()}</p>
-            <p className="text-xs text-gray-400 mt-2">Historical approved Blue pearls.</p>
-          </div>
-          <div className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-[#f3ba2f]">Goldish pearls</p>
-            <p className="text-2xl font-bold mt-1">{Math.floor(totals.goldish).toLocaleString()}</p>
-            <p className="text-xs text-gray-400 mt-2">Auto-converted from approved White/Blue pearls and cashout source.</p>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <section className="rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
             <h2 className="text-xl font-semibold">Conversion Rules</h2>
