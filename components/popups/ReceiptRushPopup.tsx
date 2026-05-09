@@ -62,7 +62,7 @@ export default function ReceiptRushPopup({ onClose }: Props) {
     if (file.size > 10 * 1024 * 1024) throw new Error('Receipt image is too large. Max 10MB.');
 
     const raw = await readFileAsDataUrl(file);
-    if (raw.length <= 2_500_000) return raw;
+    if (raw.length <= 2_000_000) return raw;
 
     const img = document.createElement('img');
     img.decoding = 'async';
@@ -71,7 +71,7 @@ export default function ReceiptRushPopup({ onClose }: Props) {
       img.onload = () => resolve();
       img.onerror = () => reject(new Error('Could not process receipt image. Try a JPEG or PNG.'));
     });
-    const maxSide = 1400;
+    const maxSide = 1000;
     const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
@@ -79,7 +79,7 @@ export default function ReceiptRushPopup({ onClose }: Props) {
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Could not process receipt image.');
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', 0.82);
+    return canvas.toDataURL('image/jpeg', 0.72);
   };
 
   const onPickFile = async (file: File | null) => {
@@ -102,6 +102,10 @@ export default function ReceiptRushPopup({ onClose }: Props) {
   const submit = async () => {
     if (!userTelegramInitData) {
       setMessage('Missing Telegram session. Re-open app from Telegram.');
+      return;
+    }
+    if (!imageData && !imageUrl.startsWith('/uploads/receipts/')) {
+      setMessage('Please upload or scan a receipt image before submitting.');
       return;
     }
     setBusy(true);
@@ -251,10 +255,10 @@ export default function ReceiptRushPopup({ onClose }: Props) {
         </select>
 
         <div className="grid grid-cols-2 gap-2">
-          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="URA portal (eTax/EFRIS)" value={uraPortal} onChange={(e) => setUraPortal(e.target.value)} />
-          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Receipt number" value={receiptNumber} onChange={(e) => setReceiptNumber(e.target.value)} />
-          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Receipt date (YYYY-MM-DD)" value={receiptDate} onChange={(e) => setReceiptDate(e.target.value)} />
-          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Amount paid" value={amountPaid} onChange={(e) => setAmountPaid(e.target.value)} inputMode="numeric" />
+          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="URA portal (optional)" value={uraPortal} onChange={(e) => setUraPortal(e.target.value)} />
+          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Receipt number (optional)" value={receiptNumber} onChange={(e) => setReceiptNumber(e.target.value)} />
+          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Receipt date (optional)" value={receiptDate} onChange={(e) => setReceiptDate(e.target.value)} />
+          <input className="rounded-lg bg-ura-panel px-3 py-2 text-sm border border-ura-border/85" placeholder="Amount paid (optional)" value={amountPaid} onChange={(e) => setAmountPaid(e.target.value)} inputMode="numeric" />
         </div>
 
         <textarea

@@ -40,20 +40,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid tax type for selected category' }, { status: 400 });
   }
 
-  const portal = String(uraPortal || '').trim().slice(0, 80);
-  const receiptNo = String(receiptNumber || '').trim().slice(0, 80);
-  const date = String(receiptDate || '').trim().slice(0, 40);
-  const amount = Math.max(0, Math.floor(Number(amountPaid || 0)));
+  const portal = (String(uraPortal || '').trim() || 'Not specified').slice(0, 80);
+  const receiptNo = (String(receiptNumber || '').trim() || 'Not provided').slice(0, 80);
+  const date = (String(receiptDate || '').trim() || 'Not provided').slice(0, 40);
+  const amountRaw = Math.floor(Number(amountPaid || 0));
+  const amount = Number.isFinite(amountRaw) && amountRaw > 0 ? amountRaw : 0;
   const img = String(imageUrl || '').trim();
   const embeddedImage = String(imageData || '').trim();
   const imgName = String(imageName || '').trim().slice(0, 120);
   const imgType = String(imageType || '').trim().slice(0, 80);
   const memo = String(notes || '').trim().slice(0, 180);
   const hasUploadedImage = img.startsWith('/uploads/receipts/');
-  const hasEmbeddedImage = embeddedImage.startsWith('data:image/') && embeddedImage.length <= 3_500_000;
+  const hasEmbeddedImage = embeddedImage.startsWith('data:image/') && embeddedImage.length <= 8_000_000;
 
-  if (!portal || !receiptNo || !date || amount <= 0 || (!hasUploadedImage && !hasEmbeddedImage)) {
-    return NextResponse.json({ error: 'Missing or invalid receipt fields' }, { status: 400 });
+  if (!hasUploadedImage && !hasEmbeddedImage) {
+    const error = embeddedImage.startsWith('data:image/')
+      ? 'Receipt image is too large. Please upload or scan a clearer smaller image.'
+      : 'Please upload or scan a receipt image before submitting.';
+    return NextResponse.json({ error }, { status: 400 });
   }
 
   const user = await resolveUserFromInitData(init);
