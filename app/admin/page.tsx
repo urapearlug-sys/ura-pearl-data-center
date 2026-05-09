@@ -30,6 +30,7 @@ const AdminPanel = () => {
 
     const pearlSections = [
         { title: 'Pearls Overview', path: '/admin/pearls', description: 'Track White, Blue, and Goldish balances, conversion rates, and category totals' },
+        { title: 'Receipt Rush uploads', path: '/admin/pearls#receipt-rush-uploads', description: 'Review uploaded/scanned receipts, see who uploaded them, and approve or reject Blue-pearl rewards' },
         { title: 'Pearls Approval Queue', path: '/admin/pearls', description: 'Approve/reject Blue-pearl activities and auto-convert approved volume to Goldish pearls' },
         { title: 'Pearls History & Transfers', path: '/admin/pearls', description: 'Audit conversion history, withdrawals, and White/Goldish user-to-user transfers' },
     ];

@@ -20,6 +20,9 @@ export async function POST(req: Request) {
     amountPaid,
     notes,
     imageUrl,
+    imageData,
+    imageName,
+    imageType,
   } = body as Record<string, unknown>;
 
   const init = typeof initData === 'string' ? initData : '';
@@ -42,9 +45,14 @@ export async function POST(req: Request) {
   const date = String(receiptDate || '').trim().slice(0, 40);
   const amount = Math.max(0, Math.floor(Number(amountPaid || 0)));
   const img = String(imageUrl || '').trim();
+  const embeddedImage = String(imageData || '').trim();
+  const imgName = String(imageName || '').trim().slice(0, 120);
+  const imgType = String(imageType || '').trim().slice(0, 80);
   const memo = String(notes || '').trim().slice(0, 180);
+  const hasUploadedImage = img.startsWith('/uploads/receipts/');
+  const hasEmbeddedImage = embeddedImage.startsWith('data:image/') && embeddedImage.length <= 3_500_000;
 
-  if (!portal || !receiptNo || !date || amount <= 0 || !img.startsWith('/uploads/receipts/')) {
+  if (!portal || !receiptNo || !date || amount <= 0 || (!hasUploadedImage && !hasEmbeddedImage)) {
     return NextResponse.json({ error: 'Missing or invalid receipt fields' }, { status: 400 });
   }
 
@@ -52,7 +60,8 @@ export async function POST(req: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
 
   const result = await prisma.$transaction(async (tx) => {
-    const sourceLabel = `Receipt Rush · ${category.label} · ${tax} · Portal:${portal} · Ref:${receiptNo} · Date:${date} · Paid:${amount} · Image:${img}${memo ? ` · Notes:${memo}` : ''}`;
+    const imageRef = hasUploadedImage ? img : 'embedded';
+    const sourceLabel = `Receipt Rush · Category:${category.label} · Tax:${tax} · Portal:${portal} · Ref:${receiptNo} · Date:${date} · Paid:${amount} · Image:${imageRef}${memo ? ` · Notes:${memo}` : ''}`;
     const activity = await tx.pearlActivity.create({
       data: {
         userId: user.id,
@@ -84,7 +93,11 @@ export async function POST(req: Request) {
         receiptNumber: receiptNo,
         receiptDate: date,
         amountPaid: amount,
-        imageUrl: img,
+        imageUrl: imageRef,
+        imageData: hasEmbeddedImage ? embeddedImage : undefined,
+        imageName: imgName || undefined,
+        imageType: imgType || undefined,
+        activityId: activity.id,
       },
     });
 

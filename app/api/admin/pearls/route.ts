@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   const authError = getAdminAuthError(req);
   if (authError) return NextResponse.json(authError.body, { status: authError.status });
 
-  const [pendingBlueActivities, pendingWithdrawals, users, audits] = await Promise.all([
+  const [pendingBlueActivities, receiptRushActivities, pendingWithdrawals, users, audits] = await Promise.all([
     prisma.pearlActivity.findMany({
       where: { pearlType: PearlType.BLUE, status: PearlActivityStatus.PENDING },
       orderBy: { createdAt: 'asc' },
@@ -21,6 +21,22 @@ export async function GET(req: Request) {
         user: { select: { id: true, telegramId: true, name: true } },
       },
       take: 200,
+    }),
+    prisma.pearlActivity.findMany({
+      where: { sourceKey: 'receipt_rush' },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        sourceKey: true,
+        sourceLabel: true,
+        amount: true,
+        status: true,
+        createdAt: true,
+        approvedAt: true,
+        rejectionReason: true,
+        user: { select: { id: true, telegramId: true, name: true } },
+      },
+      take: 100,
     }),
     prisma.pearlWithdrawal.findMany({
       where: { status: PearlWithdrawalStatus.PENDING },
@@ -64,6 +80,7 @@ export async function GET(req: Request) {
     totals,
     users,
     pendingBlueActivities,
+    receiptRushActivities,
     pendingWithdrawals,
     recentAudits: audits,
   });

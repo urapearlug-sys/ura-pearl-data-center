@@ -9,7 +9,10 @@ type PendingBlueActivity = {
   sourceKey: string;
   sourceLabel: string;
   amount: number;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED';
   createdAt: string;
+  approvedAt?: string | null;
+  rejectionReason?: string | null;
   user: { telegramId: string; name: string | null };
 };
 
@@ -34,6 +37,7 @@ export default function AdminPearlsPage() {
   const [totals, setTotals] = useState({ white: 0, bluePending: 0, blueApproved: 0, goldish: 0 });
   const [accountsSummary, setAccountsSummary] = useState<AccountsSummary>({ totalUsers: 0, totalPoints: 0, frozenCount: 0, hiddenCount: 0 });
   const [pendingBlueActivities, setPendingBlueActivities] = useState<PendingBlueActivity[]>([]);
+  const [receiptRushActivities, setReceiptRushActivities] = useState<PendingBlueActivity[]>([]);
   const [pendingWithdrawals, setPendingWithdrawals] = useState<PendingWithdrawal[]>([]);
 
   const loadData = useCallback(async () => {
@@ -49,6 +53,7 @@ export default function AdminPearlsPage() {
       if (!pearlsRes.ok) throw new Error(pearlsData.error || 'Failed to load pearls admin data');
       setTotals(pearlsData.totals || { white: 0, bluePending: 0, blueApproved: 0, goldish: 0 });
       setPendingBlueActivities(pearlsData.pendingBlueActivities || []);
+      setReceiptRushActivities(pearlsData.receiptRushActivities || []);
       setPendingWithdrawals(pearlsData.pendingWithdrawals || []);
       if (accountsRes.ok && accountsData?.summary) {
         setAccountsSummary({
@@ -89,8 +94,6 @@ export default function AdminPearlsPage() {
     await loadData();
   };
 
-  const receiptUploads = pendingBlueActivities.filter((x) => x.sourceKey === 'receipt_rush');
-
   const parseReceiptRushLabel = (sourceLabel: string): Record<string, string> => {
     const out: Record<string, string> = {};
     const parts = sourceLabel.split(' · ').map((p) => p.trim()).filter(Boolean);
@@ -101,6 +104,12 @@ export default function AdminPearlsPage() {
       }
     }
     return out;
+  };
+
+  const statusBadgeClass = (status?: string): string => {
+    if (status === 'APPROVED') return 'border-emerald-500/45 bg-emerald-500/10 text-emerald-300';
+    if (status === 'REJECTED') return 'border-rose-500/45 bg-rose-500/10 text-rose-300';
+    return 'border-amber-500/45 bg-amber-500/10 text-amber-300';
   };
 
   return (
@@ -154,15 +163,33 @@ export default function AdminPearlsPage() {
           </section>
         </div>
 
-        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
-          <h2 className="text-xl font-semibold">Blue Approval Queue</h2>
-          {receiptUploads.length > 0 ? (
-            <div className="mt-4 mb-4 rounded-lg border border-cyan-700/35 bg-cyan-950/15 p-3">
-              <p className="text-sm font-semibold text-cyan-300">Receipt Rush uploads (pending review)</p>
-              <div className="mt-2 space-y-2">
-                {receiptUploads.map((item) => {
+        <section id="receipt-rush-uploads" className="mt-6 rounded-xl border border-cyan-700/45 bg-cyan-950/15 p-5 scroll-mt-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-cyan-200">Receipt Rush Uploads</h2>
+              <p className="text-sm text-gray-400 mt-1">
+                Uploaded/scanned receipts with uploader details. Pending rows can be approved or rejected here.
+              </p>
+            </div>
+            <span className="rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-200">
+              {receiptRushActivities.length} total
+            </span>
+          </div>
+          <div className="mt-4 space-y-2">
+            {receiptRushActivities.length === 0 ? (
+              <p className="text-sm text-gray-400 rounded-lg border border-dashed border-cyan-700/35 p-3">
+                No Receipt Rush uploads yet. Once a user submits a receipt, it will appear here.
+              </p>
+            ) : (
+              receiptRushActivities.map((item) => {
                   const parsed = parseReceiptRushLabel(item.sourceLabel);
-                  const receiptUrl = parsed.Image || null;
+                  const imageRef = parsed.Image || null;
+                  const receiptUrl =
+                    imageRef && imageRef !== 'embedded'
+                      ? imageRef
+                      : imageRef === 'embedded'
+                        ? `/api/admin/receipt-rush-image/${item.id}`
+                        : null;
                   return (
                     <div key={`receipt-${item.id}`} className="rounded-lg border border-ura-line/80 bg-ura-panel/90 p-3">
                       <div className="flex items-start justify-between gap-3">
@@ -174,9 +201,14 @@ export default function AdminPearlsPage() {
                             Submitted: {new Date(item.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
                           </p>
                         </div>
-                        <span className="text-xs rounded-full px-2 py-1 bg-[#5fa8ff]/15 border border-[#5fa8ff]/40 text-[#9dc9ff]">
-                          {Math.floor(item.amount)} Blue
-                        </span>
+                        <div className="flex flex-col items-end gap-1">
+                          <span className={`text-xs rounded-full px-2 py-1 border ${statusBadgeClass(item.status)}`}>
+                            {(item.status || 'PENDING').toLowerCase()}
+                          </span>
+                          <span className="text-xs rounded-full px-2 py-1 bg-[#5fa8ff]/15 border border-[#5fa8ff]/40 text-[#9dc9ff]">
+                            {Math.floor(item.amount)} Blue
+                          </span>
+                        </div>
                       </div>
                       <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-gray-300">
                         <p><span className="text-gray-400">Category:</span> {parsed['Receipt Rush'] || parsed['Category'] || 'N/A'}</p>
@@ -196,12 +228,36 @@ export default function AdminPearlsPage() {
                           Open uploaded/scanned receipt
                         </a>
                       ) : null}
+                      {item.status === 'REJECTED' && item.rejectionReason ? (
+                        <p className="mt-2 text-xs text-rose-300">Rejected reason: {item.rejectionReason}</p>
+                      ) : null}
+                      {item.status === 'PENDING' ? (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button
+                            type="button"
+                            onClick={() => runAction({ action: 'approve_blue_activity', activityId: item.id, adminLabel: 'admin_panel' })}
+                            className="px-3 py-1.5 text-xs rounded bg-emerald-600 hover:bg-emerald-500"
+                          >
+                            Approve + Auto Convert
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => runAction({ action: 'reject_blue_activity', activityId: item.id, rejectionReason: 'Receipt not approved', adminLabel: 'admin_panel' })}
+                            className="px-3 py-1.5 text-xs rounded bg-rose-700 hover:bg-rose-600"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   );
-                })}
-              </div>
-            </div>
-          ) : null}
+                })
+            )}
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-xl border border-ura-border/85 bg-ura-panel-2 p-5">
+          <h2 className="text-xl font-semibold">Blue Approval Queue</h2>
           <div className="mt-3 space-y-2">
             {pendingBlueActivities.length === 0 ? (
               <p className="text-sm text-gray-400">No pending blue-pearl activities.</p>

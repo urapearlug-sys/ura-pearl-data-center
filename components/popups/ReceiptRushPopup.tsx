@@ -19,6 +19,8 @@ export default function ReceiptRushPopup({ onClose }: Props) {
   const [amountPaid, setAmountPaid] = useState('');
   const [notes, setNotes] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [imageData, setImageData] = useState('');
+  const [imageName, setImageName] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [cameraActive, setCameraActive] = useState(false);
@@ -47,29 +49,51 @@ export default function ReceiptRushPopup({ onClose }: Props) {
     };
   }, []);
 
-  const uploadFile = async (file: File) => {
-    if (!userTelegramInitData) throw new Error('Open app from Telegram first.');
-    const form = new FormData();
-    form.append('file', file);
-    const res = await fetch(`/api/receipt-rush/upload?initData=${encodeURIComponent(userTelegramInitData)}`, {
-      method: 'POST',
-      body: form,
+  const readFileAsDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('Could not read receipt image'));
+      reader.readAsDataURL(file);
     });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Upload failed');
-    return String(data.url || '');
+
+  const prepareReceiptImage = async (file: File): Promise<string> => {
+    if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.');
+    if (file.size > 10 * 1024 * 1024) throw new Error('Receipt image is too large. Max 10MB.');
+
+    const raw = await readFileAsDataUrl(file);
+    if (raw.length <= 2_500_000) return raw;
+
+    const img = document.createElement('img');
+    img.decoding = 'async';
+    img.src = raw;
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject(new Error('Could not process receipt image. Try a JPEG or PNG.'));
+    });
+    const maxSide = 1400;
+    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Could not process receipt image.');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.82);
   };
 
   const onPickFile = async (file: File | null) => {
     if (!file) return;
     setBusy(true);
-    setMessage('Uploading receipt image...');
+    setMessage('Preparing receipt image...');
     try {
-      const url = await uploadFile(file);
-      setImageUrl(url);
-      setMessage('Receipt image uploaded.');
+      const dataUrl = await prepareReceiptImage(file);
+      setImageData(dataUrl);
+      setImageName(file.name || `receipt-${Date.now()}.jpg`);
+      setImageUrl('embedded');
+      setMessage('Receipt image ready. Submit it for approval.');
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Upload failed');
+      setMessage(err instanceof Error ? err.message : 'Could not prepare receipt image');
     } finally {
       setBusy(false);
     }
@@ -96,6 +120,9 @@ export default function ReceiptRushPopup({ onClose }: Props) {
           amountPaid: Number(amountPaid || 0),
           notes,
           imageUrl,
+          imageData,
+          imageName,
+          imageType: imageData.slice(5, imageData.indexOf(';')) || 'image/jpeg',
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -275,7 +302,11 @@ export default function ReceiptRushPopup({ onClose }: Props) {
               </div>
             </div>
           ) : null}
-          {imageUrl ? <p className="text-[11px] text-emerald-300 break-all">Uploaded: {imageUrl}</p> : null}
+          {imageUrl ? (
+            <p className="text-[11px] text-emerald-300 break-all">
+              Receipt image ready{imageName ? `: ${imageName}` : ''}.
+            </p>
+          ) : null}
         </div>
 
         {message ? <p className="mt-3 text-xs text-gray-300">{message}</p> : null}
