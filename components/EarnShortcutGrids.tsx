@@ -41,6 +41,9 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'spin-wheel': { tone: 'from-[#162844] to-[#0a1628] border-[#5fa8ff]/45', icon: '🎡' },
   /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
   'earn-more': { tone: 'from-[#1f3f8f] to-[#0a1628] border-[#f3ba2f]/58', icon: '➕' },
+  groupage: { tone: 'from-[#1a2844] to-[#0c1829] border-[#5fa8ff]/46', icon: '📦' },
+  warehousing: { tone: 'from-[#1e3460] to-[#0a1628] border-[#f3ba2f]/44', icon: '🏭' },
+  'service-experience': { tone: 'from-[#172640] to-[#0e1a2e] border-[#5eead4]/38', icon: '✨' },
 };
 
 /** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
@@ -52,6 +55,9 @@ const PRIMARY_SHORTCUT_IDS: string[] = [
   'earn-your-tenure',
   'words-of-the-day',
   'whistle-blower',
+  'groupage',
+  'warehousing',
+  'service-experience',
 ];
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
@@ -147,6 +153,24 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
       title: 'Earn your Tenure',
       subtitle: REWARD_AND_PROTECTION_SUBTITLE,
       onClick: () => goEarn({ openDailyCombo: true }),
+    },
+    {
+      id: 'groupage',
+      title: 'Groupage',
+      subtitle: 'Customs grouping & consolidated cargo',
+      onClick: () => setCurrentView('services'),
+    },
+    {
+      id: 'warehousing',
+      title: 'Warehousing',
+      subtitle: 'Bonded storage & warehouse services',
+      onClick: () => setCurrentView('services'),
+    },
+    {
+      id: 'service-experience',
+      title: 'Service Experience',
+      subtitle: 'URA services catalog & tools',
+      onClick: () => setCurrentView('services'),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView('collection') },

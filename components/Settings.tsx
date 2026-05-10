@@ -114,6 +114,9 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   const [receiptLoading, setReceiptLoading] = useState(false);
   const [receiptError, setReceiptError] = useState<string | null>(null);
   const [receiptFilter, setReceiptFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
+  const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
+  const [deleteConfirmInput, setDeleteConfirmInput] = useState('');
+  const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
 
   useEffect(() => {
     if (active === 'profile') {
@@ -320,6 +323,101 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               >
                 {districtSaving ? 'Saving…' : 'Save district'}
               </button>
+            </div>
+
+            <div className="rounded-lg border border-rose-500/35 bg-[#1a1618]/90 p-3 mb-4">
+              <h3 className="text-sm font-bold text-rose-200 mb-1">Delete account</h3>
+              <p className="text-[11px] text-gray-400 mb-2 leading-relaxed">
+                Permanently remove your game data, pearls balance, leagues, teams, and progress. This cannot be undone.
+                Open URAPearls from Telegram to use this option.
+              </p>
+              {!deleteAccountOpen ? (
+                <button
+                  type="button"
+                  disabled={!userTelegramInitData}
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setDeleteAccountOpen(true);
+                  }}
+                  className="w-full rounded-lg border border-rose-500/50 bg-rose-950/40 text-rose-100 text-sm font-semibold py-2.5 disabled:opacity-45"
+                >
+                  Delete my account…
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-[11px] text-rose-300/95">
+                    Type <span className="font-mono text-white">DELETE</span> to confirm.
+                  </p>
+                  <input
+                    type="text"
+                    value={deleteConfirmInput}
+                    onChange={(e) => setDeleteConfirmInput(e.target.value)}
+                    autoComplete="off"
+                    spellCheck={false}
+                    placeholder="DELETE"
+                    className="w-full rounded-lg bg-ura-panel text-white text-sm px-3 py-2 border border-rose-500/40 outline-none focus:border-rose-400"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      disabled={deleteAccountBusy}
+                      onClick={() => {
+                        triggerHapticFeedback(window);
+                        setDeleteAccountOpen(false);
+                        setDeleteConfirmInput('');
+                      }}
+                      className="flex-1 rounded-lg border border-ura-border/85 text-gray-200 text-sm font-medium py-2 disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      disabled={
+                        deleteAccountBusy ||
+                        !userTelegramInitData ||
+                        deleteConfirmInput.trim() !== 'DELETE'
+                      }
+                      onClick={async () => {
+                        triggerHapticFeedback(window);
+                        if (!userTelegramInitData || deleteConfirmInput.trim() !== 'DELETE') return;
+                        setDeleteAccountBusy(true);
+                        try {
+                          const res = await fetch('/api/user/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              telegramInitData: userTelegramInitData,
+                              confirmation: deleteConfirmInput.trim(),
+                            }),
+                          });
+                          const data = await res.json().catch(() => ({}));
+                          if (!res.ok) {
+                            throw new Error(
+                              typeof data.message === 'string'
+                                ? data.message
+                                : typeof data.error === 'string'
+                                  ? data.error
+                                  : 'Delete failed'
+                            );
+                          }
+                          writeStoredDistrictSlug(null);
+                          showToast('Account deleted. Reloading…', 'success');
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 600);
+                        } catch (err) {
+                          showToast(err instanceof Error ? err.message : 'Could not delete account', 'error');
+                        } finally {
+                          setDeleteAccountBusy(false);
+                        }
+                      }}
+                      className="flex-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-sm font-bold py-2 disabled:opacity-45"
+                    >
+                      {deleteAccountBusy ? 'Deleting…' : 'Delete forever'}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="space-y-2 flex-1 overflow-y-auto no-scrollbar pb-4">
