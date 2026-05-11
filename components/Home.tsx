@@ -62,7 +62,7 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
   { id: 'groupage', title: 'Groupage', subtitle: 'Customs grouping & consolidated cargo', route: 'services', group: 'earn', icon: dailyCipher },
   { id: 'warehousing', title: 'Warehousing', subtitle: 'Bonded storage & warehouse services', route: 'services', group: 'earn', icon: dailyCombo },
-  { id: 'service-experience', title: 'Service Experience', subtitle: 'URA services catalog & tools', route: 'services', group: 'earn', icon: dailyReward },
+  { id: 'service-experience', title: 'Service Experience', subtitle: 'Rate our agents or service', route: 'services', group: 'earn', icon: dailyReward },
 ];
 
 /** Full-width row under Action Center → Most used (same chrome as Earn shortcut cards). */
@@ -90,7 +90,7 @@ const HOME_MOST_USED_GRID: ActionItem[] = [
 const HOME_MAIN_SERVICE_BUTTONS: ActionItem[] = [
   { id: 'groupage', title: 'Groupage', subtitle: 'Customs grouping & consolidated cargo', route: 'services', group: 'earn', icon: dailyCipher },
   { id: 'warehousing', title: 'Warehousing', subtitle: 'Bonded storage & warehouse services', route: 'services', group: 'earn', icon: dailyCombo },
-  { id: 'service-experience', title: 'Service Experience', subtitle: 'URA services catalog & tools', route: 'services', group: 'earn', icon: dailyReward },
+  { id: 'service-experience', title: 'Service Experience', subtitle: 'Rate our agents or service', route: 'services', group: 'earn', icon: dailyReward },
 ];
 
 const HOME_MOST_USED_KARIBU_CHROME = { emoji: '📅', border: 'border-[#d9a63a]/55' } as const;
@@ -515,7 +515,7 @@ export default function Home({ setCurrentView }: HomeProps) {
       {
         id: 'service-experience',
         title: 'Service Experience',
-        subtitle: 'URA services catalog & tools',
+        subtitle: 'Rate our agents or service',
         icon: ic['service-experience'],
         onClick: () => goView('services'),
       },

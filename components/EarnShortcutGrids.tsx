@@ -169,7 +169,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'service-experience',
       title: 'Service Experience',
-      subtitle: 'URA services catalog & tools',
+      subtitle: 'Rate our agents or service',
       onClick: () => setCurrentView('services'),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
