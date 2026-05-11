@@ -27,6 +27,9 @@ function openServiceUrl(url: string) {
 
 type SearchHit = { item: UraServiceItem; categoryLabel: string; categoryId: string };
 
+/** Feedback / ratings — opens official URA contact (same catalogue item as Useful links → Contact URA). */
+const RATE_AGENTS_AND_SERVICE_FEEDBACK_URL = 'https://www.ura.go.ug/en/contact-us/';
+
 /** Preserve catalog order: first occurrence of each listSection defines bucket order. */
 function groupServicesByListSection(services: UraServiceItem[]): { heading: string | null; items: UraServiceItem[] }[] {
   const order: string[] = [];
@@ -238,6 +241,44 @@ export default function Services() {
                 </div>
               </>
             )}
+
+            <section
+              className="mt-6 px-2 sm:px-0 pt-4 border-t border-[#8bb4ef]/30"
+              aria-labelledby="svc-exp-rating-heading"
+            >
+              <h3 id="svc-exp-rating-heading" className="text-[10px] font-bold uppercase tracking-wider text-white mb-2 text-center px-1">
+                Service experience
+              </h3>
+              <p className="text-[9px] text-blue-100/75 text-center mb-2 px-2 leading-snug">
+                Rate our agents or service
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 sm:gap-2 max-w-md mx-auto">
+                <button
+                  type="button"
+                  onClick={() => openServiceUrl(RATE_AGENTS_AND_SERVICE_FEEDBACK_URL)}
+                  className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-2 py-2 text-center shadow-sm transition-all hover:border-[#f3ba2f] hover:-translate-y-px hover:shadow-md active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/45"
+                >
+                  <span className="text-base leading-none block mb-1" aria-hidden>
+                    👤
+                  </span>
+                  <span className="text-[8px] sm:text-[9px] font-semibold text-[#16427f] leading-tight">
+                    Rate our agents
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openServiceUrl(RATE_AGENTS_AND_SERVICE_FEEDBACK_URL)}
+                  className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-2 py-2 text-center shadow-sm transition-all hover:border-[#f3ba2f] hover:-translate-y-px hover:shadow-md active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/45"
+                >
+                  <span className="text-base leading-none block mb-1" aria-hidden>
+                    ⭐
+                  </span>
+                  <span className="text-[8px] sm:text-[9px] font-semibold text-[#16427f] leading-tight">
+                    Rate our service
+                  </span>
+                </button>
+              </div>
+            </section>
           </div>
         </main>
 

@@ -15,14 +15,14 @@
 
 'use client'
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { binanceLogo, dailyCipher, dailyCombo, dailyReward, dollarCoin, lightning, total } from '@/images';
 import IceCube from '@/icons/IceCube';
 import Rocket from '@/icons/Rocket';
 import Energy from '@/icons/Energy';
 import Link from 'next/link';
-import { useGameStore } from '@/utils/game-mechanics';
+import { calculateEnergyLimit, calculatePointsPerClick, useGameStore } from '@/utils/game-mechanics';
 import Snowflake from '@/icons/Snowflake';
 import TopInfoSection from '@/components/TopInfoSection';
 import NotificationBanner from '@/components/NotificationBanner';
@@ -40,6 +40,9 @@ interface GameProps {
   currentView: string;
   setCurrentView: (view: string) => void;
 }
+
+const TAP_ARENA_ENERGY_BAR_REFILL_MS = 24 * 60 * 60 * 1000;
+const TAP_ARENA_DEPLETED_STORAGE_KEY = 'ura:tap_arena_energy_depleted_at';
 
 export default function Game({ currentView, setCurrentView }: GameProps) {
   const showToast = useToast();
@@ -80,7 +83,27 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     userTelegramInitData,
     isFrozen,
     suspensionReason,
+    initializeState,
   } = useGameStore();
+
+  /** Recalculate energy bar refill animation & 24h server refresh */
+  const [energyBarClock, setEnergyBarClock] = useState(0);
+  const tapArenaPulledAnchorRef = useRef<number | null>(null);
+
+  function parseTsToMs(raw: unknown): number {
+    if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
+    if (typeof raw === 'string') {
+      const t = Date.parse(raw);
+      return Number.isFinite(t) ? t : 0;
+    }
+    return 0;
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const id = window.setInterval(() => setEnergyBarClock((x) => x + 1), 1000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const [showMyProgress, setShowMyProgress] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
@@ -193,7 +216,112 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
     setClicks((prevClicks) => prevClicks.filter(click => click.id !== id));
   };
 
-  const energyProgressPercent = maxEnergy > 0 ? Math.min(100, (energy / maxEnergy) * 100) : 0;
+  const canTapArena = energy >= pointsPerClick && maxEnergy > 0;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (canTapArena) {
+        window.localStorage.removeItem(TAP_ARENA_DEPLETED_STORAGE_KEY);
+        tapArenaPulledAnchorRef.current = null;
+      } else if (energy < maxEnergy) {
+        if (!window.localStorage.getItem(TAP_ARENA_DEPLETED_STORAGE_KEY)) {
+          window.localStorage.setItem(TAP_ARENA_DEPLETED_STORAGE_KEY, String(Date.now()));
+        }
+      }
+    } catch {
+      /* quota / private mode */
+    }
+  }, [canTapArena, energy, maxEnergy]);
+
+  const depletedAtMs = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const raw = window.localStorage.getItem(TAP_ARENA_DEPLETED_STORAGE_KEY);
+      const n = raw ? Number(raw) : NaN;
+      return Number.isFinite(n) ? n : null;
+    } catch {
+      return null;
+    }
+  }, [energyBarClock, energy, maxEnergy]);
+
+  const energyProgressPercent = useMemo(() => {
+    if (maxEnergy <= 0) return 0;
+    const basePct = Math.min(100, (energy / maxEnergy) * 100);
+    let refillAssistPct = basePct;
+    if (!canTapArena && depletedAtMs != null && energy < maxEnergy) {
+      const elapsed = Math.max(0, Date.now() - depletedAtMs);
+      refillAssistPct = Math.min(100, (elapsed / TAP_ARENA_ENERGY_BAR_REFILL_MS) * 100);
+    }
+    return Math.max(basePct, refillAssistPct);
+  }, [energy, maxEnergy, pointsPerClick, canTapArena, depletedAtMs, energyBarClock]);
+
+  useEffect(() => {
+    if (
+      typeof window === 'undefined' ||
+      !userTelegramInitData ||
+      canTapArena ||
+      !depletedAtMs ||
+      energy >= maxEnergy
+    ) {
+      return;
+    }
+    const elapsed = Date.now() - depletedAtMs;
+    if (elapsed < TAP_ARENA_ENERGY_BAR_REFILL_MS) return;
+    if (tapArenaPulledAnchorRef.current === depletedAtMs) return;
+    tapArenaPulledAnchorRef.current = depletedAtMs;
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const res = await fetch('/api/user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ telegramInitData: userTelegramInitData }),
+        });
+        if (!res.ok || cancelled) return;
+        const userData = (await res.json()) as Record<string, unknown>;
+        const meLimit = calculateEnergyLimit(userData.energyLimitLevelIndex as number);
+        const nextEnergy =
+          typeof userData.energy === 'number'
+            ? Math.max(0, Math.min(meLimit, Math.floor(userData.energy)))
+            : undefined;
+        if (cancelled || nextEnergy == null) return;
+        const nextPpc = calculatePointsPerClick(userData.multitapLevelIndex as number);
+        const refMs = parseTsToMs(userData.lastEnergyRefillsTimestamp);
+        initializeState({
+          energy: nextEnergy,
+          maxEnergy: meLimit,
+          pointsPerClick: nextPpc,
+          lastEnergyRefillTimestamp: refMs > 0 ? refMs : undefined,
+          energyRefillsLeft: typeof userData.energyRefillsLeft === 'number' ? userData.energyRefillsLeft : undefined,
+        });
+        if (nextEnergy >= nextPpc) {
+          try {
+            window.localStorage.removeItem(TAP_ARENA_DEPLETED_STORAGE_KEY);
+          } catch {
+            /* ignore */
+          }
+          tapArenaPulledAnchorRef.current = null;
+          showToast('Tap Arena energy is available again.', 'success');
+        }
+      } catch {
+        if (depletedAtMs != null) tapArenaPulledAnchorRef.current = depletedAtMs;
+      }
+    };
+    void run();
+    return () => {
+      cancelled = true;
+    };
+  }, [userTelegramInitData, canTapArena, depletedAtMs, energy, maxEnergy, initializeState, energyBarClock]);
+
+  /** While waiting on 24h bar, taps can still unlock before server refill — refillFromBar covers display only. */
+  const refillFromBarPct =
+    depletedAtMs != null && energy < maxEnergy && !canTapArena
+      ? Math.min(
+          100,
+          (Math.max(0, Date.now() - depletedAtMs) / TAP_ARENA_ENERGY_BAR_REFILL_MS) * 100
+        )
+      : null;
 
   const safeLevelIndex = Math.min(Math.max(gameLevelIndex, 0), LEVELS.length - 1);
   const currentLevel = LEVELS[safeLevelIndex];
@@ -340,14 +468,41 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
               </div>
               <div className="flex justify-between px-4 mt-4">
                 <p className="flex justify-center items-center gap-1"><Image src={lightning} alt="Exchange" width={40} height={40} /><span className="flex flex-col"><span className="text-xl font-bold">{energy}</span><span className="text-base font-medium">/ {maxEnergy}</span></span></p>
-                <button onClick={() => handleViewChange("boost")} className="flex justify-center items-center gap-1"><Rocket size={40} /><span className="text-xl">Boost</span></button>
+                <button
+                  type="button"
+                  aria-disabled="true"
+                  title="Boost is disabled on Tap Arena."
+                  className="flex justify-center items-center gap-1 cursor-not-allowed opacity-35 pointer-events-auto"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    showToast(
+                      'Boost isn’t available on Tap Arena — use Earn → Wallet / Mine Flow for boosts and upgrades.',
+                      'success'
+                    );
+                  }}
+                >
+                  <Rocket size={40} className="grayscale brightness-125" aria-hidden />
+                  <span className="text-xl">Boost</span>
+                </button>
               </div>
 
               <div className="w-full px-4 text-sm mt-2">
+                {refillFromBarPct !== null && depletedAtMs != null ? (
+                  <p className="text-[11px] text-[#95908a] mb-1 text-center px-1">
+                    After you run out of energy, this bar climbs to full over 24 hours (~
+                    {Math.max(
+                      0,
+                      Math.ceil(
+                        (TAP_ARENA_ENERGY_BAR_REFILL_MS - (Date.now() - depletedAtMs)) / (60 * 60 * 1000)
+                      )
+                    )}{' '}
+                    h left). When full, URAPearls pulls your refreshed energy from the server.
+                  </p>
+                ) : null}
                 <div className="flex items-center mt-1 border-2 border-[#43433b] rounded-full overflow-hidden">
                   <div className="w-full h-3 bg-[#43433b]/[0.6] rounded-full">
                     <div
-                      className="h-3 rounded-full transition-[width] duration-300 ease-out"
+                      className="h-3 rounded-full transition-[width] duration-1000 ease-linear"
                       style={{
                         width: `${energyProgressPercent}%`,
                         background: `linear-gradient(to right, ${primary}, ${accent})`,
