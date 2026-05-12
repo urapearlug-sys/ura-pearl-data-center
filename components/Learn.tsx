@@ -174,13 +174,15 @@ export default function Learn({ setCurrentView }: LearnProps) {
                 triggerHapticFeedback(window);
                 setCurrentView('ura-fc');
               }}
-              className="rounded-xl border border-emerald-400/35 bg-gradient-to-br from-[#0f3c36] to-[#0a1628] px-3 py-4 text-left hover:border-[#f3ba2f]/55 transition-colors"
+              className="rounded-xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#123f78] via-[#0f315f] to-[#061428] px-3 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.15)] transition-colors"
             >
-              <span className="text-2xl block mb-1" aria-hidden>
+              <span className="text-2xl block mb-1 drop-shadow-sm" aria-hidden>
                 ⚽
               </span>
               <p className="text-white font-bold text-sm">URA FC</p>
-              <p className="text-emerald-100/75 text-[11px] mt-1 leading-snug">Fixtures · The Tax Collectors</p>
+              <p className="text-[#f3ba2f]/90 text-[11px] mt-1 leading-snug font-medium">
+                The Tax Collectors · Fixtures
+              </p>
             </button>
           </div>
         ) : null}
