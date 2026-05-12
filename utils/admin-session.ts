@@ -130,9 +130,30 @@ export function isItemGateEnabled(): boolean {
   return !!getItemSecret();
 }
 
+/** Admin API routes that only need the main admin login, not ADMIN_ITEM_PASSWORD */
+const ADMIN_ITEM_GATE_EXEMPT_PREFIXES = ['/api/admin/tv-programs', '/api/admin/ura-fc'] as const;
+
+function getRequestPathname(req: Request): string {
+  try {
+    return new URL(req.url).pathname;
+  } catch {
+    return '';
+  }
+}
+
+function isAdminItemGateExemptApiPath(pathname: string): boolean {
+  return ADMIN_ITEM_GATE_EXEMPT_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
 /** Use in protected admin APIs. Returns error to send or null if authorized. */
 export function getAdminAuthError(req: Request): { status: number; body: { error: string; code?: string } } | null {
   if (!isAdminAuthorized(req)) return { status: 403, body: { error: 'Unauthorized' } };
-  if (!isItemVerified(req)) return { status: 403, body: { error: 'Section password required', code: 'ITEM_REQUIRED' } };
+  if (
+    isItemGateEnabled() &&
+    !isAdminItemGateExemptApiPath(getRequestPathname(req)) &&
+    !isItemVerified(req)
+  ) {
+    return { status: 403, body: { error: 'Section password required', code: 'ITEM_REQUIRED' } };
+  }
   return null;
 }
