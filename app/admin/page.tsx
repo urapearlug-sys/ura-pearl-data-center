@@ -48,6 +48,19 @@ const AdminPanel = () => {
         },
     ];
 
+    const clubMediaSections = [
+        {
+            title: 'URA TV programs',
+            path: '/admin/tv-programs',
+            description: 'YouTube-linked episodes for Learn → URA TV; optional schedule for upcoming vs past ordering',
+        },
+        {
+            title: 'URA FC fixtures',
+            path: '/admin/ura-fc',
+            description: 'Curate upcoming and completed matches for Learn → URA FC (full club site stays on urafc.co.ug)',
+        },
+    ];
+
     const adminSections = [
         { title: 'Account Management', path: '/admin/accounts', description: 'Delete, reset, freeze, hide, and manage user accounts (select users in table, then use actions)' },
         { title: 'Bot Users', path: '/admin/bot-users', description: 'Identify and manage suspected bot/cheater accounts; flag users, freeze with cheating message, view suspicion score' },
@@ -109,6 +122,32 @@ const AdminPanel = () => {
                         <div
                             key={section.path}
                             className="bg-ura-panel-2 rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer"
+                            onClick={() => router.push(section.path)}
+                        >
+                            <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
+                            <p className="text-gray-400 mb-4">{section.description}</p>
+                            <Link
+                                href={section.path}
+                                className="inline-block bg-ura-gold text-black px-4 py-2 rounded-lg hover:bg-[#f4c141] transition-colors"
+                            >
+                                Go to {section.title}
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mb-3 mt-10">
+                    <h2 className="text-xl font-semibold text-white">URA TV &amp; URA FC</h2>
+                    <p className="text-sm text-gray-400 mt-1">
+                        Content surfaced from the Learn tab: TV programs with embeds and comments; football fixtures with
+                        optional logos and highlights.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {clubMediaSections.map((section) => (
+                        <div
+                            key={section.path}
+                            className="bg-ura-panel-2 rounded-lg p-6 hover:bg-[#3a3d42] transition-colors cursor-pointer border border-emerald-900/40"
                             onClick={() => router.push(section.path)}
                         >
                             <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>

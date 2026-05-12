@@ -26,6 +26,7 @@ interface User {
   id?: string | number;
   username?: string;
   first_name?: string;
+  last_name?: string;
   is_premium?: boolean;
   language_code?: string;
 }

@@ -69,7 +69,11 @@ const GENERAL_ICON_EMOJI: Record<string, string> = {
   'general-whistle-blow': '📣',
 };
 
-export default function Learn() {
+type LearnProps = {
+  setCurrentView?: (view: string) => void;
+};
+
+export default function Learn({ setCurrentView }: LearnProps) {
   const showToast = useToast();
   const [activeTab, setActiveTab] = useState<'general' | 'tax-education'>('general');
   const [categories, setCategories] = useState<LearnCategory[]>(FALLBACK_CATEGORIES);
@@ -147,6 +151,39 @@ export default function Learn() {
             priority
           />
         </div>
+
+        {setCurrentView ? (
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setCurrentView('ura-tv');
+              }}
+              className="rounded-xl border border-[#8bb4ef]/40 bg-gradient-to-br from-[#1e3460] to-[#0f1a2e] px-3 py-4 text-left hover:border-[#f3ba2f]/55 transition-colors"
+            >
+              <span className="text-2xl block mb-1" aria-hidden>
+                📺
+              </span>
+              <p className="text-white font-bold text-sm">URA TV</p>
+              <p className="text-blue-100/70 text-[11px] mt-1 leading-snug">Programs, YouTube library, comments</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                triggerHapticFeedback(window);
+                setCurrentView('ura-fc');
+              }}
+              className="rounded-xl border border-emerald-400/35 bg-gradient-to-br from-[#0f3c36] to-[#0a1628] px-3 py-4 text-left hover:border-[#f3ba2f]/55 transition-colors"
+            >
+              <span className="text-2xl block mb-1" aria-hidden>
+                ⚽
+              </span>
+              <p className="text-white font-bold text-sm">URA FC</p>
+              <p className="text-emerald-100/75 text-[11px] mt-1 leading-snug">Fixtures · The Tax Collectors</p>
+            </button>
+          </div>
+        ) : null}
 
         <div className="mt-4 rounded-xl border border-[#3f6db5] bg-[#0f315f] p-1 grid grid-cols-2 gap-1">
           {(

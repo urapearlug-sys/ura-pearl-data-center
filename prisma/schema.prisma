@@ -1048,3 +1048,50 @@ model PearlAudit {
   meta          Json?
   createdAt     DateTime           @default(now())
 }
+
+/// URA TV — programs with YouTube embeds (admin-managed).
+model TvProgram {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  youtubeUrl  String
+  scheduledAt DateTime?
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  comments TvProgramComment[]
+}
+
+model TvProgramComment {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  programId  String    @db.ObjectId
+  program    TvProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  telegramId String
+  authorName String?
+  body       String
+  createdAt  DateTime  @default(now())
+
+  @@index([programId])
+}
+
+/// URA FC fixtures — mirrors club schedule for in-app display ([URA FC official site](https://urafc.co.ug/)).
+model UraFcMatch {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  homeTeam     String
+  awayTeam     String
+  homeLogoUrl  String?
+  awayLogoUrl  String?
+  kickoffAt    DateTime
+  venue        String?
+  competition  String?
+  status       String   @default("upcoming")
+  homeScore    Int?
+  awayScore    Int?
+  highlightUrl String?
+  sortOrder    Int      @default(0)
+  isPublished  Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

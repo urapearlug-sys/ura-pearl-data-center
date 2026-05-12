@@ -47,12 +47,23 @@ import Learn from '@/components/Learn';
 import Services from '@/components/Services';
 import Guild from '@/components/Guild';
 import KaribuDailyPage from '@/components/KaribuDailyPage';
+import UraTvPage from '@/components/UraTvPage';
+import UraFcPage from '@/components/UraFcPage';
 
 function EmptyPrimaryPage() {
     return <div className="bg-ura-page min-h-screen" />;
 }
 
-const MORE_VIEWS = new Set(['game', 'mine', 'collection', 'friends', 'airdrop', 'guild']);
+const MORE_VIEWS = new Set([
+    'game',
+    'mine',
+    'collection',
+    'friends',
+    'airdrop',
+    'guild',
+    'ura-tv',
+    'ura-fc',
+]);
 
 function ClickerPage() {
     useExitFullscreenWhenOpenedViaOpenButton();
@@ -92,7 +103,11 @@ function ClickerPage() {
             case 'friends':
                 return <Friends />;
             case 'eearn':
-                return <Learn />;
+                return <Learn setCurrentView={setCurrentView} />;
+            case 'ura-tv':
+                return <UraTvPage setCurrentView={setCurrentView} />;
+            case 'ura-fc':
+                return <UraFcPage setCurrentView={setCurrentView} />;
             case 'services':
                 return <Services />;
             case 'guild':

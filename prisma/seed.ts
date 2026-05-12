@@ -121,6 +121,126 @@ async function main() {
     console.log(`Seeded ${GLOBAL_TASK_SEED_TEAM.length + GLOBAL_TASK_SEED_LEAGUE.length} global task templates (10 team, 10 league)`);
   }
 
+  // Sample URA TV programs (Learn → URA TV) — replace or extend via /admin/tv-programs
+  const tvProgramCount = await prisma.tvProgram.count();
+  if (tvProgramCount === 0) {
+    const tvSamples = [
+      {
+        title: 'URA TV — Tax basics for citizens',
+        description: 'Sample episode introducing key tax concepts. Replace this row in admin with your production YouTube links.',
+        youtubeUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+        scheduledAt: new Date('2026-02-08T14:00:00.000Z'),
+        sortOrder: 0,
+        isPublished: true,
+      },
+      {
+        title: 'Compliance corner (replay)',
+        description: 'Archived discussion on filing and deadlines.',
+        youtubeUrl: 'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+        scheduledAt: new Date('2026-03-22T15:30:00.000Z'),
+        sortOrder: 1,
+        isPublished: true,
+      },
+      {
+        title: 'Live: Ask URA — May community hour',
+        description: 'Upcoming live session — submit questions in-app via comments after publish.',
+        youtubeUrl: 'https://www.youtube.com/watch?v=YE7VzlLtp-4',
+        scheduledAt: new Date('2026-05-28T17:00:00.000Z'),
+        sortOrder: 2,
+        isPublished: true,
+      },
+      {
+        title: 'URA TV Weekly — Trailer',
+        description: 'Short promo for the weekly roundup (scheduled soon).',
+        youtubeUrl: 'https://youtu.be/9bZkp7q19f0',
+        scheduledAt: new Date('2026-06-05T12:00:00.000Z'),
+        sortOrder: 3,
+        isPublished: true,
+      },
+    ];
+    for (const row of tvSamples) {
+      await prisma.tvProgram.create({ data: row });
+    }
+    console.log(`Seeded ${tvSamples.length} URA TV sample programs`);
+  }
+
+  // Sample URA FC fixtures (Learn → URA FC) — curated; full site at https://urafc.co.ug/
+  const uraFcCount = await prisma.uraFcMatch.count();
+  if (uraFcCount === 0) {
+    const logoUra = 'https://urafc.co.ug/wp-content/uploads/2020/10/logo-1.png';
+    const logoNec = 'https://urafc.co.ug/wp-content/uploads/2024/01/nec.png';
+    const logoVipers = 'https://urafc.co.ug/wp-content/uploads/2022/12/new-vipers-logo-1-1.png';
+    const logoKcca =
+      'https://urafc.co.ug/wp-content/uploads/2022/12/Kampala_Capital_City_Authority_FC-1.png';
+
+    const matchSamples = [
+      {
+        homeTeam: 'URA FC',
+        awayTeam: 'Express FC',
+        homeLogoUrl: logoUra,
+        awayLogoUrl: null,
+        kickoffAt: new Date('2026-05-03T13:00:00.000Z'),
+        venue: 'Nakivubo Stadium',
+        competition: 'Uganda Premier League',
+        status: 'completed',
+        homeScore: 4,
+        awayScore: 1,
+        highlightUrl: 'https://urafc.co.ug/',
+        sortOrder: 0,
+        isPublished: true,
+      },
+      {
+        homeTeam: 'NEC FC',
+        awayTeam: 'URA FC',
+        homeLogoUrl: logoNec,
+        awayLogoUrl: logoUra,
+        kickoffAt: new Date('2026-04-12T13:00:00.000Z'),
+        venue: 'Lugogo Stadium',
+        competition: 'Uganda Premier League',
+        status: 'completed',
+        homeScore: 1,
+        awayScore: 0,
+        highlightUrl: 'https://urafc.co.ug/',
+        sortOrder: 1,
+        isPublished: true,
+      },
+      {
+        homeTeam: 'URA FC',
+        awayTeam: 'Vipers SC',
+        homeLogoUrl: logoUra,
+        awayLogoUrl: logoVipers,
+        kickoffAt: new Date('2026-05-24T15:00:00.000Z'),
+        venue: 'Mandela National Stadium',
+        competition: 'Uganda Premier League',
+        status: 'upcoming',
+        homeScore: null,
+        awayScore: null,
+        highlightUrl: null,
+        sortOrder: 2,
+        isPublished: true,
+      },
+      {
+        homeTeam: 'KCCA FC',
+        awayTeam: 'URA FC',
+        homeLogoUrl: logoKcca,
+        awayLogoUrl: logoUra,
+        kickoffAt: new Date('2026-06-07T13:00:00.000Z'),
+        venue: 'Philip Omondi Stadium',
+        competition: 'Uganda Premier League',
+        status: 'upcoming',
+        homeScore: null,
+        awayScore: null,
+        highlightUrl: null,
+        sortOrder: 3,
+        isPublished: true,
+      },
+    ];
+    for (const row of matchSamples) {
+      await prisma.uraFcMatch.create({ data: row });
+    }
+    console.log(`Seeded ${matchSamples.length} URA FC sample fixtures`);
+  }
+
   console.log('Seeding finished.');
 }
 
