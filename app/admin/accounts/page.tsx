@@ -2,9 +2,9 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import ItemPasswordGate from '@/app/admin/ItemPasswordGate';
+import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
 
 interface UserAccount {
   rank: number;
@@ -164,66 +164,47 @@ export default function AccountsAdminPage() {
     return num.toString();
   };
 
+  const kpis = useMemo(() => {
+    if (!summary) return undefined;
+    return [
+      { label: 'Total users', value: formatNumber(summary.totalUsers) },
+      { label: 'Total points', value: formatNumber(summary.totalPoints), hint: 'Across all accounts' },
+      { label: 'Frozen', value: summary.frozenCount },
+      { label: 'Hidden', value: summary.hiddenCount },
+    ];
+  }, [summary]);
+
   if (itemPasswordRequired) {
     return <ItemPasswordGate pathname="/admin/accounts" />;
   }
 
   return (
-    <div className="min-h-screen bg-ura-panel text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <Link href="/admin" className="text-[#f3ba2f] hover:underline mb-2 inline-block">
-              ← Back to Admin
-            </Link>
-            <h1 className="text-3xl font-bold text-[#f3ba2f]">Account Management</h1>
-          </div>
-        </div>
-
+    <AdminModuleShell
+      wide
+      eyebrow="Operations"
+      title="User accounts"
+      description="Search and filter the directory, run row-level actions, or use guarded bulk tools for testing."
+      kpis={kpis}
+    >
         {/* Message */}
         {message && (
           <div
-            className={`p-4 rounded-lg mb-6 ${
-              message.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+            className={`p-4 rounded-2xl mb-6 border border-white/[0.08] ${
+              message.type === 'success' ? 'bg-emerald-900/40 text-emerald-100' : 'bg-red-900/40 text-red-100'
             }`}
           >
             {message.text}
             <button
               onClick={() => setMessage(null)}
-              className="float-right font-bold"
+              className="float-right font-bold opacity-80 hover:opacity-100"
             >
               ×
             </button>
           </div>
         )}
 
-        {/* Summary Stats */}
-        {summary && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-ura-panel-2 p-4 rounded-lg">
-              <div className="text-sm text-gray-400">Total Users</div>
-              <div className="text-2xl font-bold">{formatNumber(summary.totalUsers)}</div>
-            </div>
-            <div className="bg-ura-panel-2 p-4 rounded-lg">
-              <div className="text-sm text-gray-400">Total Points</div>
-              <div className="text-2xl font-bold text-[#f3ba2f]">
-                {formatNumber(summary.totalPoints)}
-              </div>
-            </div>
-            <div className="bg-ura-panel-2 p-4 rounded-lg">
-              <div className="text-sm text-gray-400">Frozen Accounts</div>
-              <div className="text-2xl font-bold text-red-400">{summary.frozenCount}</div>
-            </div>
-            <div className="bg-ura-panel-2 p-4 rounded-lg">
-              <div className="text-sm text-gray-400">Hidden Accounts</div>
-              <div className="text-2xl font-bold text-gray-400">{summary.hiddenCount}</div>
-            </div>
-          </div>
-        )}
-
         {/* Bulk Actions - All Users + Delete selected */}
-        <div className="bg-ura-panel-2 p-4 rounded-lg mb-6">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 mb-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold mb-4 text-red-400">
             ⚠️ Bulk Actions (All Users) - Testing Only
           </h2>
@@ -662,7 +643,6 @@ export default function AccountsAdminPage() {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </AdminModuleShell>
   );
 }

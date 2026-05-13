@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 const SECTION_LABELS: Record<string, string> = {
-  '/admin/accounts': 'Account Management',
+  '/admin/accounts': 'User accounts',
   '/admin/bot-users': 'Bot Users',
   '/admin/tasks': 'Manage Tasks',
   '/admin/daily-cipher': 'Decode',

@@ -87,9 +87,9 @@ const PEARLS_MANAGEMENT_CARDS: AdminHubCard[] = [
   },
   {
     id: 'account-management',
-    title: 'Account Management',
+    title: 'User accounts',
     path: '/admin/accounts',
-    description: 'Delete, reset, freeze, hide, and manage user accounts (select users in the table, then use actions).',
+    description: 'Search the user table, run per-user actions, bulk testing tools, and exports from the dedicated accounts screen.',
     icon: '👤',
   },
 ];
@@ -362,7 +362,7 @@ const AdminPanel = () => {
             Pearls management & operations
           </h2>
           <p className="text-sm text-slate-500 mt-1 max-w-3xl">
-            Pearls workflows, Earn publishing, club media, and <strong className="text-slate-400 font-semibold">Account Management</strong> live
+            Pearls workflows, Earn publishing, club media, and <strong className="text-slate-400 font-semibold">user accounts</strong> live
             in this hub — a single place for revenue-adjacent operations.
           </p>
 

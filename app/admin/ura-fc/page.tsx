@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/contexts/ToastContext';
+import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
 
 type Row = {
   id: string;
@@ -177,6 +177,18 @@ export default function AdminUraFcPage() {
     }
   };
 
+  const kpis = useMemo(() => {
+    const published = rows.filter((r) => r.isPublished).length;
+    const upcoming = rows.filter((r) => r.status === 'upcoming').length;
+    const completed = rows.filter((r) => r.status === 'completed').length;
+    return [
+      { label: 'Fixtures', value: rows.length },
+      { label: 'Published', value: published, hint: 'Learn → URA FC' },
+      { label: 'Upcoming', value: upcoming },
+      { label: 'Completed', value: completed },
+    ];
+  }, [rows]);
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this fixture?')) return;
     try {
@@ -192,37 +204,26 @@ export default function AdminUraFcPage() {
   };
 
   return (
-    <div className="min-h-screen bg-ura-panel text-white p-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-6">
-          <Link href="/admin" className="text-sm text-[#f3ba2f] hover:underline">
-            ← Admin home
-          </Link>
-          <h1 className="text-3xl font-bold text-[#f3ba2f] mt-2">URA FC fixtures</h1>
-          <p className="text-gray-400 text-sm mt-2">
-            Curate upcoming and completed matches shown under <strong className="text-gray-200">Learn → URA FC</strong>. For
-            full club news and tables, users are linked to{' '}
-            <a href="https://urafc.co.ug/" className="text-cyan-300 hover:underline" target="_blank" rel="noreferrer">
-              urafc.co.ug
-            </a>
-            .
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 space-y-3 mb-10">
+    <AdminModuleShell
+      title="URA FC fixtures"
+      description="Curate matches under Learn → URA FC. Full club news and tables stay on urafc.co.ug."
+      kpis={kpis}
+    >
+      <div className="max-w-3xl">
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 space-y-3 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold">{editingId ? 'Edit match' : 'New match'}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
               value={homeTeam}
               onChange={(e) => setHomeTeam(e.target.value)}
               placeholder="Home team"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
             <input
               value={awayTeam}
               onChange={(e) => setAwayTeam(e.target.value)}
               placeholder="Away team"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -230,13 +231,13 @@ export default function AdminUraFcPage() {
               value={homeLogoUrl}
               onChange={(e) => setHomeLogoUrl(e.target.value)}
               placeholder="Home logo URL (optional)"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
             <input
               value={awayLogoUrl}
               onChange={(e) => setAwayLogoUrl(e.target.value)}
               placeholder="Away logo URL (optional)"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </div>
           <label className="block text-xs text-gray-400">
@@ -246,7 +247,7 @@ export default function AdminUraFcPage() {
               value={kickoffLocal}
               onChange={(e) => setKickoffLocal(e.target.value)}
               required
-              className="mt-1 w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -254,13 +255,13 @@ export default function AdminUraFcPage() {
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
               placeholder="Venue (optional)"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
             <input
               value={competition}
               onChange={(e) => setCompetition(e.target.value)}
               placeholder="Competition (e.g. Uganda Premier League)"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </div>
           <label className="block text-xs text-gray-400">
@@ -268,7 +269,7 @@ export default function AdminUraFcPage() {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as typeof status)}
-              className="mt-1 w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             >
               <option value="upcoming">Upcoming</option>
               <option value="completed">Completed</option>
@@ -281,28 +282,28 @@ export default function AdminUraFcPage() {
               onChange={(e) => setHomeScore(e.target.value)}
               placeholder="Home score"
               type="number"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
             <input
               value={awayScore}
               onChange={(e) => setAwayScore(e.target.value)}
               placeholder="Away score"
               type="number"
-              className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </div>
           <input
             value={highlightUrl}
             onChange={(e) => setHighlightUrl(e.target.value)}
             placeholder="Highlight / report URL (optional)"
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <input
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             placeholder="Sort order (lower first)"
             type="number"
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
@@ -324,19 +325,22 @@ export default function AdminUraFcPage() {
           </div>
         </form>
 
-        <h2 className="text-lg font-semibold mb-3">All fixtures</h2>
+        <h2 className="text-lg font-semibold mb-3 text-white">All fixtures</h2>
         {loading ? (
-          <p className="text-gray-400">Loading…</p>
+          <p className="text-slate-500 text-sm">Loading…</p>
         ) : (
           <ul className="space-y-3">
             {rows.map((r) => (
-              <li key={r.id} className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 flex flex-col gap-2">
+              <li
+                key={r.id}
+                className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 flex flex-col gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-bold text-white">
                       {r.homeTeam} vs {r.awayTeam}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       {r.status} · {r.isPublished ? 'Published' : 'Draft'} · {new Date(r.kickoffAt).toLocaleString()}
                     </p>
                     {r.homeScore != null && r.awayScore != null ? (
@@ -369,13 +373,13 @@ export default function AdminUraFcPage() {
                     </button>
                   </div>
                 </div>
-                {r.competition ? <p className="text-xs text-gray-400">{r.competition}</p> : null}
-                {r.venue ? <p className="text-xs text-gray-400">{r.venue}</p> : null}
+                {r.competition ? <p className="text-xs text-slate-400">{r.competition}</p> : null}
+                {r.venue ? <p className="text-xs text-slate-400">{r.venue}</p> : null}
               </li>
             ))}
           </ul>
         )}
       </div>
-    </div>
+    </AdminModuleShell>
   );
 }

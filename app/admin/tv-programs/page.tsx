@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/contexts/ToastContext';
+import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
 
 type Row = {
   id: string;
@@ -129,6 +129,17 @@ export default function AdminTvProgramsPage() {
     }
   };
 
+  const kpis = useMemo(() => {
+    const published = rows.filter((r) => r.isPublished).length;
+    const scheduled = rows.filter((r) => r.scheduledAt).length;
+    return [
+      { label: 'Programs', value: rows.length },
+      { label: 'Published', value: published, hint: 'Visible in Learn → URA TV' },
+      { label: 'Drafts', value: rows.length - published },
+      { label: 'Scheduled', value: scheduled, hint: 'Has date for ordering' },
+    ];
+  }, [rows]);
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this TV program and its comments?')) return;
     try {
@@ -144,39 +155,32 @@ export default function AdminTvProgramsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-ura-panel text-white p-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-6">
-          <Link href="/admin" className="text-sm text-[#f3ba2f] hover:underline">
-            ← Admin home
-          </Link>
-          <h1 className="text-3xl font-bold text-[#f3ba2f] mt-2">URA TV programs</h1>
-          <p className="text-gray-400 text-sm mt-2">
-            Add YouTube links for episodes and previews. Users see programs under <strong className="text-gray-200">Learn → URA TV</strong>.
-            Schedule optional date/time for ordering upcoming vs past in the app.
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 space-y-3 mb-10">
+    <AdminModuleShell
+      title="URA TV programs"
+      description="YouTube episodes and previews under Learn → URA TV. Optional schedule controls upcoming vs past ordering in the app."
+      kpis={kpis}
+    >
+      <div className="max-w-3xl">
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 space-y-3 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold">{editingId ? 'Edit program' : 'New program'}</h2>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Description (optional)"
             rows={3}
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <input
             value={youtubeUrl}
             onChange={(e) => setYoutubeUrl(e.target.value)}
             placeholder="YouTube URL (watch, shorts, or youtu.be)"
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <label className="block text-xs text-gray-400">
             Scheduled (optional — helps upcoming vs past sorting)
@@ -184,7 +188,7 @@ export default function AdminTvProgramsPage() {
               type="datetime-local"
               value={scheduledAtLocal}
               onChange={(e) => setScheduledAtLocal(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
             />
           </label>
           <input
@@ -192,7 +196,7 @@ export default function AdminTvProgramsPage() {
             onChange={(e) => setSortOrder(e.target.value)}
             placeholder="Sort order (lower first)"
             type="number"
-            className="w-full rounded-lg border border-[#3a3d46] bg-ura-panel px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-white/[0.1] bg-[#0f1522] px-3 py-2 text-sm"
           />
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
@@ -218,17 +222,20 @@ export default function AdminTvProgramsPage() {
           </div>
         </form>
 
-        <h2 className="text-lg font-semibold mb-3">All programs</h2>
+        <h2 className="text-lg font-semibold mb-3 text-white">All programs</h2>
         {loading ? (
-          <p className="text-gray-400">Loading…</p>
+          <p className="text-slate-500 text-sm">Loading…</p>
         ) : (
           <ul className="space-y-3">
             {rows.map((r) => (
-              <li key={r.id} className="rounded-xl border border-[#3a3d46] bg-ura-panel-2 p-4 flex flex-col gap-2">
+              <li
+                key={r.id}
+                className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 flex flex-col gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-bold text-white">{r.title}</p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       {r.isPublished ? 'Published' : 'Draft'} · sort {r.sortOrder}
                       {r.scheduledAt ? ` · ${new Date(r.scheduledAt).toLocaleString()}` : ''}
                     </p>
@@ -257,13 +264,13 @@ export default function AdminTvProgramsPage() {
                     </button>
                   </div>
                 </div>
-                {r.description ? <p className="text-sm text-gray-300 whitespace-pre-wrap">{r.description}</p> : null}
+                {r.description ? <p className="text-sm text-slate-300 whitespace-pre-wrap">{r.description}</p> : null}
                 <p className="text-xs text-cyan-300 break-all">{r.youtubeUrl}</p>
               </li>
             ))}
           </ul>
         )}
       </div>
-    </div>
+    </AdminModuleShell>
   );
 }
