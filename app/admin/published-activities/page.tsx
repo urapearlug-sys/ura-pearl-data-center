@@ -5,6 +5,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useToast } from '@/contexts/ToastContext';
 import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
+import {
+  AdminDonutChart,
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 type Row = {
   id: string;
@@ -111,6 +118,23 @@ export default function AdminPublishedActivitiesPage() {
     ];
   }, [rows]);
 
+  const publishMixBars = useMemo((): BarDatum[] => {
+    const published = rows.filter((r) => r.isPublished).length;
+    const drafts = rows.length - published;
+    return [
+      { label: 'Published', value: published, color: '#34d399' },
+      { label: 'Drafts', value: drafts, color: '#fbbf24' },
+    ];
+  }, [rows]);
+
+  const publishDonutSlices = useMemo(
+    () => [
+      { label: 'Published', value: rows.filter((r) => r.isPublished).length, color: '#34d399' },
+      { label: 'Drafts', value: rows.filter((r) => !r.isPublished).length, color: '#fbbf24' },
+    ],
+    [rows],
+  );
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this activity post?')) return;
     try {
@@ -133,6 +157,26 @@ export default function AdminPublishedActivitiesPage() {
       kpis={kpis}
     >
       <div className="max-w-3xl">
+        {rows.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Chart · Visibility mix</AdminSectionLabel>
+              <AdminDonutChart slices={publishDonutSlices} size={132} />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Graph · Draft backlog</AdminSectionLabel>
+              <div className="mb-3">
+                <AdminLoadStars
+                  score={rows.filter((r) => !r.isPublished).length}
+                  maxForFive={15}
+                  caption="Stars scale with draft count"
+                />
+              </div>
+              <AdminHorizontalBars items={publishMixBars} emptyLabel="No rows yet." />
+            </div>
+          </div>
+        ) : null}
+
         <form onSubmit={handleCreate} className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 space-y-3 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold">New activity</h2>
           <input

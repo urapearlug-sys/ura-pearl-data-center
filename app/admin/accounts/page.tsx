@@ -5,6 +5,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import ItemPasswordGate from '@/app/admin/ItemPasswordGate';
 import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
+import {
+  AdminDonutChart,
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 interface UserAccount {
   rank: number;
@@ -174,6 +181,32 @@ export default function AccountsAdminPage() {
     ];
   }, [summary]);
 
+  const accountDonutSlices = useMemo(() => {
+    if (!summary) return [];
+    const { totalUsers, frozenCount, hiddenCount } = summary;
+    const overlapSafeActive = Math.max(0, totalUsers - frozenCount - hiddenCount);
+    return [
+      { label: 'Active (approx.)', value: overlapSafeActive, color: '#34d399' },
+      { label: 'Frozen', value: Math.max(0, frozenCount), color: '#fb7185' },
+      { label: 'Hidden', value: Math.max(0, hiddenCount), color: '#94a3b8' },
+    ];
+  }, [summary]);
+
+  const accountStateBars = useMemo((): BarDatum[] => {
+    if (!summary) return [];
+    return [
+      { label: 'Frozen accounts', value: summary.frozenCount, color: '#fb7185' },
+      { label: 'Hidden accounts', value: summary.hiddenCount, color: '#94a3b8' },
+      {
+        label: 'Total users (scale)',
+        value: summary.totalUsers,
+        color: '#475569',
+      },
+    ];
+  }, [summary]);
+
+  const moderationLoad = summary ? summary.frozenCount + summary.hiddenCount : 0;
+
   if (itemPasswordRequired) {
     return <ItemPasswordGate pathname="/admin/accounts" />;
   }
@@ -202,6 +235,32 @@ export default function AccountsAdminPage() {
             </button>
           </div>
         )}
+
+        {summary ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Chart · Directory shape</AdminSectionLabel>
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                Approximate split: “Active” treats frozen and hidden as disjoint from the total. Use the table for exact flags.
+              </p>
+              <AdminDonutChart slices={accountDonutSlices} size={148} />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Graph · Flags vs directory size</AdminSectionLabel>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <p className="text-xs text-slate-500 max-w-sm leading-relaxed">
+                  Stars reflect combined frozen + hidden volume (higher = more moderation surface).
+                </p>
+                <AdminLoadStars
+                  score={moderationLoad}
+                  maxForFive={Math.max(25, Math.ceil(summary.totalUsers * 0.05) || 25)}
+                  caption={`${moderationLoad} frozen + hidden`}
+                />
+              </div>
+              <AdminHorizontalBars items={accountStateBars} emptyLabel="No summary." />
+            </div>
+          </div>
+        ) : null}
 
         {/* Bulk Actions - All Users + Delete selected */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 mb-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">

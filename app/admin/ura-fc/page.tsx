@@ -3,6 +3,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/contexts/ToastContext';
 import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
+import {
+  AdminDonutChart,
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 type Row = {
   id: string;
@@ -189,6 +196,33 @@ export default function AdminUraFcPage() {
     ];
   }, [rows]);
 
+  const fcStatusBars = useMemo((): BarDatum[] => {
+    const u = rows.filter((r) => r.status === 'upcoming').length;
+    const c = rows.filter((r) => r.status === 'completed').length;
+    const x = rows.filter((r) => r.status === 'cancelled').length;
+    return [
+      { label: 'Upcoming', value: u, color: '#38bdf8' },
+      { label: 'Completed', value: c, color: '#34d399' },
+      { label: 'Cancelled', value: x, color: '#fb7185' },
+    ];
+  }, [rows]);
+
+  const fcPublishBars = useMemo((): BarDatum[] => {
+    const published = rows.filter((r) => r.isPublished).length;
+    return [
+      { label: 'Published', value: published, color: '#34d399' },
+      { label: 'Drafts', value: rows.length - published, color: '#fbbf24' },
+    ];
+  }, [rows]);
+
+  const fcDonutSlices = useMemo(
+    () => [
+      { label: 'Published', value: rows.filter((r) => r.isPublished).length, color: '#34d399' },
+      { label: 'Drafts', value: rows.filter((r) => !r.isPublished).length, color: '#fbbf24' },
+    ],
+    [rows],
+  );
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this fixture?')) return;
     try {
@@ -210,6 +244,35 @@ export default function AdminUraFcPage() {
       kpis={kpis}
     >
       <div className="max-w-3xl">
+        {!loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Chart · Publish mix</AdminSectionLabel>
+              <AdminDonutChart slices={fcDonutSlices} size={120} />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:col-span-2">
+              <AdminSectionLabel>Graph · Fixture pipeline</AdminSectionLabel>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-slate-600 mb-2">Match status</p>
+                  <AdminHorizontalBars items={fcStatusBars} emptyLabel="No fixtures." />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-slate-600 mb-2">Visibility</p>
+                  <AdminHorizontalBars items={fcPublishBars} emptyLabel="No fixtures." />
+                </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                <AdminLoadStars
+                  score={rows.filter((r) => !r.isPublished).length}
+                  maxForFive={10}
+                  caption="Unpublished fixtures still in draft"
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <form onSubmit={handleSubmit} className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 space-y-3 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold">{editingId ? 'Edit match' : 'New match'}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

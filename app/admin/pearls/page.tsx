@@ -4,6 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { triggerHapticFeedback } from '@/utils/ui';
 import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
+import {
+  AdminDonutChart,
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 type PendingBlueActivity = {
   id: string;
@@ -76,6 +83,38 @@ export default function AdminPearlsPage() {
     [totals],
   );
 
+  const pearlDonutSlices = useMemo(
+    () => [
+      { label: 'White', value: Math.max(0, totals.white), color: '#cbd5e1' },
+      { label: 'Blue pending', value: Math.max(0, totals.bluePending), color: '#38bdf8' },
+      { label: 'Blue approved', value: Math.max(0, totals.blueApproved), color: '#0369a1' },
+      { label: 'Goldish', value: Math.max(0, totals.goldish), color: '#f3ba2f' },
+    ],
+    [totals],
+  );
+
+  const receiptRushBars = useMemo((): BarDatum[] => {
+    let p = 0;
+    let a = 0;
+    let r = 0;
+    for (const row of receiptRushActivities) {
+      const s = (row.status || 'PENDING').toUpperCase();
+      if (s === 'APPROVED') a += 1;
+      else if (s === 'REJECTED') r += 1;
+      else p += 1;
+    }
+    return [
+      { label: 'Pending', value: p, color: '#fbbf24' },
+      { label: 'Approved', value: a, color: '#34d399' },
+      { label: 'Rejected', value: r, color: '#fb7185' },
+    ];
+  }, [receiptRushActivities]);
+
+  const opsPressure =
+    pendingBlueActivities.length +
+    pendingWithdrawals.length +
+    (receiptRushBars[0]?.value ?? 0);
+
   const runAction = async (payload: Record<string, unknown>) => {
     triggerHapticFeedback(window);
     const res = await fetch('/api/admin/pearls', {
@@ -138,6 +177,30 @@ export default function AdminPearlsPage() {
     >
       {loading ? <p className="text-slate-500 text-sm mb-4">Loading pearls data…</p> : null}
       {error ? <p className="text-rose-400 text-sm mb-4">{error}</p> : null}
+
+      {!loading && !error ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <div className={`${cardSurface} p-5`}>
+            <AdminSectionLabel>Chart · Pearls composition (totals)</AdminSectionLabel>
+            <p className="text-xs text-slate-500 mb-4">Donut uses the same snapshot numbers as the KPI row above.</p>
+            <AdminDonutChart slices={pearlDonutSlices} size={150} />
+          </div>
+          <div className={`${cardSurface} p-5`}>
+            <AdminSectionLabel>Graph · Receipt Rush outcomes</AdminSectionLabel>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+              <p className="text-xs text-slate-500 max-w-sm leading-relaxed">
+                Counts of Receipt Rush rows by status. Stars reflect combined ops backlog (Blue queue + withdrawals + pending receipts).
+              </p>
+              <AdminLoadStars
+                score={opsPressure}
+                maxForFive={25}
+                caption={`${opsPressure} item(s) need attention`}
+              />
+            </div>
+            <AdminHorizontalBars items={receiptRushBars} emptyLabel="No Receipt Rush rows yet." />
+          </div>
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <section className={`${cardSurface} p-5`}>

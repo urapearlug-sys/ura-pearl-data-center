@@ -3,6 +3,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/contexts/ToastContext';
 import AdminModuleShell from '@/app/admin/_components/AdminModuleShell';
+import {
+  AdminDonutChart,
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 type Row = {
   id: string;
@@ -140,6 +147,31 @@ export default function AdminTvProgramsPage() {
     ];
   }, [rows]);
 
+  const tvPublishBars = useMemo((): BarDatum[] => {
+    const published = rows.filter((r) => r.isPublished).length;
+    return [
+      { label: 'Published', value: published, color: '#34d399' },
+      { label: 'Drafts', value: rows.length - published, color: '#fbbf24' },
+    ];
+  }, [rows]);
+
+  const tvScheduleBars = useMemo((): BarDatum[] => {
+    const withDate = rows.filter((r) => r.scheduledAt).length;
+    const without = rows.length - withDate;
+    return [
+      { label: 'Scheduled', value: withDate, color: '#38bdf8' },
+      { label: 'No schedule', value: without, color: '#64748b' },
+    ];
+  }, [rows]);
+
+  const tvDonutSlices = useMemo(
+    () => [
+      { label: 'Published', value: rows.filter((r) => r.isPublished).length, color: '#34d399' },
+      { label: 'Drafts', value: rows.filter((r) => !r.isPublished).length, color: '#fbbf24' },
+    ],
+    [rows],
+  );
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this TV program and its comments?')) return;
     try {
@@ -161,6 +193,35 @@ export default function AdminTvProgramsPage() {
       kpis={kpis}
     >
       <div className="max-w-3xl">
+        {!loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:col-span-1">
+              <AdminSectionLabel>Chart · Publish mix</AdminSectionLabel>
+              <AdminDonutChart slices={tvDonutSlices} size={120} />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:col-span-2">
+              <AdminSectionLabel>Graph · Catalog shape</AdminSectionLabel>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-slate-600 mb-2">Visibility</p>
+                  <AdminHorizontalBars items={tvPublishBars} emptyLabel="No programs." />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-wide text-slate-600 mb-2">Schedule coverage</p>
+                  <AdminHorizontalBars items={tvScheduleBars} emptyLabel="No programs." />
+                </div>
+              </div>
+              <div className="mt-3 pt-3 border-t border-white/[0.06]">
+                <AdminLoadStars
+                  score={rows.filter((r) => !r.isPublished).length}
+                  maxForFive={12}
+                  caption="Draft load (for prioritizing publish work)"
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <form onSubmit={handleSubmit} className="rounded-2xl border border-white/[0.08] bg-[#141c2c] p-5 space-y-3 mb-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
           <h2 className="text-lg font-semibold">{editingId ? 'Edit program' : 'New program'}</h2>
           <input

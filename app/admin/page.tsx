@@ -9,9 +9,15 @@
 
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import {
+  AdminHorizontalBars,
+  AdminLoadStars,
+  AdminSectionLabel,
+  type BarDatum,
+} from '@/app/admin/_components/charts/AdminChartPrimitives';
 
 type PearlsApiPayload = {
   totals?: { white?: number; bluePending?: number; blueApproved?: number; goldish?: number };
@@ -175,6 +181,41 @@ const AdminPanel = () => {
 
   const spotlightQueue = (pearlsPayload?.pendingBlueActivities ?? []).slice(0, 4);
 
+  const pearlBarData = useMemo<BarDatum[]>(() => {
+    const t = totals;
+    if (!t) {
+      return [
+        { label: 'White', value: 0, color: '#cbd5e1' },
+        { label: 'Blue (pending)', value: 0, color: '#38bdf8' },
+        { label: 'Blue (approved)', value: 0, color: '#0369a1' },
+        { label: 'Goldish', value: 0, color: '#f3ba2f' },
+      ];
+    }
+    return [
+      { label: 'White', value: Math.max(0, t.white ?? 0), color: '#cbd5e1' },
+      { label: 'Blue (pending)', value: Math.max(0, t.bluePending ?? 0), color: '#38bdf8' },
+      { label: 'Blue (approved)', value: Math.max(0, t.blueApproved ?? 0), color: '#0369a1' },
+      { label: 'Goldish', value: Math.max(0, t.goldish ?? 0), color: '#f3ba2f' },
+    ];
+  }, [totals]);
+
+  const queueBarData = useMemo<BarDatum[]>(() => {
+    if (!pearlsPayload) {
+      return [
+        { label: 'Blue approvals', value: 0, color: '#38bdf8' },
+        { label: 'Receipt Rush', value: 0, color: '#22d3ee' },
+        { label: 'Withdrawals', value: 0, color: '#fbbf24' },
+      ];
+    }
+    return [
+      { label: 'Blue approvals', value: pendingBlue, color: '#38bdf8' },
+      { label: 'Receipt Rush (pending)', value: receiptPending, color: '#22d3ee' },
+      { label: 'Withdrawals', value: pendingWithdrawals, color: '#fbbf24' },
+    ];
+  }, [pearlsPayload, pendingBlue, receiptPending, pendingWithdrawals]);
+
+  const queuePressureScore = pendingBlue + receiptPending + pendingWithdrawals;
+
   return (
     <div className="min-h-screen bg-[#0c1018] text-white">
       <div className="border-b border-white/[0.06] bg-gradient-to-b from-[#121a28] to-[#0c1018]">
@@ -304,6 +345,43 @@ const AdminPanel = () => {
                 </div>
               </div>
               <p className="text-xs text-slate-500 mt-4 leading-relaxed">Counts reflect published rows in each admin list.</p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="rounded-2xl border border-white/[0.08] bg-[#111822] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Graph · Pearls balance mix (relative)</AdminSectionLabel>
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                Bars scale to the largest bucket so you can compare shape even when totals are huge.
+              </p>
+              <AdminHorizontalBars items={pearlBarData} emptyLabel="Refresh to load pearls snapshot." />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#111822] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Graph · Open queues</AdminSectionLabel>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                <div>
+                  <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
+                    Star row estimates combined queue pressure (not a user rating).
+                  </p>
+                </div>
+                <AdminLoadStars
+                  score={queuePressureScore}
+                  maxForFive={20}
+                  caption={`${queuePressureScore} open item(s) across queues`}
+                />
+              </div>
+              <AdminHorizontalBars items={queueBarData} emptyLabel="No queue data." />
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-[#111822] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <AdminSectionLabel>Graph · Learn content registry</AdminSectionLabel>
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">Row counts from TV programs and URA FC admin lists.</p>
+              <AdminHorizontalBars
+                items={[
+                  { label: 'URA TV programs', value: tvCount ?? 0, color: '#38bdf8' },
+                  { label: 'URA FC fixtures', value: fcCount ?? 0, color: '#4ade80' },
+                ]}
+                emptyLabel="Counts unavailable."
+              />
             </div>
           </div>
         </div>
