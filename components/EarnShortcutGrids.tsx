@@ -38,6 +38,7 @@ const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
   'pearls-airdrop': { tone: 'from-[#1e3460] to-[#0f1a2e] border-[#f3ba2f]/46', icon: '🎈' },
   'mini-games': { tone: 'from-[#1f3f72] to-[#0e1a2e] border-[#f3ba2f]/40', icon: '🕹️' },
   'tax-trivia-live': { tone: 'from-[#1a3058] to-[#0c1829] border-[#f3ba2f]/44', icon: '🎤' },
+  'ura-fc': { tone: 'from-[#123f78] to-[#061428] border-[#f3ba2f]/50', icon: '⚽' },
   'spin-wheel': { tone: 'from-[#162844] to-[#0a1628] border-[#5fa8ff]/45', icon: '🎡' },
   /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
   'earn-more': { tone: 'from-[#1f3f8f] to-[#0a1628] border-[#f3ba2f]/58', icon: '➕' },
@@ -57,7 +58,7 @@ const PRIMARY_SHORTCUT_IDS: string[] = [
   'whistle-blower',
   'groupage',
   'warehousing',
-  'service-experience',
+  'tax-trivia-live',
 ];
 
 const PRIMARY_ID_SET = new Set(PRIMARY_SHORTCUT_IDS);
@@ -172,6 +173,12 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
       subtitle: 'Rate our agents or service',
       onClick: () => setCurrentView('services'),
     },
+    {
+      id: 'tax-trivia-live',
+      title: 'Tax Trivia Live Events',
+      subtitle: 'Live learning events',
+      onClick: () => goEarn({ openWeeklyEvent: true }),
+    },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView('collection') },
     { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', onClick: () => goEarn({ openWeeklyEvent: true }) },
@@ -195,11 +202,16 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   const moreGames: ShortcutItem[] = [
     { id: 'mini-games', title: 'Mini games', subtitle: 'Open mini games hub', onClick: () => goEarn({ openMiniGamesHub: true }) },
     { id: 'spin-wheel', title: 'Spin wheel', subtitle: 'Daily lucky spin', onClick: () => goEarn({ openLuckySpin: true }) },
-    { id: 'tax-trivia-live', title: 'Tax Trivia Live Events', subtitle: 'Live learning events', onClick: () => goEarn({ openWeeklyEvent: true }) },
   ];
 
   const learningFun: ShortcutItem[] = [
     { id: 'social-engagement', title: 'Earn activities - social media engagement', subtitle: 'Complete social tasks', onClick: () => goEarn({ activeTabAll: true }) },
+    {
+      id: 'ura-fc',
+      title: 'URA FC',
+      subtitle: 'The Tax Collectors · Fixtures',
+      onClick: () => setCurrentView('ura-fc'),
+    },
   ];
 
   const earnPlatform: ShortcutItem[] = [];

@@ -13,7 +13,6 @@ import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDas
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
 import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
-import SupportChatWidget from '@/components/SupportChatWidget';
 import NotificationCenter from '@/components/NotificationCenter';
 
 type ActionCenterTab = 'most-used' | 'favorites';
@@ -34,9 +33,6 @@ const HOME_ECOSYSTEM_ICONS: Record<string, string> = {
   'pearls-collection': '🧊',
   'citizen-network': '👥',
   'pearls-airdrop': '🎈',
-  groupage: '📦',
-  warehousing: '🏭',
-  'service-experience': '✨',
 };
 
 type ActionItem = {
@@ -60,9 +56,6 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn', icon: dailyCipher },
   { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
-  { id: 'groupage', title: 'Groupage', subtitle: 'Customs grouping & consolidated cargo', route: 'services', group: 'earn', icon: dailyCipher },
-  { id: 'warehousing', title: 'Warehousing', subtitle: 'Bonded storage & warehouse services', route: 'services', group: 'earn', icon: dailyCombo },
-  { id: 'service-experience', title: 'Service Experience', subtitle: 'Rate our agents or service', route: 'services', group: 'earn', icon: dailyReward },
 ];
 
 /** Full-width row under Action Center → Most used (same chrome as Earn shortcut cards). */
@@ -86,13 +79,6 @@ const HOME_MOST_USED_GRID: ActionItem[] = [
   { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
 ];
 
-/** Secondary main row — matches Earn shortcuts for Groupage · Warehousing · Service Experience */
-const HOME_MAIN_SERVICE_BUTTONS: ActionItem[] = [
-  { id: 'groupage', title: 'Groupage', subtitle: 'Customs grouping & consolidated cargo', route: 'services', group: 'earn', icon: dailyCipher },
-  { id: 'warehousing', title: 'Warehousing', subtitle: 'Bonded storage & warehouse services', route: 'services', group: 'earn', icon: dailyCombo },
-  { id: 'service-experience', title: 'Service Experience', subtitle: 'Rate our agents or service', route: 'services', group: 'earn', icon: dailyReward },
-];
-
 const HOME_MOST_USED_KARIBU_CHROME = { emoji: '📅', border: 'border-[#d9a63a]/55' } as const;
 
 const HOME_MOST_USED_GRID_CHROME: Record<string, { emoji: string; border: string }> = {
@@ -102,16 +88,9 @@ const HOME_MOST_USED_GRID_CHROME: Record<string, { emoji: string; border: string
   voice: { emoji: '🎤', border: 'border-[#a78bfa]/55' },
 };
 
-const HOME_MAIN_SERVICE_CHROME: Record<string, { emoji: string; border: string }> = {
-  groupage: { emoji: '📦', border: 'border-[#6eb4ff]/48' },
-  warehousing: { emoji: '🏭', border: 'border-[#d9a63a]/52' },
-  'service-experience': { emoji: '✨', border: 'border-[#5eead4]/42' },
-};
-
 const HOME_MOST_USED_PINNED_IDS = new Set<string>([
   'karibu',
   ...HOME_MOST_USED_GRID.map((x) => x.id),
-  ...HOME_MAIN_SERVICE_BUTTONS.map((x) => x.id),
 ]);
 
 interface HomeProps {
@@ -415,32 +394,6 @@ export default function Home({ setCurrentView }: HomeProps) {
           );
         })}
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-2">
-        {HOME_MAIN_SERVICE_BUTTONS.map((item) => {
-          const chrome = HOME_MAIN_SERVICE_CHROME[item.id] ?? { emoji: '⭐', border: 'border-ura-border/85' };
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleAction(item)}
-              className={`rounded-2xl border ${chrome.border} bg-[#f4f8ff] px-2 py-3 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/35`}
-            >
-              <div className="flex flex-col gap-1.5">
-                <span
-                  className="inline-flex h-8 min-w-8 items-center justify-center rounded-lg border border-[#cfe0ff] bg-white text-base shrink-0"
-                  aria-hidden
-                >
-                  {chrome.emoji}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-extrabold leading-snug text-[#123f78]">{item.title}</p>
-                  <p className="mt-0.5 text-[10px] leading-snug text-[#335f97] line-clamp-2">{item.subtitle}</p>
-                </div>
-              </div>
-            </button>
-          );
-        })}
-      </div>
     </>
   );
 
@@ -510,15 +463,6 @@ export default function Home({ setCurrentView }: HomeProps) {
       { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', icon: ic['pearls-collection'], onClick: () => goView('collection') },
       { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', icon: ic['citizen-network'], onClick: () => goView('friends') },
       { id: 'pearls-airdrop', title: 'PEARLS Drops', subtitle: 'Drops and campaign rewards', icon: ic['pearls-airdrop'], onClick: () => goView('airdrop') },
-      { id: 'groupage', title: 'Groupage', subtitle: 'Customs grouping & consolidated cargo', icon: ic.groupage, onClick: () => goView('services') },
-      { id: 'warehousing', title: 'Warehousing', subtitle: 'Bonded storage & warehouse services', icon: ic.warehousing, onClick: () => goView('services') },
-      {
-        id: 'service-experience',
-        title: 'Service Experience',
-        subtitle: 'Rate our agents or service',
-        icon: ic['service-experience'],
-        onClick: () => goView('services'),
-      },
     ];
   }, [setCurrentView]);
 
@@ -936,8 +880,6 @@ export default function Home({ setCurrentView }: HomeProps) {
           </div>
         </div>
       )}
-
-      <SupportChatWidget placement="clicker" />
     </div>
   );
 }

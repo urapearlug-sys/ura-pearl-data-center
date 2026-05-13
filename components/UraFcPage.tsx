@@ -94,10 +94,10 @@ export default function UraFcPage({ setCurrentView }: UraFcPageProps) {
 
     return (
       <article
-        className={`rounded-2xl border overflow-hidden ${
+        className={`rounded-2xl border overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.2)] ${
           tone === 'upcoming'
-            ? 'border-emerald-400/35 bg-gradient-to-br from-[#0f2850]/98 to-[#0a1628]'
-            : 'border-[#8bb4ef]/30 bg-[#0f315f]/85'
+            ? 'border-[#1e4a8a]/80 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#123f78]/95 via-[#0f315f]/98 to-[#061428]'
+            : 'border-[#8bb4ef]/35 bg-gradient-to-br from-[#0f315f]/95 to-[#0a1a32]'
         }`}
       >
         <div className="px-4 pt-3 pb-2 flex flex-wrap items-center justify-between gap-2 border-b border-white/10">
@@ -125,7 +125,7 @@ export default function UraFcPage({ setCurrentView }: UraFcPageProps) {
               {score ? (
                 <p className="text-2xl font-black tabular-nums text-white tracking-tight">{score}</p>
               ) : (
-                <p className="text-lg font-black text-emerald-300/95">VS</p>
+                <p className="text-lg font-black tracking-wide text-[#f3ba2f] drop-shadow-sm">VS</p>
               )}
               <span className="text-[10px] uppercase tracking-wide text-blue-100/50 mt-1">
                 {m.venue ?? 'Venue TBC'}
@@ -169,7 +169,7 @@ export default function UraFcPage({ setCurrentView }: UraFcPageProps) {
   return (
     <div className="bg-[#0f3c86] min-h-screen pb-28">
       <div className="relative">
-        <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-emerald-900/35 to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-[#f3ba2f]/12 via-[#0f3c86]/40 to-transparent" />
         <UraStadiumPageHero
           title="URA FC"
           description="Uganda Revenue Authority FC — The Tax Collectors. Upcoming fixtures and recent results."
@@ -178,7 +178,7 @@ export default function UraFcPage({ setCurrentView }: UraFcPageProps) {
       </div>
 
       <div className="w-full max-w-xl mx-auto px-4 pt-2 space-y-5">
-        <div className="rounded-2xl border border-[#8bb4ef]/35 bg-[#f4f8ff] px-4 py-4 shadow-lg shadow-black/10">
+        <div className="rounded-2xl border border-[#8bb4ef]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#f4f8ff] px-4 py-4 shadow-lg shadow-black/15">
           <p className="text-[#16427f] text-sm leading-relaxed">
             For tables, transfers, and club news visit{' '}
             <strong className="text-[#123f78]">urafc.co.ug</strong>. Only the fixtures listed here are edited for this app.
@@ -211,7 +211,7 @@ export default function UraFcPage({ setCurrentView }: UraFcPageProps) {
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#0f315f]/95 p-1 grid grid-cols-2 gap-1">
+        <div className="rounded-xl border border-[#8bb4ef]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#0a1f3d]/90 p-1 grid grid-cols-2 gap-1 shadow-inner">
           {(
             [
               { key: 'upcoming' as const, label: 'Upcoming' },

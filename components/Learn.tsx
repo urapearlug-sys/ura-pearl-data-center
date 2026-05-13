@@ -160,13 +160,15 @@ export default function Learn({ setCurrentView }: LearnProps) {
                 triggerHapticFeedback(window);
                 setCurrentView('ura-tv');
               }}
-              className="rounded-xl border border-[#8bb4ef]/40 bg-gradient-to-br from-[#1e3460] to-[#0f1a2e] px-3 py-4 text-left hover:border-[#f3ba2f]/55 transition-colors"
+              className="rounded-xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#1e3460] via-[#123f78] to-[#061428] px-3 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.12)] transition-colors"
             >
-              <span className="text-2xl block mb-1" aria-hidden>
+              <span className="text-2xl block mb-1 drop-shadow-sm" aria-hidden>
                 📺
               </span>
               <p className="text-white font-bold text-sm">URA TV</p>
-              <p className="text-blue-100/70 text-[11px] mt-1 leading-snug">Programs, YouTube library, comments</p>
+              <p className="text-[#f3ba2f]/85 text-[11px] mt-1 leading-snug font-medium">
+                Programs · YouTube · feedback
+              </p>
             </button>
             <button
               type="button"
