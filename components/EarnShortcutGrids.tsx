@@ -158,13 +158,13 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     {
       id: 'groupage',
       title: 'Groupage',
-      subtitle: 'Customs grouping & consolidated cargo',
+      subtitle: 'Share your experience',
       onClick: () => setCurrentView('services'),
     },
     {
       id: 'warehousing',
       title: 'Warehousing',
-      subtitle: 'Bonded storage & warehouse services',
+      subtitle: 'Rate the service',
       onClick: () => setCurrentView('services'),
     },
     {
