@@ -13,6 +13,7 @@ import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDas
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
 import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
+import SupportChatWidget from '@/components/SupportChatWidget';
 import NotificationCenter from '@/components/NotificationCenter';
 
 type ActionCenterTab = 'most-used' | 'favorites';
@@ -880,6 +881,8 @@ export default function Home({ setCurrentView }: HomeProps) {
           </div>
         </div>
       )}
+
+      <SupportChatWidget placement="clicker" />
     </div>
   );
 }
