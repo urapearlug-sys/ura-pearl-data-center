@@ -11,10 +11,12 @@ import { PEARLS_BALANCE_REFRESH_EVENT } from '@/utils/pearl-balance-events';
 import { applyPearlsMeClientPayload } from '@/utils/apply-pearls-me-client';
 import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
-import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
 import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 import SupportChatWidget from '@/components/SupportChatWidget';
 import NotificationCenter from '@/components/NotificationCenter';
+import UraTaxCalculatorsModal, {
+  type UraTaxCalcCategory,
+} from '@/components/UraTaxCalculatorsModal';
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -59,39 +61,60 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
 ];
 
-/** Full-width row under Action Center → Most used (same chrome as Earn shortcut cards). */
-const HOME_MOST_USED_KARIBU: ActionItem = {
-  id: 'karibu',
-  title: 'Karibu Daily',
-  subtitle: '10-day login · white pearls',
-  pearlType: 'white',
-  route: 'earn',
-  group: 'play',
-  icon: dailyReward,
+/** Full-width intro for URA tax calculators (replaces Karibu Daily pin on home). */
+const HOME_TAX_CALC_HEADER = {
+  title: 'URA Tax Calculators',
+  subtitle: 'Estimate · then pay via URA PRN',
+  emoji: '🧮',
+  border: 'border-[#d9a63a]/55',
+} as const;
+
+type HomeTaxCalcTile = {
+  id: UraTaxCalcCategory;
+  title: string;
+  subtitle: string;
+  emoji: string;
+  border: string;
 };
 
 /**
- * 2×2 grid: top row URA Quiz | Receipt Rush, bottom row Whistle blower | Voice reports (matches reference layout).
+ * 2×2 grid matching ura.go.ug/en/tax-calculators categories
+ * (replaces URA Quiz | Receipt Rush | Whistle | Voice on home Most used).
  */
-const HOME_MOST_USED_GRID: ActionItem[] = [
-  { id: 'quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', pearlType: 'white', route: 'earn', group: 'play', icon: dailyCipher },
-  { id: 'receipt', title: 'Receipt Rush', subtitle: 'Receipt activity tracking', pearlType: 'blue', route: 'earn', group: 'play', icon: dailyCombo },
-  { id: 'whistle', title: 'Whistle blower', subtitle: 'Protected reporting tasks', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
-  { id: 'voice', title: 'Voice reports', subtitle: 'Approval-required blue pearls', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
+const HOME_TAX_CALC_GRID: HomeTaxCalcTile[] = [
+  {
+    id: 'mv-import',
+    title: 'Motor Vehicle Import Tax',
+    subtitle: 'CIF · duty · VAT estimate',
+    emoji: '🚗',
+    border: 'border-[#6eb4ff]/50',
+  },
+  {
+    id: 'paye',
+    title: 'PAYE',
+    subtitle: 'Monthly income tax',
+    emoji: '💼',
+    border: 'border-[#d9a63a]/55',
+  },
+  {
+    id: 'rental',
+    title: 'Rental Tax for Individuals',
+    subtitle: '12% above threshold',
+    emoji: '🏠',
+    border: 'border-[#5eead4]/45',
+  },
+  {
+    id: 'advance-mv',
+    title: 'Advance Motor Vehicle Tax',
+    subtitle: 'Transport advance tax',
+    emoji: '🚐',
+    border: 'border-[#a78bfa]/55',
+  },
 ];
 
-const HOME_MOST_USED_KARIBU_CHROME = { emoji: '📅', border: 'border-[#d9a63a]/55' } as const;
-
-const HOME_MOST_USED_GRID_CHROME: Record<string, { emoji: string; border: string }> = {
-  quiz: { emoji: '📝', border: 'border-[#d9a63a]/55' },
-  receipt: { emoji: '🧾', border: 'border-[#6eb4ff]/50' },
-  whistle: { emoji: '🛡️', border: 'border-[#5eead4]/45' },
-  voice: { emoji: '🎤', border: 'border-[#a78bfa]/55' },
-};
-
 const HOME_MOST_USED_PINNED_IDS = new Set<string>([
-  'karibu',
-  ...HOME_MOST_USED_GRID.map((x) => x.id),
+  'tax-calculators',
+  ...HOME_TAX_CALC_GRID.map((x) => x.id),
 ]);
 
 interface HomeProps {
@@ -114,7 +137,8 @@ export default function Home({ setCurrentView }: HomeProps) {
   const { userTelegramName, points, pointsBalance, bluePearlsTotal, userTelegramInitData, unsynchronizedPoints } =
     useGameStore();
   const [goldishPearls, setGoldishPearls] = useState(0);
-  const [karibuHomeSubtitle, setKaribuHomeSubtitle] = useState('10-day login · 100–1000 white pearls');
+  const [taxCalcOpen, setTaxCalcOpen] = useState(false);
+  const [taxCalcCategory, setTaxCalcCategory] = useState<UraTaxCalcCategory>('paye');
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -149,7 +173,7 @@ export default function Home({ setCurrentView }: HomeProps) {
     return [...pickedCatalog, ...customFavorites];
   }, [favoriteIds, customFavorites]);
 
-  /** Most-used scores excluding pinned ids so Karibu / Quiz / etc. are not listed twice. */
+  /** Most-used scores excluding pinned tax-calculator tiles so they are not listed twice. */
   const mostUsedRest = useMemo(
     () => mostUsedItems.filter((item) => !HOME_MOST_USED_PINNED_IDS.has(item.id)),
     [mostUsedItems]
@@ -206,42 +230,6 @@ export default function Home({ setCurrentView }: HomeProps) {
     };
     window.addEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
     return () => window.removeEventListener(PEARLS_BALANCE_REFRESH_EVENT, onRefresh);
-  }, [userTelegramInitData]);
-
-  useEffect(() => {
-    if (!userTelegramInitData) return;
-    let cancelled = false;
-    const load = async () => {
-      try {
-        const res = await fetch(
-          `/api/daily-reward?initData=${encodeURIComponent(userTelegramInitData)}`
-        );
-        if (!res.ok || cancelled) return;
-        const s = await res.json();
-        const c = karibuDaysCompleted(s);
-        const line = s.claimedToday
-          ? `Day ${c}/10 · claimed today`
-          : s.canClaimToday
-            ? `Day ${c}/10 · open to claim`
-            : `Day ${c}/10 · Karibu Daily`;
-        setKaribuHomeSubtitle(line);
-      } catch {
-        /* keep default */
-      }
-    };
-    void load();
-    const onKaribu = () => {
-      void load();
-    };
-    if (typeof window !== 'undefined') {
-      window.addEventListener('karibu-daily-status-changed', onKaribu);
-    }
-    return () => {
-      cancelled = true;
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('karibu-daily-status-changed', onKaribu);
-      }
-    };
   }, [userTelegramInitData]);
 
   useEffect(() => {
@@ -343,57 +331,59 @@ export default function Home({ setCurrentView }: HomeProps) {
     </button>
   );
 
-  const renderMostUsedPinnedKaribu = () => {
-    const { emoji, border } = HOME_MOST_USED_KARIBU_CHROME;
-    return (
+  const openTaxCalculator = (category: UraTaxCalcCategory) => {
+    triggerHapticFeedback(window);
+    setVisitCounts((prev) => ({
+      ...prev,
+      'tax-calculators': (prev['tax-calculators'] ?? 0) + 1,
+      [category]: (prev[category] ?? 0) + 1,
+    }));
+    setTaxCalcCategory(category);
+    setTaxCalcOpen(true);
+  };
+
+  const renderMostUsedTaxCalculators = () => (
+    <>
       <button
         type="button"
-        onClick={() => handleAction(HOME_MOST_USED_KARIBU)}
-        className={`w-full rounded-2xl border ${border} bg-[#f4f8ff] px-3 py-3.5 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/35`}
+        onClick={() => openTaxCalculator('paye')}
+        className={`w-full rounded-2xl border ${HOME_TAX_CALC_HEADER.border} bg-[#f4f8ff] px-3 py-3.5 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/35`}
       >
         <div className="flex items-start gap-3">
           <span
             className="mt-0.5 inline-flex h-10 min-w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-white text-xl"
             aria-hidden
           >
-            {emoji}
+            {HOME_TAX_CALC_HEADER.emoji}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-base font-extrabold leading-tight text-[#123f78]">{HOME_MOST_USED_KARIBU.title}</p>
-            <p className="mt-1 text-sm leading-snug text-[#335f97]">{karibuHomeSubtitle}</p>
+            <p className="text-base font-extrabold leading-tight text-[#123f78]">{HOME_TAX_CALC_HEADER.title}</p>
+            <p className="mt-1 text-sm leading-snug text-[#335f97]">{HOME_TAX_CALC_HEADER.subtitle}</p>
           </div>
         </div>
       </button>
-    );
-  };
-
-  const renderMostUsedPinnedGrid = () => (
-    <>
       <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-4">
-        {HOME_MOST_USED_GRID.map((item) => {
-          const chrome = HOME_MOST_USED_GRID_CHROME[item.id] ?? { emoji: '⭐', border: 'border-ura-border/85' };
-          return (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleAction(item)}
-              className={`rounded-2xl border ${chrome.border} bg-[#f4f8ff] px-3 py-3 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/35`}
-            >
-              <div className="flex items-start gap-2">
-                <span
-                  className="mt-0.5 inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-white text-lg"
-                  aria-hidden
-                >
-                  {chrome.emoji}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-extrabold leading-tight text-[#123f78]">{item.title}</p>
-                  <p className="mt-1 text-[13px] leading-snug text-[#335f97]">{item.subtitle}</p>
-                </div>
+        {HOME_TAX_CALC_GRID.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => openTaxCalculator(item.id)}
+            className={`rounded-2xl border ${item.border} bg-[#f4f8ff] px-3 py-3 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f3ba2f]/35`}
+          >
+            <div className="flex items-start gap-2">
+              <span
+                className="mt-0.5 inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-white text-lg"
+                aria-hidden
+              >
+                {item.emoji}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-extrabold leading-tight text-[#123f78]">{item.title}</p>
+                <p className="mt-1 text-[13px] leading-snug text-[#335f97]">{item.subtitle}</p>
               </div>
-            </button>
-          );
-        })}
+            </div>
+          </button>
+        ))}
       </div>
     </>
   );
@@ -695,10 +685,7 @@ export default function Home({ setCurrentView }: HomeProps) {
             <div className="mt-4 space-y-2">
               {activeActionTab === 'most-used' ? (
                 <>
-                  <>
-                    {renderMostUsedPinnedKaribu()}
-                    {renderMostUsedPinnedGrid()}
-                  </>
+                  {renderMostUsedTaxCalculators()}
                   {mostUsedRest.length > 0 ? (
                     <>
                       <p className="mt-4 pt-1 text-[11px] font-semibold uppercase tracking-wide text-blue-100/80">Your most used</p>
@@ -881,6 +868,13 @@ export default function Home({ setCurrentView }: HomeProps) {
           </div>
         </div>
       )}
+
+      {taxCalcOpen ? (
+        <UraTaxCalculatorsModal
+          initialCategory={taxCalcCategory}
+          onClose={() => setTaxCalcOpen(false)}
+        />
+      ) : null}
 
       <SupportChatWidget placement="clicker" />
     </div>
