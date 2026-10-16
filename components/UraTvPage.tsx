@@ -13,7 +13,9 @@ export type TvProgramPublic = {
   description: string | null;
   youtubeUrl: string;
   embedUrl: string | null;
+  thumbnailUrl?: string | null;
   scheduledAt: string | null;
+  source?: 'admin' | 'channel';
 };
 
 type CommentRow = {
@@ -47,7 +49,7 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
   const userTelegramInitData = useGameStore((s) => s.userTelegramInitData);
   const [upcoming, setUpcoming] = useState<TvProgramPublic[]>([]);
   const [past, setPast] = useState<TvProgramPublic[]>([]);
-  const [listTab, setListTab] = useState<'upcoming' | 'library'>('upcoming');
+  const [listTab, setListTab] = useState<'upcoming' | 'library'>('library');
   const [loading, setLoading] = useState(true);
   const [activeProgram, setActiveProgram] = useState<TvProgramPublic | null>(null);
   const [comments, setComments] = useState<CommentRow[]>([]);
@@ -97,6 +99,12 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
       setDraft('');
       return;
     }
+    // Channel feed videos are not stored in DB — skip comments API
+    if (activeProgram.source === 'channel' || activeProgram.id.startsWith('yt:')) {
+      setComments([]);
+      setDraft('');
+      return;
+    }
     void loadComments(activeProgram.id);
   }, [activeProgram, loadComments]);
 
@@ -139,6 +147,7 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
     program: TvProgramPublic;
     variant: 'upcoming' | 'past';
   }) {
+    const fromChannel = program.source === 'channel' || program.id.startsWith('yt:');
     return (
       <button
         type="button"
@@ -146,22 +155,46 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
           triggerHapticFeedback(window);
           setActiveProgram(program);
         }}
-        className={`w-full h-full rounded-2xl border text-left transition-all px-3 py-3 sm:px-4 sm:py-3.5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] active:scale-[0.99] ${
+        className={`w-full h-full rounded-2xl border text-left transition-all overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.18)] active:scale-[0.99] ${
           variant === 'upcoming'
             ? 'border-[#1e4a8a]/80 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#123f78]/90 to-[#061428] hover:border-[#f3ba2f]/60 hover:shadow-[0_0_24px_rgba(243,186,47,0.12)]'
             : 'border-[#8bb4ef]/40 bg-gradient-to-br from-[#0f315f]/95 to-[#0a1628] hover:border-[#f3ba2f]/35'
         }`}
       >
-        <p className="text-white font-bold text-[13px] sm:text-sm leading-snug line-clamp-2">{program.title}</p>
-        {program.scheduledAt ? (
-          <p className="text-blue-100/75 text-[10px] sm:text-xs mt-1.5 tabular-nums leading-tight">{formatWhen(program.scheduledAt)}</p>
+        {program.thumbnailUrl ? (
+          <div className="relative aspect-video w-full bg-black/50">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={program.thumbnailUrl}
+              alt=""
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <span className="absolute inset-0 flex items-center justify-center bg-black/25">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#f3ba2f] text-[#0a1628] shadow-lg">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 ml-0.5" fill="currentColor" aria-hidden>
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </span>
+          </div>
         ) : null}
-        {program.description ? (
-          <p className="text-blue-100/60 text-[10px] sm:text-xs mt-1.5 line-clamp-2 leading-relaxed">{program.description}</p>
-        ) : null}
-        <p className="text-[#f3ba2f]/95 text-[10px] sm:text-[11px] mt-2 font-semibold tracking-wide">
-          Watch · comment
-        </p>
+        <div className="px-3 py-3 sm:px-4 sm:py-3.5">
+          <p className="text-white font-bold text-[13px] sm:text-sm leading-snug line-clamp-2">{program.title}</p>
+          {program.scheduledAt ? (
+            <p className="text-blue-100/75 text-[10px] sm:text-xs mt-1.5 tabular-nums leading-tight">
+              {formatWhen(program.scheduledAt)}
+            </p>
+          ) : null}
+          {program.description && !program.thumbnailUrl ? (
+            <p className="text-blue-100/60 text-[10px] sm:text-xs mt-1.5 line-clamp-2 leading-relaxed">
+              {program.description}
+            </p>
+          ) : null}
+          <p className="text-[#f3ba2f]/95 text-[10px] sm:text-[11px] mt-2 font-semibold tracking-wide">
+            {fromChannel ? 'Watch in app' : 'Watch · comment'}
+          </p>
+        </div>
       </button>
     );
   }
@@ -170,14 +203,14 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
   const activeEmpty =
     listTab === 'upcoming'
       ? 'Nothing scheduled yet. New slots will show here when published.'
-      : 'Past episodes appear here once each program has a valid YouTube link.';
+      : 'Library loads episodes from @uratvofficial when available.';
 
   return (
     <div className="relative bg-[#0f3c86] min-h-screen pb-28">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#f3ba2f]/10 via-transparent to-transparent" />
       <UraStadiumPageHero
         title="URA TV"
-        description="Official video programs — upcoming listings and replays on YouTube. Tap an episode to watch or comment."
+        description="Official URA TV — upcoming slots and Library replays from @uratvofficial. Tap a video to play in app."
         icon={navLearn}
       />
 
@@ -321,76 +354,88 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
 
             <div className="px-4 py-4 space-y-4">
               {activeProgram.description ? (
-                <p className="text-sm text-blue-100/88 leading-relaxed">{activeProgram.description}</p>
+                <p className="text-sm text-blue-100/88 leading-relaxed line-clamp-4">{activeProgram.description}</p>
               ) : null}
 
               {activeProgram.embedUrl ? (
                 <div className="rounded-xl overflow-hidden border-2 border-[#f3ba2f]/35 bg-black aspect-video shadow-inner ring-1 ring-black/40">
                   <iframe
-                    src={activeProgram.embedUrl}
+                    src={`${activeProgram.embedUrl}${activeProgram.embedUrl.includes('?') ? '&' : '?'}autoplay=1&rel=0`}
                     title={activeProgram.title}
                     className="w-full h-full min-h-[200px]"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
                   />
                 </div>
               ) : (
                 <p className="text-sm text-amber-200/90 rounded-lg border border-amber-500/35 px-3 py-2">
-                  Video URL needs to be a valid YouTube link (admin).
+                  Video URL needs to be a valid YouTube link.
                 </p>
               )}
 
-              <div className="rounded-xl border border-[#8bb4ef]/35 border-l-[3px] border-l-[#f3ba2f] bg-[#061428]/90 p-3.5">
-                <h4 className="text-sm font-bold text-white mb-2 tracking-tight">Comments & suggestions</h4>
-                <textarea
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  placeholder={
-                    userTelegramInitData
-                      ? 'Share feedback or programme ideas…'
-                      : 'Open from Telegram to comment.'
-                  }
-                  disabled={!userTelegramInitData || submitting}
-                  rows={3}
-                  className="w-full rounded-lg bg-[#131f33] border border-[#8bb4ef]/35 text-white text-sm px-3 py-2 placeholder:text-blue-100/35 outline-none focus:border-[#f3ba2f]/55 resize-none disabled:opacity-50"
-                />
-                <button
-                  type="button"
-                  disabled={!userTelegramInitData || submitting}
-                  onClick={() => void submitSuggestion()}
-                  className="mt-2 w-full rounded-xl bg-[#f3ba2f] text-[#0a1628] font-bold py-2.5 text-sm shadow-md shadow-black/20 hover:bg-[#f4c141] disabled:opacity-45 transition-colors"
-                >
-                  {submitting ? 'Posting…' : 'Post'}
-                </button>
-              </div>
-
-              <div>
-                <p className="text-xs font-semibold text-blue-100/70 uppercase tracking-wide mb-2">
-                  Recent feedback
+              {activeProgram.source === 'channel' || activeProgram.id.startsWith('yt:') ? (
+                <p className="text-[11px] text-blue-100/55 text-center">
+                  From{' '}
+                  <span className="text-[#f3ba2f] font-semibold">@uratvofficial</span>
+                  {' · '}
+                  playing inside URAPearls
                 </p>
-                {commentsLoading ? (
-                  <p className="text-xs text-blue-100/50">Loading…</p>
-                ) : comments.length === 0 ? (
-                  <p className="text-xs text-blue-100/45">No comments yet — start the conversation.</p>
-                ) : (
-                  <ul className="space-y-2">
-                    {comments.map((c) => (
-                      <li
-                        key={c.id}
-                        className="rounded-xl border border-[#8bb4ef]/25 bg-[#0c1526]/90 px-3 py-2.5 text-sm text-blue-50"
-                      >
-                        <span className="text-[11px] font-semibold text-[#f3ba2f]/90">
-                          {c.authorName ?? 'Citizen'}
-                        </span>
-                        <span className="text-[10px] text-blue-100/45 ml-2">
-                          {formatWhen(c.createdAt)}
-                        </span>
-                        <p className="text-blue-100/90 mt-1 whitespace-pre-wrap break-words">{c.body}</p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              ) : (
+                <>
+                  <div className="rounded-xl border border-[#8bb4ef]/35 border-l-[3px] border-l-[#f3ba2f] bg-[#061428]/90 p-3.5">
+                    <h4 className="text-sm font-bold text-white mb-2 tracking-tight">Comments & suggestions</h4>
+                    <textarea
+                      value={draft}
+                      onChange={(e) => setDraft(e.target.value)}
+                      placeholder={
+                        userTelegramInitData
+                          ? 'Share feedback or programme ideas…'
+                          : 'Open from Telegram to comment.'
+                      }
+                      disabled={!userTelegramInitData || submitting}
+                      rows={3}
+                      className="w-full rounded-lg bg-[#131f33] border border-[#8bb4ef]/35 text-white text-sm px-3 py-2 placeholder:text-blue-100/35 outline-none focus:border-[#f3ba2f]/55 resize-none disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      disabled={!userTelegramInitData || submitting}
+                      onClick={() => void submitSuggestion()}
+                      className="mt-2 w-full rounded-xl bg-[#f3ba2f] text-[#0a1628] font-bold py-2.5 text-sm shadow-md shadow-black/20 hover:bg-[#f4c141] disabled:opacity-45 transition-colors"
+                    >
+                      {submitting ? 'Posting…' : 'Post'}
+                    </button>
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-semibold text-blue-100/70 uppercase tracking-wide mb-2">
+                      Recent feedback
+                    </p>
+                    {commentsLoading ? (
+                      <p className="text-xs text-blue-100/50">Loading…</p>
+                    ) : comments.length === 0 ? (
+                      <p className="text-xs text-blue-100/45">No comments yet — start the conversation.</p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {comments.map((c) => (
+                          <li
+                            key={c.id}
+                            className="rounded-xl border border-[#8bb4ef]/25 bg-[#0c1526]/90 px-3 py-2.5 text-sm text-blue-50"
+                          >
+                            <span className="text-[11px] font-semibold text-[#f3ba2f]/90">
+                              {c.authorName ?? 'Citizen'}
+                            </span>
+                            <span className="text-[10px] text-blue-100/45 ml-2">
+                              {formatWhen(c.createdAt)}
+                            </span>
+                            <p className="text-blue-100/90 mt-1 whitespace-pre-wrap break-words">{c.body}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
