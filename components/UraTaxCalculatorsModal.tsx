@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import {
   calculateAdvanceMotorVehicleTax,
@@ -11,9 +11,7 @@ import {
   parseAmount,
   type AdvanceMvKind,
   type PayeResidence,
-  URA_MAKE_PAYMENT_URL,
   URA_MV_OFFICIAL_CALC_URL,
-  URA_PAY_PRN_URL,
   URA_TAX_CALC_URL,
 } from '@/utils/ura-tax-calculators';
 
@@ -106,54 +104,6 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
   const [advKind, setAdvKind] = useState<AdvanceMvKind>('psv');
   const [advQty, setAdvQty] = useState('');
 
-  const payableAmount = useMemo(() => {
-    if (category === 'paye') {
-      const g = parseAmount(payeGross);
-      if (g == null) return null;
-      return calculatePaye(g, payeResidence).tax;
-    }
-    if (category === 'rental') {
-      const g = parseAmount(rentalGross);
-      if (g == null) return null;
-      const annual = rentalPeriod === 'monthly' ? g * 12 : g;
-      return calculateRentalTaxIndividuals(annual).tax;
-    }
-    if (category === 'advance-mv') {
-      if (advKind === 'boda') return calculateAdvanceMotorVehicleTax('boda', 1).tax;
-      const q = parseAmount(advQty);
-      if (q == null) return null;
-      return calculateAdvanceMotorVehicleTax(advKind, q).tax;
-    }
-    // mv-import
-    if (!mvEthical) return null;
-    const cif = parseAmount(mvCif);
-    const fx = parseAmount(mvFx) ?? 3700;
-    if (cif == null) return null;
-    const year = parseAmount(mvYear);
-    return calculateMotorVehicleImportTax({
-      cif,
-      currency: mvCurrency,
-      usdToUgx: fx,
-      yearOfManufacture: year,
-      status: mvStatus,
-      applyEnvironmentalLevy: true,
-    }).total;
-  }, [
-    category,
-    payeGross,
-    payeResidence,
-    rentalGross,
-    rentalPeriod,
-    advKind,
-    advQty,
-    mvEthical,
-    mvCif,
-    mvFx,
-    mvCurrency,
-    mvYear,
-    mvStatus,
-  ]);
-
   useEffect(() => {
     setCategory(initialCategory);
   }, [initialCategory]);
@@ -166,13 +116,6 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  const payEnabled = payableAmount != null && payableAmount > 0;
-
-  const openPay = (url: string) => {
-    triggerHapticFeedback(window);
-    openExternal(url);
-  };
-
   return (
     <div
       className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-ura-navy/80 backdrop-blur-sm"
@@ -184,15 +127,15 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
       }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#2d323c] bg-[#13161d] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
+        className="w-full max-w-md rounded-2xl border border-[var(--ura-yellow)]/35 bg-[var(--ura-navy)] shadow-2xl overflow-hidden max-h-[92vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[#2d323c] shrink-0">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-[var(--ura-border-subtle)] shrink-0 bg-[var(--ura-blue-dark)]/50">
           <div>
             <h2 id="ura-tax-calc-title" className="text-lg font-bold text-white">
               URA Tax Calculators
             </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5">Based on ura.go.ug tax calculators</p>
+            <p className="text-[11px] text-[var(--ura-blue-medium)]/80 mt-0.5">Based on ura.go.ug tax calculators</p>
           </div>
           <button
             type="button"
@@ -200,7 +143,7 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
               triggerHapticFeedback(window);
               onClose();
             }}
-            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-gray-400 hover:bg-white/5 hover:text-white"
+            className="rounded-lg px-3 py-1.5 text-sm font-semibold text-[var(--ura-blue-medium)] hover:bg-white/5 hover:text-white"
           >
             Close
           </button>
@@ -218,8 +161,8 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
                 }}
                 className={`rounded-full px-3 py-1.5 text-[11px] font-bold whitespace-nowrap transition-colors ${
                   category === tab.id
-                    ? 'bg-sky-600 text-white'
-                    : 'bg-[#1a1d24] text-slate-400 border border-[#2d323c] hover:text-white'
+                    ? 'bg-[var(--ura-yellow)] text-[#123f78]'
+                    : 'bg-[var(--ura-surface)] text-slate-300 border border-[var(--ura-border-subtle)] hover:text-white'
                 }`}
               >
                 <span className="mr-1" aria-hidden>
@@ -534,37 +477,16 @@ export default function UraTaxCalculatorsModal({ onClose, initialCategory = 'pay
             </div>
           ) : null}
 
-          {/* Pay calculated amount */}
-          <div className="rounded-xl border border-[#f3ba2f]/35 bg-[#1a1608] px-3 py-3 space-y-2">
-            <p className="text-sm font-bold text-[#f3ba2f]">Pay the calculated amount</p>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              {payEnabled
-                ? `Estimated payable: ${formatUgx(payableAmount!)}. Generate a PRN on URA and complete payment via banks or mobile money.`
-                : 'Calculate a tax amount above, then pay on the official URA payment channels.'}
-            </p>
-            <button
-              type="button"
-              disabled={!payEnabled}
-              onClick={() => openPay(URA_PAY_PRN_URL)}
-              className="w-full rounded-xl bg-[#f3ba2f] py-3 text-sm font-extrabold text-[#123f78] disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {payEnabled ? `Pay ${formatUgx(payableAmount!)} via URA PRN` : 'Pay via URA (calculate first)'}
-            </button>
-            <button
-              type="button"
-              onClick={() => openPay(URA_MAKE_PAYMENT_URL)}
-              className="w-full rounded-xl border border-[#f3ba2f]/40 bg-transparent py-2.5 text-xs font-semibold text-[#f3ba2f]"
-            >
-              Open URA make a payment hub
-            </button>
-            <button
-              type="button"
-              onClick={() => openPay(URA_TAX_CALC_URL)}
-              className="w-full rounded-xl border border-[#2d323c] bg-[#1a1d24] py-2.5 text-xs font-semibold text-sky-300"
-            >
-              Official URA tax calculators
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              openExternal(URA_TAX_CALC_URL);
+            }}
+            className="w-full rounded-xl border border-[var(--ura-yellow)]/40 bg-[var(--ura-blue-dark)]/40 py-2.5 text-xs font-semibold text-[var(--ura-yellow)]"
+          >
+            Official URA tax calculators
+          </button>
         </div>
       </div>
     </div>
