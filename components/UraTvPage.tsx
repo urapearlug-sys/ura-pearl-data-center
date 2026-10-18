@@ -321,7 +321,7 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
 
       {activeProgram ? (
         <div
-          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-3 bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="ura-tv-modal-title"
@@ -353,10 +353,6 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
             </div>
 
             <div className="px-4 py-4 space-y-4">
-              {activeProgram.description ? (
-                <p className="text-sm text-blue-100/88 leading-relaxed line-clamp-4">{activeProgram.description}</p>
-              ) : null}
-
               {activeProgram.embedUrl ? (
                 <div className="rounded-xl overflow-hidden border-2 border-[#f3ba2f]/35 bg-black aspect-video shadow-inner ring-1 ring-black/40">
                   <iframe
@@ -373,6 +369,13 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
                   Video URL needs to be a valid YouTube link.
                 </p>
               )}
+
+              {activeProgram.description ? (
+                <div className="rounded-xl border border-[#8bb4ef]/30 bg-[#061428]/70 px-3.5 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-[#f3ba2f]/90 mb-1.5">About this video</p>
+                  <p className="text-sm text-blue-100/90 leading-relaxed whitespace-pre-wrap">{activeProgram.description}</p>
+                </div>
+              ) : null}
 
               {activeProgram.source === 'channel' || activeProgram.id.startsWith('yt:') ? (
                 <p className="text-[11px] text-blue-100/55 text-center">

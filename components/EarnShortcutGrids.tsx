@@ -82,9 +82,9 @@ function useKaribuEarnSubtitle() {
         const s = await res.json();
         const c = karibuDaysCompleted(s);
         const line = s.claimedToday
-          ? `Day ${c}/10 · Tap Arena unlocked today`
+          ? `Day ${c}/10 · claimed today`
           : s.canClaimToday
-            ? `Day ${c}/10 · Claim to unlock Tap Arena`
+            ? `Day ${c}/10 · tap to claim`
             : `Day ${c}/10 · Karibu Daily`;
         setSubtitle(line);
       } catch {

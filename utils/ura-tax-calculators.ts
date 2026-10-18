@@ -161,6 +161,15 @@ export function calculateMotorVehicleImportTax(input: {
 export const URA_TAX_CALC_URL = 'https://ura.go.ug/en/tax-calculators/';
 export const URA_PAY_PRN_URL =
   'https://ura.go.ug/en/domestic-taxes/make-a-payment/generate-a-payment-slip/';
+/** Pay using an existing Payment Registration Number (PRN). */
+export const URA_PAY_AGAINST_PRN_URL = 'https://ura.go.ug/en/domestic-taxes/make-a-payment/';
+/** Register / generate a new payment slip (PRN). */
+export const URA_REGISTER_NEW_PAYMENT_URL =
+  'https://ura.go.ug/en/domestic-taxes/make-a-payment/generate-a-payment-slip/';
+/** Motor vehicle / driving-related URA payments hub. */
+export const URA_DRIVER_LICENSE_PAY_URL = 'https://ura.go.ug/en/domestic-taxes/motor-vehicle/';
+/** Contact URA / ask the Commissioner (helpdesk). */
+export const URA_ASK_COMMISSIONER_URL = 'https://www.ura.go.ug/en/contact-us/';
 export const URA_MAKE_PAYMENT_URL = 'https://ura.go.ug/en/domestic-taxes/make-a-payment/';
 export const URA_MV_OFFICIAL_CALC_URL = 'https://services.ura.go.ug/faces/mv_calculator.xhtml';
 export const URA_PAYE_RATES_URL = 'https://ura.go.ug/en/domestic-taxes/paye-rates/';

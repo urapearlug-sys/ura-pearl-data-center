@@ -18,6 +18,30 @@ import NotificationCenter from '@/components/NotificationCenter';
 import UraTaxCalculatorsModal, {
   type UraTaxCalcCategory,
 } from '@/components/UraTaxCalculatorsModal';
+import {
+  URA_ASK_COMMISSIONER_URL,
+  URA_DRIVER_LICENSE_PAY_URL,
+  URA_PAY_AGAINST_PRN_URL,
+  URA_REGISTER_NEW_PAYMENT_URL,
+} from '@/utils/ura-tax-calculators';
+
+const HOME_QUICK_ACCESS: { id: string; title: string; emoji: string; url: string }[] = [
+  { id: 'pay-prn', title: 'Pay against PRN', emoji: '💳', url: URA_PAY_AGAINST_PRN_URL },
+  { id: 'register-payment', title: 'Register new payment', emoji: '🎫', url: URA_REGISTER_NEW_PAYMENT_URL },
+  { id: 'driver-license', title: 'Pay driver license', emoji: '🪪', url: URA_DRIVER_LICENSE_PAY_URL },
+  { id: 'ask-commissioner', title: 'Ask the Commissioner', emoji: '📞', url: URA_ASK_COMMISSIONER_URL },
+];
+
+function openHomeExternalUrl(url: string) {
+  if (typeof window === 'undefined') return;
+  const tg = (
+    window as unknown as {
+      Telegram?: { WebApp?: { openLink?: (u: string, o?: { try_instant_view?: boolean }) => void } };
+    }
+  ).Telegram?.WebApp;
+  if (tg?.openLink) tg.openLink(url, { try_instant_view: false });
+  else window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -458,7 +482,7 @@ export default function Home({ setCurrentView }: HomeProps) {
       {
         id: 'karibu-daily',
         title: 'Karibu Daily',
-        subtitle: '10-day streak · Tap Arena after claim',
+        subtitle: '10-day login · claim white pearls',
         icon: ic['karibu-daily'],
         onClick: () => {
           setShowEcosystemDashboard(false);
@@ -559,6 +583,28 @@ export default function Home({ setCurrentView }: HomeProps) {
               priority
             />
           </div>
+
+          <section className="mt-5" aria-label="Quick access">
+            <h2 className="text-lg font-bold text-white tracking-tight mb-3">Quick access</h2>
+            <div className="grid grid-cols-2 gap-2.5">
+              {HOME_QUICK_ACCESS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    openHomeExternalUrl(item.url);
+                  }}
+                  className="rounded-2xl border border-[var(--ura-yellow)]/45 bg-[#f4f8ff] px-3 py-3.5 text-left transition-colors hover:bg-[#e8f0ff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ura-yellow)]/40 active:scale-[0.99]"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--ura-blue-medium)]/35 bg-white text-lg" aria-hidden>
+                    {item.emoji}
+                  </span>
+                  <p className="mt-2 text-sm font-extrabold leading-snug text-[#123f78]">{item.title}</p>
+                </button>
+              ))}
+            </div>
+          </section>
 
           {showEcosystemDashboard ? (
             <div
