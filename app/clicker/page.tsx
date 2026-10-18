@@ -115,12 +115,7 @@ function ClickerPage() {
             case 'earn':
                 return <Earn setCurrentView={setCurrentView} minimalOnly />;
             case 'karibu-daily':
-                return (
-                  <>
-                    <Home setCurrentView={setCurrentView} />
-                    <KaribuDailyPage setCurrentView={setCurrentView} />
-                  </>
-                );
+                return <KaribuDailyPage setCurrentView={setCurrentView} />;
             case 'airdrop':
                 return <Airdrop />;
             case 'collection':
