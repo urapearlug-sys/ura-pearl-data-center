@@ -321,7 +321,7 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
 
       {activeProgram ? (
         <div
-          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-3 bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-labelledby="ura-tv-modal-title"
@@ -330,19 +330,11 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
           }}
         >
           <div
-            className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-b from-[#0f315f] to-[#061428] shadow-[0_24px_48px_rgba(0,0,0,0.45)]"
+            className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-b from-[#0f315f] to-[#061428] shadow-[0_24px_48px_rgba(0,0,0,0.45)]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 flex justify-between items-start gap-2 px-4 py-3.5 border-b border-white/10 bg-[#0a1f3d]/95 backdrop-blur-md z-10">
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#f3ba2f]">URA TV</p>
-                <h3 id="ura-tv-modal-title" className="text-white font-bold text-lg leading-snug mt-1">
-                  {activeProgram.title}
-                </h3>
-                {activeProgram.scheduledAt ? (
-                  <p className="text-xs text-blue-100/75 mt-1 tabular-nums">{formatWhen(activeProgram.scheduledAt)}</p>
-                ) : null}
-              </div>
+            <div className="sticky top-0 flex justify-between items-center gap-2 px-4 py-3 border-b border-white/10 bg-[#0a1f3d]/95 backdrop-blur-md z-10">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#f3ba2f]">URA TV</p>
               <button
                 type="button"
                 onClick={() => setActiveProgram(null)}
@@ -353,10 +345,6 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
             </div>
 
             <div className="px-4 py-4 space-y-4">
-              {activeProgram.description ? (
-                <p className="text-sm text-blue-100/88 leading-relaxed line-clamp-4">{activeProgram.description}</p>
-              ) : null}
-
               {activeProgram.embedUrl ? (
                 <div className="rounded-xl overflow-hidden border-2 border-[#f3ba2f]/35 bg-black aspect-video shadow-inner ring-1 ring-black/40">
                   <iframe
@@ -373,6 +361,18 @@ export default function UraTvPage({ setCurrentView }: UraTvPageProps) {
                   Video URL needs to be a valid YouTube link.
                 </p>
               )}
+
+              <div className="space-y-1.5">
+                <h3 id="ura-tv-modal-title" className="text-white font-bold text-base leading-snug">
+                  {activeProgram.title}
+                </h3>
+                {activeProgram.scheduledAt ? (
+                  <p className="text-xs text-blue-100/75 tabular-nums">{formatWhen(activeProgram.scheduledAt)}</p>
+                ) : null}
+                {activeProgram.description ? (
+                  <p className="text-sm text-blue-100/88 leading-relaxed">{activeProgram.description}</p>
+                ) : null}
+              </div>
 
               {activeProgram.source === 'channel' || activeProgram.id.startsWith('yt:') ? (
                 <p className="text-[11px] text-blue-100/55 text-center">

@@ -12,12 +12,50 @@ import { applyPearlsMeClientPayload } from '@/utils/apply-pearls-me-client';
 import { EcosystemRadialDashboard, type EcosystemBottomNavKey, type EcosystemDashboardModule } from '@/components/ecosystem';
 import { queueEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
-import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
 import SupportChatWidget from '@/components/SupportChatWidget';
 import NotificationCenter from '@/components/NotificationCenter';
 import UraTaxCalculatorsModal, {
   type UraTaxCalcCategory,
 } from '@/components/UraTaxCalculatorsModal';
+import KaribuDailyPopup from '@/components/KaribuDailyPopup';
+
+const HOME_QUICK_ACCESS: { id: string; title: string; emoji: string; url: string }[] = [
+  {
+    id: 'pay-prn',
+    title: 'Pay against PRN',
+    emoji: '💳',
+    url: 'https://ura.go.ug/en/domestic-taxes/make-a-payment/',
+  },
+  {
+    id: 'register-payment',
+    title: 'Register new payment',
+    emoji: '🎫',
+    url: 'https://ura.go.ug/en/domestic-taxes/make-a-payment/generate-a-payment-slip/',
+  },
+  {
+    id: 'driver-licence',
+    title: "Pay driver's licence",
+    emoji: '🪪',
+    url: 'https://ura.go.ug/Portal/paymentController/load',
+  },
+  {
+    id: 'ask-kamisona',
+    title: 'Ask the Kamisona',
+    emoji: '🗣️',
+    url: 'https://ura.go.ug/en/category/buuza-kamisona/',
+  },
+];
+
+function openExternalUrl(url: string) {
+  if (typeof window === 'undefined') return;
+  const tg = (
+    window as unknown as {
+      Telegram?: { WebApp?: { openLink?: (u: string, o?: { try_instant_view?: boolean }) => void } };
+    }
+  ).Telegram?.WebApp;
+  if (tg?.openLink) tg.openLink(url, { try_instant_view: false });
+  else window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -115,6 +153,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [karibuHomeSubtitle, setKaribuHomeSubtitle] = useState('10-day login · 100–1000 white pearls');
   const [taxCalcOpen, setTaxCalcOpen] = useState(false);
   const [taxCalcCategory, setTaxCalcCategory] = useState<UraTaxCalcCategory>('paye');
+  const [karibuPopupOpen, setKaribuPopupOpen] = useState(false);
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -285,7 +324,7 @@ export default function Home({ setCurrentView }: HomeProps) {
     if (item.route === 'earn') {
       switch (item.id) {
         case 'karibu':
-          navigateToKaribuDaily(setCurrentView, 'home');
+          setKaribuPopupOpen(true);
           return;
         case 'quiz':
           queueEarnBootstrap({ openMitrolabsQuiz: true });
@@ -353,8 +392,35 @@ export default function Home({ setCurrentView }: HomeProps) {
     setTaxCalcOpen(true);
   };
 
+  const renderQuickAccess = () => (
+    <div className="rounded-2xl border border-[var(--ura-yellow)]/45 bg-[#f4f8ff] p-3">
+      <p className="text-[11px] font-bold uppercase tracking-wide text-[#c9a227] mb-2.5">Quick access</p>
+      <div className="grid grid-cols-2 gap-2">
+        {HOME_QUICK_ACCESS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
+              openExternalUrl(item.url);
+            }}
+            className="rounded-xl border border-[#8bb4ef]/40 bg-white px-2.5 py-2.5 text-left hover:border-[var(--ura-yellow)]/55 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ura-yellow)]/40"
+          >
+            <span className="text-base" aria-hidden>
+              {item.emoji}
+            </span>
+            <p className="mt-1 text-[12px] font-bold leading-snug text-[#123f78]">{item.title}</p>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   const renderMostUsedPinned = () => (
     <div className="space-y-3">
+      {renderQuickAccess()}
+
       <button type="button" onClick={() => openTaxCalculator('paye')} className={`w-full ${URA_PIN_CARD} py-3.5`}>
         <div className="flex items-start gap-3">
           <span className={`${URA_PIN_ICON} h-10 min-w-10 text-xl`} aria-hidden>
@@ -458,11 +524,11 @@ export default function Home({ setCurrentView }: HomeProps) {
       {
         id: 'karibu-daily',
         title: 'Karibu Daily',
-        subtitle: '10-day streak · Tap Arena after claim',
+        subtitle: '10-day streak · claim white pearls',
         icon: ic['karibu-daily'],
         onClick: () => {
           setShowEcosystemDashboard(false);
-          navigateToKaribuDaily(setCurrentView, 'home');
+          setKaribuPopupOpen(true);
         },
       },
       { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', icon: ic['mine-flow'], onClick: () => goView('mine') },
@@ -890,6 +956,8 @@ export default function Home({ setCurrentView }: HomeProps) {
           onClose={() => setTaxCalcOpen(false)}
         />
       ) : null}
+
+      {karibuPopupOpen ? <KaribuDailyPopup onClose={() => setKaribuPopupOpen(false)} /> : null}
 
       <SupportChatWidget placement="clicker" />
     </div>

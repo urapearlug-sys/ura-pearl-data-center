@@ -34,7 +34,7 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useToast } from '@/contexts/ToastContext';
 import type { DailyRewardStatus } from '@/utils/karibu-daily-ui';
 import { karibuDaysCompleted } from '@/utils/karibu-daily-ui';
-import { navigateToKaribuDaily } from '@/utils/karibu-navigation';
+import KaribuDailyPopup from '@/components/KaribuDailyPopup';
 
 interface GameProps {
   currentView: string;
@@ -108,6 +108,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const [showMyProgress, setShowMyProgress] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
   const [karibuStatus, setKaribuStatus] = useState<DailyRewardStatus | null>(null);
+  const [showKaribuPopup, setShowKaribuPopup] = useState(false);
 
   const fetchKaribuDaily = useCallback(async () => {
     if (!userTelegramInitData) return;
@@ -167,12 +168,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const handleInteraction = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault(); // Prevent default behavior
     if (isFrozen) return;
-
-    if (karibuStatus && !karibuStatus.claimedToday) {
-      triggerHapticFeedback(window);
-      showToast('Claim Karibu Daily first to unlock tapping today.', 'error');
-      return;
-    }
 
     const processInteraction = (clientX: number, clientY: number, pageX: number, pageY: number) => {
       if (energy - pointsPerClick < 0) return;
@@ -337,7 +332,6 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
   const defaultSuspensionMessage = 'Cheating is bad. Your account has been suspended.';
 
   const karibuCompleted = karibuStatus ? karibuDaysCompleted(karibuStatus) : 0;
-  const tapLocked = Boolean(karibuStatus && !karibuStatus.claimedToday);
 
   return (
     <div className="bg-ura-page flex justify-center min-h-screen">
@@ -384,7 +378,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 type="button"
                 onClick={() => {
                   triggerHapticFeedback(window);
-                  navigateToKaribuDaily(setCurrentView, 'game');
+                  setShowKaribuPopup(true);
                 }}
                 className="w-full mt-2 py-2 flex items-center justify-between text-left"
               >
@@ -398,9 +392,7 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                       />
                     ))}
                   </span>
-                  <span className="text-[#f3ba2f] shrink-0">
-                    {karibuCompleted}/10{tapLocked ? ' · claim' : ''}
-                  </span>
+                  <span className="text-[#f3ba2f] shrink-0">{karibuCompleted}/10</span>
                 </span>
               </button>
 
@@ -422,15 +414,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
               </button>
 
               <div className="px-4 mt-4 flex justify-center relative">
-                {tapLocked && (
-                  <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 z-10 flex justify-center pointer-events-none">
-                    <p className="text-center text-xs font-semibold text-amber-200/95 bg-black/55 px-3 py-2 rounded-xl border border-amber-500/40 max-w-[280px]">
-                      Claim today&apos;s Karibu reward to unlock Tap Arena.
-                    </p>
-                  </div>
-                )}
                 <div
-                  className={`w-80 h-80 p-4 rounded-full flex items-center justify-center transition-all duration-500 ${tapLocked ? 'opacity-45' : ''}`}
+                  className="w-80 h-80 p-4 rounded-full flex items-center justify-center transition-all duration-500"
                   style={{
                     background: circleGradient,
                     border: circleBorder,
@@ -527,6 +512,8 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
       {showHowToPlay && (
         <HowToPlayPopup onClose={() => setShowHowToPlay(false)} />
       )}
+
+      {showKaribuPopup ? <KaribuDailyPopup onClose={() => setShowKaribuPopup(false)} /> : null}
 
       <CongratulationsBanner />
 
