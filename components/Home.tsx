@@ -154,6 +154,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [taxCalcOpen, setTaxCalcOpen] = useState(false);
   const [taxCalcCategory, setTaxCalcCategory] = useState<UraTaxCalcCategory>('paye');
   const [karibuPopupOpen, setKaribuPopupOpen] = useState(false);
+  const [quickAccessOpen, setQuickAccessOpen] = useState(false);
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -392,34 +393,32 @@ export default function Home({ setCurrentView }: HomeProps) {
     setTaxCalcOpen(true);
   };
 
-  const renderQuickAccess = () => (
-    <div className="rounded-2xl border border-[var(--ura-yellow)]/45 bg-[#f4f8ff] p-3">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-[#c9a227] mb-2.5">Quick access</p>
-      <div className="grid grid-cols-2 gap-2">
-        {HOME_QUICK_ACCESS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => {
-              triggerHapticFeedback(window);
-              setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
-              openExternalUrl(item.url);
-            }}
-            className="rounded-xl border border-[#8bb4ef]/40 bg-white px-2.5 py-2.5 text-left hover:border-[var(--ura-yellow)]/55 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ura-yellow)]/40"
-          >
-            <span className="text-base" aria-hidden>
-              {item.emoji}
-            </span>
-            <p className="mt-1 text-[12px] font-bold leading-snug text-[#123f78]">{item.title}</p>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-
   const renderMostUsedPinned = () => (
     <div className="space-y-3">
-      {renderQuickAccess()}
+      <button
+        type="button"
+        onClick={() => {
+          triggerHapticFeedback(window);
+          setVisitCounts((prev) => ({
+            ...prev,
+            'quick-access': (prev['quick-access'] ?? 0) + 1,
+          }));
+          setQuickAccessOpen(true);
+        }}
+        className={`w-full ${URA_PIN_CARD} py-3.5`}
+      >
+        <div className="flex items-start gap-3">
+          <span className={`${URA_PIN_ICON} h-10 min-w-10 text-xl`} aria-hidden>
+            ⚡
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-extrabold leading-tight text-[#123f78]">Quick access</p>
+            <p className="mt-1 text-sm leading-snug text-[#335f97]">
+              PRN · payments · licence · Kamisona
+            </p>
+          </div>
+        </div>
+      </button>
 
       <button type="button" onClick={() => openTaxCalculator('paye')} className={`w-full ${URA_PIN_CARD} py-3.5`}>
         <div className="flex items-start gap-3">
@@ -958,6 +957,65 @@ export default function Home({ setCurrentView }: HomeProps) {
       ) : null}
 
       {karibuPopupOpen ? <KaribuDailyPopup onClose={() => setKaribuPopupOpen(false)} /> : null}
+
+      {quickAccessOpen ? (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="quick-access-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setQuickAccessOpen(false);
+          }}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl border border-[var(--ura-yellow)]/40 border-t-[3px] border-t-[var(--ura-yellow)] bg-[#f4f8ff] shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-2 px-3.5 py-3 border-b border-[#8bb4ef]/35 bg-[#0f315f]">
+              <div className="min-w-0">
+                <h2 id="quick-access-title" className="text-base font-extrabold text-white leading-tight">
+                  Quick access
+                </h2>
+                <p className="text-[11px] text-blue-100/75">Official URA payment & help links</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setQuickAccessOpen(false);
+                }}
+                className="shrink-0 rounded-xl border border-[#8bb4ef]/40 px-3 py-1.5 text-sm font-semibold text-blue-50 hover:bg-white/10"
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-3 space-y-2">
+              {HOME_QUICK_ACCESS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
+                    setQuickAccessOpen(false);
+                    openExternalUrl(item.url);
+                  }}
+                  className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[var(--ura-yellow)]/55 transition-colors flex items-center gap-3"
+                >
+                  <span
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
+                    aria-hidden
+                  >
+                    {item.emoji}
+                  </span>
+                  <span className="text-sm font-bold text-[#123f78] leading-snug">{item.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <SupportChatWidget placement="clicker" />
     </div>
