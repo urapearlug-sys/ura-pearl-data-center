@@ -19,7 +19,7 @@ function openExternalUrl(url: string) {
 const INTRO: ChatMessage = {
   role: 'assistant',
   content:
-    'Karibu — I’m the Ask the Kamisona assistant. Ask about taxes, PRNs, TIN, PAYE, VAT, and more.\n\nIf you’re not satisfied, tap Connect to an agent for a person.',
+    'Karibu — I’m the Ask the Kamisona assistant. I give bot assistance and frequently asked questions answered by the Kamisona General of URA.\n\nNot satisfied or do not find your answer? Submit your question to the Commissioner General.',
 };
 
 type Props = { onClose: () => void };
@@ -52,14 +52,15 @@ export default function KamisonaChatPopup({ onClose }: Props) {
       const data = (await res.json().catch(() => ({}))) as { reply?: string };
       const reply =
         data.reply?.trim() ||
-        'I could not answer right now. Please Connect to an agent for help.';
+        'I could not answer right now. If you are not satisfied, submit your question to the Commissioner General below.';
       setMessages((m) => [...m, { role: 'assistant', content: reply }]);
     } catch {
       setMessages((m) => [
         ...m,
         {
           role: 'assistant',
-          content: 'Connection issue. Use Connect to an agent below for human support.',
+          content:
+            'Connection issue. Not satisfied or do not find your answer? Submit your question to the Commissioner General below.',
         },
       ]);
     } finally {
@@ -88,7 +89,7 @@ export default function KamisonaChatPopup({ onClose }: Props) {
         <div className="flex items-center justify-between gap-2 px-3.5 py-3 bg-[#123f78] border-b border-white/10">
           <div>
             <p className="text-sm font-extrabold text-white">Ask the Kamisona</p>
-            <p className="text-[11px] text-[#f3ba2f]">AI tax education · agent handoff</p>
+            <p className="text-[11px] text-[#f3ba2f]">FAQ · Commissioner General handoff</p>
           </div>
           <button
             type="button"
@@ -129,10 +130,15 @@ export default function KamisonaChatPopup({ onClose }: Props) {
             }}
             className="w-full rounded-xl border border-[#f3ba2f]/50 bg-[#f3ba2f]/15 py-2.5 text-xs font-bold text-[#f3ba2f]"
           >
-            {agentOpen ? 'Hide agent options' : 'Not satisfied? Connect to an agent'}
+            {agentOpen
+              ? 'Hide submission options'
+              : 'Not satisfied or do not find your answer? Submit to the Commissioner General'}
           </button>
           {agentOpen ? (
             <div className="rounded-xl border border-[#8bb4ef]/30 bg-[#0f315f]/80 p-2.5 space-y-2">
+              <p className="text-[11px] text-blue-100/80 leading-snug px-0.5">
+                Submit your question to the Commissioner General via Telegram or call URA.
+              </p>
               <button
                 type="button"
                 onClick={() => {
@@ -141,7 +147,7 @@ export default function KamisonaChatPopup({ onClose }: Props) {
                 }}
                 className="w-full rounded-lg bg-[#229ED9]/25 border border-[#229ED9]/40 py-2 text-xs font-semibold text-sky-100"
               >
-                Telegram agent
+                Submit via Telegram
               </button>
               <a
                 href="tel:0800117000"
