@@ -131,7 +131,11 @@ export function isItemGateEnabled(): boolean {
 }
 
 /** Admin API routes that only need the main admin login, not ADMIN_ITEM_PASSWORD */
-const ADMIN_ITEM_GATE_EXEMPT_PREFIXES = ['/api/admin/tv-programs', '/api/admin/ura-fc'] as const;
+const ADMIN_ITEM_GATE_EXEMPT_PREFIXES = [
+  '/api/admin/tv-programs',
+  '/api/admin/ura-fc',
+  '/api/admin/opportunity-notices',
+] as const;
 
 function getRequestPathname(req: Request): string {
   try {

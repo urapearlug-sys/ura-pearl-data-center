@@ -614,7 +614,7 @@ export default function Home({ setCurrentView }: HomeProps) {
             </div>
           </div>
 
-          <div className="mt-4 rounded-2xl overflow-hidden border border-[#8bb4ef]/35 bg-[#f5f0e8]">
+          <div className="relative mt-4 rounded-2xl overflow-hidden border border-[#8bb4ef]/35 bg-[#f5f0e8]">
             <Image
               src={uraFiscalFunHomeBanner}
               alt="Fiscal Fun — Uganda Revenue Authority"
@@ -624,13 +624,13 @@ export default function Home({ setCurrentView }: HomeProps) {
               sizes="(max-width: 576px) 100vw, 576px"
               priority
             />
+            <HomeNoticesTicker
+              floating
+              onOpenCategory={(category) => {
+                setCurrentView(category === 'tender' ? 'tenders' : 'opportunities');
+              }}
+            />
           </div>
-
-          <HomeNoticesTicker
-            onOpenCategory={(category) => {
-              setCurrentView(category === 'tender' ? 'tenders' : 'opportunities');
-            }}
-          />
 
           {showEcosystemDashboard ? (
             <div

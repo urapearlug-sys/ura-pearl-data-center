@@ -31,8 +31,16 @@ export default function AdminOpportunityNoticesPage() {
   const load = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/opportunity-notices', { credentials: 'include' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(
+          typeof data.error === 'string'
+            ? data.error
+            : res.status === 403
+              ? 'Unauthorized — log in at /admin/login first'
+              : 'Failed to load notices'
+        );
+      }
       setRows(Array.isArray(data) ? data : []);
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Failed to load', 'error');
@@ -92,10 +100,17 @@ export default function AdminOpportunityNoticesPage() {
         credentials: 'include',
         body: JSON.stringify({ isPublished: !current }),
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed');
+        throw new Error(
+          typeof data.error === 'string'
+            ? data.error
+            : data.code === 'ITEM_REQUIRED'
+              ? 'Section password required — unlock admin section first'
+              : 'Failed to update publish status'
+        );
       }
+      showToast(current ? 'Unpublished' : 'Published — title will scroll on Home', 'success');
       void load();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Failed', 'error');
