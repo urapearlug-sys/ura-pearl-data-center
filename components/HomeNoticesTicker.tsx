@@ -51,7 +51,7 @@ export default function HomeNoticesTicker({ onOpenCategory }: Props) {
 
   return (
     <section
-      className="overflow-hidden bg-[#123f78] border-b-2 border-[#f3ba2f]"
+      className="overflow-hidden rounded-xl bg-[#123f78] border border-[#5fa8ff]/50 border-b-2 border-b-[#f3ba2f]"
       aria-label="Published opportunities and tenders"
     >
       <div className="relative overflow-hidden py-2.5 px-2">
