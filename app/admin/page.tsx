@@ -65,10 +65,17 @@ const PEARLS_MANAGEMENT_CARDS: AdminHubCard[] = [
   },
   {
     id: 'opportunity-notices',
-    title: 'Opportunities & Tenders',
+    title: 'Opportunities',
     path: '/admin/opportunity-notices',
-    description: 'Publish Learn notices; titles scroll right-to-left on the Home ticker when published.',
+    description: 'Publish Auctions, Careers & Tenders; titles scroll on the Home ticker when published.',
     icon: '🎯',
+  },
+  {
+    id: 'driver-licence',
+    title: "Driver licence applications",
+    path: '/admin/driver-licence',
+    description: 'Review simulated Quick Access → Pay driver\'s licence submissions.',
+    icon: '🪪',
   },
   {
     id: 'ura-tv',

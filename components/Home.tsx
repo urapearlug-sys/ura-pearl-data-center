@@ -19,44 +19,19 @@ import UraTaxCalculatorsModal, {
 } from '@/components/UraTaxCalculatorsModal';
 import KaribuDailyPopup from '@/components/KaribuDailyPopup';
 import HomeNoticesTicker from '@/components/HomeNoticesTicker';
+import KamisonaChatPopup from '@/components/quick-access/KamisonaChatPopup';
+import PayAgainstPrnPopup from '@/components/quick-access/PayAgainstPrnPopup';
+import DriverLicenceFormPopup from '@/components/quick-access/DriverLicenceFormPopup';
+import RegisterPaymentPopup from '@/components/quick-access/RegisterPaymentPopup';
 
-const HOME_QUICK_ACCESS: { id: string; title: string; emoji: string; url: string }[] = [
-  {
-    id: 'pay-prn',
-    title: 'Pay against PRN',
-    emoji: '💳',
-    url: 'https://ura.go.ug/en/domestic-taxes/make-a-payment/',
-  },
-  {
-    id: 'register-payment',
-    title: 'Register new payment',
-    emoji: '🎫',
-    url: 'https://ura.go.ug/en/domestic-taxes/make-a-payment/generate-a-payment-slip/',
-  },
-  {
-    id: 'driver-licence',
-    title: "Pay driver's licence",
-    emoji: '🪪',
-    url: 'https://ura.go.ug/Portal/paymentController/load',
-  },
-  {
-    id: 'ask-kamisona',
-    title: 'Ask the Kamisona',
-    emoji: '🗣️',
-    url: 'https://ura.go.ug/en/category/buuza-kamisona/',
-  },
+type QuickAccessId = 'pay-prn' | 'register-payment' | 'driver-licence' | 'ask-kamisona';
+
+const HOME_QUICK_ACCESS: { id: QuickAccessId; title: string; emoji: string }[] = [
+  { id: 'pay-prn', title: 'Pay against PRN', emoji: '💳' },
+  { id: 'register-payment', title: 'Register new payment', emoji: '🎫' },
+  { id: 'driver-licence', title: "Pay driver's licence", emoji: '🪪' },
+  { id: 'ask-kamisona', title: 'Ask the Kamisona', emoji: '🗣️' },
 ];
-
-function openExternalUrl(url: string) {
-  if (typeof window === 'undefined') return;
-  const tg = (
-    window as unknown as {
-      Telegram?: { WebApp?: { openLink?: (u: string, o?: { try_instant_view?: boolean }) => void } };
-    }
-  ).Telegram?.WebApp;
-  if (tg?.openLink) tg.openLink(url, { try_instant_view: false });
-  else window.open(url, '_blank', 'noopener,noreferrer');
-}
 
 type ActionCenterTab = 'most-used' | 'favorites';
 
@@ -156,6 +131,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [taxCalcCategory, setTaxCalcCategory] = useState<UraTaxCalcCategory>('paye');
   const [karibuPopupOpen, setKaribuPopupOpen] = useState(false);
   const [quickAccessOpen, setQuickAccessOpen] = useState(false);
+  const [quickAccessFlow, setQuickAccessFlow] = useState<QuickAccessId | null>(null);
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -968,6 +944,19 @@ export default function Home({ setCurrentView }: HomeProps) {
 
       {karibuPopupOpen ? <KaribuDailyPopup onClose={() => setKaribuPopupOpen(false)} /> : null}
 
+      {quickAccessFlow === 'ask-kamisona' ? (
+        <KamisonaChatPopup onClose={() => setQuickAccessFlow(null)} />
+      ) : null}
+      {quickAccessFlow === 'pay-prn' ? (
+        <PayAgainstPrnPopup onClose={() => setQuickAccessFlow(null)} />
+      ) : null}
+      {quickAccessFlow === 'driver-licence' ? (
+        <DriverLicenceFormPopup onClose={() => setQuickAccessFlow(null)} />
+      ) : null}
+      {quickAccessFlow === 'register-payment' ? (
+        <RegisterPaymentPopup onClose={() => setQuickAccessFlow(null)} />
+      ) : null}
+
       {quickAccessOpen ? (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
@@ -987,7 +976,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                 <h2 id="quick-access-title" className="text-base font-extrabold text-white leading-tight">
                   Quick access
                 </h2>
-                <p className="text-[11px] text-blue-100/75">Official URA payment & help links</p>
+                <p className="text-[11px] text-blue-100/75">In-app simulated services & Kamisona AI</p>
               </div>
               <button
                 type="button"
@@ -1009,7 +998,7 @@ export default function Home({ setCurrentView }: HomeProps) {
                     triggerHapticFeedback(window);
                     setVisitCounts((prev) => ({ ...prev, [item.id]: (prev[item.id] ?? 0) + 1 }));
                     setQuickAccessOpen(false);
-                    openExternalUrl(item.url);
+                    setQuickAccessFlow(item.id);
                   }}
                   className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[var(--ura-yellow)]/55 transition-colors flex items-center gap-3"
                 >

@@ -15,36 +15,35 @@ export type EarnShortcutGridsProps = {
 
 type ShortcutItem = { id: string; title: string; subtitle: string; onClick: () => void };
 
-/** URA shell colours: navy surfaces (#0a1628–#172642), accent #5fa8ff, gold #f3ba2f (see globals.css). */
+/** URA boxes: navy + gold top accent (matches Learn / Quick Access tiles). */
 const PLAY_CARD_APPEARANCE: Record<string, { tone: string; icon: string }> = {
-  tasks: { tone: 'from-[#172642] to-[#0a1628] border-[#5fa8ff]/45', icon: '✅' },
-  decode: { tone: 'from-[#1f3f72] to-[#0e1a2e] border-[#5fa8ff]/42', icon: '🔐' },
-  matrix: { tone: 'from-[#1a3058] to-[#0c1829] border-[#f3ba2f]/45', icon: '🎴' },
-  'collection-cards': { tone: 'from-[#152a48] to-[#0a1628] border-[#5fa8ff]/38', icon: '🗂️' },
-  'weekly-event': { tone: 'from-[#1e3460] to-[#0f1a2e] border-[#f3ba2f]/50', icon: '🎁' },
-  'global-joinable-tasks': { tone: 'from-[#172642] to-[#050b14] border-[#2a4168]', icon: '🌍' },
-  'ura-quiz': { tone: 'from-[#1f3f8f] to-[#101e32] border-[#f3ba2f]/55', icon: '📝' },
-  'receipt-rush': { tone: 'from-[#1a3058] to-[#0a1628] border-[#5fa8ff]/48', icon: '🧾' },
-  'true-false': { tone: 'from-[#162844] to-[#0a1424] border-[#f3ba2f]/42', icon: '⚖️' },
-  'whistle-blower': { tone: 'from-[#121f35] to-[#0a1628] border-[#5fa8ff]/40', icon: '🛡️' },
-  'voice-reports': { tone: 'from-[#1e3460] to-[#0d1829] border-[#5fa8ff]/44', icon: '🎤' },
-  'words-of-the-day': { tone: 'from-[#1f3f72] to-[#0c1829] border-[#5fa8ff]/46', icon: '📖' },
-  'earn-your-tenure': { tone: 'from-[#1a3058] to-[#0f1a2e] border-[#f3ba2f]/48', icon: '🎴' },
-  leaderboard: { tone: 'from-[#172642] to-[#0a1628] border-[#2a4168]', icon: '🏆' },
-  'karibu-daily': { tone: 'from-[#1e3460] to-[#0c1829] border-[#f3ba2f]/52', icon: '📅' },
-  'mine-flow': { tone: 'from-[#152a48] to-[#0a1628] border-[#5fa8ff]/36', icon: '⛏️' },
-  'pearls-collection': { tone: 'from-[#1a2850] to-[#0d1829] border-[#5fa8ff]/42', icon: '🧊' },
-  'citizen-network': { tone: 'from-[#172642] to-[#050b14] border-[#5fa8ff]/40', icon: '👥' },
-  'pearls-airdrop': { tone: 'from-[#1e3460] to-[#0f1a2e] border-[#f3ba2f]/46', icon: '🎈' },
-  'mini-games': { tone: 'from-[#1f3f72] to-[#0e1a2e] border-[#f3ba2f]/40', icon: '🕹️' },
-  'tax-trivia-live': { tone: 'from-[#1a3058] to-[#0c1829] border-[#f3ba2f]/44', icon: '🎤' },
-  'ura-fc': { tone: 'from-[#123f78] to-[#061428] border-[#f3ba2f]/50', icon: '⚽' },
-  'spin-wheel': { tone: 'from-[#162844] to-[#0a1628] border-[#5fa8ff]/45', icon: '🎡' },
-  /** Tile that opens the “more shortcuts” popup (same visual family as primary cards). */
-  'earn-more': { tone: 'from-[#1f3f8f] to-[#0a1628] border-[#f3ba2f]/58', icon: '➕' },
-  groupage: { tone: 'from-[#1a2844] to-[#0c1829] border-[#5fa8ff]/46', icon: '📦' },
-  warehousing: { tone: 'from-[#1e3460] to-[#0a1628] border-[#f3ba2f]/44', icon: '🏭' },
-  'service-experience': { tone: 'from-[#172640] to-[#0e1a2e] border-[#5eead4]/38', icon: '✨' },
+  tasks: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '✅' },
+  decode: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🔐' },
+  matrix: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎴' },
+  'collection-cards': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🗂️' },
+  'weekly-event': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎁' },
+  'global-joinable-tasks': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🌍' },
+  'ura-quiz': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '📝' },
+  'receipt-rush': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🧾' },
+  'true-false': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '⚖️' },
+  'whistle-blower': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🛡️' },
+  'voice-reports': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎤' },
+  'words-of-the-day': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '📖' },
+  'earn-your-tenure': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎴' },
+  leaderboard: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🏆' },
+  'karibu-daily': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '📅' },
+  'mine-flow': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '⛏️' },
+  'pearls-collection': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🧊' },
+  'citizen-network': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '👥' },
+  'pearls-airdrop': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎈' },
+  'mini-games': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🕹️' },
+  'tax-trivia-live': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎤' },
+  'ura-fc': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '⚽' },
+  'spin-wheel': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🎡' },
+  'earn-more': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '➕' },
+  groupage: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '📦' },
+  warehousing: { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '🏭' },
+  'service-experience': { tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90', icon: '✨' },
 };
 
 /** Top of Earn tab: fixed shortcuts; everything else lives under “More”. */
@@ -265,7 +264,7 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
   const renderHighlightButton = (item: ShortcutItem, opts?: { closePopupAfter?: boolean }) => {
     const closeAfter = opts?.closePopupAfter ?? false;
     const appearance = PLAY_CARD_APPEARANCE[item.id] ?? {
-      tone: 'from-[#172642] to-[#0a1628] border-[#5fa8ff]/45',
+      tone: 'from-[#1e3460] via-[#123f78] to-[#061428] border-[#1e4a8a]/90',
       icon: '⭐',
     };
     return (
@@ -273,15 +272,15 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
         key={item.id}
         type="button"
         onClick={() => runShortcut(item, closeAfter)}
-        className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+        className={`rounded-xl border border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.12)] transition-colors`}
       >
         <div className="flex items-start gap-2">
-          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#0a1628]/90 border border-[#5fa8ff]/22 text-xl shadow-inner shadow-black/20">
+          <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#061428]/80 border border-[#f3ba2f]/35 text-xl drop-shadow-sm">
             {appearance.icon}
           </span>
           <div className="min-w-0">
             <p className="text-base font-extrabold text-white leading-tight">{item.title}</p>
-            <p className="text-xs text-[#b8d4ff]/90 mt-1 leading-snug">{item.subtitle}</p>
+            <p className="text-xs text-[#f3ba2f]/85 mt-1 leading-snug font-medium">{item.subtitle}</p>
           </div>
         </div>
       </button>
@@ -336,15 +335,15 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
                   triggerHapticFeedback(window);
                   setMorePopupOpen(true);
                 }}
-                className={`rounded-2xl border bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left transition-all hover:scale-[1.01]`}
+                className={`rounded-xl border border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br ${appearance.tone} px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.12)] transition-colors`}
               >
                 <div className="flex items-start gap-2">
-                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#0a1628]/90 border border-[#5fa8ff]/22 text-xl shadow-inner shadow-black/20">
+                  <span className="mt-0.5 inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-[#061428]/80 border border-[#f3ba2f]/35 text-xl drop-shadow-sm">
                     {appearance.icon}
                   </span>
                   <div className="min-w-0">
                     <p className="text-base font-extrabold text-white leading-tight">More</p>
-                    <p className="text-xs text-[#b8d4ff]/90 mt-1 leading-snug">Karibu, tasks, more games, leagues & more</p>
+                    <p className="text-xs text-[#f3ba2f]/85 mt-1 leading-snug font-medium">Karibu, tasks, more games, leagues & more</p>
                   </div>
                 </div>
               </button>

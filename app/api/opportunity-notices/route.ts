@@ -31,7 +31,12 @@ export async function GET(req: NextRequest) {
   try {
     const category = req.nextUrl.searchParams.get('category')?.trim().toLowerCase();
     const where: { isPublished: boolean; category?: string } = { isPublished: true };
-    if (category === 'opportunity' || category === 'tender') {
+    if (
+      category === 'opportunity' ||
+      category === 'tender' ||
+      category === 'auction' ||
+      category === 'career'
+    ) {
       where.category = category;
     }
 

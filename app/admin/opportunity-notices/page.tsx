@@ -20,7 +20,7 @@ export default function AdminOpportunityNoticesPage() {
   const showToast = useToast();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState<'opportunity' | 'tender'>('opportunity');
+  const [category, setCategory] = useState<'career' | 'tender' | 'auction'>('career');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [link, setLink] = useState('');
@@ -137,8 +137,8 @@ export default function AdminOpportunityNoticesPage() {
 
   return (
     <AdminModuleShell
-      title="Opportunities & Tenders"
-      description="Publish notices for Learn → Opportunities / Tenders. Published titles also animate right-to-left on the Home screen."
+      title="Opportunities"
+      description="Publish Auctions, Careers, and Tenders for Learn → Opportunities. Published titles also animate on the Home ticker."
     >
       <p className="text-sm text-slate-400 mb-4">
         {loading ? 'Loading…' : `${rows.length} notices · ${publishedCount} published`}
@@ -152,7 +152,8 @@ export default function AdminOpportunityNoticesPage() {
         <div className="flex gap-2">
           {(
             [
-              { id: 'opportunity' as const, label: 'Opportunity' },
+              { id: 'auction' as const, label: 'Auction' },
+              { id: 'career' as const, label: 'Career' },
               { id: 'tender' as const, label: 'Tender' },
             ] as const
           ).map((opt) => (

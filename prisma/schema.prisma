@@ -1052,7 +1052,7 @@ model PearlAudit {
 /// Learn → Opportunities / Tenders — admin-published notices (titles also scroll on Home).
 model OpportunityNotice {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  /// "opportunity" | "tender"
+  /// "opportunity" | "career" | "tender" | "auction"
   category    String
   title       String
   body        String?
@@ -1064,6 +1064,25 @@ model OpportunityNotice {
   updatedAt   DateTime @updatedAt
 
   @@index([category, isPublished])
+}
+
+/// Simulated driver's licence payment applications (Quick Access → admin review).
+model DriverLicenceApplication {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullName       String
+  tin            String?
+  phone          String
+  idType         String
+  idNumber       String
+  licenceType    String
+  years          Int      @default(3)
+  amountUgx      Int
+  status         String   @default("submitted")
+  telegramId     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status, createdAt])
 }
 
 /// URA TV — programs with YouTube embeds (admin-managed).

@@ -135,6 +135,7 @@ const ADMIN_ITEM_GATE_EXEMPT_PREFIXES = [
   '/api/admin/tv-programs',
   '/api/admin/ura-fc',
   '/api/admin/opportunity-notices',
+  '/api/admin/driver-licence-applications',
 ] as const;
 
 function getRequestPathname(req: Request): string {

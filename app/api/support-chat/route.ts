@@ -11,6 +11,7 @@ const MessageSchema = z.object({
 
 const BodySchema = z.object({
   messages: z.array(MessageSchema).max(24),
+  mode: z.enum(['support', 'kamisona']).optional(),
 });
 
 const SYSTEM_PROMPT = `You are the URAPearls support assistant for a Telegram mini-app themed around URA Pearls.
@@ -20,6 +21,12 @@ Be concise, friendly, and accurate. You help with:
 - General guidance; you do not have access to user accounts or balances
 If the user needs account-specific help, billing disputes, or official tax determinations, tell them politely to use the "talk to an agent" option in the chat widget for human support and official URA channels.
 Never invent URA policies or legal advice. Keep answers short (2–5 sentences) unless the user asks for detail.`;
+
+const KAMISONA_PROMPT = `You are “Ask the Kamisona” — a helpful AI guide in the URAPearls mini-app, inspired by URA’s Ask the Commissioner General / Buuza Kamisona education series.
+You answer general taxpayer education questions about Ugandan tax topics (PAYE, VAT, EFRIS, TIN, PRN payments, customs basics) in plain language.
+Be concise (2–5 sentences), respectful, and clear. You are NOT the real Commissioner General and you do not issue official rulings.
+If the user needs a binding answer, case-specific help, or is unsatisfied, tell them to use “Connect to an agent” for human support and official URA channels (toll-free 0800 117 000).
+Never invent statutes or claim access to URA systems.`;
 
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -34,7 +41,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid body' }, { status: 400 });
   }
 
-  const { messages } = parsed.data;
+  const { messages, mode } = parsed.data;
+  const systemPrompt = mode === 'kamisona' ? KAMISONA_PROMPT : SYSTEM_PROMPT;
   const lastUser = [...messages].reverse().find((m) => m.role === 'user');
   const lastUserText = lastUser?.content?.trim() ?? '';
 
@@ -55,7 +63,7 @@ export async function POST(req: NextRequest) {
         temperature: 0.5,
         max_tokens: 500,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: systemPrompt },
           ...messages.map((m) => ({ role: m.role, content: m.content })),
         ],
       }),

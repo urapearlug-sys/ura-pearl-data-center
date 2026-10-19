@@ -23,7 +23,12 @@ export async function PATCH(
       sortOrder?: number;
     } = {};
 
-    if (body.category === 'opportunity' || body.category === 'tender') {
+    if (
+      body.category === 'opportunity' ||
+      body.category === 'career' ||
+      body.category === 'tender' ||
+      body.category === 'auction'
+    ) {
       data.category = body.category;
     }
     if (typeof body.title === 'string') data.title = body.title.trim();

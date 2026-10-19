@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/utils/prisma';
 import { getAdminAuthError } from '@/utils/admin-session';
 
-function parseCategory(raw: unknown): 'opportunity' | 'tender' | null {
-  if (raw === 'opportunity' || raw === 'tender') return raw;
+function parseCategory(raw: unknown): 'opportunity' | 'career' | 'tender' | 'auction' | null {
+  if (raw === 'opportunity' || raw === 'career' || raw === 'tender' || raw === 'auction') {
+    return raw;
+  }
   return null;
 }
 
@@ -29,7 +31,10 @@ export async function POST(req: NextRequest) {
     const category = parseCategory(body.category);
     const title = typeof body.title === 'string' ? body.title.trim() : '';
     if (!category) {
-      return NextResponse.json({ error: 'category must be opportunity or tender' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'category must be opportunity, career, tender, or auction' },
+        { status: 400 }
+      );
     }
     if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 });
 
