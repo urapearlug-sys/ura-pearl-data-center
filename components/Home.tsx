@@ -616,6 +616,7 @@ export default function Home({ setCurrentView }: HomeProps) {
 
           <div className="mt-4">
             <HomeNoticesTicker
+              storageKey={`ura:home:notices-read:${storagePrefix}`}
               onOpenCategory={(category) => {
                 setCurrentView(category === 'tender' ? 'tenders' : 'opportunities');
               }}

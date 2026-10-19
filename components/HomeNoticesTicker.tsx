@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 
 type Notice = {
@@ -11,11 +11,38 @@ type Notice = {
 
 type Props = {
   onOpenCategory?: (category: 'opportunity' | 'tender') => void;
+  /** Optional user-scoped key so read state is per citizen */
+  storageKey?: string;
 };
 
-/** Right-to-left scrolling titles of published opportunities & tenders. */
-export default function HomeNoticesTicker({ onOpenCategory }: Props) {
+const DEFAULT_READ_KEY = 'ura:home:notices-read';
+
+function loadReadIds(key: string): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = JSON.parse(window.localStorage.getItem(key) ?? '[]') as unknown;
+    return new Set(Array.isArray(raw) ? raw.filter((x): x is string => typeof x === 'string') : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveReadIds(key: string, ids: Set<string>) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(key, JSON.stringify([...ids]));
+}
+
+/** Right-to-left scrolling titles — disappears once the user has read them. */
+export default function HomeNoticesTicker({
+  onOpenCategory,
+  storageKey = DEFAULT_READ_KEY,
+}: Props) {
   const [notices, setNotices] = useState<Notice[]>([]);
+  const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
+
+  useEffect(() => {
+    setReadIds(loadReadIds(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,7 +60,7 @@ export default function HomeNoticesTicker({ onOpenCategory }: Props) {
           }))
         );
       } catch {
-        /* keep empty — hide ticker */
+        /* keep empty */
       }
     };
     void load();
@@ -42,10 +69,29 @@ export default function HomeNoticesTicker({ onOpenCategory }: Props) {
     };
   }, []);
 
+  const unread = useMemo(
+    () => notices.filter((n) => !readIds.has(n.id)),
+    [notices, readIds]
+  );
+
+  const markRead = useCallback(
+    (ids: string[]) => {
+      if (ids.length === 0) return;
+      setReadIds((prev) => {
+        const next = new Set(prev);
+        for (const id of ids) next.add(id);
+        saveReadIds(storageKey, next);
+        return next;
+      });
+    },
+    [storageKey]
+  );
+
   const titles = useMemo(() => {
-    if (notices.length === 0) return [];
-    return [...notices, ...notices];
-  }, [notices]);
+    if (unread.length === 0) return [];
+    // Duplicate only when enough items for a smooth loop
+    return unread.length === 1 ? unread : [...unread, ...unread];
+  }, [unread]);
 
   if (titles.length === 0) return null;
 
@@ -62,6 +108,8 @@ export default function HomeNoticesTicker({ onOpenCategory }: Props) {
               type="button"
               onClick={() => {
                 triggerHapticFeedback(window);
+                // After reading, clear the ticker (all current items marked read)
+                markRead(unread.map((x) => x.id));
                 if (n.category === 'opportunity' || n.category === 'tender') {
                   onOpenCategory?.(n.category);
                 }
@@ -77,9 +125,7 @@ export default function HomeNoticesTicker({ onOpenCategory }: Props) {
               >
                 {n.category === 'tender' ? 'Tender' : 'Opportunity'}
               </span>
-              <span className="text-[13px] sm:text-sm font-bold text-white">
-                {n.title}
-              </span>
+              <span className="text-[13px] sm:text-sm font-bold text-white">{n.title}</span>
               <span className="text-[#f3ba2f] text-base font-bold" aria-hidden>
                 •
               </span>
