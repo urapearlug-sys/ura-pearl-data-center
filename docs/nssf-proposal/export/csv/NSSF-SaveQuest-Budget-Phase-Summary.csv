@@ -1,0 +1,13 @@
+Phase,Duration,Description,Budget (UGX),Budget (USD),Option A,Option B,Option C,Option D
+Phase 0,6 weeks,Discovery & Co-design,85000000,23000,Yes,Yes,Yes,Yes
+Phase 1,10 weeks,Interactive Prototype (POC),195000000,53000,Yes,Yes,Yes,Yes
+Phase 2,20 weeks,Full Platform Adaptation,520000000,140000,No,Yes,Yes,Yes
+Phase 3,12 weeks,NSSF Systems Integration,280000000,76000,No,Yes,Yes,Yes
+Phase 4,16 weeks,Content & Financial Literacy,185000000,50000,No,Yes,Yes,Yes
+Phase 5,12 weeks,Pilot (3 regions),145000000,39000,No,Yes,Yes,Yes
+Phase 6,8 weeks,National Rollout & Change Management,165000000,45000,No,No,Yes,Yes
+Year 1 Operations,12 months,Operations & Support,220000000,59000,No,No,Yes,Yes
+Contingency (12%),—,Risk buffer,223200000,60000,No,Partial,Yes,Yes
+TOTAL Year 1,~18 months,Full programme,2018200000,545500,280000000,1410000000,2018200000,2658200000
+Year 2 Support,12 months,Annual support & enhancement,320000000,86000,No,No,Optional,Yes
+Year 3 Support,12 months,Annual support & enhancement,320000000,86000,No,No,Optional,Yes

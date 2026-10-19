@@ -1,0 +1,9 @@
+KPI,Pilot Target (90 days),Measurement Method
+Registered SaveQuest users,50000,Telegram bot analytics
+Daily active users (DAU),5000 (10% DAU/MAU),Platform analytics
+Smartlife Flexi enrollments via SaveQuest,5000,Attribution UTM / API
+Financial Literacy modules completed,15000,LMS tracking
+Quiz completion rate (>60% started → finished),60%,In-app events
+Referral conversions (new voluntary members),2000,Referral codes
+Sanyu handoff satisfaction,80%,Sanyu logs
+Cost per engaged member,< UGX 3000,Total pilot cost / MAU

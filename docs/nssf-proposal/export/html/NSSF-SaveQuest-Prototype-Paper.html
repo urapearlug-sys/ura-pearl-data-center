@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part B — Prototype Paper — NSSF SaveQuest</title>
+  <style>
+  :root {
+    --nssf-green: #0B5D3B;
+    --nssf-green-dark: #084A2F;
+    --nssf-gold: #C9A227;
+    --nssf-navy: #1A2744;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #d0d7de;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    background: #fff;
+  }
+  .cover {
+    text-align: center;
+    padding: 40mm 10mm 30mm;
+    border-bottom: 4px solid var(--nssf-gold);
+    margin-bottom: 24pt;
+    page-break-after: always;
+  }
+  .cover .org { font-size: 14pt; color: var(--nssf-green); font-weight: 700; letter-spacing: 0.05em; }
+  .cover h1 { font-size: 26pt; color: var(--nssf-navy); margin: 16pt 0 8pt; line-height: 1.2; }
+  .cover .subtitle { font-size: 13pt; color: var(--muted); margin-bottom: 24pt; }
+  .cover .meta { font-size: 10pt; color: var(--muted); }
+  .cover .tagline { font-size: 12pt; color: var(--nssf-gold); font-weight: 600; margin-top: 20pt; }
+  .header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--nssf-green);
+    padding-bottom: 8pt; margin-bottom: 20pt;
+    font-size: 9pt; color: var(--muted);
+  }
+  .header-bar strong { color: var(--nssf-green); }
+  h1 { font-size: 20pt; color: var(--nssf-navy); border-bottom: 2px solid var(--nssf-gold); padding-bottom: 6pt; margin-top: 24pt; }
+  h2 { font-size: 14pt; color: var(--nssf-green); margin-top: 20pt; }
+  h3 { font-size: 12pt; color: var(--nssf-navy); margin-top: 16pt; }
+  h4 { font-size: 11pt; color: var(--nssf-green-dark); }
+  p { margin: 8pt 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+  th { background: var(--nssf-green); color: #fff; padding: 8pt 10pt; text-align: left; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 7pt 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f9f7; }
+  code, pre { background: #f0f4f2; border-radius: 4px; font-size: 9pt; }
+  pre { padding: 12pt; overflow-x: auto; white-space: pre-wrap; border-left: 4px solid var(--nssf-gold); }
+  blockquote { border-left: 4px solid var(--nssf-gold); margin: 12pt 0; padding: 8pt 16pt; background: #faf8f0; color: var(--muted); }
+  ul, ol { margin: 8pt 0; padding-left: 20pt; }
+  li { margin: 4pt 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20pt 0; }
+  a { color: var(--nssf-green); }
+  .confidential {
+    background: #fff3cd; border: 1px solid var(--nssf-gold); padding: 8pt 12pt;
+    font-size: 9pt; text-align: center; margin-top: 24pt; border-radius: 4px;
+  }
+  .footer-note { font-size: 8pt; color: var(--muted); text-align: center; margin-top: 30pt; border-top: 1px solid var(--border); padding-top: 10pt; }
+  @media print {
+    body { padding: 15mm 15mm; }
+    .no-print { display: none; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; }
+  }
+  @page { margin: 15mm; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="org">NATIONAL SOCIAL SECURITY FUND · UGANDA</div>
+    <h1>NSSF SaveQuest</h1>
+    <div class="subtitle">Part B — Prototype Paper</div>
+    <div class="tagline">#WeBelieveInU · Save For Your Dream</div>
+    <div class="meta">Prepared for NSSF Uganda · www.nssfug.org<br/>June 2026 · Confidential</div>
+  </div>
+  <div class="header-bar">
+    <span><strong>NSSF SaveQuest</strong> · Part B — Prototype Paper</span>
+    <span>Confidential · June 2026</span>
+  </div>
+  <main><h1>NSSF SaveQuest — Part B: Prototype Paper</h1>
+<p><strong>Prepared for:</strong> National Social Security Fund (NSSF) Uganda<br><strong>Date:</strong> June 2026 | <strong>Classification:</strong> Confidential</p>
+<hr>
+<h2>B.1 Document Purpose</h2>
+<p>This prototype paper presents <strong>NSSF SaveQuest</strong> for EXCO and Board review — concept, user experience, technical approach, and pilot plan without requiring production deployment.</p>
+<hr>
+<h2>B.2 Problem Statement</h2>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Current State</th>
+<th>2035 Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Coverage</td>
+<td><del>11% (</del>3.35M registered)</td>
+<td>50% (~15M members)</td>
+</tr>
+<tr>
+<td>AUM</td>
+<td>UGX 23.5T+</td>
+<td>UGX 50T</td>
+</tr>
+<tr>
+<td>Satisfaction</td>
+<td>Rising, staff 91%</td>
+<td>95% stakeholder satisfaction</td>
+</tr>
+</tbody></table>
+<p><strong>Specific gaps:</strong></p>
+<ol>
+<li><strong>Benefit dissipation</strong> — 98% spend benefits within 2 years; ~5% retirees achieve financial independence</li>
+<li><strong>Informal sector exclusion</strong> — 85% of gig workers have no retirement savings</li>
+<li><strong>Digital fatigue vs. engagement</strong> — NSSF Go handles transactions, not daily saving behaviour</li>
+<li><strong>Youth channel</strong> — 50% under 18; Telegram has 2M+ Ugandan users, no app-store install</li>
+</ol>
+<hr>
+<h2>B.3 Proposed Solution: NSSF SaveQuest</h2>
+<p><strong>Tagline:</strong> <em>Save For Your Dream — One Shield Point at a Time</em></p>
+<p>Telegram Mini App (with NSSF Go deep-link integration) gamifying financial literacy, Smartlife Flexi activation, referrals, and benefit education.</p>
+<h3>Shield Points Economy</h3>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Name</th>
+<th>Meaning</th>
+<th>Example Activities</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>White Shield</td>
+<td>Instant</td>
+<td>Learning &amp; engagement</td>
+<td>Daily login, quizzes, tap arena</td>
+</tr>
+<tr>
+<td>Blue Shield</td>
+<td>Verified</td>
+<td>Admin-verified</td>
+<td>Contribution proof, employer registration</td>
+</tr>
+<tr>
+<td>Gold Shield</td>
+<td>Mature</td>
+<td>Long-term saver</td>
+<td>12-month Smartlife streak, FL certificate</td>
+</tr>
+</tbody></table>
+<p><em>Non-monetary — badges, certificates, leaderboard status only. Not a substitute for NSSF savings balances.</em></p>
+<hr>
+<h2>B.4 Platform Architecture</h2>
+<pre><code>MEMBER TOUCHPOINTS
+  Telegram Mini App | NSSF Go (deep links) | WhatsApp/Sanyu
+         ↓
+NSSF SAVEQUEST ENGAGEMENT LAYER
+  Home | Learn | Services | Earn | Guild | Settings
+  Gamification Engine | Shield Points | Notifications
+         ↓
+ADMIN &amp; OPERATIONS
+  Content CMS | Quiz Manager | Approval Queue | Analytics
+         ↓
+NSSF CORE SYSTEMS
+  NSSF Go API | Member Registry | Smartlife Flexi | Sanyu
+</code></pre>
+<p><strong>Design principles:</strong> Complement NSSF Go; no direct fund movement without NSSF Go handoff; Sanyu first for account queries; data minimisation.</p>
+<hr>
+<h2>B.5 Feature Mapping: URA → NSSF</h2>
+<table>
+<thead>
+<tr>
+<th>URA Feature</th>
+<th>NSSF Adaptation</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Home / Action Center</td>
+<td>Savings shortcuts, Smartlife CTA, benefit tracker</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Karibu Daily</td>
+<td><strong>Save Daily</strong> — 10-day savings habit</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>URA Quiz</td>
+<td><strong>NSSF Knowledge Quiz</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Learn</td>
+<td><strong>Financial Literacy Hub</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Services</td>
+<td><strong>NSSF Services Directory</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Receipt Rush</td>
+<td><strong>Contribution Verify</strong></td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Guild</td>
+<td><strong>Saver Network</strong></td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Tap Arena</td>
+<td><strong>Shield Tap</strong> engagement game</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Teams / Leagues</td>
+<td><strong>Employer Leagues</strong></td>
+<td>P2</td>
+</tr>
+<tr>
+<td>Support Chat</td>
+<td><strong>Help</strong> — AI + Sanyu handoff</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>Wallet / TON / NFT</td>
+<td><strong>Removed</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Tax Calculator</td>
+<td><strong>Retirement Projection Calculator</strong></td>
+<td>P1</td>
+</tr>
+<tr>
+<td>Admin console</td>
+<td>Full NSSF operations toolkit</td>
+<td>P0</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>B.6 User Journeys</h2>
+<h3>Journey 1 — Informal worker (boda-boda)</h3>
+<ol>
+<li>QR at boda stage → Telegram bot</li>
+<li>Onboarding quiz → 100 White Shields</li>
+<li>Prompt: Smartlife Flexi UGX 5,000/week</li>
+<li>Deep-link NSSF Go → enroll</li>
+<li>Save Daily streak → Day 7 Blue Shield</li>
+<li>Refer colleagues → district leaderboard</li>
+</ol>
+<h3>Journey 2 — Formal employee</h3>
+<ol>
+<li>HR sends link in payslip</li>
+<li>Services → e-statement via NSSF Go</li>
+<li>Financial Literacy module → certificate</li>
+<li>Upload payslip → Blue Shield (admin approval)</li>
+<li>Employer League quiz competition</li>
+</ol>
+<h3>Journey 3 — NSSF admin</h3>
+<ol>
+<li>Review Contribution Verify queue</li>
+<li>Approve → Blue Shield + notification</li>
+<li>Publish weekly Save Challenge</li>
+<li>Analytics: Smartlife enrollments, quiz rates</li>
+</ol>
+<hr>
+<h2>B.7 Prototype Screens</h2>
+<p><strong>Home:</strong> Profile, banner, Shield Points, rank, Action Center (Save Daily, Quiz, Smartlife, Contribution Verify), Help FAB</p>
+<p><strong>Learn:</strong> General | Retirement Journey | Smartlife Flexi tabs; sector cards with lessons</p>
+<p><strong>Services:</strong> Search; categories Register, Pay, Claims, Employer, Branches, Smartlife</p>
+<p><strong>Earn:</strong> Quiz, Save Daily, Decode, Weekly Challenge; Wallet tab for Shield breakdown</p>
+<p><strong>Saver Network:</strong> National/district leaderboards, referral link, champions</p>
+<hr>
+<h2>B.8 Integration with NSSF Digital Ecosystem</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NSSF Go</td>
+<td>Deep links for enrollment, payments, claims</td>
+</tr>
+<tr>
+<td>Sanyu</td>
+<td>Account service escalation from Help</td>
+</tr>
+<tr>
+<td>USSD *254#</td>
+<td>Cross-promotion for low-connectivity</td>
+</tr>
+<tr>
+<td>Smartlife Flexi</td>
+<td>Enrollment &amp; habit formation</td>
+</tr>
+<tr>
+<td>Financial Literacy Programme</td>
+<td>Certificate sync</td>
+</tr>
+<tr>
+<td>Employer Portal</td>
+<td>Employer leagues &amp; compliance</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>B.9 Pilot Success Metrics (90 Days)</h2>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Registered users</td>
+<td>50,000</td>
+</tr>
+<tr>
+<td>DAU</td>
+<td>5,000 (10% DAU/MAU)</td>
+</tr>
+<tr>
+<td>Smartlife enrollments via SaveQuest</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>FL modules completed</td>
+<td>15,000</td>
+</tr>
+<tr>
+<td>Quiz completion rate</td>
+<td>&gt;60%</td>
+</tr>
+<tr>
+<td>Referral conversions</td>
+<td>2,000</td>
+</tr>
+<tr>
+<td>Cost per engaged member</td>
+<td>&lt; UGX 3,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>B.10 Prototype Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1–2</td>
+<td>Discovery, brand approval</td>
+</tr>
+<tr>
+<td>3–5</td>
+<td>UI rebrand, core shell</td>
+</tr>
+<tr>
+<td>6–8</td>
+<td>Demo content, 5 modules, quiz, Save Daily</td>
+</tr>
+<tr>
+<td>9</td>
+<td>EXCO demo</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Refinement, go/no-go for Phase 2</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>B.11 Risks &amp; Mitigations</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API access delayed</td>
+<td>Mock data in prototype</td>
+</tr>
+<tr>
+<td>Regulatory (gamification)</td>
+<td>Non-monetary points; legal Phase 0</td>
+</tr>
+<tr>
+<td>Low Telegram among 45+</td>
+<td>NSSF Go notifications &amp; branch QR</td>
+</tr>
+<tr>
+<td>Confusion with NSSF Go</td>
+<td>Clear channel messaging</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Full deck outline: <code>NSSF_SAVEQUEST_PROTOTYPE_DECK_OUTLINE.md</code></em></p>
+</main>
+  <div class="confidential">CONFIDENTIAL — For NSSF Internal Review Only. Not for public distribution without written approval.</div>
+  <div class="footer-note">NSSF SaveQuest Proposal · Generated 2026-06-18 · URAPearls Platform Adaptation</div>
+  <p class="no-print" style="margin-top:24pt;padding:12pt;background:#e8f5ee;border-radius:6px;font-size:10pt;">
+    <strong>Export tip:</strong> Open in Chrome/Edge → File → Print → Save as PDF. Or open this file in Microsoft Word → Save As → .docx
+  </p>
+</body>
+</html>

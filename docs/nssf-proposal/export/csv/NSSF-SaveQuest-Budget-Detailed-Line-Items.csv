@@ -1,0 +1,59 @@
+Phase,Line Item,Qty,Unit Cost (UGX),Total (UGX)
+Phase 0,Project kick-off & stakeholder workshops,4 sessions,4000000,16000000
+Phase 0,Vision 2035 alignment & requirements document,1,12000000,12000000
+Phase 0,Member/employer journey mapping,1,10000000,10000000
+Phase 0,Regulatory & data privacy review,1,8000000,8000000
+Phase 0,Technical architecture & integration assessment,1,15000000,15000000
+Phase 0,Brand & naming workshop,1,6000000,6000000
+Phase 0,Project management (6 weeks),1,18000000,18000000
+Phase 1,UI/UX rebrand (NSSF colours Shield iconography),1,28000000,28000000
+Phase 1,Telegram Mini App shell (5 tabs),1,45000000,45000000
+Phase 1,Demo gamification loop,1,35000000,35000000
+Phase 1,Sample financial literacy modules (5 topics),1,18000000,18000000
+Phase 1,Services directory (20 NSSF links),1,12000000,12000000
+Phase 1,Admin demo dashboard,1,15000000,15000000
+Phase 1,Support chat widget (Sanyu handoff design),1,8000000,8000000
+Phase 1,QA & stakeholder demo sessions (3 rounds),3,5000000,15000000
+Phase 1,Project management & documentation,1,19000000,19000000
+Phase 2,Complete rebrand & asset production,1,45000000,45000000
+Phase 2,Home & Action Center,1,55000000,55000000
+Phase 2,Learn module — full NSSF curriculum,1,65000000,65000000
+Phase 2,Services hub — full NSSF portal catalog,1,40000000,40000000
+Phase 2,Earn activities — quizzes contribution verify,1,70000000,70000000
+Phase 2,Guild / Saver Network,1,35000000,35000000
+Phase 2,Wallet & rewards economy (Shield Points),1,55000000,55000000
+Phase 2,Admin operations console (26 modules),1,85000000,85000000
+Phase 2,Remove/replace URA-specific features,1,25000000,25000000
+Phase 2,Security hardening penetration testing,1,30000000,30000000
+Phase 2,QA UAT with NSSF staff,1,15000000,15000000
+Phase 3,NSSF Go API integration,1,95000000,95000000
+Phase 3,Sanyu chatbot escalation handoff,1,25000000,25000000
+Phase 3,Smartlife Flexi enrollment deep-link,1,45000000,45000000
+Phase 3,Mobile Money payment initiation,1,55000000,55000000
+Phase 3,USSD *254# cross-promotion hooks,1,15000000,15000000
+Phase 3,Single Sign-On / member verification,1,35000000,35000000
+Phase 3,Integration testing & NSSF ICT sign-off,1,15000000,15000000
+Phase 4,Curriculum design,1,35000000,35000000
+Phase 4,40+ Learn modules,1,55000000,55000000
+Phase 4,200+ quiz questions,1,25000000,25000000
+Phase 4,Video/audio integration (NSSF media),1,20000000,20000000
+Phase 4,Informal sector content,1,20000000,20000000
+Phase 4,Luganda + English localisation,1,15000000,15000000
+Phase 4,Certificate integration,1,15000000,15000000
+Phase 5,Central (Kampala) pilot,1,50000000,50000000
+Phase 5,Western (Mbarara) pilot,1,45000000,45000000
+Phase 5,Northern/Eastern pilot,1,50000000,50000000
+Phase 6,National launch campaign,1,55000000,55000000
+Phase 6,Employer onboarding toolkit,1,25000000,25000000
+Phase 6,Branch staff training,1,30000000,30000000
+Phase 6,Telegram bot launch social cross-promotion,1,20000000,20000000
+Phase 6,Press media Savings Digest,1,15000000,15000000
+Phase 6,Helpdesk & Sanyu knowledge base update,1,20000000,20000000
+Year 1 Ops,Cloud hosting,1,24000000,24000000
+Year 1 Ops,Telegram Bot API & messaging,1,8000000,8000000
+Year 1 Ops,OpenAI / AI support assistant,1,12000000,12000000
+Year 1 Ops,24/7 monitoring & incident response,1,36000000,36000000
+Year 1 Ops,Content updates (monthly),1,48000000,48000000
+Year 1 Ops,Bug fixes & minor enhancements,1,42000000,42000000
+Year 1 Ops,Analytics & quarterly EXCO reporting,1,24000000,24000000
+Year 1 Ops,Dedicated support engineer (0.5 FTE),1,26000000,26000000

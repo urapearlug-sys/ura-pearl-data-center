@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part C — Business Plan — NSSF SaveQuest</title>
+  <style>
+  :root {
+    --nssf-green: #0B5D3B;
+    --nssf-green-dark: #084A2F;
+    --nssf-gold: #C9A227;
+    --nssf-navy: #1A2744;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #d0d7de;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    background: #fff;
+  }
+  .cover {
+    text-align: center;
+    padding: 40mm 10mm 30mm;
+    border-bottom: 4px solid var(--nssf-gold);
+    margin-bottom: 24pt;
+    page-break-after: always;
+  }
+  .cover .org { font-size: 14pt; color: var(--nssf-green); font-weight: 700; letter-spacing: 0.05em; }
+  .cover h1 { font-size: 26pt; color: var(--nssf-navy); margin: 16pt 0 8pt; line-height: 1.2; }
+  .cover .subtitle { font-size: 13pt; color: var(--muted); margin-bottom: 24pt; }
+  .cover .meta { font-size: 10pt; color: var(--muted); }
+  .cover .tagline { font-size: 12pt; color: var(--nssf-gold); font-weight: 600; margin-top: 20pt; }
+  .header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--nssf-green);
+    padding-bottom: 8pt; margin-bottom: 20pt;
+    font-size: 9pt; color: var(--muted);
+  }
+  .header-bar strong { color: var(--nssf-green); }
+  h1 { font-size: 20pt; color: var(--nssf-navy); border-bottom: 2px solid var(--nssf-gold); padding-bottom: 6pt; margin-top: 24pt; }
+  h2 { font-size: 14pt; color: var(--nssf-green); margin-top: 20pt; }
+  h3 { font-size: 12pt; color: var(--nssf-navy); margin-top: 16pt; }
+  h4 { font-size: 11pt; color: var(--nssf-green-dark); }
+  p { margin: 8pt 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+  th { background: var(--nssf-green); color: #fff; padding: 8pt 10pt; text-align: left; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 7pt 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f9f7; }
+  code, pre { background: #f0f4f2; border-radius: 4px; font-size: 9pt; }
+  pre { padding: 12pt; overflow-x: auto; white-space: pre-wrap; border-left: 4px solid var(--nssf-gold); }
+  blockquote { border-left: 4px solid var(--nssf-gold); margin: 12pt 0; padding: 8pt 16pt; background: #faf8f0; color: var(--muted); }
+  ul, ol { margin: 8pt 0; padding-left: 20pt; }
+  li { margin: 4pt 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20pt 0; }
+  a { color: var(--nssf-green); }
+  .confidential {
+    background: #fff3cd; border: 1px solid var(--nssf-gold); padding: 8pt 12pt;
+    font-size: 9pt; text-align: center; margin-top: 24pt; border-radius: 4px;
+  }
+  .footer-note { font-size: 8pt; color: var(--muted); text-align: center; margin-top: 30pt; border-top: 1px solid var(--border); padding-top: 10pt; }
+  @media print {
+    body { padding: 15mm 15mm; }
+    .no-print { display: none; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; }
+  }
+  @page { margin: 15mm; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="org">NATIONAL SOCIAL SECURITY FUND · UGANDA</div>
+    <h1>NSSF SaveQuest</h1>
+    <div class="subtitle">Part C — Business Plan</div>
+    <div class="tagline">#WeBelieveInU · Save For Your Dream</div>
+    <div class="meta">Prepared for NSSF Uganda · www.nssfug.org<br/>June 2026 · Confidential</div>
+  </div>
+  <div class="header-bar">
+    <span><strong>NSSF SaveQuest</strong> · Part C — Business Plan</span>
+    <span>Confidential · June 2026</span>
+  </div>
+  <main><h1>NSSF SaveQuest — Part C: Business Plan</h1>
+<p><strong>Prepared for:</strong> National Social Security Fund (NSSF) Uganda<br><strong>Date:</strong> June 2026 | <strong>Classification:</strong> Confidential</p>
+<hr>
+<h2>C.1 Executive Summary</h2>
+<p><strong>NSSF SaveQuest</strong> transforms NSSF from transactional pension administrator to <strong>daily financial companion</strong> for Ugandan workers — supporting Vision 2035 (50% coverage, UGX 50T AUM, 95% satisfaction).</p>
+<p>Built by adapting a production-proven platform (433 files, 139 APIs, 26 admin modules), delivery in <strong>18 months</strong> at <strong>~UGX 2.0B</strong> — 43–60% below greenfield cost.</p>
+<p><strong>ROI drivers:</strong> Smartlife enrollment; contact centre deflection; referral coverage expansion; financial literacy → benefit retention; employer compliance awareness.</p>
+<p><strong>Recommendation:</strong> Option B — Pilot Programme (UGX 1.41B).</p>
+<hr>
+<h2>C.2 Strategic Alignment</h2>
+<table>
+<thead>
+<tr>
+<th>Vision 2035 Pillar</th>
+<th>SaveQuest Contribution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>50% Coverage</td>
+<td>Referrals, informal onboarding via Telegram</td>
+</tr>
+<tr>
+<td>UGX 50T AUM</td>
+<td>Smartlife habits, voluntary top-ups, youth culture</td>
+</tr>
+<tr>
+<td>95% Satisfaction</td>
+<td>Gamified learning, 24/7 Help, fewer branch visits</td>
+</tr>
+<tr>
+<td>Financial Literacy</td>
+<td>Digital scale (2M+ offline → 5M+ online target)</td>
+</tr>
+<tr>
+<td>Informal Sector</td>
+<td>Telegram, UGX 5,000 Smartlife minimum</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>C.3 Market Opportunity</h2>
+<table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>Size</th>
+<th>SaveQuest Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Current members</td>
+<td>3.35M</td>
+<td>Retention, literacy, Smartlife upsell</td>
+</tr>
+<tr>
+<td>Working population 2035</td>
+<td>30M</td>
+<td>Coverage expansion</td>
+</tr>
+<tr>
+<td>Informal/gig</td>
+<td>~12M+</td>
+<td>Primary growth</td>
+</tr>
+<tr>
+<td>Employers</td>
+<td>47,597</td>
+<td>Compliance, HR toolkits</td>
+</tr>
+<tr>
+<td>Youth 16–25</td>
+<td>8M+</td>
+<td>Early saving culture</td>
+</tr>
+</tbody></table>
+<h3>Competitive positioning</h3>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Strength</th>
+<th>Gap SaveQuest Fills</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NSSF Go</td>
+<td>Transactions</td>
+<td>No gamification / daily loop</td>
+</tr>
+<tr>
+<td>Sanyu</td>
+<td>FAQ, balance</td>
+<td>No curriculum / social / referral</td>
+</tr>
+<tr>
+<td>USSD *254#</td>
+<td>Low connectivity</td>
+<td>No rich content</td>
+</tr>
+<tr>
+<td>FL Programme (offline)</td>
+<td>Quality, certified</td>
+<td>Limited scale</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>C.4 Product Roadmap</h2>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Theme</th>
+<th>Features</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Year 1</td>
+<td>Launch &amp; Learn</td>
+<td>Core 5 tabs, Save Daily, Quiz, Services, Saver Network, admin, pilot → national</td>
+</tr>
+<tr>
+<td>Year 2</td>
+<td>Grow &amp; Integrate</td>
+<td>Employer Leagues, retirement calculator, NSSF Go embed, Luganda, SMS</td>
+</tr>
+<tr>
+<td>Year 3</td>
+<td>Scale &amp; Innovate</td>
+<td>AI savings coach, SACCO/boda partners, churn alerts</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>C.5 Value Model (Conservative ROI)</h2>
+<table>
+<thead>
+<tr>
+<th>Driver</th>
+<th>Assumption</th>
+<th>Annual Value (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Smartlife enrollments</td>
+<td>20K × UGX 50K avg</td>
+<td>1B AUM</td>
+</tr>
+<tr>
+<td>Contact deflection</td>
+<td>50K queries × UGX 5K</td>
+<td>250M saved</td>
+</tr>
+<tr>
+<td>Referral enrollment</td>
+<td>5K formal × UGX 600K</td>
+<td>3B AUM</td>
+</tr>
+<tr>
+<td>Benefit retention</td>
+<td>1% on UGX 500B benefits</td>
+<td>5B societal</td>
+</tr>
+</tbody></table>
+<p><strong>3-year ROI:</strong> ~UGX 2.7B cost vs. UGX 10B+ AUM mobilised → <strong>&gt;3.7× return</strong> before literacy intangibles.</p>
+<hr>
+<h2>C.6 Go-to-Market</h2>
+<p><strong>Pilot:</strong> Central (formal), Western (agriculture), Northern/Eastern (informal)</p>
+<p><strong>National:</strong> @NSSFSaveQuestBot, branch QR, employer payslips, #WeBelieveInU campaign, boda union partnerships</p>
+<p><strong>Sustained:</strong> Monthly Save Challenges, Employer League seasons, Savings Digest syndication</p>
+<hr>
+<h2>C.7 Operations</h2>
+<p><strong>Governance:</strong> DMD Marketing (sponsor), Member Experience (product), CTO (tech), FL Lead (content), Enterprise Risk (data)</p>
+<p><strong>Support:</strong> SaveQuest AI → Sanyu → 0800 286 773 → Branch</p>
+<p><strong>Admin (NSSF):</strong> 0.5 FTE content, approval queue operator, monthly analytics to EXCO</p>
+<hr>
+<h2>C.8 Technology &amp; Security</h2>
+<ul>
+<li>Cloud hosting, MongoDB encrypted</li>
+<li>Telegram HMAC + NSSF Go OTP for verified actions</li>
+<li>Data Protection Act 2019 compliance</li>
+<li>Pen test before launch; 99.5% SLA Year 1</li>
+<li><strong>No blockchain / cryptocurrency / fund custody in SaveQuest</strong></li>
+</ul>
+<hr>
+<h2>C.9 Risk Register</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>L</th>
+<th>I</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Low adoption</td>
+<td>M</td>
+<td>H</td>
+<td>Pilot, QR, employers</td>
+</tr>
+<tr>
+<td>Regulatory</td>
+<td>L</td>
+<td>H</td>
+<td>Legal review, non-monetary points</td>
+</tr>
+<tr>
+<td>Integration delay</td>
+<td>M</td>
+<td>M</td>
+<td>Phased launch</td>
+</tr>
+<tr>
+<td>Data breach</td>
+<td>L</td>
+<td>C</td>
+<td>Pen test, encryption</td>
+</tr>
+<tr>
+<td>Content inaccuracy</td>
+<td>L</td>
+<td>H</td>
+<td>FL team sign-off</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>C.10 Financial Projections (3-Year)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Y1</th>
+<th>Y2</th>
+<th>Y3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Platform investment</td>
+<td>2,018M</td>
+<td>320M</td>
+<td>320M</td>
+</tr>
+<tr>
+<td>NSSF staff</td>
+<td>60M</td>
+<td>80M</td>
+<td>80M</td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td>165M*</td>
+<td>100M</td>
+<td>80M</td>
+</tr>
+<tr>
+<td><strong>Total cost</strong></td>
+<td><strong>2,243M</strong></td>
+<td><strong>500M</strong></td>
+<td><strong>480M</strong></td>
+</tr>
+<tr>
+<td>Registered users</td>
+<td>200K</td>
+<td>800K</td>
+<td>2M</td>
+</tr>
+<tr>
+<td>Smartlife (cumulative)</td>
+<td>20K</td>
+<td>80K</td>
+<td>200K</td>
+</tr>
+<tr>
+<td>FL completions</td>
+<td>50K</td>
+<td>200K</td>
+<td>500K</td>
+</tr>
+<tr>
+<td>Est. new AUM</td>
+<td>1B</td>
+<td>4B</td>
+<td>10B+</td>
+</tr>
+</tbody></table>
+<p><em>*Included in Phase 6 build</em></p>
+<hr>
+<h2>C.11 Implementation Timeline</h2>
+<ul>
+<li>Month 3: Prototype EXCO approval</li>
+<li>Month 10: Integration sign-off → pilot</li>
+<li>Month 14: Pilot evaluation → national</li>
+<li>Month 16: National launch</li>
+<li>Month 18: First quarterly EXCO review</li>
+</ul>
+<hr>
+<h2>C.12 IP &amp; Ownership</h2>
+<ul>
+<li>NSSF owns all content, branding, configurations</li>
+<li>Source code licence/ownership on final payment (contract-defined)</li>
+<li>Full data export; Telegram bot in NSSF name</li>
+</ul>
+<hr>
+<h2>C.13 Why Now</h2>
+<ol>
+<li>Smartlife Flexi (Nov 2024) — 9K enrolled month 1; needs engagement infrastructure</li>
+<li>Vision 2035 — 9 years to 15M members from 3.35M</li>
+<li>Proven platform — 18 months vs. 30+ greenfield</li>
+<li>Telegram — informal workers where they are</li>
+<li>Sanyu maturity — 240K+ interactions; SaveQuest handles learning/social</li>
+<li>Digital credibility — FiRe Gold 2024; extend to member engagement</li>
+</ol>
+<hr>
+<h2>C.14 Recommendation</h2>
+<p><strong>Approve Option B (UGX 1.41B):</strong> 50K users, 3 regions, 90-day data for full rollout decision.</p>
+<p><strong>Next step:</strong> 2-hour EXCO briefing + live prototype demo (Phase 1, Week 9).</p>
+<hr>
+<p><em>See Budget (Part A) and Prototype Paper (Part B) for detail.</em></p>
+</main>
+  <div class="confidential">CONFIDENTIAL — For NSSF Internal Review Only. Not for public distribution without written approval.</div>
+  <div class="footer-note">NSSF SaveQuest Proposal · Generated 2026-06-18 · URAPearls Platform Adaptation</div>
+  <p class="no-print" style="margin-top:24pt;padding:12pt;background:#e8f5ee;border-radius:6px;font-size:10pt;">
+    <strong>Export tip:</strong> Open in Chrome/Edge → File → Print → Save as PDF. Or open this file in Microsoft Word → Save As → .docx
+  </p>
+</body>
+</html>

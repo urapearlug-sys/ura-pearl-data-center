@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype Deck Outline — NSSF SaveQuest</title>
+  <style>
+  :root {
+    --nssf-green: #0B5D3B;
+    --nssf-green-dark: #084A2F;
+    --nssf-gold: #C9A227;
+    --nssf-navy: #1A2744;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #d0d7de;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    background: #fff;
+  }
+  .cover {
+    text-align: center;
+    padding: 40mm 10mm 30mm;
+    border-bottom: 4px solid var(--nssf-gold);
+    margin-bottom: 24pt;
+    page-break-after: always;
+  }
+  .cover .org { font-size: 14pt; color: var(--nssf-green); font-weight: 700; letter-spacing: 0.05em; }
+  .cover h1 { font-size: 26pt; color: var(--nssf-navy); margin: 16pt 0 8pt; line-height: 1.2; }
+  .cover .subtitle { font-size: 13pt; color: var(--muted); margin-bottom: 24pt; }
+  .cover .meta { font-size: 10pt; color: var(--muted); }
+  .cover .tagline { font-size: 12pt; color: var(--nssf-gold); font-weight: 600; margin-top: 20pt; }
+  .header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--nssf-green);
+    padding-bottom: 8pt; margin-bottom: 20pt;
+    font-size: 9pt; color: var(--muted);
+  }
+  .header-bar strong { color: var(--nssf-green); }
+  h1 { font-size: 20pt; color: var(--nssf-navy); border-bottom: 2px solid var(--nssf-gold); padding-bottom: 6pt; margin-top: 24pt; }
+  h2 { font-size: 14pt; color: var(--nssf-green); margin-top: 20pt; }
+  h3 { font-size: 12pt; color: var(--nssf-navy); margin-top: 16pt; }
+  h4 { font-size: 11pt; color: var(--nssf-green-dark); }
+  p { margin: 8pt 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+  th { background: var(--nssf-green); color: #fff; padding: 8pt 10pt; text-align: left; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 7pt 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f9f7; }
+  code, pre { background: #f0f4f2; border-radius: 4px; font-size: 9pt; }
+  pre { padding: 12pt; overflow-x: auto; white-space: pre-wrap; border-left: 4px solid var(--nssf-gold); }
+  blockquote { border-left: 4px solid var(--nssf-gold); margin: 12pt 0; padding: 8pt 16pt; background: #faf8f0; color: var(--muted); }
+  ul, ol { margin: 8pt 0; padding-left: 20pt; }
+  li { margin: 4pt 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20pt 0; }
+  a { color: var(--nssf-green); }
+  .confidential {
+    background: #fff3cd; border: 1px solid var(--nssf-gold); padding: 8pt 12pt;
+    font-size: 9pt; text-align: center; margin-top: 24pt; border-radius: 4px;
+  }
+  .footer-note { font-size: 8pt; color: var(--muted); text-align: center; margin-top: 30pt; border-top: 1px solid var(--border); padding-top: 10pt; }
+  @media print {
+    body { padding: 15mm 15mm; }
+    .no-print { display: none; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; }
+  }
+  @page { margin: 15mm; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="org">NATIONAL SOCIAL SECURITY FUND · UGANDA</div>
+    <h1>NSSF SaveQuest</h1>
+    <div class="subtitle">Prototype Deck Outline</div>
+    <div class="tagline">#WeBelieveInU · Save For Your Dream</div>
+    <div class="meta">Prepared for NSSF Uganda · www.nssfug.org<br/>June 2026 · Confidential</div>
+  </div>
+  <div class="header-bar">
+    <span><strong>NSSF SaveQuest</strong> · Prototype Deck Outline</span>
+    <span>Confidential · June 2026</span>
+  </div>
+  <main><h1>NSSF SaveQuest — Prototype Deck Outline</h1>
+<p><strong>Presentation for:</strong> NSSF EXCO / Board<br><strong>Duration:</strong> 45–60 minutes (incl. Q&amp;A)<br><strong>Format:</strong> 24 slides + appendix backup<br><strong>Brand:</strong> NSSF — #WeBelieveInU | Save For Your Dream</p>
+<hr>
+<h2>Slide 1 — Title</h2>
+<ul>
+<li><strong>Title:</strong> NSSF SaveQuest — Gamified Member Engagement for Vision 2035</li>
+<li><strong>Subtitle:</strong> Prototype Proposal &amp; Pilot Programme</li>
+<li><strong>Presented by:</strong> [Organisation Name]</li>
+<li><strong>Date:</strong> June 2026</li>
+<li><strong>Visual:</strong> NSSF logo + SaveQuest shield icon mockup</li>
+</ul>
+<hr>
+<h2>Slide 2 — Agenda</h2>
+<ol>
+<li>Strategic context &amp; Vision 2035 alignment</li>
+<li>The problem we are solving</li>
+<li>Introducing NSSF SaveQuest</li>
+<li>Live prototype demo (10 min)</li>
+<li>Platform architecture &amp; integrations</li>
+<li>User journeys (3 personas)</li>
+<li>Pilot programme &amp; budget</li>
+<li>ROI &amp; business case</li>
+<li>Timeline &amp; recommendation</li>
+<li>Q&amp;A</li>
+</ol>
+<hr>
+<h2>Slide 3 — Strategic Context</h2>
+<ul>
+<li><strong>Vision 2035:</strong> 50% coverage | UGX 50T AUM | 95% satisfaction</li>
+<li><strong>Current state:</strong> 3.35M members (11% of workforce), UGX 23.5T+ AUM</li>
+<li><strong>Gap:</strong> 12M+ informal workers underserved; Smartlife Flexi needs engagement layer</li>
+<li><strong>MD quote:</strong> <em>&quot;Creating a willingness to save and building the capacity of Ugandans to save&quot;</em> — Patrick Ayota</li>
+<li><strong>Visual:</strong> 50:50:95 infographic</li>
+</ul>
+<hr>
+<h2>Slide 4 — The Problem</h2>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Data Point</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Benefit dissipation</td>
+<td>98% spend benefits within 2 years</td>
+</tr>
+<tr>
+<td>Informal sector</td>
+<td>85% of gig workers have no retirement savings</td>
+</tr>
+<tr>
+<td>Financial literacy</td>
+<td>Only ~5% of retirees achieve financial independence</td>
+</tr>
+<tr>
+<td>Digital gap</td>
+<td>NSSF Go = transactions; no daily engagement loop</td>
+</tr>
+<tr>
+<td>Youth</td>
+<td>50% of population under 18 — need early saving culture</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Visual:</strong> Problem statement icons (4 quadrants)</li>
+</ul>
+<hr>
+<h2>Slide 5 — Why Telegram?</h2>
+<ul>
+<li><strong>2M+ Ugandan Telegram users</strong> — no app-store install</li>
+<li><strong>Informal sector access</strong> — boda stages, markets, gig workers already on Telegram</li>
+<li><strong>Low data cost</strong> — lightweight Mini App vs. full native app</li>
+<li><strong>Proven model</strong> — URAPearls platform live for URA (adaptation, not greenfield)</li>
+<li><strong>Complements NSSF Go</strong> — engagement layer, not replacement</li>
+</ul>
+<hr>
+<h2>Slide 6 — Introducing NSSF SaveQuest</h2>
+<ul>
+<li><strong>Tagline:</strong> <em>Save For Your Dream — One Shield Point at a Time</em></li>
+<li><strong>What it is:</strong> Gamified Telegram Mini App for learning, saving habits, referrals</li>
+<li><strong>What it is NOT:</strong> Payment processor, benefit adjudicator, or balance manager (those stay in NSSF Go)</li>
+<li><strong>Core modules:</strong> Home | Learn | Services | Earn | Saver Network</li>
+<li><strong>Visual:</strong> App shell mockup (5-tab navigation)</li>
+</ul>
+<hr>
+<h2>Slide 7 — Shield Points Economy</h2>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Name</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>White Shield</td>
+<td>Instant</td>
+<td>Learning &amp; engagement</td>
+<td>Daily login, quizzes</td>
+</tr>
+<tr>
+<td>Blue Shield</td>
+<td>Verified</td>
+<td>Admin-approved actions</td>
+<td>Contribution proof upload</td>
+</tr>
+<tr>
+<td>Gold Shield</td>
+<td>Mature</td>
+<td>Long-term saver status</td>
+<td>12-month Smartlife streak</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Important:</strong> Non-monetary — badges, certificates, leaderboard status only</li>
+<li><strong>Visual:</strong> Three-tier shield graphic</li>
+</ul>
+<hr>
+<h2>Slide 8 — Feature Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Key Features</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Home</strong></td>
+<td>Shield balance, rank, Save Daily streak, action shortcuts</td>
+</tr>
+<tr>
+<td><strong>Learn</strong></td>
+<td>Financial Literacy modules, retirement journey, Smartlife Flexi education</td>
+</tr>
+<tr>
+<td><strong>Services</strong></td>
+<td>NSSF portal directory, deep links to NSSF Go, branch locator</td>
+</tr>
+<tr>
+<td><strong>Earn</strong></td>
+<td>Quizzes, weekly challenges, contribution verify, referrals</td>
+</tr>
+<tr>
+<td><strong>Saver Network</strong></td>
+<td>District leaderboards, referral champions, invite links</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 9 — LIVE DEMO</h2>
+<ul>
+<li><strong>Duration:</strong> 10 minutes</li>
+<li><strong>Flow:</strong><ol>
+<li>Open Telegram → NSSF SaveQuest Bot</li>
+<li>Onboarding quiz → earn White Shields</li>
+<li>Save Daily streak</li>
+<li>Financial Literacy module sample</li>
+<li>Services → Smartlife Flexi deep link</li>
+<li>Help widget → Sanyu handoff</li>
+</ol>
+</li>
+<li><strong>Note:</strong> Interactive prototype on staging environment</li>
+</ul>
+<hr>
+<h2>Slide 10 — Architecture (Conceptual)</h2>
+<pre><code>Members → Telegram / NSSF Go deep links
+         ↓
+    SaveQuest Engagement Layer
+         ↓
+    Admin Console (NSSF staff)
+         ↓
+    NSSF Core Systems (NSSF Go API, Sanyu, Smartlife)
+</code></pre>
+<ul>
+<li><strong>Principles:</strong> Complement not replace | Data minimisation | Sanyu first for account queries</li>
+<li><strong>Visual:</strong> Architecture diagram (from Prototype Paper)</li>
+</ul>
+<hr>
+<h2>Slide 11 — Integration with NSSF Ecosystem</h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NSSF Go</td>
+<td>Deep links for enrollment, payments, claims</td>
+</tr>
+<tr>
+<td>Sanyu</td>
+<td>Help widget escalates account queries</td>
+</tr>
+<tr>
+<td>Smartlife Flexi</td>
+<td>Enrollment &amp; habit activation</td>
+</tr>
+<tr>
+<td>Financial Literacy Programme</td>
+<td>Certificate sync</td>
+</tr>
+<tr>
+<td>USSD *254#</td>
+<td>Cross-promotion for low-connectivity users</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 12 — User Journey: Boda-Boda Rider</h2>
+<ol>
+<li>QR at boda stage → Telegram bot</li>
+<li>3-min onboarding quiz → 100 White Shields</li>
+<li>Prompt: <em>&quot;Start UGX 5,000/week with Smartlife Flexi&quot;</em></li>
+<li>Deep-link to NSSF Go → enroll</li>
+<li>Daily Save Daily streak → Day 7 Blue Shield badge</li>
+<li>Refer 2 colleagues → district leaderboard</li>
+</ol>
+<ul>
+<li><strong>Visual:</strong> Journey map (6 steps)</li>
+</ul>
+<hr>
+<h2>Slide 13 — User Journey: Formal Employee</h2>
+<ol>
+<li>HR sends SaveQuest link in payslip</li>
+<li>Services → e-statement via NSSF Go</li>
+<li>Financial Literacy module → certificate</li>
+<li>Upload payslip → Blue Shield (admin approval)</li>
+<li>Join Employer League → team quiz competition</li>
+</ol>
+<hr>
+<h2>Slide 14 — User Journey: NSSF Admin</h2>
+<ol>
+<li>Admin console → review Contribution Verify queue</li>
+<li>Approve → member gets Blue Shield + notification</li>
+<li>Publish weekly Save Challenge</li>
+<li>Analytics: Smartlife enrollments, quiz completion rates</li>
+</ol>
+<hr>
+<h2>Slide 15 — URA → NSSF Feature Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>URA (Source)</th>
+<th>NSSF (Adapted)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pearls</td>
+<td>Shield Points</td>
+</tr>
+<tr>
+<td>Karibu Daily</td>
+<td>Save Daily streak</td>
+</tr>
+<tr>
+<td>URA Quiz</td>
+<td>NSSF Knowledge Quiz</td>
+</tr>
+<tr>
+<td>Tax education</td>
+<td>Financial Literacy Hub</td>
+</tr>
+<tr>
+<td>URA Services</td>
+<td>NSSF Services Directory</td>
+</tr>
+<tr>
+<td>Receipt Rush</td>
+<td>Contribution Verify</td>
+</tr>
+<tr>
+<td>Guild</td>
+<td>Saver Network</td>
+</tr>
+<tr>
+<td>TON/Blockchain</td>
+<td><strong>Removed</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 16 — Pilot Programme</h2>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Focus</th>
+<th>Target Users</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central (Kampala)</td>
+<td>Formal sector, employers</td>
+<td>20,000</td>
+</tr>
+<tr>
+<td>Western (Mbarara)</td>
+<td>Agriculture, SMEs</td>
+<td>15,000</td>
+</tr>
+<tr>
+<td>Northern/Eastern</td>
+<td>Informal sector, Smartlife</td>
+<td>15,000</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>50,000</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Duration:</strong> 12 weeks post-build</li>
+<li><strong>Deliverable:</strong> Pilot evaluation report with go/no-go recommendation</li>
+</ul>
+<hr>
+<h2>Slide 17 — Pilot Success Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>90-Day Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Registered users</td>
+<td>50,000</td>
+</tr>
+<tr>
+<td>Daily active users</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>Smartlife enrollments</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>Literacy modules completed</td>
+<td>15,000</td>
+</tr>
+<tr>
+<td>Referral conversions</td>
+<td>2,000</td>
+</tr>
+<tr>
+<td>Cost per engaged member</td>
+<td>&lt; UGX 3,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 18 — Budget Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Scope</th>
+<th>Year 1 (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A — Prototype</td>
+<td>POC only</td>
+<td>280M</td>
+</tr>
+<tr>
+<td><strong>B — Pilot ★</strong></td>
+<td><strong>3-region pilot</strong></td>
+<td><strong>1.41B</strong></td>
+</tr>
+<tr>
+<td>C — Full Year 1</td>
+<td>National launch</td>
+<td>2.02B</td>
+</tr>
+<tr>
+<td>D — 3-Year</td>
+<td>Build + 3 yrs support</td>
+<td>2.66B</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Saving vs greenfield:</strong> 43–60% (UGX 1.5–3.0B)</li>
+</ul>
+<hr>
+<h2>Slide 19 — ROI Hypothesis (Conservative)</h2>
+<table>
+<thead>
+<tr>
+<th>Value Driver</th>
+<th>Annual Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Smartlife enrollments (20K/yr)</td>
+<td>UGX 1B+ new AUM</td>
+</tr>
+<tr>
+<td>Contact centre deflection</td>
+<td>UGX 250M saved</td>
+</tr>
+<tr>
+<td>Referral-based enrollment</td>
+<td>UGX 3B+ new AUM</td>
+</tr>
+<tr>
+<td>Benefit retention improvement</td>
+<td>UGX 5B+ societal value</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>3-year ROI:</strong> Platform cost ~UGX 2.7B vs. UGX 10B+ AUM mobilised → <strong>&gt;3.7× return</strong></li>
+</ul>
+<hr>
+<h2>Slide 20 — Implementation Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Duration</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Discovery</td>
+<td>6 weeks</td>
+<td>Requirements sign-off</td>
+</tr>
+<tr>
+<td>Prototype</td>
+<td>10 weeks</td>
+<td>EXCO demo</td>
+</tr>
+<tr>
+<td>Full build</td>
+<td>20 weeks</td>
+<td>Feature complete</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>12 weeks</td>
+<td>NSSF ICT sign-off</td>
+</tr>
+<tr>
+<td>Content</td>
+<td>16 weeks</td>
+<td>Curriculum ready</td>
+</tr>
+<tr>
+<td>Pilot</td>
+<td>12 weeks</td>
+<td>Evaluation report</td>
+</tr>
+<tr>
+<td>Launch</td>
+<td>8 weeks</td>
+<td>National go-live</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Total:</strong> ~18 months to national launch</li>
+</ul>
+<hr>
+<h2>Slide 21 — Risk Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Low adoption</td>
+<td>Pilot-first; branch QR; employer mandates</td>
+</tr>
+<tr>
+<td>Regulatory (gamification)</td>
+<td>Non-monetary points; legal review</td>
+</tr>
+<tr>
+<td>Integration delays</td>
+<td>Mock data in prototype; phased launch</td>
+</tr>
+<tr>
+<td>Confusion with NSSF Go</td>
+<td>Clear messaging: SaveQuest = learn; NSSF Go = manage</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 22 — Governance &amp; Operations</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Owner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Executive Sponsor</td>
+<td>DMD Marketing &amp; Communications</td>
+</tr>
+<tr>
+<td>Product Owner</td>
+<td>Head of Member Experience</td>
+</tr>
+<tr>
+<td>Technical Owner</td>
+<td>CTO (Benoni Katende)</td>
+</tr>
+<tr>
+<td>Content Owner</td>
+<td>Financial Literacy Programme Lead</td>
+</tr>
+<tr>
+<td>Support</td>
+<td>SaveQuest AI → Sanyu → Contact Centre → Branch</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Slide 23 — Recommendation</h2>
+<ol>
+<li><strong>Approve Option B</strong> — Pilot Programme (UGX 1.41B)</li>
+<li><strong>Appoint executive sponsor</strong> and ICT liaison</li>
+<li><strong>Proceed to Phase 0</strong> — Discovery workshops (6 weeks)</li>
+<li><strong>Schedule EXCO prototype demo</strong> — Week 9</li>
+</ol>
+<p><strong>Immediate next step:</strong> Sign Phase 0 + Phase 1 contract (UGX 280M for prototype)</p>
+<hr>
+<h2>Slide 24 — Thank You / Q&amp;A</h2>
+<ul>
+<li><strong>NSSF SaveQuest</strong> — Save For Your Dream</li>
+<li><strong>#WeBelieveInU</strong></li>
+<li>Contact: [Name] | [Email] | [Phone]</li>
+<li><strong>Appendix available:</strong> Full budget, business plan, prototype paper</li>
+</ul>
+<hr>
+<h2>Appendix Slides (Backup)</h2>
+<h3>A1 — Detailed Phase Budget Breakdown</h3>
+<h3>A2 — Payment Schedule &amp; Milestones</h3>
+<h3>A3 — Technology Stack &amp; Security</h3>
+<h3>A4 — Admin Console Capabilities (26 modules)</h3>
+<h3>A5 — Content Curriculum Outline (40+ modules)</h3>
+<h3>A6 — Competitive Landscape (NSSF Go vs Sanyu vs SaveQuest)</h3>
+<h3>A7 — Boda-Boda Sector Opportunity (1.2M riders, UGX 550B potential)</h3>
+<h3>A8 — Source Platform Inventory (433 files, 139 APIs)</h3>
+<h3>A9 — Team &amp; Resource Plan</h3>
+<h3>A10 — IP &amp; Ownership Terms</h3>
+<hr>
+<h2>Presenter Notes</h2>
+<ul>
+<li><strong>Slide 9 (Demo):</strong> Have backup screen recording if live demo fails</li>
+<li><strong>Slide 18 (Budget):</strong> Lead with Option B; mention Option A as lower-risk entry if EXCO hesitant</li>
+<li><strong>Slide 19 (ROI):</strong> Emphasise these are conservative; actual impact likely higher with informal sector scale</li>
+<li><strong>Timing:</strong> Keep demo to 10 min max; leave 15 min for Q&amp;A</li>
+</ul>
+<h2>Design Guidelines for Deck Production</h2>
+<ul>
+<li><strong>Primary colour:</strong> NSSF Navy (#0B3D2E or brand green from nssfug.org)</li>
+<li><strong>Accent:</strong> Gold (#C9A227) for highlights and CTAs</li>
+<li><strong>Typography:</strong> Clean sans-serif (Arial, Calibri, or NSSF brand font if available)</li>
+<li><strong>Imagery:</strong> Uganda workforce diversity, mobile phones, savings metaphors (shield, nest egg)</li>
+<li><strong>Logo placement:</strong> Top-right on all slides except title (centred)</li>
+</ul>
+</main>
+  <div class="confidential">CONFIDENTIAL — For NSSF Internal Review Only. Not for public distribution without written approval.</div>
+  <div class="footer-note">NSSF SaveQuest Proposal · Generated 2026-06-18 · URAPearls Platform Adaptation</div>
+  <p class="no-print" style="margin-top:24pt;padding:12pt;background:#e8f5ee;border-radius:6px;font-size:10pt;">
+    <strong>Export tip:</strong> Open in Chrome/Edge → File → Print → Save as PDF. Or open this file in Microsoft Word → Save As → .docx
+  </p>
+</body>
+</html>

@@ -16,7 +16,8 @@
     "migrate:regions": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/migrate-regions.ts",
     "migrate:matrix-cards": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/migrate-matrix-cards.ts",
     "migrate:matrix-labels": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/update-matrix-labels.ts",
-    "fix:team-join-duplicates": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/fix-team-join-request-duplicates.ts"
+    "fix:team-join-duplicates": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/fix-team-join-request-duplicates.ts",
+    "export:nssf-proposal": "node scripts/export-nssf-proposal.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -52,6 +53,8 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "docx": "^9.5.0",
+    "marked": "^15.0.6",
     "postcss": "^8",
     "ts-node": "^10.9.2",
     "typescript": "^5"

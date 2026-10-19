@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Part A — Project Budget — NSSF SaveQuest</title>
+  <style>
+  :root {
+    --nssf-green: #0B5D3B;
+    --nssf-green-dark: #084A2F;
+    --nssf-gold: #C9A227;
+    --nssf-navy: #1A2744;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #d0d7de;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--text);
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20mm 18mm;
+    background: #fff;
+  }
+  .cover {
+    text-align: center;
+    padding: 40mm 10mm 30mm;
+    border-bottom: 4px solid var(--nssf-gold);
+    margin-bottom: 24pt;
+    page-break-after: always;
+  }
+  .cover .org { font-size: 14pt; color: var(--nssf-green); font-weight: 700; letter-spacing: 0.05em; }
+  .cover h1 { font-size: 26pt; color: var(--nssf-navy); margin: 16pt 0 8pt; line-height: 1.2; }
+  .cover .subtitle { font-size: 13pt; color: var(--muted); margin-bottom: 24pt; }
+  .cover .meta { font-size: 10pt; color: var(--muted); }
+  .cover .tagline { font-size: 12pt; color: var(--nssf-gold); font-weight: 600; margin-top: 20pt; }
+  .header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid var(--nssf-green);
+    padding-bottom: 8pt; margin-bottom: 20pt;
+    font-size: 9pt; color: var(--muted);
+  }
+  .header-bar strong { color: var(--nssf-green); }
+  h1 { font-size: 20pt; color: var(--nssf-navy); border-bottom: 2px solid var(--nssf-gold); padding-bottom: 6pt; margin-top: 24pt; }
+  h2 { font-size: 14pt; color: var(--nssf-green); margin-top: 20pt; }
+  h3 { font-size: 12pt; color: var(--nssf-navy); margin-top: 16pt; }
+  h4 { font-size: 11pt; color: var(--nssf-green-dark); }
+  p { margin: 8pt 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12pt 0; font-size: 10pt; }
+  th { background: var(--nssf-green); color: #fff; padding: 8pt 10pt; text-align: left; font-weight: 600; }
+  td { border: 1px solid var(--border); padding: 7pt 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f9f7; }
+  code, pre { background: #f0f4f2; border-radius: 4px; font-size: 9pt; }
+  pre { padding: 12pt; overflow-x: auto; white-space: pre-wrap; border-left: 4px solid var(--nssf-gold); }
+  blockquote { border-left: 4px solid var(--nssf-gold); margin: 12pt 0; padding: 8pt 16pt; background: #faf8f0; color: var(--muted); }
+  ul, ol { margin: 8pt 0; padding-left: 20pt; }
+  li { margin: 4pt 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20pt 0; }
+  a { color: var(--nssf-green); }
+  .confidential {
+    background: #fff3cd; border: 1px solid var(--nssf-gold); padding: 8pt 12pt;
+    font-size: 9pt; text-align: center; margin-top: 24pt; border-radius: 4px;
+  }
+  .footer-note { font-size: 8pt; color: var(--muted); text-align: center; margin-top: 30pt; border-top: 1px solid var(--border); padding-top: 10pt; }
+  @media print {
+    body { padding: 15mm 15mm; }
+    .no-print { display: none; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; }
+  }
+  @page { margin: 15mm; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="org">NATIONAL SOCIAL SECURITY FUND · UGANDA</div>
+    <h1>NSSF SaveQuest</h1>
+    <div class="subtitle">Part A — Project Budget</div>
+    <div class="tagline">#WeBelieveInU · Save For Your Dream</div>
+    <div class="meta">Prepared for NSSF Uganda · www.nssfug.org<br/>June 2026 · Confidential</div>
+  </div>
+  <div class="header-bar">
+    <span><strong>NSSF SaveQuest</strong> · Part A — Project Budget</span>
+    <span>Confidential · June 2026</span>
+  </div>
+  <main><h1>NSSF SaveQuest — Part A: Project Budget</h1>
+<p><strong>Prepared for:</strong> National Social Security Fund (NSSF) Uganda — <a href="https://www.nssfug.org">www.nssfug.org</a><br><strong>Prepared by:</strong> [Your Organisation Name]<br><strong>Date:</strong> June 2026<br><strong>Classification:</strong> Confidential — For NSSF Internal Review</p>
+<hr>
+<h2>A.1 Executive Budget Summary</h2>
+<p>This budget covers adaptation of a <strong>proven Telegram Mini App engagement platform</strong> (currently deployed as URAPearls for Uganda Revenue Authority) into <strong>NSSF SaveQuest</strong> — a gamified member engagement, financial literacy, and voluntary savings activation platform aligned with <strong>Vision 2035 (50:50:95)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Duration</th>
+<th>Budget (UGX)</th>
+<th>Budget (USD)*</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Phase 0</strong> — Discovery &amp; Co-design</td>
+<td>6 weeks</td>
+<td>85,000,000</td>
+<td>23,000</td>
+</tr>
+<tr>
+<td><strong>Phase 1</strong> — Interactive Prototype (POC)</td>
+<td>10 weeks</td>
+<td>195,000,000</td>
+<td>53,000</td>
+</tr>
+<tr>
+<td><strong>Phase 2</strong> — Full Platform Adaptation</td>
+<td>20 weeks</td>
+<td>520,000,000</td>
+<td>140,000</td>
+</tr>
+<tr>
+<td><strong>Phase 3</strong> — NSSF Systems Integration</td>
+<td>12 weeks</td>
+<td>280,000,000</td>
+<td>76,000</td>
+</tr>
+<tr>
+<td><strong>Phase 4</strong> — Content &amp; Financial Literacy Curriculum</td>
+<td>16 weeks</td>
+<td>185,000,000</td>
+<td>50,000</td>
+</tr>
+<tr>
+<td><strong>Phase 5</strong> — Pilot (3 regions)</td>
+<td>12 weeks</td>
+<td>145,000,000</td>
+<td>39,000</td>
+</tr>
+<tr>
+<td><strong>Phase 6</strong> — National Rollout &amp; Change Management</td>
+<td>8 weeks</td>
+<td>165,000,000</td>
+<td>45,000</td>
+</tr>
+<tr>
+<td><strong>Year 1 Operations &amp; Support</strong></td>
+<td>12 months</td>
+<td>220,000,000</td>
+<td>59,000</td>
+</tr>
+<tr>
+<td><strong>Contingency (12%)</strong></td>
+<td>—</td>
+<td>223,200,000</td>
+<td>60,000</td>
+</tr>
+<tr>
+<td><strong>TOTAL — Year 1 Programme</strong></td>
+<td><strong>~18 months</strong></td>
+<td><strong>2,018,200,000</strong></td>
+<td><strong>~545,000</strong></td>
+</tr>
+<tr>
+<td><strong>Year 2–3 Annual Support &amp; Enhancement</strong></td>
+<td>per year</td>
+<td>320,000,000 / yr</td>
+<td>86,000 / yr</td>
+</tr>
+</tbody></table>
+<p><em>*USD at ~UGX 3,700. Exchange rate to be fixed at contract signing.</em></p>
+<h3>Recommended Presentation Options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Scope</th>
+<th>Year 1 Total (UGX)</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Option A — Prototype Only</strong></td>
+<td>Phases 0 + 1</td>
+<td><strong>280,000,000</strong></td>
+<td>Board approval, proof of concept</td>
+</tr>
+<tr>
+<td><strong>Option B — Pilot Programme</strong></td>
+<td>Phases 0–5</td>
+<td><strong>1,410,000,000</strong></td>
+<td>Measured rollout before national scale</td>
+</tr>
+<tr>
+<td><strong>Option C — Full Year 1 Programme</strong></td>
+<td>Phases 0–6 + Year 1 ops</td>
+<td><strong>2,018,200,000</strong></td>
+<td>Complete launch aligned to Vision 2035</td>
+</tr>
+<tr>
+<td><strong>Option D — 3-Year Partnership</strong></td>
+<td>Full build + 3 yrs support</td>
+<td><strong>2,658,200,000</strong></td>
+<td>Long-term strategic partnership</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.2 Phase 0 — Discovery &amp; Co-design (6 weeks) — UGX 85,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Qty</th>
+<th>Unit Cost (UGX)</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Project kick-off &amp; stakeholder workshops</td>
+<td>4 sessions</td>
+<td>4,000,000</td>
+<td>16,000,000</td>
+</tr>
+<tr>
+<td>Vision 2035 alignment &amp; requirements document</td>
+<td>1</td>
+<td>12,000,000</td>
+<td>12,000,000</td>
+</tr>
+<tr>
+<td>Member/employer journey mapping</td>
+<td>1</td>
+<td>10,000,000</td>
+<td>10,000,000</td>
+</tr>
+<tr>
+<td>Regulatory &amp; data privacy review</td>
+<td>1</td>
+<td>8,000,000</td>
+<td>8,000,000</td>
+</tr>
+<tr>
+<td>Technical architecture &amp; integration assessment</td>
+<td>1</td>
+<td>15,000,000</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Brand &amp; naming workshop</td>
+<td>1</td>
+<td>6,000,000</td>
+<td>6,000,000</td>
+</tr>
+<tr>
+<td>Project management (6 weeks)</td>
+<td>1</td>
+<td>18,000,000</td>
+<td>18,000,000</td>
+</tr>
+</tbody></table>
+<p><strong>Deliverables:</strong> Signed-off requirements, governance model, risk register, phase gate criteria.</p>
+<hr>
+<h2>A.3 Phase 1 — Interactive Prototype (10 weeks) — UGX 195,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UI/UX rebrand (NSSF colours, #WeBelieveInU, Shield iconography)</td>
+<td>28,000,000</td>
+</tr>
+<tr>
+<td>Telegram Mini App shell (Home, Learn, Services, Earn, Guild)</td>
+<td>45,000,000</td>
+</tr>
+<tr>
+<td>Demo gamification loop (tap-to-learn, daily login streak, quiz)</td>
+<td>35,000,000</td>
+</tr>
+<tr>
+<td>Sample financial literacy modules (5 topics)</td>
+<td>18,000,000</td>
+</tr>
+<tr>
+<td>Services directory (20 NSSF links)</td>
+<td>12,000,000</td>
+</tr>
+<tr>
+<td>Admin demo dashboard</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Support chat widget (Sanyu handoff design)</td>
+<td>8,000,000</td>
+</tr>
+<tr>
+<td>QA &amp; stakeholder demo sessions (3 rounds)</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Project management &amp; documentation</td>
+<td>19,000,000</td>
+</tr>
+</tbody></table>
+<p><strong>Deliverables:</strong> Clickable prototype on Telegram, prototype paper, executive demo for Board/EXCO.</p>
+<hr>
+<h2>A.4 Phase 2 — Full Platform Adaptation (20 weeks) — UGX 520,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Complete rebrand &amp; asset production</td>
+<td>45,000,000</td>
+</tr>
+<tr>
+<td>Home &amp; Action Center</td>
+<td>55,000,000</td>
+</tr>
+<tr>
+<td>Learn module — full NSSF curriculum</td>
+<td>65,000,000</td>
+</tr>
+<tr>
+<td>Services hub — full NSSF portal catalog</td>
+<td>40,000,000</td>
+</tr>
+<tr>
+<td>Earn activities — quizzes, contribution verify</td>
+<td>70,000,000</td>
+</tr>
+<tr>
+<td>Guild / Saver Network — referral &amp; leaderboards</td>
+<td>35,000,000</td>
+</tr>
+<tr>
+<td>Wallet &amp; rewards economy (Shield Points)</td>
+<td>55,000,000</td>
+</tr>
+<tr>
+<td>Admin operations console (26 modules)</td>
+<td>85,000,000</td>
+</tr>
+<tr>
+<td>Remove/replace URA-specific features</td>
+<td>25,000,000</td>
+</tr>
+<tr>
+<td>Security hardening, penetration testing</td>
+<td>30,000,000</td>
+</tr>
+<tr>
+<td>QA, UAT with NSSF staff</td>
+<td>15,000,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.5 Phase 3 — NSSF Systems Integration (12 weeks) — UGX 280,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NSSF Go API integration</td>
+<td>95,000,000</td>
+</tr>
+<tr>
+<td>Sanyu chatbot escalation handoff</td>
+<td>25,000,000</td>
+</tr>
+<tr>
+<td>Smartlife Flexi enrollment deep-link</td>
+<td>45,000,000</td>
+</tr>
+<tr>
+<td>Mobile Money payment initiation</td>
+<td>55,000,000</td>
+</tr>
+<tr>
+<td>USSD *254# cross-promotion hooks</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Single Sign-On / member verification</td>
+<td>35,000,000</td>
+</tr>
+<tr>
+<td>Integration testing &amp; NSSF ICT sign-off</td>
+<td>15,000,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.6 Phase 4 — Content &amp; Financial Literacy (16 weeks) — UGX 185,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Curriculum design</td>
+<td>35,000,000</td>
+</tr>
+<tr>
+<td>40+ Learn modules</td>
+<td>55,000,000</td>
+</tr>
+<tr>
+<td>200+ quiz questions</td>
+<td>25,000,000</td>
+</tr>
+<tr>
+<td>Video/audio integration (NSSF media)</td>
+<td>20,000,000</td>
+</tr>
+<tr>
+<td>Informal sector content</td>
+<td>20,000,000</td>
+</tr>
+<tr>
+<td>Luganda + English localisation</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Certificate integration</td>
+<td>15,000,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.7 Phase 5 — Pilot Programme (12 weeks) — UGX 145,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Focus</th>
+<th>Budget (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central (Kampala)</td>
+<td>Formal sector, employers</td>
+<td>50,000,000</td>
+</tr>
+<tr>
+<td>Western (Mbarara)</td>
+<td>Agriculture &amp; SMEs</td>
+<td>45,000,000</td>
+</tr>
+<tr>
+<td>Northern/Eastern</td>
+<td>Informal sector, Smartlife</td>
+<td>50,000,000</td>
+</tr>
+</tbody></table>
+<p>Includes: field activations, trainer-of-trainers, 50,000 target users, analytics, evaluation report.</p>
+<hr>
+<h2>A.8 Phase 6 — National Rollout — UGX 165,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Total (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>National launch campaign</td>
+<td>55,000,000</td>
+</tr>
+<tr>
+<td>Employer onboarding toolkit</td>
+<td>25,000,000</td>
+</tr>
+<tr>
+<td>Branch staff training</td>
+<td>30,000,000</td>
+</tr>
+<tr>
+<td>Telegram bot launch, social cross-promotion</td>
+<td>20,000,000</td>
+</tr>
+<tr>
+<td>Press, media, Savings Digest</td>
+<td>15,000,000</td>
+</tr>
+<tr>
+<td>Helpdesk &amp; Sanyu knowledge base update</td>
+<td>20,000,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.9 Year 1 Operations &amp; Support — UGX 220,000,000</h2>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Annual (UGX)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloud hosting</td>
+<td>24,000,000</td>
+</tr>
+<tr>
+<td>Telegram Bot API &amp; messaging</td>
+<td>8,000,000</td>
+</tr>
+<tr>
+<td>OpenAI / AI support assistant</td>
+<td>12,000,000</td>
+</tr>
+<tr>
+<td>24/7 monitoring &amp; incident response</td>
+<td>36,000,000</td>
+</tr>
+<tr>
+<td>Content updates (monthly)</td>
+<td>48,000,000</td>
+</tr>
+<tr>
+<td>Bug fixes &amp; minor enhancements</td>
+<td>42,000,000</td>
+</tr>
+<tr>
+<td>Analytics &amp; quarterly EXCO reporting</td>
+<td>24,000,000</td>
+</tr>
+<tr>
+<td>Dedicated support engineer (0.5 FTE)</td>
+<td>26,000,000</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.10 Payment Schedule (Option C — Full Year 1)</h2>
+<table>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>%</th>
+<th>Amount (UGX)</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Contract signing</td>
+<td>20%</td>
+<td>403,640,000</td>
+<td>Signed agreement</td>
+</tr>
+<tr>
+<td>Prototype approval</td>
+<td>15%</td>
+<td>302,730,000</td>
+<td>EXCO demo sign-off</td>
+</tr>
+<tr>
+<td>Integration complete</td>
+<td>20%</td>
+<td>403,640,000</td>
+<td>NSSF ICT acceptance</td>
+</tr>
+<tr>
+<td>Pilot launch</td>
+<td>15%</td>
+<td>302,730,000</td>
+<td>3-region go-live</td>
+</tr>
+<tr>
+<td>National launch</td>
+<td>20%</td>
+<td>403,640,000</td>
+<td>Public launch</td>
+</tr>
+<tr>
+<td>90-day post-launch review</td>
+<td>10%</td>
+<td>201,820,000</td>
+<td>KPI report accepted</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.11 Cost Advantage vs. Greenfield</h2>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Est. Year 1 Cost (UGX)</th>
+<th>Timeline</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Greenfield build</td>
+<td>3.5B – 5.0B</td>
+<td>24–30 months</td>
+</tr>
+<tr>
+<td><strong>Adaptation (this proposal)</strong></td>
+<td><strong>2.0B</strong></td>
+<td><strong>18 months</strong></td>
+</tr>
+<tr>
+<td><strong>Estimated saving</strong></td>
+<td><strong>1.5B – 3.0B (43–60%)</strong></td>
+<td><strong>6–12 months faster</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A.12 Exclusions</h2>
+<ul>
+<li>NSSF internal staff time</li>
+<li>Third-party API licensing fees charged directly by vendors</li>
+<li>Physical event venues beyond launch campaign scope</li>
+<li>Legal registration of new trademarks (NSSF to own all IP)</li>
+<li>Hardware devices for members</li>
+</ul>
+<hr>
+<p><em>See also: <code>export/csv/</code> for spreadsheet versions of this budget.</em></p>
+</main>
+  <div class="confidential">CONFIDENTIAL — For NSSF Internal Review Only. Not for public distribution without written approval.</div>
+  <div class="footer-note">NSSF SaveQuest Proposal · Generated 2026-06-18 · URAPearls Platform Adaptation</div>
+  <p class="no-print" style="margin-top:24pt;padding:12pt;background:#e8f5ee;border-radius:6px;font-size:10pt;">
+    <strong>Export tip:</strong> Open in Chrome/Edge → File → Print → Save as PDF. Or open this file in Microsoft Word → Save As → .docx
+  </p>
+</body>
+</html>
