@@ -18,7 +18,12 @@ import {
   resolvePaymentActivityUserKey,
   type StoredPaymentActivity,
 } from '@/utils/payment-activity-storage';
-import { downloadReceiptFile, printReceiptDocument } from '@/utils/simulated-receipt';
+import {
+  downloadReceiptFile,
+  printReceiptDocument,
+  shareReceiptFile,
+} from '@/utils/simulated-receipt';
+import ReceiptQrScanModal from '@/components/quick-access/ReceiptQrScanModal';
 
 interface SettingsProps {
   setCurrentView: (view: string) => void;
@@ -124,6 +129,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   const [paymentActivities, setPaymentActivities] = useState<StoredPaymentActivity[]>([]);
   const [paymentFilter, setPaymentFilter] = useState<'ALL' | 'prn-slip' | 'payment'>('ALL');
   const [paymentActionBusy, setPaymentActionBusy] = useState<string | null>(null);
+  const [paymentScanOpen, setPaymentScanOpen] = useState(false);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
   const [deleteConfirmInput, setDeleteConfirmInput] = useState('');
   const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
@@ -513,7 +519,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 items-center">
                     {(
                       [
                         { id: 'ALL' as const, label: 'All' },
@@ -537,6 +543,16 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                         {f.label}
                       </button>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        triggerHapticFeedback(window);
+                        setPaymentScanOpen(true);
+                      }}
+                      className="ml-auto px-2.5 py-1 rounded-full text-[10px] font-bold border border-[#8bb4ef]/50 bg-[#123f78]/50 text-[#b8d4ff]"
+                    >
+                      Scan QR
+                    </button>
                   </div>
 
                   {filteredPayments.length === 0 ? (
@@ -575,7 +591,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                               {item.kind === 'payment' ? 'paid' : 'prn'}
                             </span>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="grid grid-cols-3 gap-1.5">
                             <button
                               type="button"
                               disabled={paymentActionBusy === item.id}
@@ -606,9 +622,41 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                   }
                                 })();
                               }}
-                              className="flex-1 rounded-lg border border-[#8bb4ef]/40 py-1.5 text-[10px] font-bold text-[#b8d4ff] disabled:opacity-50"
+                              className="rounded-lg border border-[#8bb4ef]/40 py-1.5 text-[10px] font-bold text-[#b8d4ff] disabled:opacity-50"
                             >
-                              Download PDF
+                              PDF
+                            </button>
+                            <button
+                              type="button"
+                              disabled={paymentActionBusy === item.id}
+                              onClick={() => {
+                                void (async () => {
+                                  setPaymentActionBusy(item.id);
+                                  triggerHapticFeedback(window);
+                                  try {
+                                    const result = await shareReceiptFile({
+                                      kind: item.kind,
+                                      title: item.title,
+                                      subtitle: item.subtitle,
+                                      fields: item.fields,
+                                      refCode: item.refCode,
+                                      issuedAt: item.issuedAt,
+                                    });
+                                    if (result === 'shared' || result === 'telegram') {
+                                      showToast('Share opened', 'success');
+                                    } else if (result === 'copied') {
+                                      showToast('Copied to clipboard', 'success');
+                                    } else {
+                                      showToast('Share failed', 'error');
+                                    }
+                                  } finally {
+                                    setPaymentActionBusy(null);
+                                  }
+                                })();
+                              }}
+                              className="rounded-lg border border-[#f3ba2f]/45 py-1.5 text-[10px] font-bold text-[#f3ba2f] disabled:opacity-50"
+                            >
+                              Share
                             </button>
                             <button
                               type="button"
@@ -637,7 +685,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                   }
                                 })();
                               }}
-                              className="flex-1 rounded-lg border border-[#f3ba2f]/40 py-1.5 text-[10px] font-bold text-[#f3ba2f] disabled:opacity-50"
+                              className="rounded-lg border border-white/20 py-1.5 text-[10px] font-bold text-slate-200 disabled:opacity-50"
                             >
                               Print
                             </button>
@@ -646,6 +694,21 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                       ))}
                     </ul>
                   )}
+                  {paymentScanOpen ? (
+                    <ReceiptQrScanModal
+                      onClose={() => setPaymentScanOpen(false)}
+                      onScanned={(payload) => {
+                        setPaymentScanOpen(false);
+                        const match = paymentActivities.find((x) => x.refCode === payload.ref);
+                        if (match) {
+                          showToast(`Found receipt ${payload.ref}`, 'success');
+                          setPaymentFilter(match.kind);
+                        } else {
+                          showToast(`Scanned ${payload.ref}${payload.title ? ` · ${payload.title}` : ''}`, 'success');
+                        }
+                      }}
+                    />
+                  ) : null}
                 </div>
               )}
               <AccordionRow id="receipts" title="My receipts" />

@@ -8,12 +8,15 @@ import {
   downloadReceiptFile,
   normalizeIssuedAt,
   printReceiptDocument,
+  shareReceiptFile,
   type SimulatedReceiptData,
 } from '@/utils/simulated-receipt';
 import {
   resolvePaymentActivityUserKey,
   savePaymentActivity,
 } from '@/utils/payment-activity-storage';
+import { buildReceiptQrDataUrl, type ReceiptQrPayload } from '@/utils/receipt-qr';
+import ReceiptQrScanModal from '@/components/quick-access/ReceiptQrScanModal';
 
 export type { SimulatedReceiptData, ReceiptField } from '@/utils/simulated-receipt';
 
@@ -29,7 +32,10 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
   const { userTelegramInitData } = useGameStore();
   const issuedAt = normalizeIssuedAt(data.issuedAt);
   const savedRef = useRef(false);
-  const [busy, setBusy] = useState<'download' | 'print' | null>(null);
+  const [busy, setBusy] = useState<'download' | 'print' | 'share' | null>(null);
+  const [qrUrl, setQrUrl] = useState<string | null>(null);
+  const [scanOpen, setScanOpen] = useState(false);
+  const [scanned, setScanned] = useState<ReceiptQrPayload | null>(null);
 
   useEffect(() => {
     if (!persist || savedRef.current) return;
@@ -44,6 +50,20 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
       issuedAt: issuedAt.toISOString(),
     });
   }, [persist, data, issuedAt, userTelegramInitData]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void buildReceiptQrDataUrl(data, issuedAt, 200)
+      .then((url) => {
+        if (!cancelled) setQrUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setQrUrl(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [data, issuedAt]);
 
   const download = async () => {
     if (busy) return;
@@ -81,6 +101,23 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
     }
   };
 
+  const share = async () => {
+    if (busy) return;
+    setBusy('share');
+    triggerHapticFeedback(window);
+    try {
+      const result = await shareReceiptFile(data, issuedAt);
+      if (result === 'shared') showToast('Share sheet opened', 'success');
+      else if (result === 'telegram') showToast('Opened Telegram share', 'success');
+      else if (result === 'copied') showToast('Receipt text copied — paste to share', 'success');
+      else showToast('Could not share. Try Download PDF.', 'error');
+    } catch {
+      showToast('Could not share. Try Download PDF.', 'error');
+    } finally {
+      setBusy(null);
+    }
+  };
+
   return (
     <div className="space-y-3">
       <div className="rounded-xl border border-emerald-400/40 bg-emerald-50 px-3 py-3 text-center">
@@ -109,6 +146,23 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
             <p className="text-[10px] text-[#5a7bb0] uppercase tracking-wide">Reference</p>
             <p className="text-sm font-mono font-bold text-[#123f78]">{data.refCode}</p>
           </div>
+
+          <div className="flex flex-col items-center gap-1.5 pt-1">
+            {qrUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={qrUrl}
+                alt={`QR for receipt ${data.refCode}`}
+                width={140}
+                height={140}
+                className="rounded-lg border border-[#8bb4ef]/40 bg-white p-1"
+              />
+            ) : (
+              <div className="h-[140px] w-[140px] rounded-lg border border-dashed border-[#8bb4ef]/40 bg-[#f4f8ff] animate-pulse" />
+            )}
+            <p className="text-[10px] text-[#5a7bb0] text-center">Scan this QR to verify the receipt</p>
+          </div>
+
           <p className="text-[10px] text-center text-[#5a7bb0]">
             Issued {issuedAt.toLocaleString('en-UG')} · Not an official URA document
           </p>
@@ -132,9 +186,42 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
         >
           {busy === 'print' ? 'Printing…' : 'Print'}
         </button>
+        <button
+          type="button"
+          disabled={busy !== null}
+          onClick={() => void share()}
+          className="rounded-xl border border-[#f3ba2f]/55 bg-[#f3ba2f]/15 py-2.5 text-sm font-bold text-[#123f78] disabled:opacity-50"
+        >
+          {busy === 'share' ? 'Sharing…' : 'Share'}
+        </button>
+        <button
+          type="button"
+          disabled={busy !== null}
+          onClick={() => {
+            triggerHapticFeedback(window);
+            setScanOpen(true);
+          }}
+          className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78] disabled:opacity-50"
+        >
+          Scan QR
+        </button>
       </div>
+
+      {scanned ? (
+        <div className="rounded-xl border border-emerald-400/40 bg-emerald-50 px-3 py-2.5 space-y-1">
+          <p className="text-[11px] font-bold text-[#123f78]">Scanned receipt</p>
+          <p className="text-xs font-mono text-[#123f78]">{scanned.ref}</p>
+          <p className="text-[10px] text-[#335f97]">{scanned.title}</p>
+          {scanned.fields.slice(0, 4).map((f) => (
+            <p key={f.l} className="text-[10px] text-[#5a7bb0]">
+              {f.l}: <span className="font-semibold text-[#123f78]">{f.v}</span>
+            </p>
+          ))}
+        </div>
+      ) : null}
+
       <p className="text-[10px] text-center text-[#5a7bb0]">
-        Downloads as PDF. Also saved under Profile → Downloads.
+        PDF includes the QR. Also saved under Profile → Downloads.
       </p>
       <button
         type="button"
@@ -146,6 +233,17 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
       >
         Done
       </button>
+
+      {scanOpen ? (
+        <ReceiptQrScanModal
+          onClose={() => setScanOpen(false)}
+          onScanned={(payload) => {
+            setScanned(payload);
+            setScanOpen(false);
+            showToast(`Scanned ${payload.ref}`, 'success');
+          }}
+        />
+      ) : null}
     </div>
   );
 }

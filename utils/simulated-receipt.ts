@@ -81,7 +81,11 @@ export function buildReceiptHtml(data: SimulatedReceiptData, issuedAt?: Date) {
 }
 
 /** Markup suitable for same-document @media print (no full HTML document). */
-export function buildReceiptPrintMarkup(data: SimulatedReceiptData, issuedAt?: Date) {
+export function buildReceiptPrintMarkup(
+  data: SimulatedReceiptData,
+  issuedAt?: Date,
+  qrDataUrl?: string | null
+) {
   const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
   const rows = data.fields
     .map(
@@ -89,6 +93,9 @@ export function buildReceiptPrintMarkup(data: SimulatedReceiptData, issuedAt?: D
         `<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #e5eefc;font-size:12px"><span style="color:#5a7bb0">${escapeHtml(f.label)}</span><span style="color:#123f78;font-weight:700;text-align:right">${escapeHtml(f.value)}</span></div>`
     )
     .join('');
+  const qrBlock = qrDataUrl
+    ? `<div style="margin-top:14px;text-align:center"><img src="${qrDataUrl}" alt="Receipt QR" width="120" height="120" style="display:inline-block;border:1px solid #8bb4ef;border-radius:8px;padding:4px;background:#fff"/><div style="margin-top:6px;font-size:10px;color:#5a7bb0">Scan QR to verify</div></div>`
+    : '';
   return `
     <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#123f78;max-width:480px;margin:0 auto;border:1px solid #8bb4ef;border-top:4px solid #f3ba2f;overflow:hidden">
       <div style="background:#123f78;color:#fff;padding:16px 18px">
@@ -99,6 +106,7 @@ export function buildReceiptPrintMarkup(data: SimulatedReceiptData, issuedAt?: D
         <div style="font-size:13px;font-weight:700;margin-bottom:10px">${escapeHtml(data.subtitle)}</div>
         ${rows}
         <div style="margin-top:14px;padding:10px;background:#f4f8ff;border-radius:8px;text-align:center;font-family:ui-monospace,monospace;font-size:12px;font-weight:700">Ref ${escapeHtml(data.refCode)}</div>
+        ${qrBlock}
         <div style="margin-top:12px;font-size:10px;color:#5a7bb0;text-align:center">Issued ${escapeHtml(formatReceiptIssuedAt(when))} · Simulation — not an official URA document</div>
       </div>
     </div>
@@ -129,12 +137,13 @@ function isLikelyTelegramWebView(): boolean {
   return /Telegram/i.test(navigator.userAgent || '');
 }
 
-/** Build a real PDF blob with jsPDF. */
+/** Build a real PDF blob with jsPDF (includes QR). */
 export async function buildReceiptPdfBlob(
   data: SimulatedReceiptData,
   issuedAt?: Date
 ): Promise<Blob> {
   const { jsPDF } = await import('jspdf');
+  const { buildReceiptQrDataUrl } = await import('@/utils/receipt-qr');
   const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
@@ -199,6 +208,24 @@ export async function buildReceiptPdfBlob(
   doc.setTextColor(18, 63, 120);
   doc.text(data.refCode, pageW / 2, y + 30, { align: 'center' });
   y += 56;
+
+  try {
+    const qrDataUrl = await buildReceiptQrDataUrl(data, when, 160);
+    const qrSize = 96;
+    if (y + qrSize + 40 > 780) {
+      doc.addPage();
+      y = 48;
+    }
+    doc.addImage(qrDataUrl, 'PNG', (pageW - qrSize) / 2, y, qrSize, qrSize);
+    y += qrSize + 14;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(90, 123, 176);
+    doc.text('Scan QR to verify this simulated receipt', pageW / 2, y, { align: 'center' });
+    y += 16;
+  } catch {
+    /* QR optional */
+  }
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
@@ -273,6 +300,14 @@ export async function printReceiptDocument(
     return 'saved-pdf';
   }
 
+  let qrDataUrl: string | null = null;
+  try {
+    const { buildReceiptQrDataUrl } = await import('@/utils/receipt-qr');
+    qrDataUrl = await buildReceiptQrDataUrl(data, issuedAt, 160);
+  } catch {
+    qrDataUrl = null;
+  }
+
   return new Promise((resolve) => {
     try {
       ensurePrintStyles();
@@ -281,7 +316,7 @@ export async function printReceiptDocument(
       const root = document.createElement('div');
       root.id = PRINT_ROOT_ID;
       root.setAttribute('aria-hidden', 'true');
-      root.innerHTML = buildReceiptPrintMarkup(data, issuedAt);
+      root.innerHTML = buildReceiptPrintMarkup(data, issuedAt, qrDataUrl);
       document.body.appendChild(root);
       document.body.classList.add('ura-printing-receipt');
 
@@ -396,6 +431,73 @@ export async function downloadReceiptFile(
     if (opened) {
       setTimeout(() => URL.revokeObjectURL(url), 60_000);
       return 'opened';
+    }
+  } catch {
+    /* continue */
+  }
+
+  return 'failed';
+}
+
+export type ShareReceiptResult = 'shared' | 'copied' | 'telegram' | 'failed';
+
+/** Explicit Share action — PDF file when possible, else text / Telegram share URL. */
+export async function shareReceiptFile(
+  data: SimulatedReceiptData,
+  issuedAt?: Date
+): Promise<ShareReceiptResult> {
+  if (typeof window === 'undefined') return 'failed';
+  const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
+  const { buildReceiptShareText } = await import('@/utils/receipt-qr');
+  const text = buildReceiptShareText(data, when);
+  const fileName = `${receiptFileBaseName(data)}.pdf`;
+  const nav = navigator as Navigator & {
+    canShare?: (d: ShareData) => boolean;
+    share?: (d: ShareData) => Promise<void>;
+  };
+
+  try {
+    const pdfBlob = await buildReceiptPdfBlob(data, when);
+    const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+    if (nav.share && (!nav.canShare || nav.canShare({ files: [pdfFile] }))) {
+      await nav.share({ files: [pdfFile], title: data.title, text });
+      return 'shared';
+    }
+  } catch (err) {
+    if (err && typeof err === 'object' && 'name' in err && (err as { name: string }).name === 'AbortError') {
+      return 'failed';
+    }
+  }
+
+  try {
+    if (nav.share) {
+      await nav.share({ title: data.title, text });
+      return 'shared';
+    }
+  } catch (err) {
+    if (err && typeof err === 'object' && 'name' in err && (err as { name: string }).name === 'AbortError') {
+      return 'failed';
+    }
+  }
+
+  // Telegram share URL (text)
+  try {
+    const tg = getTelegramWebApp();
+    const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(data.refCode)}&text=${encodeURIComponent(text)}`;
+    if (tg?.openLink) {
+      tg.openLink(shareUrl, { try_instant_view: false });
+      return 'telegram';
+    }
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    return 'telegram';
+  } catch {
+    /* continue */
+  }
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return 'copied';
     }
   } catch {
     /* continue */
