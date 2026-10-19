@@ -40,6 +40,7 @@
     "next": "14.2.5",
     "prisma": "5.22.0",
     "qrcode": "^1.5.4",
+    "@types/qrcode": "^1.5.5",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
@@ -53,7 +54,6 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/qrcode": "^1.5.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "docx": "^9.5.0",
