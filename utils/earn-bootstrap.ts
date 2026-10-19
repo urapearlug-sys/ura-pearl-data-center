@@ -14,6 +14,13 @@ export type EarnBootstrapPayload = {
   openDailyLogin?: boolean;
   openMiniGamesHub?: boolean;
   openLuckySpin?: boolean;
+  openTrueFalse?: boolean;
+  openVoiceReports?: boolean;
+  openWhistleBlower?: boolean;
+  openEarnTenure?: boolean;
+  openRateService?: 'warehousing' | 'groupage' | 'service';
+  openTaxTriviaLive?: boolean;
+  openWordsOfTheDay?: boolean;
 };
 
 export function queueEarnBootstrap(payload: EarnBootstrapPayload): void {

@@ -54,6 +54,11 @@ import TeamMemberDashboardPopup from './popups/TeamMemberDashboardPopup';
 import GlobalTasksPopup from './popups/GlobalTasksPopup';
 import MitrolabsQuizPopup from './popups/MitrolabsQuizPopup';
 import ReceiptRushPopup from './popups/ReceiptRushPopup';
+import TrueFalseQuizPopup from './popups/TrueFalseQuizPopup';
+import VoiceReportPopup from './popups/VoiceReportPopup';
+import WhistleBlowerPopup from './popups/WhistleBlowerPopup';
+import EarnTenurePopup from './popups/EarnTenurePopup';
+import RateServicePopup from './popups/RateServicePopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
 import { consumeEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
@@ -131,8 +136,32 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   const [showGlobalTasks, setShowGlobalTasks] = useState(false);
   const [showMitrolabsQuiz, setShowMitrolabsQuiz] = useState(false);
   const [showReceiptRush, setShowReceiptRush] = useState(false);
+  const [showTrueFalse, setShowTrueFalse] = useState(false);
+  const [showVoiceReports, setShowVoiceReports] = useState(false);
+  const [showWhistleBlower, setShowWhistleBlower] = useState(false);
+  const [showEarnTenure, setShowEarnTenure] = useState(false);
+  const [rateServiceMode, setRateServiceMode] = useState<'warehousing' | 'groupage' | 'service' | null>(
+    null
+  );
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [earnMainTab, setEarnMainTab] = useState<'earn' | 'wallet'>('earn');
+
+  const openFromBootstrap = useCallback((p: EarnBootstrapPayload) => {
+    if (p.openDailyCipher || p.openWordsOfTheDay) setShowDailyCipher(true);
+    if (p.openDailyCombo) setShowDailyCombo(true);
+    if (p.openWeeklyEvent || p.openTaxTriviaLive) setShowWeeklyEvent(true);
+    if (p.openGlobalTasks) setShowGlobalTasks(true);
+    if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
+    if (p.openReceiptRush) setShowReceiptRush(true);
+    if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
+    if (p.openMiniGamesHub) setShowMiniGamesHub(true);
+    if (p.openLuckySpin) setShowLuckySpin(true);
+    if (p.openTrueFalse) setShowTrueFalse(true);
+    if (p.openVoiceReports) setShowVoiceReports(true);
+    if (p.openWhistleBlower) setShowWhistleBlower(true);
+    if (p.openEarnTenure) setShowEarnTenure(true);
+    if (p.openRateService) setRateServiceMode(p.openRateService);
+  }, [setCurrentView]);
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -142,19 +171,8 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
     const p = consumeEarnBootstrap();
     if (!p) return;
     if (p.activeTabAll) setActiveTab('All');
-    const open = () => {
-      if (p.openDailyCipher) setShowDailyCipher(true);
-      if (p.openDailyCombo) setShowDailyCombo(true);
-      if (p.openWeeklyEvent) setShowWeeklyEvent(true);
-      if (p.openGlobalTasks) setShowGlobalTasks(true);
-      if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
-      if (p.openReceiptRush) setShowReceiptRush(true);
-      if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
-      if (p.openMiniGamesHub) setShowMiniGamesHub(true);
-      if (p.openLuckySpin) setShowLuckySpin(true);
-    };
-    requestAnimationFrame(open);
-  }, []);
+    requestAnimationFrame(() => openFromBootstrap(p));
+  }, [openFromBootstrap]);
 
   const ownedTeams = useMemo(() => myTeams.filter((t) => t.isCreator), [myTeams]);
   const memberTeam = useMemo(() => myTeams.find((t) => !t.isCreator), [myTeams]);
@@ -253,18 +271,8 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
 
   const applyEarnBootstrap = useCallback((p: EarnBootstrapPayload) => {
     if (p.activeTabAll) setActiveTab('All');
-    requestAnimationFrame(() => {
-      if (p.openDailyCipher) setShowDailyCipher(true);
-      if (p.openDailyCombo) setShowDailyCombo(true);
-      if (p.openWeeklyEvent) setShowWeeklyEvent(true);
-      if (p.openGlobalTasks) setShowGlobalTasks(true);
-      if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
-      if (p.openReceiptRush) setShowReceiptRush(true);
-      if (p.openDailyLogin && setCurrentView) navigateToKaribuDaily(setCurrentView, 'earn');
-      if (p.openMiniGamesHub) setShowMiniGamesHub(true);
-      if (p.openLuckySpin) setShowLuckySpin(true);
-    });
-  }, []);
+    requestAnimationFrame(() => openFromBootstrap(p));
+  }, [openFromBootstrap]);
 
   if (minimalOnly) {
     return (
@@ -332,6 +340,27 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
         {showReceiptRush && (
           <ReceiptRushPopup onClose={() => setShowReceiptRush(false)} />
         )}
+        {showDailyCipher && (
+          <DailyCipherPopup onClose={() => setShowDailyCipher(false)} />
+        )}
+        {showWeeklyEvent && (
+          <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />
+        )}
+        {showTrueFalse && (
+          <TrueFalseQuizPopup onClose={() => setShowTrueFalse(false)} />
+        )}
+        {showVoiceReports && (
+          <VoiceReportPopup onClose={() => setShowVoiceReports(false)} />
+        )}
+        {showWhistleBlower && (
+          <WhistleBlowerPopup onClose={() => setShowWhistleBlower(false)} />
+        )}
+        {showEarnTenure && (
+          <EarnTenurePopup onClose={() => setShowEarnTenure(false)} />
+        )}
+        {rateServiceMode ? (
+          <RateServicePopup mode={rateServiceMode} onClose={() => setRateServiceMode(null)} />
+        ) : null}
       </div>
     );
   }
@@ -756,18 +785,33 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
       {showLuckySpin && (
         <LuckySpinPopup onClose={() => setShowLuckySpin(false)} />
       )}
-      {showMitrolabsQuiz && (
-        <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
-      )}
-      {showReceiptRush && (
-        <ReceiptRushPopup onClose={() => setShowReceiptRush(false)} />
-      )}
-      {showWeeklyEvent && (
-        <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />
-      )}
-      {showDonation && (
-        <DonationPopup onClose={() => setShowDonation(false)} />
-      )}
+        {showMitrolabsQuiz && (
+          <MitrolabsQuizPopup onClose={() => setShowMitrolabsQuiz(false)} />
+        )}
+        {showReceiptRush && (
+          <ReceiptRushPopup onClose={() => setShowReceiptRush(false)} />
+        )}
+        {showTrueFalse && (
+          <TrueFalseQuizPopup onClose={() => setShowTrueFalse(false)} />
+        )}
+        {showVoiceReports && (
+          <VoiceReportPopup onClose={() => setShowVoiceReports(false)} />
+        )}
+        {showWhistleBlower && (
+          <WhistleBlowerPopup onClose={() => setShowWhistleBlower(false)} />
+        )}
+        {showEarnTenure && (
+          <EarnTenurePopup onClose={() => setShowEarnTenure(false)} />
+        )}
+        {rateServiceMode ? (
+          <RateServicePopup mode={rateServiceMode} onClose={() => setRateServiceMode(null)} />
+        ) : null}
+        {showWeeklyEvent && (
+          <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />
+        )}
+        {showDonation && (
+          <DonationPopup onClose={() => setShowDonation(false)} />
+        )}
       {showCreateTeam && (
         <CreateTeamPopup
           onClose={() => setShowCreateTeam(false)}

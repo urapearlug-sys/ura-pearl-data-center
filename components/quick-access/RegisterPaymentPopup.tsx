@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
-import DriverLicenceFormPopup from '@/components/quick-access/DriverLicenceFormPopup';
 
 const TAX_TYPES = [
   { id: 'income', label: 'Income tax' },
@@ -12,10 +11,24 @@ const TAX_TYPES = [
   { id: 'customs', label: 'Customs' },
 ] as const;
 
+/** Official URA Motor Vehicle / tenure-related payments portal. */
+const PAY_YOUR_TENURE_URL = 'https://ura.go.ug/en/domestic-taxes/motor-vehicle/';
+
 type TaxTypeId = (typeof TAX_TYPES)[number]['id'];
-type Flow = 'menu' | 'tax' | 'licence';
+type Flow = 'menu' | 'tax';
 
 type Props = { onClose: () => void };
+
+function openUraUrl(url: string) {
+  if (typeof window === 'undefined') return;
+  const tg = (
+    window as unknown as {
+      Telegram?: { WebApp?: { openLink?: (u: string, o?: { try_instant_view?: boolean }) => void } };
+    }
+  ).Telegram?.WebApp;
+  if (tg?.openLink) tg.openLink(url, { try_instant_view: false });
+  else window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 export default function RegisterPaymentPopup({ onClose }: Props) {
   const [flow, setFlow] = useState<Flow>('menu');
@@ -65,10 +78,6 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
       ],
     };
   }, [done, prn, refCode, taxType, tin, amount, issuedAt]);
-
-  if (flow === 'licence') {
-    return <DriverLicenceFormPopup onClose={close} />;
-  }
 
   const taxStepLabel = done ? null : step === 0 ? '1/2' : '2/2';
 
@@ -127,7 +136,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-[#123f78]">Tax / PRN payment</span>
                   <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
-                    Income tax, VAT, PAYE, customs
+                    Income tax, VAT, PAYE, customs · in-app
                   </span>
                 </span>
               </button>
@@ -135,7 +144,8 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 type="button"
                 onClick={() => {
                   triggerHapticFeedback(window);
-                  setFlow('licence');
+                  openUraUrl(PAY_YOUR_TENURE_URL);
+                  close();
                 }}
                 className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[#f3ba2f]/55 transition-colors flex items-center gap-3"
               >
@@ -143,12 +153,12 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
                   aria-hidden
                 >
-                  🪪
+                  🏛️
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold text-[#123f78]">Pay driver&apos;s licence</span>
+                  <span className="block text-sm font-bold text-[#123f78]">Pay your tenure</span>
                   <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
-                    New, renew, or learner licence
+                    Opens official URA motor vehicle site
                   </span>
                 </span>
               </button>
