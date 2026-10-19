@@ -1,129 +1,78 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
+import { useGameStore } from '@/utils/game-mechanics';
+import { useToast } from '@/contexts/ToastContext';
+import {
+  buildReceiptHtml,
+  downloadReceiptFile,
+  normalizeIssuedAt,
+  printReceiptHtml,
+  type SimulatedReceiptData,
+} from '@/utils/simulated-receipt';
+import {
+  resolvePaymentActivityUserKey,
+  savePaymentActivity,
+} from '@/utils/payment-activity-storage';
 
-export type ReceiptField = { label: string; value: string };
-
-export type SimulatedReceiptData = {
-  kind: 'prn-slip' | 'payment';
-  title: string;
-  subtitle: string;
-  fields: ReceiptField[];
-  refCode: string;
-  issuedAt?: Date;
-};
-
-function formatIssuedAt(d: Date) {
-  return d.toLocaleString('en-UG', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
-
-function buildReceiptHtml(data: SimulatedReceiptData, issuedAt: Date) {
-  const rows = data.fields
-    .map(
-      (f) =>
-        `<tr><td style="padding:8px 0;color:#5a7bb0;font-size:12px;width:40%">${escapeHtml(f.label)}</td><td style="padding:8px 0;color:#123f78;font-size:13px;font-weight:700;text-align:right">${escapeHtml(f.value)}</td></tr>`
-    )
-    .join('');
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<title>${escapeHtml(data.title)} — ${escapeHtml(data.refCode)}</title>
-<style>
-  body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;padding:24px;background:#fff;color:#123f78}
-  .wrap{max-width:420px;margin:0 auto;border:1px solid #8bb4ef;border-top:4px solid #f3ba2f;border-radius:12px;overflow:hidden}
-  .head{background:#123f78;color:#fff;padding:16px 18px}
-  .head h1{margin:0;font-size:16px}
-  .head p{margin:4px 0 0;font-size:11px;color:#f3ba2f}
-  .body{padding:18px}
-  table{width:100%;border-collapse:collapse}
-  .sim{margin-top:14px;font-size:10px;color:#5a7bb0;text-align:center}
-  .ref{margin-top:12px;padding:10px;background:#f4f8ff;border-radius:8px;font-family:ui-monospace,monospace;font-size:12px;text-align:center;font-weight:700}
-  @media print{body{padding:0}.wrap{border-radius:0}}
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="head">
-      <h1>Uganda Revenue Authority</h1>
-      <p>${escapeHtml(data.title)} · Simulated</p>
-    </div>
-    <div class="body">
-      <p style="margin:0 0 12px;font-size:13px;font-weight:700">${escapeHtml(data.subtitle)}</p>
-      <table>${rows}</table>
-      <div class="ref">Ref ${escapeHtml(data.refCode)}</div>
-      <p class="sim">Issued ${escapeHtml(formatIssuedAt(issuedAt))} · Simulation — not an official URA document</p>
-    </div>
-  </div>
-</body>
-</html>`;
-}
-
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+export type { SimulatedReceiptData, ReceiptField } from '@/utils/simulated-receipt';
 
 type Props = {
   data: SimulatedReceiptData;
   onDone: () => void;
+  /** When false, do not write to profile downloads history (e.g. re-viewing). Default true. */
+  persist?: boolean;
 };
 
-export default function SimulatedReceipt({ data, onDone }: Props) {
-  const issuedAt = data.issuedAt ?? new Date();
+export default function SimulatedReceipt({ data, onDone, persist = true }: Props) {
+  const showToast = useToast();
+  const { userTelegramInitData } = useGameStore();
+  const issuedAt = normalizeIssuedAt(data.issuedAt);
+  const savedRef = useRef(false);
+  const [busy, setBusy] = useState<'download' | 'print' | null>(null);
 
-  const download = () => {
+  useEffect(() => {
+    if (!persist || savedRef.current) return;
+    savedRef.current = true;
+    const userKey = resolvePaymentActivityUserKey(userTelegramInitData);
+    savePaymentActivity(userKey, {
+      kind: data.kind,
+      title: data.title,
+      subtitle: data.subtitle,
+      fields: data.fields,
+      refCode: data.refCode,
+      issuedAt: issuedAt.toISOString(),
+    });
+  }, [persist, data, issuedAt, userTelegramInitData]);
+
+  const download = async () => {
+    if (busy) return;
+    setBusy('download');
     triggerHapticFeedback(window);
-    const html = buildReceiptHtml(data, issuedAt);
-    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const slug = data.kind === 'payment' ? 'payment-receipt' : 'prn-slip';
-    a.href = url;
-    a.download = `URA-${slug}-${data.refCode}.html`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    try {
+      const result = await downloadReceiptFile(data, issuedAt);
+      if (result === 'shared') showToast('Receipt ready — save it from the share sheet', 'success');
+      else if (result === 'downloaded') showToast('Receipt downloaded', 'success');
+      else if (result === 'opened') showToast('Receipt opened — use Save in the browser', 'success');
+      else if (result === 'copied') showToast('Receipt copied to clipboard', 'success');
+      else showToast('Could not download. Try Print, then save as PDF.', 'error');
+    } catch {
+      showToast('Could not download. Try Print, then save as PDF.', 'error');
+    } finally {
+      setBusy(null);
+    }
   };
 
   const print = () => {
+    if (busy) return;
+    setBusy('print');
     triggerHapticFeedback(window);
     const html = buildReceiptHtml(data, issuedAt);
-    const w = window.open('', '_blank', 'noopener,noreferrer,width=480,height=720');
-    if (!w) {
-      // Popup blocked — try printing the in-dialog receipt area
-      window.print();
-      return;
-    }
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
-    w.focus();
-    w.onload = () => {
-      try {
-        w.print();
-      } catch {
-        /* ignore */
-      }
-    };
-    // Some browsers fire print before onload; retry shortly
-    setTimeout(() => {
-      try {
-        w.print();
-      } catch {
-        /* ignore */
-      }
-    }, 250);
+    const ok = printReceiptHtml(html);
+    if (ok) showToast('Opening print dialog…', 'success');
+    else showToast('Print blocked. Try Download instead.', 'error');
+    setTimeout(() => setBusy(null), 600);
   };
 
   return (
@@ -155,7 +104,7 @@ export default function SimulatedReceipt({ data, onDone }: Props) {
             <p className="text-sm font-mono font-bold text-[#123f78]">{data.refCode}</p>
           </div>
           <p className="text-[10px] text-center text-[#5a7bb0]">
-            Issued {formatIssuedAt(issuedAt)} · Not an official URA document
+            Issued {issuedAt.toLocaleString('en-UG')} · Not an official URA document
           </p>
         </div>
       </div>
@@ -163,19 +112,24 @@ export default function SimulatedReceipt({ data, onDone }: Props) {
       <div className="grid grid-cols-2 gap-2">
         <button
           type="button"
-          onClick={download}
-          className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78]"
+          disabled={busy !== null}
+          onClick={() => void download()}
+          className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78] disabled:opacity-50"
         >
-          Download
+          {busy === 'download' ? 'Saving…' : 'Download'}
         </button>
         <button
           type="button"
+          disabled={busy !== null}
           onClick={print}
-          className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78]"
+          className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78] disabled:opacity-50"
         >
-          Print
+          {busy === 'print' ? 'Printing…' : 'Print'}
         </button>
       </div>
+      <p className="text-[10px] text-center text-[#5a7bb0]">
+        Saved under Profile → Downloads. On mobile, Download opens Share — choose Save to Files.
+      </p>
       <button
         type="button"
         onClick={() => {

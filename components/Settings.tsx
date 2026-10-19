@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { defaultProfileAvatar, pearlBlue, pearlGolden, pearlWhite } from '@/images';
@@ -12,6 +12,17 @@ import Toggle from '@/components/Toggle';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { UGANDA_DISTRICTS } from '@/utils/uganda-districts';
 import { readStoredDistrictSlug, writeStoredDistrictSlug } from '@/utils/user-district-storage';
+import {
+  paymentActivityCounts,
+  readPaymentActivities,
+  resolvePaymentActivityUserKey,
+  type StoredPaymentActivity,
+} from '@/utils/payment-activity-storage';
+import {
+  buildReceiptHtml,
+  downloadReceiptFile,
+  printReceiptHtml,
+} from '@/utils/simulated-receipt';
 
 interface SettingsProps {
   setCurrentView: (view: string) => void;
@@ -114,15 +125,45 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   const [receiptLoading, setReceiptLoading] = useState(false);
   const [receiptError, setReceiptError] = useState<string | null>(null);
   const [receiptFilter, setReceiptFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
+  const [paymentActivities, setPaymentActivities] = useState<StoredPaymentActivity[]>([]);
+  const [paymentFilter, setPaymentFilter] = useState<'ALL' | 'prn-slip' | 'payment'>('ALL');
+  const [paymentActionBusy, setPaymentActionBusy] = useState<string | null>(null);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
   const [deleteConfirmInput, setDeleteConfirmInput] = useState('');
   const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
 
+  const paymentUserKey = useMemo(
+    () => resolvePaymentActivityUserKey(userTelegramInitData),
+    [userTelegramInitData]
+  );
+
+  const refreshPaymentActivities = useCallback(() => {
+    setPaymentActivities(readPaymentActivities(paymentUserKey));
+  }, [paymentUserKey]);
+
   useEffect(() => {
     if (active === 'profile') {
       setDistrictSlug(readStoredDistrictSlug() || '');
+      refreshPaymentActivities();
     }
-  }, [active]);
+  }, [active, refreshPaymentActivities]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onChange = () => refreshPaymentActivities();
+    window.addEventListener('ura-payment-activities-changed', onChange);
+    window.addEventListener('storage', onChange);
+    return () => {
+      window.removeEventListener('ura-payment-activities-changed', onChange);
+      window.removeEventListener('storage', onChange);
+    };
+  }, [refreshPaymentActivities]);
+
+  const paymentCounts = useMemo(() => paymentActivityCounts(paymentActivities), [paymentActivities]);
+  const filteredPayments = useMemo(() => {
+    if (paymentFilter === 'ALL') return paymentActivities;
+    return paymentActivities.filter((x) => x.kind === paymentFilter);
+  }, [paymentActivities, paymentFilter]);
 
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const [animationEnabled, setAnimationEnabled] = useState(true);
@@ -437,6 +478,172 @@ export default function Settings({ setCurrentView }: SettingsProps) {
               {openAccordion === 'addresses' && (
                 <div className="px-3 py-2 text-xs text-gray-400 rounded-lg bg-[#1a1d26] border border-ura-border/85">
                   No addresses on file yet.
+                </div>
+              )}
+              <AccordionRow
+                id="downloads"
+                title={`Downloads${paymentCounts.total ? ` (${paymentCounts.total})` : ''}`}
+              />
+              {openAccordion === 'downloads' && (
+                <div className="px-3 py-3 text-xs text-gray-300 rounded-lg bg-[#1a1d26] border border-ura-border/85 space-y-3">
+                  <div>
+                    <p className="text-white text-sm font-bold">Payment activities</p>
+                    <p className="text-gray-400 mt-0.5">
+                      Simulated PRN slips and payments from Quick Access. Download or print anytime.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-[#f3ba2f]/35 bg-[#123f78]/35 p-3 space-y-2">
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-[#f3ba2f]">
+                      Recent activity
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="rounded-lg bg-black/25 px-2.5 py-2">
+                        <p className="text-lg font-extrabold text-white">{paymentCounts.total}</p>
+                        <p className="text-[10px] text-gray-400">Total receipts</p>
+                      </div>
+                      <div className="rounded-lg bg-black/25 px-2.5 py-2">
+                        <p className="text-lg font-extrabold text-white">{paymentCounts.recentWeek}</p>
+                        <p className="text-[10px] text-gray-400">Last 7 days</p>
+                      </div>
+                      <div className="rounded-lg bg-black/25 px-2.5 py-2">
+                        <p className="text-lg font-extrabold text-[#f3ba2f]">{paymentCounts.prnSlips}</p>
+                        <p className="text-[10px] text-gray-400">PRN slips</p>
+                      </div>
+                      <div className="rounded-lg bg-black/25 px-2.5 py-2">
+                        <p className="text-lg font-extrabold text-emerald-300">{paymentCounts.payments}</p>
+                        <p className="text-[10px] text-gray-400">Payments</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {(
+                      [
+                        { id: 'ALL' as const, label: 'All' },
+                        { id: 'prn-slip' as const, label: 'PRN slips' },
+                        { id: 'payment' as const, label: 'Payments' },
+                      ] as const
+                    ).map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => {
+                          triggerHapticFeedback(window);
+                          setPaymentFilter(f.id);
+                        }}
+                        className={`px-2.5 py-1 rounded-full text-[10px] border transition-colors ${
+                          paymentFilter === f.id
+                            ? 'border-[#f3ba2f]/70 bg-[#f3ba2f]/20 text-[#f3ba2f]'
+                            : 'border-ura-border/80 bg-ura-panel text-gray-300'
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {filteredPayments.length === 0 ? (
+                    <p className="text-gray-500 py-2">
+                      No payment activity yet. Use Home → Quick access to register a PRN or pay against a
+                      PRN.
+                    </p>
+                  ) : (
+                    <ul className="space-y-2 max-h-[42vh] overflow-y-auto no-scrollbar">
+                      {filteredPayments.map((item) => (
+                        <li
+                          key={item.id}
+                          className="rounded-lg border border-ura-border/75 bg-ura-panel/85 p-2.5 space-y-2"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <p className="text-[11px] text-white font-semibold leading-snug">
+                                {item.title}
+                              </p>
+                              <p className="text-[10px] text-gray-400 mt-0.5">
+                                {item.kind === 'payment' ? 'Payment' : 'PRN slip'} ·{' '}
+                                {new Date(item.issuedAt).toLocaleString(undefined, {
+                                  dateStyle: 'medium',
+                                  timeStyle: 'short',
+                                })}
+                              </p>
+                              <p className="text-[10px] font-mono text-[#8bb4ef] mt-0.5">{item.refCode}</p>
+                            </div>
+                            <span
+                              className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] border ${
+                                item.kind === 'payment'
+                                  ? 'border-emerald-500/45 bg-emerald-500/10 text-emerald-300'
+                                  : 'border-[#f3ba2f]/45 bg-[#f3ba2f]/10 text-[#f3ba2f]'
+                              }`}
+                            >
+                              {item.kind === 'payment' ? 'paid' : 'prn'}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              disabled={paymentActionBusy === item.id}
+                              onClick={() => {
+                                void (async () => {
+                                  setPaymentActionBusy(item.id);
+                                  triggerHapticFeedback(window);
+                                  try {
+                                    const result = await downloadReceiptFile({
+                                      kind: item.kind,
+                                      title: item.title,
+                                      subtitle: item.subtitle,
+                                      fields: item.fields,
+                                      refCode: item.refCode,
+                                      issuedAt: item.issuedAt,
+                                    });
+                                    if (result === 'shared') {
+                                      showToast('Use Share → Save to Files', 'success');
+                                    } else if (result === 'downloaded') {
+                                      showToast('Receipt downloaded', 'success');
+                                    } else if (result === 'opened') {
+                                      showToast('Opened — save from browser', 'success');
+                                    } else if (result === 'copied') {
+                                      showToast('Receipt copied to clipboard', 'success');
+                                    } else {
+                                      showToast('Download failed — try Print → Save as PDF', 'error');
+                                    }
+                                  } finally {
+                                    setPaymentActionBusy(null);
+                                  }
+                                })();
+                              }}
+                              className="flex-1 rounded-lg border border-[#8bb4ef]/40 py-1.5 text-[10px] font-bold text-[#b8d4ff] disabled:opacity-50"
+                            >
+                              Download
+                            </button>
+                            <button
+                              type="button"
+                              disabled={paymentActionBusy === item.id}
+                              onClick={() => {
+                                triggerHapticFeedback(window);
+                                const html = buildReceiptHtml({
+                                  kind: item.kind,
+                                  title: item.title,
+                                  subtitle: item.subtitle,
+                                  fields: item.fields,
+                                  refCode: item.refCode,
+                                  issuedAt: item.issuedAt,
+                                });
+                                const ok = printReceiptHtml(html);
+                                showToast(
+                                  ok ? 'Opening print dialog…' : 'Print blocked — try Download',
+                                  ok ? 'success' : 'error'
+                                );
+                              }}
+                              className="flex-1 rounded-lg border border-[#f3ba2f]/40 py-1.5 text-[10px] font-bold text-[#f3ba2f] disabled:opacity-50"
+                            >
+                              Print
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
               <AccordionRow id="receipts" title="My receipts" />
