@@ -18,11 +18,7 @@ import {
   resolvePaymentActivityUserKey,
   type StoredPaymentActivity,
 } from '@/utils/payment-activity-storage';
-import {
-  buildReceiptHtml,
-  downloadReceiptFile,
-  printReceiptHtml,
-} from '@/utils/simulated-receipt';
+import { downloadReceiptFile, printReceiptDocument } from '@/utils/simulated-receipt';
 
 interface SettingsProps {
   setCurrentView: (view: string) => void;
@@ -597,15 +593,13 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                       issuedAt: item.issuedAt,
                                     });
                                     if (result === 'shared') {
-                                      showToast('Use Share → Save to Files', 'success');
+                                      showToast('PDF ready — Share → Save to Files', 'success');
                                     } else if (result === 'downloaded') {
-                                      showToast('Receipt downloaded', 'success');
+                                      showToast('PDF downloaded', 'success');
                                     } else if (result === 'opened') {
-                                      showToast('Opened — save from browser', 'success');
-                                    } else if (result === 'copied') {
-                                      showToast('Receipt copied to clipboard', 'success');
+                                      showToast('PDF opened — save from viewer', 'success');
                                     } else {
-                                      showToast('Download failed — try Print → Save as PDF', 'error');
+                                      showToast('Download failed — try Print', 'error');
                                     }
                                   } finally {
                                     setPaymentActionBusy(null);
@@ -614,26 +608,34 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                               }}
                               className="flex-1 rounded-lg border border-[#8bb4ef]/40 py-1.5 text-[10px] font-bold text-[#b8d4ff] disabled:opacity-50"
                             >
-                              Download
+                              Download PDF
                             </button>
                             <button
                               type="button"
                               disabled={paymentActionBusy === item.id}
                               onClick={() => {
-                                triggerHapticFeedback(window);
-                                const html = buildReceiptHtml({
-                                  kind: item.kind,
-                                  title: item.title,
-                                  subtitle: item.subtitle,
-                                  fields: item.fields,
-                                  refCode: item.refCode,
-                                  issuedAt: item.issuedAt,
-                                });
-                                const ok = printReceiptHtml(html);
-                                showToast(
-                                  ok ? 'Opening print dialog…' : 'Print blocked — try Download',
-                                  ok ? 'success' : 'error'
-                                );
+                                void (async () => {
+                                  setPaymentActionBusy(item.id);
+                                  triggerHapticFeedback(window);
+                                  try {
+                                    const result = await printReceiptDocument({
+                                      kind: item.kind,
+                                      title: item.title,
+                                      subtitle: item.subtitle,
+                                      fields: item.fields,
+                                      refCode: item.refCode,
+                                      issuedAt: item.issuedAt,
+                                    });
+                                    if (result === 'printed') showToast('Print dialog opened', 'success');
+                                    else if (result === 'saved-pdf') {
+                                      showToast('Print unavailable here — PDF saved instead', 'success');
+                                    } else {
+                                      showToast('Print blocked — try Download PDF', 'error');
+                                    }
+                                  } finally {
+                                    setPaymentActionBusy(null);
+                                  }
+                                })();
                               }}
                               className="flex-1 rounded-lg border border-[#f3ba2f]/40 py-1.5 text-[10px] font-bold text-[#f3ba2f] disabled:opacity-50"
                             >

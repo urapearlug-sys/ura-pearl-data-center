@@ -5,10 +5,9 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import {
-  buildReceiptHtml,
   downloadReceiptFile,
   normalizeIssuedAt,
-  printReceiptHtml,
+  printReceiptDocument,
   type SimulatedReceiptData,
 } from '@/utils/simulated-receipt';
 import {
@@ -52,27 +51,34 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
     triggerHapticFeedback(window);
     try {
       const result = await downloadReceiptFile(data, issuedAt);
-      if (result === 'shared') showToast('Receipt ready — save it from the share sheet', 'success');
-      else if (result === 'downloaded') showToast('Receipt downloaded', 'success');
-      else if (result === 'opened') showToast('Receipt opened — use Save in the browser', 'success');
-      else if (result === 'copied') showToast('Receipt copied to clipboard', 'success');
-      else showToast('Could not download. Try Print, then save as PDF.', 'error');
+      if (result === 'shared') showToast('PDF ready — save it from the share sheet', 'success');
+      else if (result === 'downloaded') showToast('PDF receipt downloaded', 'success');
+      else if (result === 'opened') showToast('PDF opened — use Save in the viewer', 'success');
+      else showToast('Could not download PDF. Try Print → Save as PDF.', 'error');
     } catch {
-      showToast('Could not download. Try Print, then save as PDF.', 'error');
+      showToast('Could not download PDF. Try Print → Save as PDF.', 'error');
     } finally {
       setBusy(null);
     }
   };
 
-  const print = () => {
+  const print = async () => {
     if (busy) return;
     setBusy('print');
     triggerHapticFeedback(window);
-    const html = buildReceiptHtml(data, issuedAt);
-    const ok = printReceiptHtml(html);
-    if (ok) showToast('Opening print dialog…', 'success');
-    else showToast('Print blocked. Try Download instead.', 'error');
-    setTimeout(() => setBusy(null), 600);
+    try {
+      const result = await printReceiptDocument(data, issuedAt);
+      if (result === 'printed') showToast('Print dialog opened', 'success');
+      else if (result === 'saved-pdf') {
+        showToast('Print unavailable in Telegram — PDF saved instead', 'success');
+      } else {
+        showToast('Print blocked. Try Download PDF instead.', 'error');
+      }
+    } catch {
+      showToast('Print blocked. Try Download PDF instead.', 'error');
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
@@ -121,14 +127,14 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
         <button
           type="button"
           disabled={busy !== null}
-          onClick={print}
+          onClick={() => void print()}
           className="rounded-xl border border-[#8bb4ef]/50 bg-white py-2.5 text-sm font-bold text-[#123f78] disabled:opacity-50"
         >
           {busy === 'print' ? 'Printing…' : 'Print'}
         </button>
       </div>
       <p className="text-[10px] text-center text-[#5a7bb0]">
-        Saved under Profile → Downloads. On mobile, Download opens Share — choose Save to Files.
+        Downloads as PDF. Also saved under Profile → Downloads.
       </p>
       <button
         type="button"

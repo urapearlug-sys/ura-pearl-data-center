@@ -80,19 +80,29 @@ export function buildReceiptHtml(data: SimulatedReceiptData, issuedAt?: Date) {
 </html>`;
 }
 
-export function buildReceiptPlainText(data: SimulatedReceiptData, issuedAt?: Date) {
+/** Markup suitable for same-document @media print (no full HTML document). */
+export function buildReceiptPrintMarkup(data: SimulatedReceiptData, issuedAt?: Date) {
   const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
-  const lines = [
-    'Uganda Revenue Authority',
-    data.title,
-    data.subtitle,
-    '---',
-    ...data.fields.map((f) => `${f.label}: ${f.value}`),
-    `Ref: ${data.refCode}`,
-    `Issued: ${formatReceiptIssuedAt(when)}`,
-    'Simulation — not an official URA document',
-  ];
-  return lines.join('\n');
+  const rows = data.fields
+    .map(
+      (f) =>
+        `<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #e5eefc;font-size:12px"><span style="color:#5a7bb0">${escapeHtml(f.label)}</span><span style="color:#123f78;font-weight:700;text-align:right">${escapeHtml(f.value)}</span></div>`
+    )
+    .join('');
+  return `
+    <div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#123f78;max-width:480px;margin:0 auto;border:1px solid #8bb4ef;border-top:4px solid #f3ba2f;overflow:hidden">
+      <div style="background:#123f78;color:#fff;padding:16px 18px">
+        <div style="font-size:16px;font-weight:800">Uganda Revenue Authority</div>
+        <div style="margin-top:4px;font-size:11px;color:#f3ba2f">${escapeHtml(data.title)} · Simulated</div>
+      </div>
+      <div style="padding:18px;background:#fff">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px">${escapeHtml(data.subtitle)}</div>
+        ${rows}
+        <div style="margin-top:14px;padding:10px;background:#f4f8ff;border-radius:8px;text-align:center;font-family:ui-monospace,monospace;font-size:12px;font-weight:700">Ref ${escapeHtml(data.refCode)}</div>
+        <div style="margin-top:12px;font-size:10px;color:#5a7bb0;text-align:center">Issued ${escapeHtml(formatReceiptIssuedAt(when))} · Simulation — not an official URA document</div>
+      </div>
+    </div>
+  `;
 }
 
 export function receiptFileBaseName(data: SimulatedReceiptData) {
@@ -103,7 +113,6 @@ export function receiptFileBaseName(data: SimulatedReceiptData) {
 
 type TgWebApp = {
   openLink?: (url: string, options?: { try_instant_view?: boolean }) => void;
-  downloadFile?: (params: { url: string; file_name: string }, cb?: (accepted: boolean) => void) => void;
   platform?: string;
 };
 
@@ -114,60 +123,227 @@ function getTelegramWebApp(): TgWebApp | null {
   );
 }
 
-/** Print via hidden iframe (works in Telegram WebView better than window.open). */
-export function printReceiptHtml(html: string): boolean {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return false;
-  try {
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('title', 'Print receipt');
-    iframe.style.cssText =
-      'position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0;pointer-events:none';
-    document.body.appendChild(iframe);
-    const doc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!doc) {
-      iframe.remove();
-      return false;
+function isLikelyTelegramWebView(): boolean {
+  if (getTelegramWebApp()) return true;
+  if (typeof navigator === 'undefined') return false;
+  return /Telegram/i.test(navigator.userAgent || '');
+}
+
+/** Build a real PDF blob with jsPDF. */
+export async function buildReceiptPdfBlob(
+  data: SimulatedReceiptData,
+  issuedAt?: Date
+): Promise<Blob> {
+  const { jsPDF } = await import('jspdf');
+  const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 48;
+  const contentW = pageW - margin * 2;
+  let y = 48;
+
+  // Header bar
+  doc.setFillColor(18, 63, 120);
+  doc.rect(0, 0, pageW, 72, 'F');
+  doc.setFillColor(243, 186, 47);
+  doc.rect(0, 72, pageW, 4, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('Uganda Revenue Authority', margin, 34);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(243, 186, 47);
+  doc.text(`${data.title} · Simulated`, margin, 52);
+
+  y = 100;
+  doc.setTextColor(18, 63, 120);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.text(data.subtitle, margin, y);
+  y += 22;
+
+  doc.setDrawColor(139, 180, 239);
+  doc.setLineWidth(0.5);
+
+  for (const field of data.fields) {
+    if (y > 740) {
+      doc.addPage();
+      y = 48;
     }
-    doc.open();
-    doc.write(html);
-    doc.close();
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(90, 123, 176);
+    doc.text(field.label, margin, y);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(18, 63, 120);
+    const valueLines = doc.splitTextToSize(field.value, contentW * 0.55);
+    doc.text(valueLines, pageW - margin, y, { align: 'right' });
+    const blockH = Math.max(14, valueLines.length * 12);
+    y += blockH;
+    doc.setDrawColor(229, 238, 252);
+    doc.line(margin, y, pageW - margin, y);
+    y += 14;
+  }
 
-    const runPrint = () => {
-      try {
-        iframe.contentWindow?.focus();
-        iframe.contentWindow?.print();
-      } catch {
-        /* ignore */
+  y += 8;
+  doc.setFillColor(244, 248, 255);
+  doc.rect(margin, y, contentW, 40, 'F');
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(90, 123, 176);
+  doc.text('REFERENCE', pageW / 2, y + 14, { align: 'center' });
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.setTextColor(18, 63, 120);
+  doc.text(data.refCode, pageW / 2, y + 30, { align: 'center' });
+  y += 56;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(90, 123, 176);
+  doc.text(
+    `Issued ${formatReceiptIssuedAt(when)} · Simulation — not an official URA document`,
+    pageW / 2,
+    y,
+    { align: 'center' }
+  );
+
+  return doc.output('blob');
+}
+
+const PRINT_ROOT_ID = 'ura-print-receipt-root';
+const PRINT_STYLE_ID = 'ura-print-receipt-style';
+
+function ensurePrintStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById(PRINT_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = PRINT_STYLE_ID;
+  style.textContent = `
+    @media print {
+      body.ura-printing-receipt * {
+        visibility: hidden !important;
       }
-      setTimeout(() => {
-        try {
-          iframe.remove();
-        } catch {
-          /* ignore */
-        }
-      }, 1500);
-    };
+      body.ura-printing-receipt #${PRINT_ROOT_ID},
+      body.ura-printing-receipt #${PRINT_ROOT_ID} * {
+        visibility: visible !important;
+      }
+      body.ura-printing-receipt #${PRINT_ROOT_ID} {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        background: #fff !important;
+        z-index: 2147483647 !important;
+      }
+    }
+    #${PRINT_ROOT_ID} {
+      position: fixed;
+      left: -10000px;
+      top: 0;
+      width: 480px;
+      background: #fff;
+      z-index: -1;
+      pointer-events: none;
+    }
+  `;
+  document.head.appendChild(style);
+}
 
-    // Allow layout then print
-    setTimeout(runPrint, 300);
+export type PrintReceiptResult = 'printed' | 'saved-pdf' | 'failed';
+
+/**
+ * Same-window print. In Telegram WebViews (where print dialogs are often blocked),
+ * falls back to saving/sharing a PDF so the user still gets a printable file.
+ */
+export async function printReceiptDocument(
+  data: SimulatedReceiptData,
+  issuedAt?: Date
+): Promise<PrintReceiptResult> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return 'failed';
+
+  // Telegram Mini App WebViews frequently ignore window.print() — give a PDF instead
+  if (isLikelyTelegramWebView()) {
+    const saved = await downloadReceiptFile(data, issuedAt);
+    if (saved === 'failed') return 'failed';
+    return 'saved-pdf';
+  }
+
+  return new Promise((resolve) => {
+    try {
+      ensurePrintStyles();
+      document.getElementById(PRINT_ROOT_ID)?.remove();
+
+      const root = document.createElement('div');
+      root.id = PRINT_ROOT_ID;
+      root.setAttribute('aria-hidden', 'true');
+      root.innerHTML = buildReceiptPrintMarkup(data, issuedAt);
+      document.body.appendChild(root);
+      document.body.classList.add('ura-printing-receipt');
+
+      let settled = false;
+      const cleanup = (result: PrintReceiptResult) => {
+        if (settled) return;
+        settled = true;
+        document.body.classList.remove('ura-printing-receipt');
+        root.remove();
+        window.removeEventListener('afterprint', onAfterPrint);
+        resolve(result);
+      };
+      const onAfterPrint = () => cleanup('printed');
+      window.addEventListener('afterprint', onAfterPrint);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          try {
+            window.focus();
+            window.print();
+          } catch {
+            cleanup('failed');
+            return;
+          }
+          // If afterprint never fires, still treat as attempted print
+          setTimeout(() => cleanup('printed'), 2000);
+        });
+      });
+    } catch {
+      resolve('failed');
+    }
+  });
+}
+
+/** @deprecated use printReceiptDocument */
+export function printReceiptHtml(_html: string): boolean {
+  // Kept for callers that still pass HTML; prefer printReceiptDocument.
+  return false;
+}
+
+export type DownloadReceiptResult = 'shared' | 'downloaded' | 'opened' | 'failed';
+
+function triggerAnchorDownload(blob: Blob, fileName: string): boolean {
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
     return true;
   } catch {
     return false;
   }
 }
 
-export type DownloadReceiptResult = 'shared' | 'downloaded' | 'opened' | 'copied' | 'failed';
-
-function isLikelyTelegramWebView(): boolean {
-  const tg = getTelegramWebApp();
-  if (tg) return true;
-  if (typeof navigator === 'undefined') return false;
-  return /Telegram/i.test(navigator.userAgent || '');
-}
-
 /**
- * Multi-strategy download for browsers + Telegram Mini App WebViews.
- * Telegram often blocks <a download>; prefer Share / openLink / clipboard.
+ * Generate PDF and download (or share on Telegram).
  */
 export async function downloadReceiptFile(
   data: SimulatedReceiptData,
@@ -175,82 +351,51 @@ export async function downloadReceiptFile(
 ): Promise<DownloadReceiptResult> {
   if (typeof window === 'undefined') return 'failed';
   const when = issuedAt ?? normalizeIssuedAt(data.issuedAt);
-  const html = buildReceiptHtml(data, when);
-  const text = buildReceiptPlainText(data, when);
-  const base = receiptFileBaseName(data);
-  const htmlName = `${base}.html`;
-  const txtName = `${base}.txt`;
-  const htmlBlob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const txtBlob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const htmlFile = new File([htmlBlob], htmlName, { type: 'text/html' });
-  const txtFile = new File([txtBlob], txtName, { type: 'text/plain' });
+  const fileName = `${receiptFileBaseName(data)}.pdf`;
+  const pdfBlob = await buildReceiptPdfBlob(data, when);
+  const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
   const inTelegram = isLikelyTelegramWebView();
+  const nav = navigator as Navigator & {
+    canShare?: (d: ShareData) => boolean;
+    share?: (d: ShareData) => Promise<void>;
+  };
 
-  // 1) Native share sheet (best on mobile / Telegram WebView)
-  try {
-    const nav = navigator as Navigator & {
-      canShare?: (data: ShareData) => boolean;
-      share?: (data: ShareData) => Promise<void>;
-    };
-    if (nav.share) {
-      if (nav.canShare?.({ files: [htmlFile] })) {
-        await nav.share({ files: [htmlFile], title: htmlName, text: data.title });
-        return 'shared';
-      }
-      if (nav.canShare?.({ files: [txtFile] })) {
-        await nav.share({ files: [txtFile], title: txtName, text: data.title });
-        return 'shared';
-      }
-      // Always try share on Telegram even if canShare is missing
-      if (inTelegram || nav.canShare?.({ text })) {
-        await nav.share({ title: htmlName, text });
-        return 'shared';
-      }
-    }
-  } catch (err) {
-    if (err && typeof err === 'object' && 'name' in err && (err as { name: string }).name === 'AbortError') {
-      return 'failed';
-    }
-  }
-
-  // 2) Classic <a download> (desktop browsers)
-  if (!inTelegram) {
+  // On Telegram / mobile: Share sheet with the PDF file (Save to Files)
+  if (inTelegram && nav.share) {
     try {
-      const url = URL.createObjectURL(htmlBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = htmlName;
-      a.rel = 'noopener';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      return 'downloaded';
-    } catch {
-      /* continue */
-    }
-  }
-
-  // 3) Open blob in a new tab (browser only — Telegram blocks blob/data openLink)
-  if (!inTelegram) {
-    try {
-      const url = URL.createObjectURL(htmlBlob);
-      const opened = window.open(url, '_blank', 'noopener,noreferrer');
-      if (opened) {
-        setTimeout(() => URL.revokeObjectURL(url), 60_000);
-        return 'opened';
+      if (!nav.canShare || nav.canShare({ files: [pdfFile] })) {
+        await nav.share({ files: [pdfFile], title: fileName, text: data.title });
+        return 'shared';
       }
-    } catch {
-      /* continue */
+    } catch (err) {
+      if (err && typeof err === 'object' && 'name' in err && (err as { name: string }).name === 'AbortError') {
+        return 'failed';
+      }
     }
   }
 
-  // 5) Clipboard fallback
+  // Desktop / regular browser: force PDF file download
+  if (triggerAnchorDownload(pdfBlob, fileName)) {
+    return 'downloaded';
+  }
+
+  // Share fallback (desktop with share support)
   try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return 'copied';
+    if (nav.share && nav.canShare?.({ files: [pdfFile] })) {
+      await nav.share({ files: [pdfFile], title: fileName, text: data.title });
+      return 'shared';
+    }
+  } catch {
+    /* continue */
+  }
+
+  // Open PDF in a new tab as last resort
+  try {
+    const url = URL.createObjectURL(pdfBlob);
+    const opened = window.open(url, '_blank', 'noopener,noreferrer');
+    if (opened) {
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      return 'opened';
     }
   } catch {
     /* continue */
