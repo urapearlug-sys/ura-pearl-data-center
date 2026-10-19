@@ -19,7 +19,7 @@ function openExternalUrl(url: string) {
 const INTRO: ChatMessage = {
   role: 'assistant',
   content:
-    'Karibu — I’m the Ask the Kamisona assistant. I give bot assistance and frequently asked questions answered by the Kamisona General of URA.\n\nNot satisfied or do not find your answer? Submit your question to the Commissioner General.',
+    'Karibu — I’m the Ask the Kamisona assistant. I give bot assistance and frequently asked questions answered by the Kamisona General of URA.',
 };
 
 type Props = { onClose: () => void };
