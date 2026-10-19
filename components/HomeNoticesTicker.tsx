@@ -11,12 +11,10 @@ type Notice = {
 
 type Props = {
   onOpenCategory?: (category: 'opportunity' | 'tender') => void;
-  /** Overlay on banner image without taking layout space */
-  floating?: boolean;
 };
 
 /** Right-to-left scrolling titles of published opportunities & tenders. */
-export default function HomeNoticesTicker({ onOpenCategory, floating = false }: Props) {
+export default function HomeNoticesTicker({ onOpenCategory }: Props) {
   const [notices, setNotices] = useState<Notice[]>([]);
 
   useEffect(() => {
@@ -53,14 +51,10 @@ export default function HomeNoticesTicker({ onOpenCategory, floating = false }: 
 
   return (
     <section
-      className={
-        floating
-          ? 'pointer-events-auto absolute inset-x-0 top-0 z-10 overflow-hidden rounded-t-2xl bg-[#0f315f]/92 border-b border-[var(--ura-yellow)]/45 shadow-[0_4px_14px_rgba(0,0,0,0.25)] backdrop-blur-[2px]'
-          : 'mt-4 overflow-hidden rounded-xl border border-[var(--ura-yellow)]/40 bg-[#0f315f]/95'
-      }
+      className="overflow-hidden bg-[#123f78] border-b-2 border-[#f3ba2f]"
       aria-label="Published opportunities and tenders"
     >
-      <div className="relative overflow-hidden py-2 pl-2 pr-2">
+      <div className="relative overflow-hidden py-2.5 px-2">
         <div className="ura-ticker-track flex w-max items-center gap-6 whitespace-nowrap will-change-transform">
           {titles.map((n, i) => (
             <button
@@ -72,21 +66,21 @@ export default function HomeNoticesTicker({ onOpenCategory, floating = false }: 
                   onOpenCategory?.(n.category);
                 }
               }}
-              className="inline-flex items-center gap-2 px-1 text-left hover:opacity-90"
+              className="inline-flex items-center gap-2 px-1 text-left hover:opacity-95"
             >
               <span
-                className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
+                className={`rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ${
                   n.category === 'tender'
-                    ? 'bg-[#f3ba2f] text-[#0a1628]'
+                    ? 'bg-[#f3ba2f] text-[#123f78]'
                     : 'bg-[#5fa8ff] text-[#0a1628]'
                 }`}
               >
                 {n.category === 'tender' ? 'Tender' : 'Opportunity'}
               </span>
-              <span className="text-[12px] sm:text-sm font-semibold text-white drop-shadow-sm">
+              <span className="text-[13px] sm:text-sm font-bold text-white">
                 {n.title}
               </span>
-              <span className="text-[var(--ura-yellow)]" aria-hidden>
+              <span className="text-[#f3ba2f] text-base font-bold" aria-hidden>
                 •
               </span>
             </button>
