@@ -14,6 +14,8 @@ const LICENCE_TYPES = [
   { id: 'learner', label: 'Learner / provisional', amount: 50000 },
 ] as const;
 
+type LicenceTypeId = (typeof LICENCE_TYPES)[number]['id'];
+
 export default function DriverLicenceFormPopup({ onClose }: Props) {
   const showToast = useToast();
   const { userTelegramInitData } = useGameStore();
@@ -23,7 +25,7 @@ export default function DriverLicenceFormPopup({ onClose }: Props) {
   const [tin, setTin] = useState('');
   const [idType, setIdType] = useState('National ID');
   const [idNumber, setIdNumber] = useState('');
-  const [licenceType, setLicenceType] = useState(LICENCE_TYPES[0].id);
+  const [licenceType, setLicenceType] = useState<LicenceTypeId>(LICENCE_TYPES[0].id);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -172,7 +174,7 @@ export default function DriverLicenceFormPopup({ onClose }: Props) {
                 <span className="text-[11px] font-semibold text-[#5a7bb0] uppercase">Licence product *</span>
                 <select
                   value={licenceType}
-                  onChange={(e) => setLicenceType(e.target.value)}
+                  onChange={(e) => setLicenceType(e.target.value as LicenceTypeId)}
                   className="mt-1 w-full rounded-xl border border-[#8bb4ef]/50 bg-white px-3 py-2.5 text-sm font-semibold text-[#123f78]"
                 >
                   {LICENCE_TYPES.map((t) => (

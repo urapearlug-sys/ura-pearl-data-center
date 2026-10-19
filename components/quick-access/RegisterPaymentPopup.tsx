@@ -10,11 +10,13 @@ const TAX_TYPES = [
   { id: 'customs', label: 'Customs' },
 ] as const;
 
+type TaxTypeId = (typeof TAX_TYPES)[number]['id'];
+
 type Props = { onClose: () => void };
 
 export default function RegisterPaymentPopup({ onClose }: Props) {
   const [step, setStep] = useState(0);
-  const [taxType, setTaxType] = useState(TAX_TYPES[0].id);
+  const [taxType, setTaxType] = useState<TaxTypeId>(TAX_TYPES[0].id);
   const [tin, setTin] = useState('');
   const [amount, setAmount] = useState('');
   const [busy, setBusy] = useState(false);
