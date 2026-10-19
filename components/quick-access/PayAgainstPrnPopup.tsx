@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
+import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
 
 const PAY_ITEMS = [
   { id: 'income-tax', label: 'Income tax', emoji: '🧾' },
@@ -22,6 +23,7 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [refCode, setRefCode] = useState('');
+  const [issuedAt, setIssuedAt] = useState<Date | null>(null);
 
   const selected = useMemo(() => PAY_ITEMS.find((x) => x.id === itemId) ?? null, [itemId]);
 
@@ -35,10 +37,31 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
     setBusy(true);
     triggerHapticFeedback(window);
     await new Promise((r) => setTimeout(r, 900));
-    setRefCode(`SIM-${Date.now().toString().slice(-8)}`);
+    setRefCode(`PAY-${Date.now().toString().slice(-8)}`);
+    setIssuedAt(new Date());
     setDone(true);
     setBusy(false);
   };
+
+  const receipt: SimulatedReceiptData | null = useMemo(() => {
+    if (!done || !refCode || !selected) return null;
+    const fields = [
+      { label: 'Payment for', value: selected.label },
+      { label: 'PRN', value: prn.trim() },
+      ...(amount
+        ? [{ label: 'Amount paid', value: `UGX ${Number(amount).toLocaleString('en-UG')}` }]
+        : []),
+      { label: 'Status', value: 'Paid (simulated)' },
+    ];
+    return {
+      kind: 'payment',
+      title: 'Payment successful',
+      subtitle: 'Official-style simulated receipt',
+      refCode,
+      issuedAt: issuedAt ?? undefined,
+      fields,
+    };
+  }, [done, refCode, selected, prn, amount, issuedAt]);
 
   return (
     <div
@@ -64,27 +87,7 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
         </div>
 
         <div className="p-4 space-y-3">
-          {done ? (
-            <div className="rounded-xl border border-emerald-400/40 bg-emerald-50 px-3 py-4 text-center space-y-2">
-              <p className="text-2xl" aria-hidden>
-                ✅
-              </p>
-              <p className="text-sm font-extrabold text-[#123f78]">Payment successful</p>
-              <p className="text-xs text-[#335f97]">
-                {selected?.label} · PRN {prn.trim()}
-                {amount ? ` · UGX ${Number(amount).toLocaleString('en-UG')}` : ''}
-              </p>
-              <p className="text-[11px] font-mono text-[#123f78]">Ref {refCode}</p>
-              <p className="text-[10px] text-[#5a7bb0]">Simulation complete — no real funds moved.</p>
-              <button
-                type="button"
-                onClick={close}
-                className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
-              >
-                Done
-              </button>
-            </div>
-          ) : null}
+          {done && receipt ? <SimulatedReceipt data={receipt} onDone={close} /> : null}
 
           {!done && step === 0 ? (
             <>

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
+import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
 
 const TAX_TYPES = [
   { id: 'income', label: 'Income tax' },
@@ -22,6 +23,8 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [prn, setPrn] = useState('');
+  const [refCode, setRefCode] = useState('');
+  const [issuedAt, setIssuedAt] = useState<Date | null>(null);
 
   const close = () => {
     triggerHapticFeedback(window);
@@ -33,10 +36,32 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
     setBusy(true);
     triggerHapticFeedback(window);
     await new Promise((r) => setTimeout(r, 800));
+    const now = new Date();
     setPrn(`PRN-SIM-${Date.now().toString().slice(-10)}`);
+    setRefCode(`SLIP-${Date.now().toString().slice(-8)}`);
+    setIssuedAt(now);
     setDone(true);
     setBusy(false);
   };
+
+  const receipt: SimulatedReceiptData | null = useMemo(() => {
+    if (!done || !prn || !refCode) return null;
+    const taxLabel = TAX_TYPES.find((t) => t.id === taxType)?.label ?? taxType;
+    return {
+      kind: 'prn-slip',
+      title: 'PRN generated',
+      subtitle: 'Payment registration slip',
+      refCode,
+      issuedAt: issuedAt ?? undefined,
+      fields: [
+        { label: 'Tax type', value: taxLabel },
+        { label: 'TIN', value: tin.trim() },
+        { label: 'Amount', value: `UGX ${Number(amount).toLocaleString('en-UG')}` },
+        { label: 'PRN', value: prn },
+        { label: 'Status', value: 'Registered (simulated)' },
+      ],
+    };
+  }, [done, prn, refCode, taxType, tin, amount, issuedAt]);
 
   return (
     <div
@@ -66,25 +91,8 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
         </div>
 
         <div className="p-4 space-y-3">
-          {done ? (
-            <div className="rounded-xl border border-emerald-400/40 bg-emerald-50 px-3 py-4 text-center space-y-2">
-              <p className="text-2xl" aria-hidden>
-                ✅
-              </p>
-              <p className="text-sm font-extrabold text-[#123f78]">Payment slip generated</p>
-              <p className="text-xs text-[#335f97]">
-                {TAX_TYPES.find((t) => t.id === taxType)?.label} · TIN {tin.trim()}
-              </p>
-              <p className="text-sm font-mono font-bold text-[#123f78]">{prn}</p>
-              <p className="text-[10px] text-[#5a7bb0]">Simulation — use Pay against PRN to practice payment.</p>
-              <button
-                type="button"
-                onClick={close}
-                className="mt-2 w-full rounded-xl bg-[#123f78] py-2.5 text-sm font-bold text-white"
-              >
-                Done
-              </button>
-            </div>
+          {done && receipt ? (
+            <SimulatedReceipt data={receipt} onDone={close} />
           ) : step === 0 ? (
             <>
               <p className="text-xs font-semibold text-[#123f78]">Select tax type</p>
