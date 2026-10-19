@@ -7,8 +7,6 @@ import UraStadiumPageHero from '@/components/UraStadiumPageHero';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { LEARN_CATEGORY_DEFAULTS } from '@/data/learn-defaults';
 import { useToast } from '@/contexts/ToastContext';
-import { queueEarnBootstrap } from '@/utils/earn-bootstrap';
-
 type LearnCategory = {
   id: string;
   slug: string;
@@ -159,34 +157,32 @@ export default function Learn({ setCurrentView }: LearnProps) {
               type="button"
               onClick={() => {
                 triggerHapticFeedback(window);
-                setCurrentView('ura-tv');
+                setCurrentView('opportunities');
               }}
               className="rounded-xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#1e3460] via-[#123f78] to-[#061428] px-3 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.12)] transition-colors"
             >
               <span className="text-2xl block mb-1 drop-shadow-sm" aria-hidden>
-                📺
+                🎯
               </span>
-              <p className="text-white font-bold text-sm">URA TV</p>
+              <p className="text-white font-bold text-sm">Opportunities</p>
               <p className="text-[#f3ba2f]/85 text-[11px] mt-1 leading-snug font-medium">
-                Programs · YouTube · feedback
+                Careers & openings · publishable
               </p>
             </button>
             <button
               type="button"
               onClick={() => {
                 triggerHapticFeedback(window);
-                if (!setCurrentView) return;
-                queueEarnBootstrap({ openWeeklyEvent: true });
-                setCurrentView('earn');
+                setCurrentView('tenders');
               }}
               className="rounded-xl border border-[#1e4a8a]/90 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#1e3460] via-[#123f78] to-[#061428] px-3 py-4 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[#f3ba2f]/70 hover:shadow-[0_0_20px_rgba(243,186,47,0.12)] transition-colors"
             >
               <span className="text-2xl block mb-1 drop-shadow-sm" aria-hidden>
-                🎤
+                📋
               </span>
-              <p className="text-white font-bold text-sm">Tax Trivia Live Events</p>
+              <p className="text-white font-bold text-sm">Tenders</p>
               <p className="text-[#f3ba2f]/85 text-[11px] mt-1 leading-snug font-medium">
-                Live learning events
+                Procurement notices · publishable
               </p>
             </button>
           </div>

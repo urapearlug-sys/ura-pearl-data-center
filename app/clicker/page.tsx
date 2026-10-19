@@ -49,6 +49,7 @@ import Guild from '@/components/Guild';
 import KaribuDailyPage from '@/components/KaribuDailyPage';
 import UraTvPage from '@/components/UraTvPage';
 import UraFcPage from '@/components/UraFcPage';
+import OpportunityNoticesPage from '@/components/OpportunityNoticesPage';
 
 function EmptyPrimaryPage() {
     return <div className="bg-ura-page min-h-screen" />;
@@ -63,6 +64,8 @@ const MORE_VIEWS = new Set([
     'guild',
     'ura-tv',
     'ura-fc',
+    'opportunities',
+    'tenders',
 ]);
 
 function ClickerPage() {
@@ -106,6 +109,10 @@ function ClickerPage() {
                 return <Learn setCurrentView={setCurrentView} />;
             case 'ura-tv':
                 return <UraTvPage setCurrentView={setCurrentView} />;
+            case 'opportunities':
+                return <OpportunityNoticesPage category="opportunity" setCurrentView={setCurrentView} />;
+            case 'tenders':
+                return <OpportunityNoticesPage category="tender" setCurrentView={setCurrentView} />;
             case 'ura-fc':
                 return <UraFcPage setCurrentView={setCurrentView} />;
             case 'services':

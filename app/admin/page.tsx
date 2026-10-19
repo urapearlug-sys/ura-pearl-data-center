@@ -64,6 +64,13 @@ const PEARLS_MANAGEMENT_CARDS: AdminHubCard[] = [
     icon: '📜',
   },
   {
+    id: 'opportunity-notices',
+    title: 'Opportunities & Tenders',
+    path: '/admin/opportunity-notices',
+    description: 'Publish Learn notices; titles scroll right-to-left on the Home ticker when published.',
+    icon: '🎯',
+  },
+  {
     id: 'ura-tv',
     title: 'URA TV programs',
     path: '/admin/tv-programs',

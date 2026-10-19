@@ -309,3 +309,21 @@ body {
 .ecosystem-particle {
   animation: ecosystem-particle-float 5s ease-in-out infinite;
 }
+
+/* Home Opportunities & Tenders titles — scroll right → left */
+@keyframes ura-ticker-rtl {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ura-ticker-track {
+  animation: ura-ticker-rtl 28s linear infinite;
+}
+
+.ura-ticker-track:hover {
+  animation-play-state: paused;
+}

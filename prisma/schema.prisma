@@ -1049,6 +1049,23 @@ model PearlAudit {
   createdAt     DateTime           @default(now())
 }
 
+/// Learn → Opportunities / Tenders — admin-published notices (titles also scroll on Home).
+model OpportunityNotice {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// "opportunity" | "tender"
+  category    String
+  title       String
+  body        String?
+  link        String?
+  linkLabel   String?
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, isPublished])
+}
+
 /// URA TV — programs with YouTube embeds (admin-managed).
 model TvProgram {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId

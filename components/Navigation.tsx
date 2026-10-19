@@ -78,7 +78,13 @@ export default function Navigation({ currentView, setCurrentView }: NavigationPr
                 >
                     <div
                         className={`flex flex-col items-center justify-center ${
-                            currentView === item.view || (item.view === 'earn' && currentView === 'karibu-daily')
+                            currentView === item.view ||
+                              (item.view === 'earn' && currentView === 'karibu-daily') ||
+                              (item.view === 'eearn' &&
+                                (currentView === 'opportunities' ||
+                                  currentView === 'tenders' ||
+                                  currentView === 'ura-tv' ||
+                                  currentView === 'ura-fc'))
                                 ? 'text-white bg-ura-panel-3/80'
                                 : 'text-gray-400'
                         } h-16 m-1 p-2 rounded-2xl`}

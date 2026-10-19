@@ -18,6 +18,7 @@ import UraTaxCalculatorsModal, {
   type UraTaxCalcCategory,
 } from '@/components/UraTaxCalculatorsModal';
 import KaribuDailyPopup from '@/components/KaribuDailyPopup';
+import HomeNoticesTicker from '@/components/HomeNoticesTicker';
 
 const HOME_QUICK_ACCESS: { id: string; title: string; emoji: string; url: string }[] = [
   {
@@ -624,6 +625,12 @@ export default function Home({ setCurrentView }: HomeProps) {
               priority
             />
           </div>
+
+          <HomeNoticesTicker
+            onOpenCategory={(category) => {
+              setCurrentView(category === 'tender' ? 'tenders' : 'opportunities');
+            }}
+          />
 
           {showEcosystemDashboard ? (
             <div
