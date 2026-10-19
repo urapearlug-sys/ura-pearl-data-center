@@ -21,15 +21,13 @@ import KaribuDailyPopup from '@/components/KaribuDailyPopup';
 import HomeNoticesTicker from '@/components/HomeNoticesTicker';
 import KamisonaChatPopup from '@/components/quick-access/KamisonaChatPopup';
 import PayAgainstPrnPopup from '@/components/quick-access/PayAgainstPrnPopup';
-import DriverLicenceFormPopup from '@/components/quick-access/DriverLicenceFormPopup';
 import RegisterPaymentPopup from '@/components/quick-access/RegisterPaymentPopup';
 
-type QuickAccessId = 'pay-prn' | 'register-payment' | 'driver-licence' | 'ask-kamisona';
+type QuickAccessId = 'pay-prn' | 'register-payment' | 'ask-kamisona';
 
 const HOME_QUICK_ACCESS: { id: QuickAccessId; title: string; emoji: string }[] = [
   { id: 'pay-prn', title: 'Pay against PRN', emoji: '💳' },
   { id: 'register-payment', title: 'Register new payment', emoji: '🎫' },
-  { id: 'driver-licence', title: "Pay driver's licence", emoji: '🪪' },
   { id: 'ask-kamisona', title: 'Ask the Kamisona', emoji: '🗣️' },
 ];
 
@@ -391,7 +389,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           <div className="min-w-0 flex-1">
             <p className="text-base font-extrabold leading-tight text-[#123f78]">Quick access</p>
             <p className="mt-1 text-sm leading-snug text-[#335f97]">
-              PRN · payments · licence · Kamisona
+              PRN · register payment · Kamisona
             </p>
           </div>
         </div>
@@ -949,9 +947,6 @@ export default function Home({ setCurrentView }: HomeProps) {
       ) : null}
       {quickAccessFlow === 'pay-prn' ? (
         <PayAgainstPrnPopup onClose={() => setQuickAccessFlow(null)} />
-      ) : null}
-      {quickAccessFlow === 'driver-licence' ? (
-        <DriverLicenceFormPopup onClose={() => setQuickAccessFlow(null)} />
       ) : null}
       {quickAccessFlow === 'register-payment' ? (
         <RegisterPaymentPopup onClose={() => setQuickAccessFlow(null)} />

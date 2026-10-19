@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
+import DriverLicenceFormPopup from '@/components/quick-access/DriverLicenceFormPopup';
 
 const TAX_TYPES = [
   { id: 'income', label: 'Income tax' },
@@ -12,10 +13,12 @@ const TAX_TYPES = [
 ] as const;
 
 type TaxTypeId = (typeof TAX_TYPES)[number]['id'];
+type Flow = 'menu' | 'tax' | 'licence';
 
 type Props = { onClose: () => void };
 
 export default function RegisterPaymentPopup({ onClose }: Props) {
+  const [flow, setFlow] = useState<Flow>('menu');
   const [step, setStep] = useState(0);
   const [taxType, setTaxType] = useState<TaxTypeId>(TAX_TYPES[0].id);
   const [tin, setTin] = useState('');
@@ -63,6 +66,12 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
     };
   }, [done, prn, refCode, taxType, tin, amount, issuedAt]);
 
+  if (flow === 'licence') {
+    return <DriverLicenceFormPopup onClose={close} />;
+  }
+
+  const taxStepLabel = done ? null : step === 0 ? '1/2' : '2/2';
+
   return (
     <div
       className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
@@ -79,7 +88,13 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
         <div className="flex items-center justify-between px-3.5 py-3 bg-[#123f78]">
           <div>
             <p className="text-sm font-extrabold text-white">Register new payment</p>
-            <p className="text-[11px] text-[#f3ba2f]">Simulated · step {Math.min(step + 1, 2)}/2</p>
+            <p className="text-[11px] text-[#f3ba2f]">
+              {flow === 'menu'
+                ? 'Choose what to register'
+                : done
+                  ? 'Simulated · receipt ready'
+                  : `Simulated · tax payment · step ${taxStepLabel}`}
+            </p>
           </div>
           <button
             type="button"
@@ -91,7 +106,54 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
         </div>
 
         <div className="p-4 space-y-3">
-          {done && receipt ? (
+          {flow === 'menu' ? (
+            <>
+              <p className="text-xs font-semibold text-[#123f78]">What do you want to register?</p>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setFlow('tax');
+                  setStep(0);
+                }}
+                className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[#f3ba2f]/55 transition-colors flex items-center gap-3"
+              >
+                <span
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
+                  aria-hidden
+                >
+                  🎫
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-bold text-[#123f78]">Tax / PRN payment</span>
+                  <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
+                    Income tax, VAT, PAYE, customs
+                  </span>
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setFlow('licence');
+                }}
+                className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[#f3ba2f]/55 transition-colors flex items-center gap-3"
+              >
+                <span
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
+                  aria-hidden
+                >
+                  🪪
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-bold text-[#123f78]">Pay driver&apos;s licence</span>
+                  <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
+                    New, renew, or learner licence
+                  </span>
+                </span>
+              </button>
+            </>
+          ) : done && receipt ? (
             <SimulatedReceipt data={receipt} onDone={close} />
           ) : step === 0 ? (
             <>
@@ -115,16 +177,28 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  setStep(1);
-                }}
-                className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
-              >
-                Next
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setFlow('menu');
+                  }}
+                  className="flex-1 rounded-xl border border-[#8bb4ef]/50 py-2.5 text-sm font-bold text-[#123f78]"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setStep(1);
+                  }}
+                  className="flex-[2] rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
+                >
+                  Next
+                </button>
+              </div>
             </>
           ) : (
             <>
