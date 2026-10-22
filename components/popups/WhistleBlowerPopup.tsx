@@ -129,7 +129,7 @@ export default function WhistleBlowerPopup({ onClose }: Props) {
   };
 
   const violationLabels = useMemo(() => {
-    const fromList = WHISTLE_VIOLATION_OPTIONS.filter((v) => violations.has(v.id)).map((v) => v.label);
+    const fromList: string[] = WHISTLE_VIOLATION_OPTIONS.filter((v) => violations.has(v.id)).map((v) => v.label);
     if (violationOther.trim()) fromList.push(`Other: ${violationOther.trim()}`);
     return fromList;
   }, [violations, violationOther]);
