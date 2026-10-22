@@ -131,6 +131,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [quickAccessOpen, setQuickAccessOpen] = useState(false);
   const [quickAccessFlow, setQuickAccessFlow] = useState<QuickAccessId | null>(null);
   const [payPrnPrefill, setPayPrnPrefill] = useState<string | null>(null);
+  const [pearlsHidden, setPearlsHidden] = useState(false);
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -147,6 +148,30 @@ export default function Home({ setCurrentView }: HomeProps) {
   const visitsStorageKey = `ura:home:visits:${storagePrefix}`;
   const favoritesStorageKey = `ura:home:favorites:${storagePrefix}`;
   const customFavoritesStorageKey = `ura:home:favorites:custom:${storagePrefix}`;
+  const pearlsHiddenStorageKey = `ura:home:pearls-hidden:${storagePrefix}`;
+
+  useEffect(() => {
+    try {
+      setPearlsHidden(localStorage.getItem(pearlsHiddenStorageKey) === '1');
+    } catch {
+      setPearlsHidden(false);
+    }
+  }, [pearlsHiddenStorageKey]);
+
+  const togglePearlsHidden = () => {
+    triggerHapticFeedback(window);
+    setPearlsHidden((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(pearlsHiddenStorageKey, next ? '1' : '0');
+      } catch {
+        /* quota */
+      }
+      return next;
+    });
+  };
+
+  const maskPearls = (value: number | string) => (pearlsHidden ? '•••••' : value);
 
   const mostUsedItems = useMemo(() => {
     const scored = ACTION_CATALOG.map((item, index) => ({
@@ -664,7 +689,18 @@ export default function Home({ setCurrentView }: HomeProps) {
 
             <div className="rounded-xl border border-[#8bb4ef]/35 bg-[#f4f8ff] p-3">
               <div className="min-w-0">
-                <h3 className="text-sm font-bold text-[#c9a227] tracking-tight">Total PEARLS</h3>
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-sm font-bold text-[#c9a227] tracking-tight">Total PEARLS</h3>
+                  <button
+                    type="button"
+                    onClick={togglePearlsHidden}
+                    aria-pressed={pearlsHidden}
+                    aria-label={pearlsHidden ? 'Show pearl values' : 'Hide pearl values'}
+                    className="rounded-lg border border-[#8bb4ef]/45 bg-white px-2.5 py-1 text-[10px] font-bold text-[#123f78] hover:border-[#f3ba2f]/50"
+                  >
+                    {pearlsHidden ? 'Show' : 'Hide'}
+                  </button>
+                </div>
                 <div className="mt-2 flex items-center gap-2">
                   <Image
                     src={uraTreasuryCounter}
@@ -673,7 +709,9 @@ export default function Home({ setCurrentView }: HomeProps) {
                     height={56}
                     className="h-14 w-14 flex-shrink-0 object-contain"
                   />
-                  <span className="text-2xl font-bold text-[#123f78] tabular-nums tracking-tight">{pearlsDisplay}</span>
+                  <span className="text-2xl font-bold text-[#123f78] tabular-nums tracking-tight">
+                    {maskPearls(pearlsDisplay)}
+                  </span>
                 </div>
                 <button
                   type="button"
@@ -702,7 +740,9 @@ export default function Home({ setCurrentView }: HomeProps) {
                         <p className={`text-xs font-semibold ${item.color}`}>{item.label}</p>
                         <p className="text-[10px] text-[#5a7bb0] truncate">{item.hint}</p>
                       </div>
-                      <p className="text-sm font-bold text-[#123f78] tabular-nums">{item.value.toLocaleString()}</p>
+                      <p className="text-sm font-bold text-[#123f78] tabular-nums">
+                        {maskPearls(item.value.toLocaleString())}
+                      </p>
                     </div>
                   ))}
                 </div>

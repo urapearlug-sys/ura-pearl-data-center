@@ -1112,6 +1112,18 @@ model TvProgramComment {
   @@index([programId])
 }
 
+/// URA TV feedback on admin programs and YouTube library videos (videoKey = program id or yt:VIDEO_ID).
+model UraTvVideoComment {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  videoKey   String
+  telegramId String
+  authorName String?
+  body       String
+  createdAt  DateTime @default(now())
+
+  @@index([videoKey, createdAt])
+}
+
 /// URA FC fixtures — mirrors club schedule for in-app display ([URA FC official site](https://urafc.co.ug/)).
 model UraFcMatch {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

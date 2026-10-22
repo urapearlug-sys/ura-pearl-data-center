@@ -6,29 +6,58 @@ export const dynamic = 'force-dynamic';
 
 const MAX_BODY = 2000;
 
+function isMongoObjectId(id: string) {
+  return /^[a-f\d]{24}$/i.test(id);
+}
+
+type CommentDto = {
+  id: string;
+  authorName: string | null;
+  body: string;
+  createdAt: string;
+};
+
+function mapRow(row: { id: string; authorName: string | null; body: string; createdAt: Date }): CommentDto {
+  return {
+    id: row.id,
+    authorName: row.authorName,
+    body: row.body,
+    createdAt: row.createdAt.toISOString(),
+  };
+}
+
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  if (!id) return NextResponse.json({ error: 'Missing program id' }, { status: 400 });
+  const { id: videoKey } = await params;
+  if (!videoKey) return NextResponse.json({ error: 'Missing video id' }, { status: 400 });
   try {
-    const comments = await prisma.tvProgramComment.findMany({
-      where: { programId: id },
-      orderBy: { createdAt: 'desc' },
-      take: 80,
-      select: {
-        id: true,
-        authorName: true,
-        body: true,
-        createdAt: true,
-      },
+    const [byKey, legacy] = await Promise.all([
+      prisma.uraTvVideoComment.findMany({
+        where: { videoKey },
+        orderBy: { createdAt: 'desc' },
+        take: 80,
+        select: { id: true, authorName: true, body: true, createdAt: true },
+      }),
+      isMongoObjectId(videoKey)
+        ? prisma.tvProgramComment.findMany({
+            where: { programId: videoKey },
+            orderBy: { createdAt: 'desc' },
+            take: 80,
+            select: { id: true, authorName: true, body: true, createdAt: true },
+          })
+        : Promise.resolve([]),
+    ]);
+
+    const merged = [...byKey.map(mapRow), ...legacy.map(mapRow)].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const seen = new Set<string>();
+    const comments = merged.filter((c) => {
+      if (seen.has(c.id)) return false;
+      seen.add(c.id);
+      return true;
     });
-    return NextResponse.json({
-      comments: comments.map((c) => ({
-        id: c.id,
-        authorName: c.authorName,
-        body: c.body,
-        createdAt: c.createdAt.toISOString(),
-      })),
-    });
+
+    return NextResponse.json({ comments: comments.slice(0, 80) });
   } catch (e) {
     console.error('[tv-programs comments GET]', e);
     return NextResponse.json({ error: 'Failed to load comments' }, { status: 500 });
@@ -36,8 +65,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id: programId } = await params;
-  if (!programId) return NextResponse.json({ error: 'Missing program id' }, { status: 400 });
+  const { id: videoKey } = await params;
+  if (!videoKey) return NextResponse.json({ error: 'Missing video id' }, { status: 400 });
 
   try {
     const body = (await req.json()) as Record<string, unknown>;
@@ -65,17 +94,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       user.username ||
       'Citizen';
 
-    const program = await prisma.tvProgram.findFirst({
-      where: { id: programId, isPublished: true },
-      select: { id: true },
-    });
-    if (!program) {
-      return NextResponse.json({ error: 'Program not found' }, { status: 404 });
+    if (isMongoObjectId(videoKey)) {
+      const program = await prisma.tvProgram.findFirst({
+        where: { id: videoKey, isPublished: true },
+        select: { id: true },
+      });
+      if (!program) {
+        return NextResponse.json({ error: 'Program not found' }, { status: 404 });
+      }
     }
 
-    const row = await prisma.tvProgramComment.create({
+    const row = await prisma.uraTvVideoComment.create({
       data: {
-        programId,
+        videoKey,
         telegramId,
         authorName,
         body: text,
@@ -83,14 +114,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       select: { id: true, authorName: true, body: true, createdAt: true },
     });
 
-    return NextResponse.json({
-      comment: {
-        id: row.id,
-        authorName: row.authorName,
-        body: row.body,
-        createdAt: row.createdAt.toISOString(),
-      },
-    });
+    return NextResponse.json({ comment: mapRow(row) });
   } catch (e) {
     console.error('[tv-programs comments POST]', e);
     return NextResponse.json({ error: 'Failed to post comment' }, { status: 500 });
