@@ -7,12 +7,22 @@ import { useToast } from '@/contexts/ToastContext';
 import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { TRUE_FALSE_REWARD_WHITE, TRUE_FALSE_UGANDA_TAX } from '@/data/true-false-uganda-tax';
 import { submitEarnPearlActivity } from '@/utils/earn-activity-submit';
+import {
+  saveTrueFalseDailyAttempt,
+  trueFalseDailyStatus,
+  trueFalseRetryMessage,
+  trueFalseUserKey,
+} from '@/utils/true-false-daily';
 
 type Props = { onClose: () => void };
 
 export default function TrueFalseQuizPopup({ onClose }: Props) {
   const showToast = useToast();
   const { userTelegramInitData, incrementPoints } = useGameStore();
+  const userKey = useMemo(() => trueFalseUserKey(userTelegramInitData), [userTelegramInitData]);
+  const dailyStatus = useMemo(() => trueFalseDailyStatus(userKey), [userKey]);
+  const locked = !dailyStatus.canPlay;
+
   const questions = useMemo(() => TRUE_FALSE_UGANDA_TAX.slice(0, 3), []);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -24,7 +34,7 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
   const q = questions[index];
 
   const answer = (value: boolean) => {
-    if (picked !== null || !q) return;
+    if (picked !== null || !q || locked) return;
     triggerHapticFeedback(window);
     setPicked(value);
     if (value === q.isTrue) setScore((s) => s + 1);
@@ -33,6 +43,7 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
   const finishWithScore = async (finalScore: number) => {
     setDone(true);
     const won = finalScore === questions.length;
+    saveTrueFalseDailyAttempt(userKey, won);
     const earned = won ? TRUE_FALSE_REWARD_WHITE : 0;
     if (!userTelegramInitData || earned <= 0) {
       setAwarded(0);
@@ -73,7 +84,7 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
         <div className="flex items-center justify-between px-4 py-3 bg-[#123f78]">
           <div>
             <p className="text-sm font-extrabold text-white">True or False</p>
-            <p className="text-[11px] text-[#f3ba2f]">3 questions · all correct to win</p>
+            <p className="text-[11px] text-[#f3ba2f]">3 questions · all correct to win · once per day</p>
           </div>
           <button
             type="button"
@@ -88,7 +99,23 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
         </div>
 
         <div className="p-4 space-y-3 text-white">
-          {done ? (
+          {locked ? (
+            <div className="space-y-3 text-center py-2">
+              <p className="text-lg font-extrabold text-[#f3ba2f]">Already played today</p>
+              <p className="text-sm text-blue-100 leading-relaxed">
+                {dailyStatus.wonToday
+                  ? 'You completed today’s round. Come back tomorrow for a new set of questions.'
+                  : `You didn’t get all three correct. ${trueFalseRetryMessage()}`}
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
+              >
+                Done
+              </button>
+            </div>
+          ) : done ? (
             <div className="space-y-2 text-center">
               <p className="text-lg font-extrabold">
                 {score === questions.length ? 'You win!' : 'No pearls this round'}
@@ -98,7 +125,7 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
                 {awarded > 0
                   ? ` · +${awarded} white pearls`
                   : score < questions.length
-                    ? ' · One wrong answer means no reward — try again'
+                    ? ` · ${trueFalseRetryMessage()}`
                     : ''}
               </p>
               <button

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import WarehousingSurveyPopup from '@/components/popups/WarehousingSurveyPopup';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
@@ -15,7 +16,7 @@ type Props = {
   mode?: 'warehousing' | 'groupage' | 'service';
 };
 
-export default function RateServicePopup({ onClose, mode = 'warehousing' }: Props) {
+function RateServiceSimplePopup({ onClose, mode }: Props & { mode: 'groupage' | 'service' }) {
   const showToast = useToast();
   const { userTelegramInitData, incrementPoints } = useGameStore();
   const [stars, setStars] = useState(5);
@@ -23,8 +24,7 @@ export default function RateServicePopup({ onClose, mode = 'warehousing' }: Prop
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
 
-  const title =
-    mode === 'groupage' ? 'Groupage experience' : mode === 'service' ? 'Rate the service' : 'Warehousing';
+  const title = mode === 'groupage' ? 'Groupage experience' : 'Rate the service';
 
   const submit = async () => {
     if (!userTelegramInitData) {
@@ -114,4 +114,11 @@ export default function RateServicePopup({ onClose, mode = 'warehousing' }: Prop
       </div>
     </div>
   );
+}
+
+export default function RateServicePopup({ onClose, mode = 'warehousing' }: Props) {
+  if (mode === 'warehousing') {
+    return <WarehousingSurveyPopup onClose={onClose} />;
+  }
+  return <RateServiceSimplePopup onClose={onClose} mode={mode} />;
 }

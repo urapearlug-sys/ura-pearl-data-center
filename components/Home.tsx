@@ -34,21 +34,22 @@ const HOME_QUICK_ACCESS: { id: QuickAccessId; title: string; emoji: string }[] =
 type ActionCenterTab = 'most-used' | 'favorites';
 
 const HOME_ECOSYSTEM_ICONS: Record<string, string> = {
-  tasks: '✅',
-  decode: '🔐',
-  matrix: '🎴',
-  'collection-cards': '🗂️',
-  'weekly-event': '🎁',
-  'global-joinable-tasks': '🌍',
+  'register-payment': '🎫',
+  'pay-prn': '💳',
+  'ask-kamisona': '🗣️',
+  'ura-tv': '📺',
+  opportunities: '🏛️',
+  'ura-fc': '⚽',
+  'tax-calculators': '🧮',
   'ura-quiz': '📝',
-  'receipt-rush': '🧾',
   'true-false': '⚖️',
-  leaderboard: '🏆',
+  'receipt-rush': '🧾',
+  'voice-reports': '🎙️',
+  'whistle-blower': '📣',
+  'rate-service': '⭐',
+  'earn-tenure': '🤝',
+  services: '🔗',
   'karibu-daily': '📅',
-  'mine-flow': '⛏️',
-  'pearls-collection': '🧊',
-  'citizen-network': '👥',
-  'pearls-airdrop': '🎈',
 };
 
 type ActionItem = {
@@ -494,47 +495,146 @@ export default function Home({ setCurrentView }: HomeProps) {
   };
 
   const homeEcosystemModules = useMemo((): EcosystemDashboardModule[] => {
+    const closeEco = () => setShowEcosystemDashboard(false);
     const goEarn = (payload: EarnBootstrapPayload) => {
       queueEarnBootstrap(payload);
-      setShowEcosystemDashboard(false);
+      closeEco();
       setCurrentView('earn');
     };
     const goView = (view: string) => {
-      setShowEcosystemDashboard(false);
+      closeEco();
       setCurrentView(view);
     };
     const ic = HOME_ECOSYSTEM_ICONS;
     return [
-      { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', icon: ic.tasks, onClick: () => goEarn({activeTabAll: true }) },
-      { id: 'decode', title: 'Decode', subtitle: 'Daily cipher challenge', icon: ic.decode, onClick: () => goEarn({openDailyCipher: true }) },
-      { id: 'matrix', title: 'Matrix', subtitle: 'Daily combo challenge', icon: ic.matrix, onClick: () => goEarn({openDailyCombo: true }) },
-      { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', icon: ic['collection-cards'], onClick: () => goView('collection') },
-      { id: 'weekly-event', title: 'Weekly Event', subtitle: 'Complete weekly objectives', icon: ic['weekly-event'], onClick: () => goEarn({openWeeklyEvent: true }) },
-      { id: 'global-joinable-tasks', title: 'Global Joinable Tasks', subtitle: 'Join league/team global competitions', icon: ic['global-joinable-tasks'], onClick: () => goEarn({openGlobalTasks: true }) },
-      { id: 'ura-quiz', title: 'URA Quiz', subtitle: 'Quiz and earn PEARLS', icon: ic['ura-quiz'], onClick: () => goEarn({openMitrolabsQuiz: true }) },
-      { id: 'receipt-rush', title: 'Receipt Rush', subtitle: 'Upload receipt · +2000 blue on approval', icon: ic['receipt-rush'], onClick: () => goEarn({openReceiptRush: true }) },
+      {
+        id: 'register-payment',
+        title: 'Register payment',
+        subtitle: 'Simulated PRN registration',
+        icon: ic['register-payment'],
+        onClick: () => {
+          closeEco();
+          setQuickAccessFlow('register-payment');
+        },
+      },
+      {
+        id: 'pay-prn',
+        title: 'Pay PRN',
+        subtitle: 'Pay against a registered PRN',
+        icon: ic['pay-prn'],
+        onClick: () => {
+          closeEco();
+          setPayPrnPrefill(null);
+          setQuickAccessFlow('pay-prn');
+        },
+      },
+      {
+        id: 'ask-kamisona',
+        title: 'Kamisona',
+        subtitle: 'Ask URA · FAQs · handoff',
+        icon: ic['ask-kamisona'],
+        onClick: () => {
+          closeEco();
+          setQuickAccessFlow('ask-kamisona');
+        },
+      },
+      {
+        id: 'ura-tv',
+        title: 'URA TV',
+        subtitle: 'Official programmes & feedback',
+        icon: ic['ura-tv'],
+        onClick: () => goView('ura-tv'),
+      },
+      {
+        id: 'opportunities',
+        title: 'Opportunities',
+        subtitle: 'Auctions · careers · tenders',
+        icon: ic.opportunities,
+        onClick: () => goView('opportunities'),
+      },
+      {
+        id: 'ura-fc',
+        title: 'URA FC',
+        subtitle: 'Fixtures and club news',
+        icon: ic['ura-fc'],
+        onClick: () => goView('ura-fc'),
+      },
+      {
+        id: 'tax-calculators',
+        title: 'Tax calc',
+        subtitle: 'PAYE · rental · motor import',
+        icon: ic['tax-calculators'],
+        onClick: () => {
+          closeEco();
+          setTaxCalcOpen(true);
+        },
+      },
+      {
+        id: 'ura-quiz',
+        title: 'URA Quiz',
+        subtitle: 'Tax quiz · earn PEARLS',
+        icon: ic['ura-quiz'],
+        onClick: () => goEarn({ openMitrolabsQuiz: true }),
+      },
       {
         id: 'true-false',
-        title: 'True or False – Uganda Tax Edition',
-        subtitle: 'Tax knowledge challenge',
+        title: 'True / False',
+        subtitle: 'Uganda tax · 3 for PEARLS',
         icon: ic['true-false'],
-        onClick: () => goEarn({activeTabAll: true }),
+        onClick: () => goEarn({ openTrueFalse: true }),
       },
-      { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track your ranking progress', icon: ic.leaderboard, onClick: () => goView('game') },
+      {
+        id: 'receipt-rush',
+        title: 'Receipt Rush',
+        subtitle: 'Submit tax receipts',
+        icon: ic['receipt-rush'],
+        onClick: () => goEarn({ openReceiptRush: true }),
+      },
+      {
+        id: 'voice-reports',
+        title: 'Voice report',
+        subtitle: 'Share feedback with URA',
+        icon: ic['voice-reports'],
+        onClick: () => goEarn({ openVoiceReports: true }),
+      },
+      {
+        id: 'whistle-blower',
+        title: 'Whistle blow',
+        subtitle: 'Report tax evasion',
+        icon: ic['whistle-blower'],
+        onClick: () => goEarn({ openWhistleBlower: true }),
+      },
+      {
+        id: 'rate-service',
+        title: 'Rate service',
+        subtitle: 'Warehousing & URA experience',
+        icon: ic['rate-service'],
+        onClick: () => goEarn({ openRateService: 'warehousing' }),
+      },
+      {
+        id: 'earn-tenure',
+        title: 'Earn tenure',
+        subtitle: 'Citizen tax pledge',
+        icon: ic['earn-tenure'],
+        onClick: () => goEarn({ openEarnTenure: true }),
+      },
+      {
+        id: 'services',
+        title: 'URA Services',
+        subtitle: 'Official ura.go.ug links',
+        icon: ic.services,
+        onClick: () => goView('services'),
+      },
       {
         id: 'karibu-daily',
         title: 'Karibu Daily',
-        subtitle: '10-day streak · claim white pearls',
+        subtitle: 'Login streak · white PEARLS',
         icon: ic['karibu-daily'],
         onClick: () => {
-          setShowEcosystemDashboard(false);
+          closeEco();
           setKaribuPopupOpen(true);
         },
       },
-      { id: 'mine-flow', title: 'Mine Flow', subtitle: 'Passive mining mode (rebranded from Mine)', icon: ic['mine-flow'], onClick: () => goView('mine') },
-      { id: 'pearls-collection', title: 'PEARLS Collection', subtitle: 'Card/progression collection', icon: ic['pearls-collection'], onClick: () => goView('collection') },
-      { id: 'citizen-network', title: 'Citizen Network', subtitle: 'Referrals and social growth (from Friends)', icon: ic['citizen-network'], onClick: () => goView('friends') },
-      { id: 'pearls-airdrop', title: 'PEARLS Drops', subtitle: 'Drops and campaign rewards', icon: ic['pearls-airdrop'], onClick: () => goView('airdrop') },
     ];
   }, [setCurrentView]);
 
