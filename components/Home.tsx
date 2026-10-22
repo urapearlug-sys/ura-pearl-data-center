@@ -70,7 +70,7 @@ const ACTION_CATALOG: ActionItem[] = [
   { id: 'leaderboard', title: 'Level & Leaderboard', subtitle: 'Track total pearl progress', route: 'game', group: 'play', icon: dailyCombo },
   { id: 'karibu', title: 'Karibu Daily', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'play', icon: dailyReward },
   { id: 'social-earn', title: 'Earn activities', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn', icon: dailyReward },
-  { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', group: 'learn', icon: dailyCipher },
+  { id: 'tax-trivia', title: 'Tax Trivia Live Events', subtitle: 'White pearls · no approval', pearlType: 'white', route: 'earn', group: 'learn', icon: dailyCipher },
   { id: 'voice', title: 'Voice reports', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
   { id: 'whistle', title: 'Whistle blower', subtitle: 'Blue pearls · needs approval', pearlType: 'blue', route: 'earn', group: 'earn', icon: dailyCombo },
 ];
@@ -331,6 +331,14 @@ export default function Home({ setCurrentView }: HomeProps) {
           return;
         case 'quiz':
           queueEarnBootstrap({ openMitrolabsQuiz: true });
+          setCurrentView('earn');
+          return;
+        case 'tax-trivia':
+          queueEarnBootstrap({ openTaxTriviaLive: true });
+          setCurrentView('earn');
+          return;
+        case 'truefalse':
+          queueEarnBootstrap({ openTrueFalse: true });
           setCurrentView('earn');
           return;
         case 'receipt':

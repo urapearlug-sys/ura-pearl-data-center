@@ -174,9 +174,9 @@ export default function EarnShortcutGrids({ setCurrentView, applyEarnBootstrap }
     },
     {
       id: 'tax-trivia-live',
-      title: 'Tax Trivia Live Events',
+      title: 'Tax Trivia Race',
       subtitle: 'Live learning events',
-      onClick: () => goEarn({ openTaxTriviaLive: true, openWeeklyEvent: true }),
+      onClick: () => goEarn({ openTaxTriviaLive: true }),
     },
     { id: 'tasks', title: 'Tasks', subtitle: 'Open all earn activities', onClick: () => goEarn({ activeTabAll: true }) },
     { id: 'collection-cards', title: 'Collection Cards', subtitle: 'Open card collection progression', onClick: () => setCurrentView('collection') },

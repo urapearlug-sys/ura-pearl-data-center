@@ -59,6 +59,7 @@ import VoiceReportPopup from './popups/VoiceReportPopup';
 import WhistleBlowerPopup from './popups/WhistleBlowerPopup';
 import EarnTenurePopup from './popups/EarnTenurePopup';
 import RateServicePopup from './popups/RateServicePopup';
+import TaxTriviaQuizRacePopup from './popups/TaxTriviaQuizRacePopup';
 import { Task, LeaguesData } from '@/utils/types';
 import Wallet from './Wallet';
 import { consumeEarnBootstrap, type EarnBootstrapPayload } from '@/utils/earn-bootstrap';
@@ -108,6 +109,7 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   const [showMiniGamesHub, setShowMiniGamesHub] = useState(false);
   const [showLuckySpin, setShowLuckySpin] = useState(false);
   const [showWeeklyEvent, setShowWeeklyEvent] = useState(false);
+  const [showTaxTriviaRace, setShowTaxTriviaRace] = useState(false);
   const [showDonation, setShowDonation] = useState(false);
   const [leaguesData, setLeaguesData] = useState<LeaguesData | null>(null);
   const [leaguesLoading, setLeaguesLoading] = useState(false);
@@ -149,7 +151,8 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
   const openFromBootstrap = useCallback((p: EarnBootstrapPayload) => {
     if (p.openDailyCipher || p.openWordsOfTheDay) setShowDailyCipher(true);
     if (p.openDailyCombo) setShowDailyCombo(true);
-    if (p.openWeeklyEvent || p.openTaxTriviaLive) setShowWeeklyEvent(true);
+    if (p.openWeeklyEvent) setShowWeeklyEvent(true);
+    if (p.openTaxTriviaLive) setShowTaxTriviaRace(true);
     if (p.openGlobalTasks) setShowGlobalTasks(true);
     if (p.openMitrolabsQuiz) setShowMitrolabsQuiz(true);
     if (p.openReceiptRush) setShowReceiptRush(true);
@@ -345,6 +348,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
         )}
         {showWeeklyEvent && (
           <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />
+        )}
+        {showTaxTriviaRace && (
+          <TaxTriviaQuizRacePopup onClose={() => setShowTaxTriviaRace(false)} />
         )}
         {showTrueFalse && (
           <TrueFalseQuizPopup onClose={() => setShowTrueFalse(false)} />
@@ -808,6 +814,9 @@ export default function Earn({ setCurrentView, initialTab = 'All', minimalOnly =
         ) : null}
         {showWeeklyEvent && (
           <WeeklyEventPopup onClose={() => setShowWeeklyEvent(false)} />
+        )}
+        {showTaxTriviaRace && (
+          <TaxTriviaQuizRacePopup onClose={() => setShowTaxTriviaRace(false)} />
         )}
         {showDonation && (
           <DonationPopup onClose={() => setShowDonation(false)} />
