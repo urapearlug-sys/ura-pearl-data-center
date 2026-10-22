@@ -17,7 +17,8 @@
     "migrate:matrix-cards": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/migrate-matrix-cards.ts",
     "migrate:matrix-labels": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/update-matrix-labels.ts",
     "fix:team-join-duplicates": "prisma generate && ts-node --project prisma/tsconfig.migrate.json -r tsconfig-paths/register prisma/fix-team-join-request-duplicates.ts",
-    "export:nssf-proposal": "node scripts/export-nssf-proposal.mjs"
+    "export:nssf-proposal": "node scripts/export-nssf-proposal.mjs",
+    "export:ura-presentation": "node scripts/generate-ura-pearls-presentation-pdf.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

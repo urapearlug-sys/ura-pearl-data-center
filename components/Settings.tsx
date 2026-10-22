@@ -24,6 +24,7 @@ import {
   shareReceiptFile,
 } from '@/utils/simulated-receipt';
 import ReceiptQrScanModal from '@/components/quick-access/ReceiptQrScanModal';
+import SimulatedReceipt from '@/components/quick-access/SimulatedReceipt';
 
 interface SettingsProps {
   setCurrentView: (view: string) => void;
@@ -130,6 +131,8 @@ export default function Settings({ setCurrentView }: SettingsProps) {
   const [paymentFilter, setPaymentFilter] = useState<'ALL' | 'prn-slip' | 'payment'>('ALL');
   const [paymentActionBusy, setPaymentActionBusy] = useState<string | null>(null);
   const [paymentScanOpen, setPaymentScanOpen] = useState(false);
+  const [viewingPayment, setViewingPayment] = useState<StoredPaymentActivity | null>(null);
+  const [copiedPaymentPrnId, setCopiedPaymentPrnId] = useState<string | null>(null);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
   const [deleteConfirmInput, setDeleteConfirmInput] = useState('');
   const [deleteAccountBusy, setDeleteAccountBusy] = useState(false);
@@ -166,6 +169,39 @@ export default function Settings({ setCurrentView }: SettingsProps) {
     if (paymentFilter === 'ALL') return paymentActivities;
     return paymentActivities.filter((x) => x.kind === paymentFilter);
   }, [paymentActivities, paymentFilter]);
+
+  const copyPaymentPrn = async (itemId: string, prn: string) => {
+    triggerHapticFeedback(window);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(prn);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = prn;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      setCopiedPaymentPrnId(itemId);
+      showToast('PRN copied', 'success');
+      window.setTimeout(() => setCopiedPaymentPrnId((c) => (c === itemId ? null : c)), 1600);
+    } catch {
+      showToast('Could not copy PRN', 'error');
+    }
+  };
+
+  const paymentActivityToReceipt = (item: StoredPaymentActivity) => ({
+    kind: item.kind,
+    title: item.title,
+    subtitle: item.subtitle,
+    fields: item.fields,
+    refCode: item.refCode,
+    issuedAt: item.issuedAt,
+  });
 
   const [vibrationEnabled, setVibrationEnabled] = useState(true);
   const [animationEnabled, setAnimationEnabled] = useState(true);
@@ -580,6 +616,25 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                 })}
                               </p>
                               <p className="text-[10px] font-mono text-[#8bb4ef] mt-0.5">{item.refCode}</p>
+                              {(() => {
+                                const prn = item.fields.find((f) => f.label.toLowerCase() === 'prn')?.value;
+                                if (!prn) return null;
+                                return (
+                                  <div className="mt-1.5 flex items-center gap-2 min-w-0">
+                                    <span className="text-[10px] text-gray-500 shrink-0">PRN</span>
+                                    <span className="text-[10px] font-mono font-semibold text-white truncate">
+                                      {prn}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => void copyPaymentPrn(item.id, prn)}
+                                      className="shrink-0 rounded-md border border-[#8bb4ef]/40 bg-[#123f78]/40 px-2 py-0.5 text-[9px] font-bold text-[#b8d4ff]"
+                                    >
+                                      {copiedPaymentPrnId === item.id ? 'Copied' : 'Copy'}
+                                    </button>
+                                  </div>
+                                );
+                              })()}
                             </div>
                             <span
                               className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] border ${
@@ -591,7 +646,17 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                               {item.kind === 'payment' ? 'paid' : 'prn'}
                             </span>
                           </div>
-                          <div className="grid grid-cols-3 gap-1.5">
+                          <div className="grid grid-cols-2 gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                triggerHapticFeedback(window);
+                                setViewingPayment(item);
+                              }}
+                              className="col-span-2 rounded-lg bg-[#123f78] py-2 text-[11px] font-extrabold text-white border border-[#8bb4ef]/35"
+                            >
+                              View
+                            </button>
                             <button
                               type="button"
                               disabled={paymentActionBusy === item.id}
@@ -600,14 +665,9 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                   setPaymentActionBusy(item.id);
                                   triggerHapticFeedback(window);
                                   try {
-                                    const result = await downloadReceiptFile({
-                                      kind: item.kind,
-                                      title: item.title,
-                                      subtitle: item.subtitle,
-                                      fields: item.fields,
-                                      refCode: item.refCode,
-                                      issuedAt: item.issuedAt,
-                                    });
+                                    const result = await downloadReceiptFile(
+                                      paymentActivityToReceipt(item)
+                                    );
                                     if (result === 'shared') {
                                       showToast('PDF ready — Share → Save to Files', 'success');
                                     } else if (result === 'downloaded') {
@@ -634,14 +694,9 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                   setPaymentActionBusy(item.id);
                                   triggerHapticFeedback(window);
                                   try {
-                                    const result = await shareReceiptFile({
-                                      kind: item.kind,
-                                      title: item.title,
-                                      subtitle: item.subtitle,
-                                      fields: item.fields,
-                                      refCode: item.refCode,
-                                      issuedAt: item.issuedAt,
-                                    });
+                                    const result = await shareReceiptFile(
+                                      paymentActivityToReceipt(item)
+                                    );
                                     if (result === 'shared' || result === 'telegram') {
                                       showToast('Share opened', 'success');
                                     } else if (result === 'copied') {
@@ -666,14 +721,9 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                                   setPaymentActionBusy(item.id);
                                   triggerHapticFeedback(window);
                                   try {
-                                    const result = await printReceiptDocument({
-                                      kind: item.kind,
-                                      title: item.title,
-                                      subtitle: item.subtitle,
-                                      fields: item.fields,
-                                      refCode: item.refCode,
-                                      issuedAt: item.issuedAt,
-                                    });
+                                    const result = await printReceiptDocument(
+                                      paymentActivityToReceipt(item)
+                                    );
                                     if (result === 'printed') showToast('Print dialog opened', 'success');
                                     else if (result === 'saved-pdf') {
                                       showToast('Print unavailable here — PDF saved instead', 'success');
@@ -703,6 +753,7 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                         if (match) {
                           showToast(`Found receipt ${payload.ref}`, 'success');
                           setPaymentFilter(match.kind);
+                          setViewingPayment(match);
                         } else {
                           showToast(`Scanned ${payload.ref}${payload.title ? ` · ${payload.title}` : ''}`, 'success');
                         }
@@ -711,6 +762,30 @@ export default function Settings({ setCurrentView }: SettingsProps) {
                   ) : null}
                 </div>
               )}
+              {viewingPayment ? (
+                <div
+                  className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+                  role="dialog"
+                  aria-modal="true"
+                  onClick={(e) => {
+                    if (e.target === e.currentTarget) setViewingPayment(null);
+                  }}
+                >
+                  <div
+                    className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#f4f8ff] p-4 shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <SimulatedReceipt
+                      data={paymentActivityToReceipt(viewingPayment)}
+                      persist={false}
+                      onDone={() => {
+                        triggerHapticFeedback(window);
+                        setViewingPayment(null);
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : null}
               <AccordionRow id="receipts" title="My receipts" />
               {openAccordion === 'receipts' && (
                 <div className="px-3 py-2 text-xs text-gray-300 rounded-lg bg-[#1a1d26] border border-ura-border/85 space-y-2">
