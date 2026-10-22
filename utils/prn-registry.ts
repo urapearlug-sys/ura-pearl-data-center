@@ -5,11 +5,16 @@ export type RegisteredPrn = {
   itemId: string;
   itemLabel: string;
   tin: string;
+  taxpayerName?: string;
+  taxYear?: string;
+  period?: string;
+  reason?: string;
   amountUgx: number;
   status: 'unpaid' | 'paid';
   createdAt: string;
   paidAt?: string;
   payRef?: string;
+  paymentMethod?: string;
 };
 
 const PREFIX = 'ura:prn-registry:';
@@ -76,7 +81,8 @@ export function saveRegisteredPrn(
 export function markRegisteredPrnPaid(
   userKey: string,
   prnRaw: string,
-  payRef: string
+  payRef: string,
+  paymentMethod?: string
 ): RegisteredPrn | null {
   const prn = normalizePrnInput(prnRaw);
   const items = readRegisteredPrns(userKey);
@@ -87,6 +93,7 @@ export function markRegisteredPrnPaid(
     status: 'paid',
     paidAt: new Date().toISOString(),
     payRef,
+    paymentMethod: paymentMethod?.trim() || items[idx].paymentMethod,
   };
   const next = [...items];
   next[idx] = updated;
