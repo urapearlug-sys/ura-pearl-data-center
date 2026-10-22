@@ -26,8 +26,8 @@ import RegisterPaymentPopup from '@/components/quick-access/RegisterPaymentPopup
 type QuickAccessId = 'pay-prn' | 'register-payment' | 'ask-kamisona';
 
 const HOME_QUICK_ACCESS: { id: QuickAccessId; title: string; emoji: string }[] = [
-  { id: 'pay-prn', title: 'Pay against PRN', emoji: '💳' },
   { id: 'register-payment', title: 'Register new payment', emoji: '🎫' },
+  { id: 'pay-prn', title: 'Pay against PRN', emoji: '💳' },
   { id: 'ask-kamisona', title: 'Ask the Kamisona', emoji: '🗣️' },
 ];
 
@@ -389,7 +389,7 @@ export default function Home({ setCurrentView }: HomeProps) {
           <div className="min-w-0 flex-1">
             <p className="text-base font-extrabold leading-tight text-[#123f78]">Quick access</p>
             <p className="mt-1 text-sm leading-snug text-[#335f97]">
-              PRN · register payment · Kamisona
+              Register · Pay PRN · Kamisona
             </p>
           </div>
         </div>

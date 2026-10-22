@@ -2,19 +2,17 @@
 
 import { useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
+import { useGameStore } from '@/utils/game-mechanics';
 import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
-
-const TAX_TYPES = [
-  { id: 'income', label: 'Income tax' },
-  { id: 'vat', label: 'VAT' },
-  { id: 'paye', label: 'PAYE' },
-  { id: 'customs', label: 'Customs' },
-] as const;
+import {
+  PRN_PAY_ITEMS,
+  prnRegistryUserKey,
+  saveRegisteredPrn,
+} from '@/utils/prn-registry';
 
 /** Official URA Motor Vehicle / tenure-related payments portal. */
 const PAY_YOUR_TENURE_URL = 'https://ura.go.ug/en/domestic-taxes/motor-vehicle/';
 
-type TaxTypeId = (typeof TAX_TYPES)[number]['id'];
 type Flow = 'menu' | 'tax';
 
 type Props = { onClose: () => void };
@@ -31,9 +29,10 @@ function openUraUrl(url: string) {
 }
 
 export default function RegisterPaymentPopup({ onClose }: Props) {
+  const { userTelegramInitData } = useGameStore();
   const [flow, setFlow] = useState<Flow>('menu');
   const [step, setStep] = useState(0);
-  const [taxType, setTaxType] = useState<TaxTypeId>(TAX_TYPES[0].id);
+  const [itemId, setItemId] = useState<string>(PRN_PAY_ITEMS[0].id);
   const [tin, setTin] = useState('');
   const [amount, setAmount] = useState('');
   const [busy, setBusy] = useState(false);
@@ -41,6 +40,8 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
   const [prn, setPrn] = useState('');
   const [refCode, setRefCode] = useState('');
   const [issuedAt, setIssuedAt] = useState<Date | null>(null);
+
+  const selected = useMemo(() => PRN_PAY_ITEMS.find((x) => x.id === itemId) ?? PRN_PAY_ITEMS[0], [itemId]);
 
   const close = () => {
     triggerHapticFeedback(window);
@@ -53,8 +54,18 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
     triggerHapticFeedback(window);
     await new Promise((r) => setTimeout(r, 800));
     const now = new Date();
-    setPrn(`PRN-SIM-${Date.now().toString().slice(-10)}`);
-    setRefCode(`SLIP-${Date.now().toString().slice(-8)}`);
+    const nextPrn = `PRN${Date.now().toString().slice(-10)}`;
+    const nextRef = `SLIP-${Date.now().toString().slice(-8)}`;
+    const userKey = prnRegistryUserKey(userTelegramInitData);
+    saveRegisteredPrn(userKey, {
+      prn: nextPrn,
+      itemId: selected.id,
+      itemLabel: selected.label,
+      tin: tin.trim(),
+      amountUgx: Number(amount),
+    });
+    setPrn(nextPrn);
+    setRefCode(nextRef);
     setIssuedAt(now);
     setDone(true);
     setBusy(false);
@@ -62,7 +73,6 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
 
   const receipt: SimulatedReceiptData | null = useMemo(() => {
     if (!done || !prn || !refCode) return null;
-    const taxLabel = TAX_TYPES.find((t) => t.id === taxType)?.label ?? taxType;
     return {
       kind: 'prn-slip',
       title: 'PRN generated',
@@ -70,14 +80,14 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
       refCode,
       issuedAt: issuedAt ?? undefined,
       fields: [
-        { label: 'Tax type', value: taxLabel },
+        { label: 'Payment for', value: selected.label },
         { label: 'TIN', value: tin.trim() },
         { label: 'Amount', value: `UGX ${Number(amount).toLocaleString('en-UG')}` },
         { label: 'PRN', value: prn },
-        { label: 'Status', value: 'Registered (simulated)' },
+        { label: 'Status', value: 'Unpaid — use Pay against PRN' },
       ],
     };
-  }, [done, prn, refCode, taxType, tin, amount, issuedAt]);
+  }, [done, prn, refCode, selected.label, tin, amount, issuedAt]);
 
   const taxStepLabel = done ? null : step === 0 ? '1/2' : '2/2';
 
@@ -101,8 +111,8 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
               {flow === 'menu'
                 ? 'Choose what to register'
                 : done
-                  ? 'Simulated · receipt ready'
-                  : `Simulated · tax payment · step ${taxStepLabel}`}
+                  ? 'Simulated · PRN ready'
+                  : `Simulated · step ${taxStepLabel}`}
             </p>
           </div>
           <button
@@ -136,7 +146,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-[#123f78]">Tax / PRN payment</span>
                   <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
-                    Income tax, VAT, PAYE, customs · in-app
+                    Pick tax type, TIN & amount · get a PRN
                   </span>
                 </span>
               </button>
@@ -167,23 +177,26 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
             <SimulatedReceipt data={receipt} onDone={close} />
           ) : step === 0 ? (
             <>
-              <p className="text-xs font-semibold text-[#123f78]">Select tax type</p>
-              <div className="grid grid-cols-2 gap-2">
-                {TAX_TYPES.map((t) => (
+              <p className="text-sm font-bold text-[#123f78]">Select what you are registering</p>
+              <div className="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto">
+                {PRN_PAY_ITEMS.map((item) => (
                   <button
-                    key={t.id}
+                    key={item.id}
                     type="button"
                     onClick={() => {
                       triggerHapticFeedback(window);
-                      setTaxType(t.id);
+                      setItemId(item.id);
                     }}
-                    className={`rounded-xl border px-3 py-2.5 text-left text-sm font-bold ${
-                      taxType === t.id
-                        ? 'border-[#f3ba2f] bg-[#123f78] text-white'
-                        : 'border-[#8bb4ef]/40 bg-white text-[#123f78]'
+                    className={`rounded-xl border px-2.5 py-3 text-left ${
+                      itemId === item.id
+                        ? 'border-[#f3ba2f] bg-[#f3ba2f]/20'
+                        : 'border-[#8bb4ef]/40 bg-white'
                     }`}
                   >
-                    {t.label}
+                    <span className="text-lg" aria-hidden>
+                      {item.emoji}
+                    </span>
+                    <p className="mt-1 text-xs font-bold text-[#123f78] leading-snug">{item.label}</p>
                   </button>
                 ))}
               </div>
@@ -212,6 +225,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
             </>
           ) : (
             <>
+              <p className="text-xs text-[#335f97]">Registering: {selected.label}</p>
               <label className="block text-xs font-semibold text-[#123f78]">
                 TIN
                 <input
