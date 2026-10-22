@@ -68,6 +68,14 @@ const MORE_VIEWS = new Set([
     'tenders',
 ]);
 
+/** Learn hub children should return to Learn (`eearn`), not the Earn rewards page (`earn`). */
+const LEARN_CHILD_VIEWS = new Set(['ura-tv', 'ura-fc', 'opportunities', 'tenders']);
+
+function moreViewBackTarget(view: string): string {
+    if (LEARN_CHILD_VIEWS.has(view)) return 'eearn';
+    return 'earn';
+}
+
 function ClickerPage() {
     useExitFullscreenWhenOpenedViaOpenButton();
     const [currentView, setCurrentViewState] = useState<string>('loading');
@@ -145,7 +153,7 @@ function ClickerPage() {
             {isInitialized && MORE_VIEWS.has(currentView) && currentView !== 'guild' && (
                 <button
                     type="button"
-                    onClick={() => setCurrentView('earn')}
+                    onClick={() => setCurrentView(moreViewBackTarget(currentView))}
                     className="fixed top-4 left-4 z-50 rounded-lg bg-ura-navy/65 border border-ura-border/75 px-3 py-1.5 text-sm font-semibold text-white"
                 >
                     ← Back
