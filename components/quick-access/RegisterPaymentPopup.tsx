@@ -101,10 +101,10 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
       }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#f4f8ff] shadow-2xl overflow-hidden"
+        className="w-full max-w-md max-h-[88vh] flex flex-col rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#f4f8ff] shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-3.5 py-3 bg-[#123f78]">
+        <div className="shrink-0 flex items-center justify-between px-3.5 py-3 bg-[#123f78]">
           <div>
             <p className="text-sm font-extrabold text-white">Register new payment</p>
             <p className="text-[11px] text-[#f3ba2f]">
@@ -124,7 +124,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
           </button>
         </div>
 
-        <div className="p-4 space-y-3">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 space-y-3">
           {flow === 'menu' ? (
             <>
               <p className="text-xs font-semibold text-[#123f78]">What do you want to register?</p>

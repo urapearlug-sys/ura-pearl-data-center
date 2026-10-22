@@ -36,6 +36,33 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
   const [qrUrl, setQrUrl] = useState<string | null>(null);
   const [scanOpen, setScanOpen] = useState(false);
   const [scanned, setScanned] = useState<ReceiptQrPayload | null>(null);
+  const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
+
+  const prnValue = data.fields.find((f) => f.label.toLowerCase() === 'prn')?.value ?? '';
+
+  const copyValue = async (label: string, value: string) => {
+    triggerHapticFeedback(window);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = value;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      setCopiedLabel(label);
+      showToast(`${label} copied`, 'success');
+      window.setTimeout(() => setCopiedLabel((c) => (c === label ? null : c)), 1600);
+    } catch {
+      showToast('Could not copy. Select the number and copy it.', 'error');
+    }
+  };
 
   useEffect(() => {
     if (!persist || savedRef.current) return;
@@ -136,15 +163,46 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
           </p>
         </div>
         <div className="px-3.5 py-3 space-y-2">
-          {data.fields.map((f) => (
-            <div key={f.label} className="flex items-start justify-between gap-3 text-xs">
-              <span className="text-[#5a7bb0] shrink-0">{f.label}</span>
-              <span className="font-bold text-[#123f78] text-right break-all">{f.value}</span>
-            </div>
-          ))}
+          {data.fields.map((f) => {
+            const isPrn = f.label.toLowerCase() === 'prn';
+            return (
+              <div key={f.label} className="flex items-start justify-between gap-3 text-xs">
+                <span className="text-[#5a7bb0] shrink-0">{f.label}</span>
+                {isPrn ? (
+                  <span className="flex items-center gap-2 min-w-0">
+                    <span className="font-mono font-bold text-[#123f78] text-right break-all select-all">
+                      {f.value}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => void copyValue('PRN', f.value)}
+                      className="shrink-0 rounded-lg border border-[#123f78]/30 bg-[#f4f8ff] px-2 py-1 text-[10px] font-extrabold text-[#123f78]"
+                    >
+                      {copiedLabel === 'PRN' ? 'Copied' : 'Copy'}
+                    </button>
+                  </span>
+                ) : (
+                  <span className="font-bold text-[#123f78] text-right break-all">{f.value}</span>
+                )}
+              </div>
+            );
+          })}
+          {prnValue ? (
+            <button
+              type="button"
+              onClick={() => void copyValue('PRN', prnValue)}
+              className="mt-2 w-full rounded-lg bg-[#123f78] px-2.5 py-2.5 text-center"
+            >
+              <p className="text-[10px] text-[#f3ba2f] uppercase tracking-wide">PRN · tap to copy</p>
+              <p className="text-sm font-mono font-bold text-white select-all">{prnValue}</p>
+              <p className="text-[10px] text-blue-100/80 mt-0.5">
+                {copiedLabel === 'PRN' ? 'Copied' : 'Use this number in Pay against PRN'}
+              </p>
+            </button>
+          ) : null}
           <div className="mt-2 rounded-lg bg-[#f4f8ff] px-2.5 py-2 text-center">
             <p className="text-[10px] text-[#5a7bb0] uppercase tracking-wide">Reference</p>
-            <p className="text-sm font-mono font-bold text-[#123f78]">{data.refCode}</p>
+            <p className="text-sm font-mono font-bold text-[#123f78] select-all">{data.refCode}</p>
           </div>
 
           <div className="flex flex-col items-center gap-1.5 pt-1">
