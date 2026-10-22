@@ -6,9 +6,16 @@ export type RegisteredPrn = {
   itemLabel: string;
   tin: string;
   taxpayerName?: string;
+  taxHeadCategory?: string;
+  taxHead?: string;
+  district?: string;
+  basisOfPayment?: string;
   taxYear?: string;
   period?: string;
+  /** @deprecated use basisOfPayment */
   reason?: string;
+  otherNtrMda?: string;
+  currency?: string;
   amountUgx: number;
   status: 'unpaid' | 'paid';
   createdAt: string;
@@ -106,7 +113,10 @@ export const PRN_PAY_ITEMS = [
   { id: 'income-tax', label: 'Income tax', emoji: '🧾' },
   { id: 'vat', label: 'VAT', emoji: '📊' },
   { id: 'paye', label: 'PAYE', emoji: '💼' },
+  { id: 'withholding', label: 'Withholding tax', emoji: '📋' },
   { id: 'customs', label: 'Customs / import', emoji: '🚢' },
-  { id: 'ntr', label: 'Non-tax revenue (NTR)', emoji: '🏛️' },
-  { id: 'motor', label: 'Motor vehicle fees', emoji: '🚗' },
+  { id: 'stamp', label: 'Stamp duty', emoji: '📜' },
+  { id: 'motor', label: 'Motor vehicle', emoji: '🚗' },
+  { id: 'ntr', label: 'Other NTR', emoji: '🏛️' },
+  { id: 'penalties', label: 'Penalties', emoji: '⚠️' },
 ] as const;

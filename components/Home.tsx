@@ -130,6 +130,7 @@ export default function Home({ setCurrentView }: HomeProps) {
   const [karibuPopupOpen, setKaribuPopupOpen] = useState(false);
   const [quickAccessOpen, setQuickAccessOpen] = useState(false);
   const [quickAccessFlow, setQuickAccessFlow] = useState<QuickAccessId | null>(null);
+  const [payPrnPrefill, setPayPrnPrefill] = useState<string | null>(null);
 
   const storagePrefix = useMemo(() => {
     const fallback = 'anon';
@@ -946,10 +947,23 @@ export default function Home({ setCurrentView }: HomeProps) {
         <KamisonaChatPopup onClose={() => setQuickAccessFlow(null)} />
       ) : null}
       {quickAccessFlow === 'pay-prn' ? (
-        <PayAgainstPrnPopup onClose={() => setQuickAccessFlow(null)} />
+        <PayAgainstPrnPopup
+          initialPrn={payPrnPrefill ?? undefined}
+          onClose={() => {
+            setPayPrnPrefill(null);
+            setQuickAccessFlow(null);
+          }}
+        />
       ) : null}
       {quickAccessFlow === 'register-payment' ? (
-        <RegisterPaymentPopup onClose={() => setQuickAccessFlow(null)} />
+        <RegisterPaymentPopup
+          onClose={() => setQuickAccessFlow(null)}
+          onPayPrn={(prn) => {
+            setQuickAccessFlow(null);
+            setPayPrnPrefill(prn);
+            setQuickAccessFlow('pay-prn');
+          }}
+        />
       ) : null}
 
       {quickAccessOpen ? (

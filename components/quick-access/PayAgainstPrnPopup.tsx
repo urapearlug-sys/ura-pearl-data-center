@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
@@ -29,7 +29,11 @@ const fieldClass =
 
 type Stage = 'lookup' | 'details' | 'method';
 
-type Props = { onClose: () => void };
+type Props = {
+  onClose: () => void;
+  /** Prefill and open PRN details (e.g. after Register new payment → Pay now). */
+  initialPrn?: string;
+};
 
 function formatRegisteredAt(iso?: string) {
   if (!iso) return '—';
@@ -38,9 +42,10 @@ function formatRegisteredAt(iso?: string) {
   return d.toLocaleString('en-UG', { dateStyle: 'medium', timeStyle: 'short' });
 }
 
-export default function PayAgainstPrnPopup({ onClose }: Props) {
+export default function PayAgainstPrnPopup({ onClose, initialPrn }: Props) {
   const { userTelegramInitData } = useGameStore();
   const userKey = useMemo(() => prnRegistryUserKey(userTelegramInitData), [userTelegramInitData]);
+  const appliedInitialPrn = useRef<string | null>(null);
 
   const [prnInput, setPrnInput] = useState('');
   const [lookupError, setLookupError] = useState<string | null>(null);
@@ -56,6 +61,30 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
     triggerHapticFeedback(window);
     onClose();
   };
+
+  useEffect(() => {
+    const raw = initialPrn?.trim();
+    if (!raw || appliedInitialPrn.current === raw) return;
+    appliedInitialPrn.current = raw;
+    const prn = normalizePrnInput(raw);
+    setPrnInput(prn);
+    setLookupError(null);
+    const row = lookupRegisteredPrn(userKey, prn);
+    if (!row) {
+      setLookupError('PRN not found. Register the payment first.');
+      setFound(null);
+      setStage('lookup');
+      return;
+    }
+    if (row.status === 'paid') {
+      setLookupError(`This PRN is already paid${row.payRef ? ` (ref ${row.payRef})` : ''}.`);
+      setFound(null);
+      setStage('lookup');
+      return;
+    }
+    setFound(row);
+    setStage('details');
+  }, [initialPrn, userKey]);
 
   const lookup = () => {
     triggerHapticFeedback(window);
@@ -103,13 +132,16 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
       refCode,
       issuedAt: issuedAt ?? undefined,
       fields: [
-        { label: 'Payment for', value: found.itemLabel },
+        { label: 'Tax head', value: found.taxHead || found.itemLabel },
         ...(found.taxpayerName ? [{ label: 'Taxpayer', value: found.taxpayerName }] : []),
         { label: 'TIN', value: found.tin },
+        ...(found.district ? [{ label: 'District', value: found.district }] : []),
         ...(found.period || found.taxYear
           ? [{ label: 'Period', value: [found.period, found.taxYear].filter(Boolean).join(' ') }]
           : []),
-        ...(found.reason ? [{ label: 'Reason', value: found.reason }] : []),
+        ...(found.basisOfPayment || found.reason
+          ? [{ label: 'Basis of payment', value: found.basisOfPayment || found.reason || '—' }]
+          : []),
         { label: 'PRN', value: found.prn },
         { label: 'Paid via', value: paymentMethod },
         { label: 'Amount paid', value: `UGX ${found.amountUgx.toLocaleString('en-UG')}` },
@@ -205,12 +237,19 @@ export default function PayAgainstPrnPopup({ onClose }: Props) {
                 {(
                   [
                     ['PRN', found.prn],
-                    ['Payment for', found.itemLabel],
+                    ['Tax head', found.taxHead || found.itemLabel],
+                    ...(found.taxHeadCategory ? [['Category', found.taxHeadCategory] as const] : []),
+                    ...(found.otherNtrMda ? [['MDA', found.otherNtrMda] as const] : []),
                     ['Taxpayer', found.taxpayerName || '—'],
                     ['TIN', found.tin],
+                    ['District', found.district || '—'],
                     ['Tax year', found.taxYear || '—'],
                     ['Period', found.period || '—'],
-                    ['Reason for payment', found.reason || '—'],
+                    [
+                      'Basis of payment',
+                      found.basisOfPayment || found.reason || '—',
+                    ],
+                    ...(found.currency ? [['Currency', found.currency] as const] : []),
                     ['Amount due', `UGX ${found.amountUgx.toLocaleString('en-UG')}`],
                     ['Registered', formatRegisteredAt(found.createdAt)],
                     ['Status', 'Unpaid'],

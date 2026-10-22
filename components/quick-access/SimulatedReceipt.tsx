@@ -25,9 +25,11 @@ type Props = {
   onDone: () => void;
   /** When false, do not write to profile downloads history (e.g. re-viewing). Default true. */
   persist?: boolean;
+  /** PRN slip: save PDF and pay this PRN in Pay against PRN */
+  onPayPrn?: (prn: string) => void;
 };
 
-export default function SimulatedReceipt({ data, onDone, persist = true }: Props) {
+export default function SimulatedReceipt({ data, onDone, persist = true, onPayPrn }: Props) {
   const showToast = useToast();
   const { userTelegramInitData } = useGameStore();
   const issuedAt = normalizeIssuedAt(data.issuedAt);
@@ -281,13 +283,42 @@ export default function SimulatedReceipt({ data, onDone, persist = true }: Props
       <p className="text-[10px] text-center text-[#5a7bb0]">
         PDF includes the QR. Also saved under Profile → Downloads.
       </p>
+
+      {data.kind === 'prn-slip' && prnValue && onPayPrn ? (
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            disabled={busy !== null}
+            onClick={() => void download()}
+            className="rounded-xl bg-[#123f78] py-2.5 text-sm font-extrabold text-white disabled:opacity-50"
+          >
+            {busy === 'download' ? 'Saving…' : 'Save slip'}
+          </button>
+          <button
+            type="button"
+            disabled={busy !== null}
+            onClick={() => {
+              triggerHapticFeedback(window);
+              onPayPrn(prnValue);
+            }}
+            className="rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78] disabled:opacity-50"
+          >
+            Pay now
+          </button>
+        </div>
+      ) : null}
+
       <button
         type="button"
         onClick={() => {
           triggerHapticFeedback(window);
           onDone();
         }}
-        className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
+        className={`w-full rounded-xl py-2.5 text-sm font-extrabold text-[#123f78] ${
+          data.kind === 'prn-slip' && onPayPrn
+            ? 'border border-[#8bb4ef]/50 bg-white'
+            : 'bg-[#f3ba2f]'
+        }`}
       >
         Done
       </button>

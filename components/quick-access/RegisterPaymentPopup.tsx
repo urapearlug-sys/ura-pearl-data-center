@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import SimulatedReceipt, { type SimulatedReceiptData } from '@/components/quick-access/SimulatedReceipt';
@@ -9,6 +9,18 @@ import {
   prnRegistryUserKey,
   saveRegisteredPrn,
 } from '@/utils/prn-registry';
+import {
+  registrationPresetForPayItem,
+  taxHeadsForCategory,
+  URA_BASIS_OF_PAYMENT,
+  URA_CURRENCY_TYPES,
+  URA_DISTRICTS,
+  URA_NTR_TAX_HEADS,
+  URA_OTHER_NTR_MDA,
+  URA_TAX_HEAD_CATEGORIES,
+  type UraBasisOfPayment,
+  type UraTaxHeadCategoryId,
+} from '@/utils/ura-payment-registration';
 
 const TAX_YEARS = ['2026', '2025', '2024', '2023'] as const;
 
@@ -32,29 +44,30 @@ const PERIODS = [
   'Q4',
 ] as const;
 
-const PAYMENT_REASONS = [
-  'Return payment',
-  'Audit assessment',
-  'Penalty',
-  'Interest',
-  'Voluntary disclosure',
-  'Other',
-] as const;
-
 const fieldClass =
   'mt-1 w-full rounded-xl border border-[#8bb4ef]/50 bg-white px-3 py-2.5 text-sm text-[#123f78]';
 
-type Props = { onClose: () => void };
+type Props = {
+  onClose: () => void;
+  onPayPrn?: (prn: string) => void;
+};
 
-export default function RegisterPaymentPopup({ onClose }: Props) {
+export default function RegisterPaymentPopup({ onClose, onPayPrn }: Props) {
   const { userTelegramInitData } = useGameStore();
   const [step, setStep] = useState(0);
   const [itemId, setItemId] = useState<string>(PRN_PAY_ITEMS[0].id);
+  const [taxHeadCategory, setTaxHeadCategory] = useState<UraTaxHeadCategoryId>('ntr-tax-type');
+  const [taxHead, setTaxHead] = useState<string>(URA_NTR_TAX_HEADS[5]);
   const [tin, setTin] = useState('');
   const [taxpayerName, setTaxpayerName] = useState('');
+  const [district, setDistrict] = useState<(typeof URA_DISTRICTS)[number]>('KAMPALA');
   const [taxYear, setTaxYear] = useState<(typeof TAX_YEARS)[number]>(TAX_YEARS[0]);
   const [period, setPeriod] = useState<(typeof PERIODS)[number]>('Annual');
-  const [reason, setReason] = useState<(typeof PAYMENT_REASONS)[number]>(PAYMENT_REASONS[0]);
+  const [basisOfPayment, setBasisOfPayment] = useState<UraBasisOfPayment>(URA_BASIS_OF_PAYMENT[0]);
+  const [otherNtrMda, setOtherNtrMda] = useState<(typeof URA_OTHER_NTR_MDA)[number]>(
+    URA_OTHER_NTR_MDA[0]
+  );
+  const [currency, setCurrency] = useState<(typeof URA_CURRENCY_TYPES)[number]>('UGANDA SHILLINGS');
   const [amount, setAmount] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -64,13 +77,39 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
 
   const selected = useMemo(() => PRN_PAY_ITEMS.find((x) => x.id === itemId) ?? PRN_PAY_ITEMS[0], [itemId]);
 
+  const taxHeadOptions = useMemo(() => taxHeadsForCategory(taxHeadCategory), [taxHeadCategory]);
+
+  const applyPresetFromItem = useCallback((id: string) => {
+    const preset = registrationPresetForPayItem(id);
+    setTaxHeadCategory(preset.taxHeadCategory);
+    setTaxHead(preset.taxHead || taxHeadsForCategory(preset.taxHeadCategory)[0] || '');
+    setBasisOfPayment(preset.basisOfPayment);
+    if ((PERIODS as readonly string[]).includes(preset.period)) {
+      setPeriod(preset.period as (typeof PERIODS)[number]);
+    }
+  }, []);
+
   const close = () => {
     triggerHapticFeedback(window);
     onClose();
   };
 
+  const goToRegistrationStep = () => {
+    triggerHapticFeedback(window);
+    applyPresetFromItem(itemId);
+    setStep(1);
+  };
+
+  const onTaxHeadCategoryChange = (next: UraTaxHeadCategoryId) => {
+    setTaxHeadCategory(next);
+    const heads = taxHeadsForCategory(next);
+    setTaxHead(heads[0] ?? '');
+  };
+
   const generate = async () => {
+    const head = taxHead.trim();
     if (tin.trim().length < 6 || taxpayerName.trim().length < 2 || !amount.trim()) return;
+    if (taxHeadCategory === 'ntr-tax-type' && !head) return;
     setBusy(true);
     triggerHapticFeedback(window);
     await new Promise((r) => setTimeout(r, 800));
@@ -78,15 +117,22 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
     const nextPrn = `PRN${Date.now().toString().slice(-10)}`;
     const nextRef = `SLIP-${Date.now().toString().slice(-8)}`;
     const userKey = prnRegistryUserKey(userTelegramInitData);
+    const paymentLabel = head || selected.label;
     saveRegisteredPrn(userKey, {
       prn: nextPrn,
       itemId: selected.id,
-      itemLabel: selected.label,
+      itemLabel: paymentLabel,
       tin: tin.trim(),
       taxpayerName: taxpayerName.trim(),
+      taxHeadCategory: URA_TAX_HEAD_CATEGORIES.find((c) => c.id === taxHeadCategory)?.label,
+      taxHead: head || undefined,
+      district,
+      basisOfPayment,
+      reason: basisOfPayment,
       taxYear,
       period,
-      reason,
+      otherNtrMda: taxHeadCategory === 'other-ntr' ? otherNtrMda : undefined,
+      currency,
       amountUgx: Number(amount),
     });
     setPrn(nextPrn);
@@ -98,6 +144,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
 
   const receipt: SimulatedReceiptData | null = useMemo(() => {
     if (!done || !prn || !refCode) return null;
+    const head = taxHead.trim() || selected.label;
     return {
       kind: 'prn-slip',
       title: 'PRN generated',
@@ -105,19 +152,46 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
       refCode,
       issuedAt: issuedAt ?? undefined,
       fields: [
-        { label: 'Payment for', value: selected.label },
+        { label: 'Tax head', value: head },
+        { label: 'Category', value: selected.label },
         { label: 'Taxpayer', value: taxpayerName.trim() },
         { label: 'TIN', value: tin.trim() },
+        { label: 'District', value: district },
         { label: 'Period', value: `${period} ${taxYear}` },
-        { label: 'Reason', value: reason },
+        { label: 'Basis of payment', value: basisOfPayment },
+        ...(taxHeadCategory === 'other-ntr' ? [{ label: 'MDA', value: otherNtrMda }] : []),
+        { label: 'Currency', value: currency },
         { label: 'Amount', value: `UGX ${Number(amount).toLocaleString('en-UG')}` },
         { label: 'PRN', value: prn },
         { label: 'Status', value: 'Unpaid — use Pay against PRN' },
       ],
     };
-  }, [done, prn, refCode, selected.label, taxpayerName, tin, period, taxYear, reason, amount, issuedAt]);
+  }, [
+    done,
+    prn,
+    refCode,
+    selected.label,
+    taxHead,
+    taxpayerName,
+    tin,
+    district,
+    period,
+    taxYear,
+    basisOfPayment,
+    taxHeadCategory,
+    otherNtrMda,
+    currency,
+    amount,
+    issuedAt,
+  ]);
 
   const taxStepLabel = done ? null : step === 0 ? '1/2' : '2/2';
+
+  const canGenerate =
+    tin.trim().length >= 6 &&
+    taxpayerName.trim().length >= 2 &&
+    amount.trim().length > 0 &&
+    (taxHeadCategory !== 'ntr-tax-type' || taxHead.trim().length > 0);
 
   return (
     <div
@@ -150,10 +224,24 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 space-y-3">
           {done && receipt ? (
-            <SimulatedReceipt data={receipt} onDone={close} />
+            <SimulatedReceipt
+              data={receipt}
+              onDone={close}
+              onPayPrn={
+                onPayPrn
+                  ? (registeredPrn) => {
+                      triggerHapticFeedback(window);
+                      onPayPrn(registeredPrn);
+                    }
+                  : undefined
+              }
+            />
           ) : step === 0 ? (
             <>
               <p className="text-sm font-bold text-[#123f78]">Select what you are registering</p>
+              <p className="text-[11px] text-[#5a7bb0] leading-snug">
+                Matches URA payment registration categories. The next step pre-fills Tax Head and basis of payment.
+              </p>
               <div className="grid grid-cols-2 gap-2 max-h-[40vh] overflow-y-auto">
                 {PRN_PAY_ITEMS.map((item) => (
                   <button
@@ -178,10 +266,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  setStep(1);
-                }}
+                onClick={goToRegistrationStep}
                 className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
               >
                 Next
@@ -191,10 +276,67 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
             <>
               <p className="text-xs font-semibold text-[#123f78]">Payment registration</p>
               <p className="text-[11px] text-[#5a7bb0] leading-snug">
-                Simplified from URA payment slip registration. Tax type: {selected.label}.
+                Simplified from{' '}
+                <span className="font-semibold">URA Generate a payment slip</span>. Pre-filled from:{' '}
+                {selected.label}.
+              </p>
+
+              <label className="block text-xs font-semibold text-[#123f78]">
+                Tax head category *
+                <select
+                  value={taxHeadCategory}
+                  onChange={(e) => onTaxHeadCategoryChange(e.target.value as UraTaxHeadCategoryId)}
+                  className={fieldClass}
+                >
+                  {URA_TAX_HEAD_CATEGORIES.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {taxHeadCategory === 'other-ntr' ? (
+                <label className="block text-xs font-semibold text-[#123f78]">
+                  Ministry / Department / Agency *
+                  <select
+                    value={otherNtrMda}
+                    onChange={(e) =>
+                      setOtherNtrMda(e.target.value as (typeof URA_OTHER_NTR_MDA)[number])
+                    }
+                    className={fieldClass}
+                  >
+                    {URA_OTHER_NTR_MDA.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+
+              <label className="block text-xs font-semibold text-[#123f78]">
+                Tax head *
+                <select
+                  value={taxHead}
+                  onChange={(e) => setTaxHead(e.target.value)}
+                  className={fieldClass}
+                  disabled={taxHeadCategory === 'penalties'}
+                >
+                  <option value="">--Select--</option>
+                  {taxHeadOptions.map((h) => (
+                    <option key={h} value={h}>
+                      {h}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[#5a7bb0]">
+                Taxpayer details
               </p>
               <label className="block text-xs font-semibold text-[#123f78]">
-                TIN
+                TIN *
                 <input
                   value={tin}
                   onChange={(e) => setTin(e.target.value.replace(/[^\d]/g, ''))}
@@ -204,7 +346,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 />
               </label>
               <label className="block text-xs font-semibold text-[#123f78]">
-                Taxpayer name
+                Taxpayer name *
                 <input
                   value={taxpayerName}
                   onChange={(e) => setTaxpayerName(e.target.value)}
@@ -212,6 +354,25 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   className={fieldClass}
                 />
               </label>
+              <label className="block text-xs font-semibold text-[#123f78]">
+                District / City *
+                <select
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value as (typeof URA_DISTRICTS)[number])}
+                  className={fieldClass}
+                >
+                  <option value="">--Select--</option>
+                  {URA_DISTRICTS.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[#5a7bb0]">
+                Period selection
+              </p>
               <label className="block text-xs font-semibold text-[#123f78]">
                 Tax year
                 <select
@@ -227,7 +388,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 </select>
               </label>
               <label className="block text-xs font-semibold text-[#123f78]">
-                Period
+                Period *
                 <select
                   value={period}
                   onChange={(e) => setPeriod(e.target.value as (typeof PERIODS)[number])}
@@ -240,22 +401,42 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   ))}
                 </select>
               </label>
+
               <label className="block text-xs font-semibold text-[#123f78]">
-                Reason for payment
+                Basis of payment *
                 <select
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value as (typeof PAYMENT_REASONS)[number])}
+                  value={basisOfPayment}
+                  onChange={(e) => setBasisOfPayment(e.target.value as UraBasisOfPayment)}
                   className={fieldClass}
                 >
-                  {PAYMENT_REASONS.map((r) => (
-                    <option key={r} value={r}>
-                      {r}
+                  <option value="">--Select--</option>
+                  {URA_BASIS_OF_PAYMENT.map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[#5a7bb0]">
+                Payment details
+              </p>
+              <label className="block text-xs font-semibold text-[#123f78]">
+                Currency
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value as (typeof URA_CURRENCY_TYPES)[number])}
+                  className={fieldClass}
+                >
+                  {URA_CURRENCY_TYPES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
                     </option>
                   ))}
                 </select>
               </label>
               <label className="block text-xs font-semibold text-[#123f78]">
-                Amount (UGX)
+                Amount (whole UGX, no commas) *
                 <input
                   value={amount}
                   onChange={(e) => setAmount(e.target.value.replace(/[^\d]/g, ''))}
@@ -264,6 +445,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   className={fieldClass}
                 />
               </label>
+
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -277,13 +459,11 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                 </button>
                 <button
                   type="button"
-                  disabled={
-                    busy || tin.trim().length < 6 || taxpayerName.trim().length < 2 || !amount
-                  }
+                  disabled={busy || !canGenerate}
                   onClick={() => void generate()}
                   className="flex-[2] rounded-xl bg-[#123f78] py-2.5 text-sm font-extrabold text-white disabled:opacity-50"
                 >
-                  {busy ? 'Generating…' : 'Generate PRN'}
+                  {busy ? 'Generating…' : 'Accept and register'}
                 </button>
               </div>
             </>
