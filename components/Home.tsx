@@ -696,9 +696,20 @@ export default function Home({ setCurrentView }: HomeProps) {
                     onClick={togglePearlsHidden}
                     aria-pressed={pearlsHidden}
                     aria-label={pearlsHidden ? 'Show pearl values' : 'Hide pearl values'}
-                    className="rounded-lg border border-[#8bb4ef]/45 bg-white px-2.5 py-1 text-[10px] font-bold text-[#123f78] hover:border-[#f3ba2f]/50"
+                    className="rounded-lg border border-[#8bb4ef]/45 bg-white p-2 text-[#123f78] hover:border-[#f3ba2f]/50"
                   >
-                    {pearlsHidden ? 'Show' : 'Hide'}
+                    {pearlsHidden ? (
+                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M3 3l18 18" strokeLinecap="round" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
                   </button>
                 </div>
                 <div className="mt-2 flex items-center gap-2">

@@ -13,7 +13,7 @@ type Props = { onClose: () => void };
 export default function TrueFalseQuizPopup({ onClose }: Props) {
   const showToast = useToast();
   const { userTelegramInitData, incrementPoints } = useGameStore();
-  const questions = useMemo(() => TRUE_FALSE_UGANDA_TAX.slice(0, 8), []);
+  const questions = useMemo(() => TRUE_FALSE_UGANDA_TAX.slice(0, 3), []);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [picked, setPicked] = useState<boolean | null>(null);
@@ -32,7 +32,8 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
 
   const finishWithScore = async (finalScore: number) => {
     setDone(true);
-    const earned = Math.max(0, Math.round((finalScore / questions.length) * TRUE_FALSE_REWARD_WHITE));
+    const won = finalScore === questions.length;
+    const earned = won ? TRUE_FALSE_REWARD_WHITE : 0;
     if (!userTelegramInitData || earned <= 0) {
       setAwarded(0);
       return;
@@ -58,19 +59,12 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
 
   const next = () => {
     triggerHapticFeedback(window);
-    const finalScore =
-      picked !== null && q && picked === q.isTrue
-        ? score
-        : picked !== null && q && picked !== q.isTrue
-          ? score
-          : score;
-    // score already includes last correct answer when picked === isTrue
     if (index + 1 < questions.length) {
       setIndex((i) => i + 1);
       setPicked(null);
       return;
     }
-    void finishWithScore(finalScore);
+    void finishWithScore(score);
   };
 
   return (
@@ -79,7 +73,7 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
         <div className="flex items-center justify-between px-4 py-3 bg-[#123f78]">
           <div>
             <p className="text-sm font-extrabold text-white">True or False</p>
-            <p className="text-[11px] text-[#f3ba2f]">Uganda Tax Edition · in-app</p>
+            <p className="text-[11px] text-[#f3ba2f]">3 questions · all correct to win</p>
           </div>
           <button
             type="button"
@@ -96,10 +90,16 @@ export default function TrueFalseQuizPopup({ onClose }: Props) {
         <div className="p-4 space-y-3 text-white">
           {done ? (
             <div className="space-y-2 text-center">
-              <p className="text-lg font-extrabold">Round complete</p>
+              <p className="text-lg font-extrabold">
+                {score === questions.length ? 'You win!' : 'No pearls this round'}
+              </p>
               <p className="text-sm text-blue-100">
                 Score {score}/{questions.length}
-                {awarded > 0 ? ` · +${awarded} white pearls` : ''}
+                {awarded > 0
+                  ? ` · +${awarded} white pearls`
+                  : score < questions.length
+                    ? ' · One wrong answer means no reward — try again'
+                    : ''}
               </p>
               <button
                 type="button"
