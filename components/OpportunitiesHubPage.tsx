@@ -39,8 +39,15 @@ function matchesTab(category: string, tab: TabKey): boolean {
   const c = category.toLowerCase();
   if (tab === 'tender') return c === 'tender';
   if (tab === 'auction') return c === 'auction';
-  // careers: career or legacy "opportunity"
   return c === 'career' || c === 'opportunity';
+}
+
+function formatPosted(iso: string) {
+  try {
+    return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  } catch {
+    return '';
+  }
 }
 
 type Props = {
@@ -53,6 +60,7 @@ export default function OpportunitiesHubPage({ setCurrentView, initialTab = 'car
   const [tab, setTab] = useState<TabKey>(initialTab);
   const [items, setItems] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<Notice | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -121,6 +129,7 @@ export default function OpportunitiesHubPage({ setCurrentView, initialTab = 'car
               onClick={() => {
                 triggerHapticFeedback(window);
                 setTab(t.id);
+                setSelected(null);
               }}
               className={`rounded-xl py-2.5 px-1 text-center transition-colors ${
                 tab === t.id
@@ -144,35 +153,85 @@ export default function OpportunitiesHubPage({ setCurrentView, initialTab = 'car
             under Opportunities.
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {filtered.map((item) => (
-              <li
-                key={item.id}
-                className="rounded-2xl border border-[#8bb4ef]/40 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-br from-[#0f315f]/95 to-[#061428] px-4 py-3.5"
-              >
-                <p className="text-white font-bold text-sm leading-snug">{item.title}</p>
-                {item.body ? (
-                  <p className="mt-2 text-[13px] text-blue-100/80 leading-relaxed whitespace-pre-wrap">
-                    {item.body}
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    setSelected(item);
+                  }}
+                  className="w-full rounded-2xl border border-[#8bb4ef]/40 border-l-[3px] border-l-[#f3ba2f] bg-gradient-to-br from-[#0f315f]/95 to-[#061428] px-4 py-3.5 text-left hover:border-[#f3ba2f]/45 transition-colors"
+                >
+                  <p className="text-white font-bold text-sm leading-snug pr-6">{item.title}</p>
+                  <p className="mt-1 text-[11px] text-blue-100/55">
+                    Posted {formatPosted(item.createdAt)} · Tap for full details
                   </p>
-                ) : null}
-                {item.link ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      triggerHapticFeedback(window);
-                      openExternal(item.link!);
-                    }}
-                    className="mt-3 w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#0a1628]"
-                  >
-                    {item.linkLabel || 'Open details'}
-                  </button>
-                ) : null}
+                </button>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      {selected ? (
+        <div
+          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="opportunity-detail-title"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelected(null);
+          }}
+        >
+          <div
+            className="w-full max-w-lg max-h-[88vh] overflow-y-auto rounded-2xl border border-[#8bb4ef]/40 border-t-[3px] border-t-[#f3ba2f] bg-gradient-to-b from-[#0f315f] to-[#061428] shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 flex justify-between items-start gap-2 px-4 py-3 border-b border-white/10 bg-[#0a1f3d]/95 backdrop-blur-md">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#f3ba2f]">
+                {TABS.find((t) => matchesTab(selected.category, t.id))?.label ?? 'Notice'}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setSelected(null);
+                }}
+                className="shrink-0 rounded-xl border border-[#8bb4ef]/35 px-3 py-1.5 text-sm font-semibold text-blue-100"
+              >
+                Close
+              </button>
+            </div>
+            <div className="px-4 py-4 space-y-3">
+              <h2 id="opportunity-detail-title" className="text-white font-extrabold text-base leading-snug">
+                {selected.title}
+              </h2>
+              <p className="text-[11px] text-blue-100/60">Published {formatPosted(selected.createdAt)}</p>
+              {selected.body ? (
+                <div className="rounded-xl border border-[#8bb4ef]/25 bg-[#061428]/80 px-3 py-3">
+                  <p className="text-[13px] text-blue-100/90 leading-relaxed whitespace-pre-wrap">{selected.body}</p>
+                </div>
+              ) : (
+                <p className="text-sm text-blue-100/60">No additional details published.</p>
+              )}
+              {selected.link ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHapticFeedback(window);
+                    openExternal(selected.link!);
+                  }}
+                  className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#0a1628]"
+                >
+                  {selected.linkLabel || 'Open on URA website'}
+                </button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

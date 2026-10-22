@@ -5,6 +5,7 @@ import {
   fetchUraTvChannelVideos,
   type UraTvChannelVideo,
 } from '@/utils/ura-tv-channel';
+import { filterUraTvPastLibrary, filterUraTvUpcoming } from '@/utils/ura-tv-library';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -113,14 +114,16 @@ export async function GET() {
         return true;
       });
 
-    const past = [...channelPast, ...adminPast].sort((a, b) => {
+    const pastSorted = [...channelPast, ...adminPast].sort((a, b) => {
       const ta = new Date(a.scheduledAt ?? a.createdAt).getTime();
       const tb = new Date(b.scheduledAt ?? b.createdAt).getTime();
       return tb - ta;
     });
+    const past = filterUraTvPastLibrary(pastSorted);
+    const upcomingFiltered = filterUraTvUpcoming(upcoming);
 
     return NextResponse.json({
-      upcoming,
+      upcoming: upcomingFiltered,
       past,
       channel: {
         handle: '@uratvofficial',

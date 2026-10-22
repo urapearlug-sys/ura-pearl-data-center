@@ -16,6 +16,7 @@ import 'tsconfig-paths/register';
 import prisma from '@/utils/prisma';
 import { TaskType } from '@prisma/client';
 import { earnData } from '@/utils/tasks-data';
+import { OPPORTUNITY_NOTICE_SAMPLES } from '@/data/opportunity-notice-samples';
 
 async function main() {
   console.log('Start seeding...');
@@ -149,19 +150,45 @@ async function main() {
         sortOrder: 2,
         isPublished: true,
       },
-      {
-        title: 'URA TV Weekly — Trailer',
-        description: 'Short promo for the weekly roundup (scheduled soon).',
-        youtubeUrl: 'https://youtu.be/9bZkp7q19f0',
-        scheduledAt: new Date('2026-06-05T12:00:00.000Z'),
-        sortOrder: 3,
-        isPublished: true,
-      },
     ];
     for (const row of tvSamples) {
       await prisma.tvProgram.create({ data: row });
     }
     console.log(`Seeded ${tvSamples.length} URA TV sample programs`);
+  }
+
+  const tvRows = await prisma.tvProgram.findMany({
+    where: { title: { contains: 'Weekly' } },
+    select: { id: true, title: true },
+  });
+  for (const row of tvRows) {
+    if (row.title.toLowerCase().includes('trailer')) {
+      await prisma.tvProgram.update({ where: { id: row.id }, data: { isPublished: false } });
+    }
+  }
+
+  let opportunityInserted = 0;
+  for (const row of OPPORTUNITY_NOTICE_SAMPLES) {
+    const existing = await prisma.opportunityNotice.findFirst({
+      where: { category: row.category, title: row.title },
+      select: { id: true },
+    });
+    if (existing) continue;
+    await prisma.opportunityNotice.create({
+      data: {
+        category: row.category,
+        title: row.title,
+        body: row.body,
+        link: row.link ?? null,
+        linkLabel: row.linkLabel ?? null,
+        sortOrder: row.sortOrder,
+        isPublished: true,
+      },
+    });
+    opportunityInserted += 1;
+  }
+  if (opportunityInserted > 0) {
+    console.log(`Seeded ${opportunityInserted} opportunity notices`);
   }
 
   // Sample URA FC fixtures (Learn → URA FC) — curated; full site at https://urafc.co.ug/
