@@ -10,27 +10,10 @@ import {
   saveRegisteredPrn,
 } from '@/utils/prn-registry';
 
-/** Official URA Motor Vehicle / tenure-related payments portal. */
-const PAY_YOUR_TENURE_URL = 'https://ura.go.ug/en/domestic-taxes/motor-vehicle/';
-
-type Flow = 'menu' | 'tax';
-
 type Props = { onClose: () => void };
-
-function openUraUrl(url: string) {
-  if (typeof window === 'undefined') return;
-  const tg = (
-    window as unknown as {
-      Telegram?: { WebApp?: { openLink?: (u: string, o?: { try_instant_view?: boolean }) => void } };
-    }
-  ).Telegram?.WebApp;
-  if (tg?.openLink) tg.openLink(url, { try_instant_view: false });
-  else window.open(url, '_blank', 'noopener,noreferrer');
-}
 
 export default function RegisterPaymentPopup({ onClose }: Props) {
   const { userTelegramInitData } = useGameStore();
-  const [flow, setFlow] = useState<Flow>('menu');
   const [step, setStep] = useState(0);
   const [itemId, setItemId] = useState<string>(PRN_PAY_ITEMS[0].id);
   const [tin, setTin] = useState('');
@@ -108,11 +91,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
           <div>
             <p className="text-sm font-extrabold text-white">Register new payment</p>
             <p className="text-[11px] text-[#f3ba2f]">
-              {flow === 'menu'
-                ? 'Choose what to register'
-                : done
-                  ? 'Simulated · PRN ready'
-                  : `Simulated · step ${taxStepLabel}`}
+              {done ? 'Simulated · PRN ready' : `Simulated · step ${taxStepLabel}`}
             </p>
           </div>
           <button
@@ -125,55 +104,7 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 space-y-3">
-          {flow === 'menu' ? (
-            <>
-              <p className="text-xs font-semibold text-[#123f78]">What do you want to register?</p>
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  setFlow('tax');
-                  setStep(0);
-                }}
-                className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[#f3ba2f]/55 transition-colors flex items-center gap-3"
-              >
-                <span
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
-                  aria-hidden
-                >
-                  🎫
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-bold text-[#123f78]">Tax / PRN payment</span>
-                  <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
-                    Pick tax type, TIN & amount · get a PRN
-                  </span>
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  triggerHapticFeedback(window);
-                  openUraUrl(PAY_YOUR_TENURE_URL);
-                  close();
-                }}
-                className="w-full rounded-xl border border-[#8bb4ef]/40 bg-white px-3 py-3 text-left hover:border-[#f3ba2f]/55 transition-colors flex items-center gap-3"
-              >
-                <span
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#cfe0ff] bg-[#f4f8ff] text-lg"
-                  aria-hidden
-                >
-                  🏛️
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-bold text-[#123f78]">Pay your tenure</span>
-                  <span className="block text-[11px] text-[#5a7bb0] mt-0.5">
-                    Opens official URA motor vehicle site
-                  </span>
-                </span>
-              </button>
-            </>
-          ) : done && receipt ? (
+          {done && receipt ? (
             <SimulatedReceipt data={receipt} onDone={close} />
           ) : step === 0 ? (
             <>
@@ -200,28 +131,16 @@ export default function RegisterPaymentPopup({ onClose }: Props) {
                   </button>
                 ))}
               </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    setFlow('menu');
-                  }}
-                  className="flex-1 rounded-xl border border-[#8bb4ef]/50 py-2.5 text-sm font-bold text-[#123f78]"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHapticFeedback(window);
-                    setStep(1);
-                  }}
-                  className="flex-[2] rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
-                >
-                  Next
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHapticFeedback(window);
+                  setStep(1);
+                }}
+                className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78]"
+              >
+                Next
+              </button>
             </>
           ) : (
             <>
