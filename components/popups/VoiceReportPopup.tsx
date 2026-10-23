@@ -45,9 +45,11 @@ export default function VoiceReportPopup({ onClose }: Props) {
       if (!up.ok) {
         setBusy(false);
         showToast(up.error, 'error');
-        return;
+        if (!hasNotes) return;
+        showToast('Submitting written summary without audio…', 'success');
+      } else {
+        attachmentUrl = up.url;
       }
-      attachmentUrl = up.url;
     }
 
     const res = await submitEarnPearlActivity({

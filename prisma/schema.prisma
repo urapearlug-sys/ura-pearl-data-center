@@ -132,6 +132,7 @@ model User {
   pearlAudits              PearlAudit[]
   pearlTransfersSent       PearlTransfer[] @relation("PearlTransferSender")
   pearlTransfersReceived   PearlTransfer[] @relation("PearlTransferRecipient")
+  voiceRecordingClips      VoiceRecordingClip[]
 }
 
 model Transfer {
@@ -980,6 +981,17 @@ enum PearlWithdrawalStatus {
   APPROVED
   REJECTED
   PAID
+}
+
+model VoiceRecordingClip {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String   @db.ObjectId
+  purpose    String
+  mimeType   String
+  dataBase64 String
+  byteSize   Int
+  createdAt  DateTime @default(now())
 }
 
 model PearlActivity {

@@ -58,8 +58,14 @@ export default function VoiceRecordingPanel({
   const stopRecording = useCallback(() => {
     clearTimer();
     const rec = mediaRecorderRef.current;
-    if (rec && rec.state !== 'inactive') rec.stop();
-    else stopStream();
+    if (rec && rec.state !== 'inactive') {
+      try {
+        rec.requestData();
+      } catch {
+        /* not all browsers support requestData */
+      }
+      rec.stop();
+    } else stopStream();
   }, []);
 
   const startRecording = async () => {
@@ -70,11 +76,13 @@ export default function VoiceRecordingPanel({
       chunksRef.current = [];
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : MediaRecorder.isTypeSupported('audio/webm')
-          ? 'audio/webm'
-          : '';
+      const mimeCandidates = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4',
+        'audio/ogg;codecs=opus',
+      ];
+      const mime = mimeCandidates.find((m) => MediaRecorder.isTypeSupported(m)) ?? '';
       const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
       mediaRecorderRef.current = recorder;
       recorder.ondataavailable = (e) => {

@@ -30,7 +30,9 @@ export async function POST(req: Request) {
   const pearlType = activityType === 'white' ? PearlType.WHITE : PearlType.BLUE;
   const status = activityType === 'white' ? PearlActivityStatus.APPROVED : PearlActivityStatus.PENDING;
   const safeAttachment =
-    typeof attachmentUrl === 'string' && attachmentUrl.startsWith('/uploads/voice-recordings/')
+    typeof attachmentUrl === 'string' &&
+    (attachmentUrl.startsWith('/uploads/voice-recordings/') ||
+      attachmentUrl.startsWith('/api/voice-recording/play/'))
       ? attachmentUrl
       : null;
   const labelWithAttachment = safeAttachment
