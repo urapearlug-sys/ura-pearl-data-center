@@ -5,6 +5,8 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import { submitEarnPearlActivity } from '@/utils/earn-activity-submit';
+import { uploadVoiceRecording } from '@/utils/voice-recording-upload';
+import VoiceRecordingPanel from '@/components/VoiceRecordingPanel';
 import {
   WHISTLE_IMPORTANT_NOTES,
   WHISTLE_STEP_LABELS,
@@ -54,6 +56,7 @@ export default function WhistleBlowerPopup({ onClose }: Props) {
   const [evidenceDescription, setEvidenceDescription] = useState('');
 
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
 
   const [signature, setSignature] = useState('');
   const [declarationDate, setDeclarationDate] = useState(() => defaultWhistleDeclarationDate());
@@ -149,6 +152,8 @@ export default function WhistleBlowerPopup({ onClose }: Props) {
       `Est. tax UGX: ${estimatedTaxUgx}`,
       `Evidence: ${evidenceChoice}`,
       activityDescription.trim().slice(0, 120),
+      additionalInfo.trim() ? `Extra: ${additionalInfo.trim().slice(0, 80)}` : null,
+      voiceBlob ? 'Voice attachment included' : null,
     ]
       .filter(Boolean)
       .join(' · ');
@@ -161,12 +166,29 @@ export default function WhistleBlowerPopup({ onClose }: Props) {
     }
     setBusy(true);
     triggerHapticFeedback(window);
+
+    let attachmentUrl: string | undefined;
+    if (voiceBlob && voiceBlob.size > 0) {
+      const up = await uploadVoiceRecording({
+        initData: userTelegramInitData,
+        blob: voiceBlob,
+        purpose: 'whistle_blower',
+      });
+      if (!up.ok) {
+        setBusy(false);
+        showToast(up.error, 'error');
+        return;
+      }
+      attachmentUrl = up.url;
+    }
+
     const res = await submitEarnPearlActivity({
       initData: userTelegramInitData,
       sourceKey: 'whistle_blower',
       sourceLabel: buildSourceLabel(),
       amount: REWARD_BLUE,
       activityType: 'blue',
+      attachmentUrl,
     });
     setBusy(false);
     if (!res.ok) {
@@ -442,11 +464,17 @@ export default function WhistleBlowerPopup({ onClose }: Props) {
             </>
           ) : step === 6 ? (
             <>
-              <StepHeading title="6. Additional information" hint="Witnesses, locations, related companies — optional." />
+              <StepHeading title="6. Additional information" hint="Optional voice note or text." />
+              <VoiceRecordingPanel
+                label="Record a confidential voice note"
+                recording={voiceBlob}
+                onRecordingChange={setVoiceBlob}
+                disabled={busy}
+              />
               <textarea
                 value={additionalInfo}
                 onChange={(e) => setAdditionalInfo(e.target.value)}
-                rows={6}
+                rows={4}
                 className={`${inputClass} resize-none`}
                 placeholder="Any other relevant details…"
               />

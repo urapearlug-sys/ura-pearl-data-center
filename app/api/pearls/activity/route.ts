@@ -7,12 +7,13 @@ type ActivityType = 'white' | 'blue';
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
-  const { initData, sourceKey, sourceLabel, amount, activityType } = body as {
+  const { initData, sourceKey, sourceLabel, amount, activityType, attachmentUrl } = body as {
     initData?: string;
     sourceKey?: string;
     sourceLabel?: string;
     amount?: number;
     activityType?: ActivityType;
+    attachmentUrl?: string;
   };
 
   if (!initData || !sourceKey || !sourceLabel || !Number.isFinite(Number(amount)) || Number(amount) <= 0) {
@@ -28,13 +29,20 @@ export async function POST(req: Request) {
   const amt = Math.floor(Number(amount));
   const pearlType = activityType === 'white' ? PearlType.WHITE : PearlType.BLUE;
   const status = activityType === 'white' ? PearlActivityStatus.APPROVED : PearlActivityStatus.PENDING;
+  const safeAttachment =
+    typeof attachmentUrl === 'string' && attachmentUrl.startsWith('/uploads/voice-recordings/')
+      ? attachmentUrl
+      : null;
+  const labelWithAttachment = safeAttachment
+    ? `${sourceLabel} · 🎤 ${safeAttachment}`
+    : sourceLabel;
 
   const result = await prisma.$transaction(async (tx) => {
     const activity = await tx.pearlActivity.create({
       data: {
         userId: user.id,
         sourceKey,
-        sourceLabel,
+        sourceLabel: labelWithAttachment,
         pearlType,
         amount: amt,
         status,
@@ -53,7 +61,7 @@ export async function POST(req: Request) {
         eventType: PearlAuditEventType.EARN_WHITE,
         pearlType: PearlType.WHITE,
         amount: amt,
-        meta: { sourceKey, sourceLabel },
+        meta: { sourceKey, sourceLabel: labelWithAttachment, attachmentUrl: safeAttachment },
       });
     } else {
       await tx.user.update({
@@ -65,7 +73,7 @@ export async function POST(req: Request) {
         eventType: PearlAuditEventType.EARN_BLUE_PENDING,
         pearlType: PearlType.BLUE,
         amount: amt,
-        meta: { sourceKey, sourceLabel },
+        meta: { sourceKey, sourceLabel: labelWithAttachment, attachmentUrl: safeAttachment },
       });
     }
 

@@ -346,8 +346,11 @@ export default function Home({ setCurrentView }: HomeProps) {
           setCurrentView('earn');
           return;
         case 'voice':
+          queueEarnBootstrap({ openVoiceReports: true });
+          setCurrentView('earn');
+          return;
         case 'whistle':
-          queueEarnBootstrap({ activeTabAll: true });
+          queueEarnBootstrap({ openWhistleBlower: true });
           setCurrentView('earn');
           return;
         default:

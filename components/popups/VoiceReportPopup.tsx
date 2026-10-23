@@ -5,6 +5,8 @@ import { triggerHapticFeedback } from '@/utils/ui';
 import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import { submitEarnPearlActivity } from '@/utils/earn-activity-submit';
+import { uploadVoiceRecording } from '@/utils/voice-recording-upload';
+import VoiceRecordingPanel from '@/components/VoiceRecordingPanel';
 
 const REWARD_BLUE = 500;
 
@@ -15,12 +17,15 @@ export default function VoiceReportPopup({ onClose }: Props) {
   const { userTelegramInitData } = useGameStore();
   const [topic, setTopic] = useState('Taxpayer experience');
   const [notes, setNotes] = useState('');
+  const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
 
   const submit = async () => {
-    if (notes.trim().length < 12) {
-      showToast('Add a short voice report summary (12+ characters)', 'error');
+    const hasNotes = notes.trim().length >= 12;
+    const hasVoice = voiceBlob != null && voiceBlob.size > 0;
+    if (!hasNotes && !hasVoice) {
+      showToast('Record a voice message or add a short summary (12+ characters)', 'error');
       return;
     }
     if (!userTelegramInitData) {
@@ -29,12 +34,29 @@ export default function VoiceReportPopup({ onClose }: Props) {
     }
     setBusy(true);
     triggerHapticFeedback(window);
+
+    let attachmentUrl: string | undefined;
+    if (hasVoice && voiceBlob) {
+      const up = await uploadVoiceRecording({
+        initData: userTelegramInitData,
+        blob: voiceBlob,
+        purpose: 'voice_report',
+      });
+      if (!up.ok) {
+        setBusy(false);
+        showToast(up.error, 'error');
+        return;
+      }
+      attachmentUrl = up.url;
+    }
+
     const res = await submitEarnPearlActivity({
       initData: userTelegramInitData,
       sourceKey: 'voice_report',
-      sourceLabel: `Voice report · ${topic}: ${notes.trim().slice(0, 80)}`,
+      sourceLabel: `Voice report · ${topic}${hasNotes ? `: ${notes.trim().slice(0, 80)}` : ' · audio only'}`,
       amount: REWARD_BLUE,
       activityType: 'blue',
+      attachmentUrl,
     });
     setBusy(false);
     if (!res.ok) {
@@ -47,17 +69,17 @@ export default function VoiceReportPopup({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="w-full max-w-md rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#0a1628] overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 bg-[#123f78]">
+      <div className="w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#0a1628] overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#123f78] shrink-0">
           <div>
             <p className="text-sm font-extrabold text-white">Voice reports</p>
-            <p className="text-[11px] text-[#f3ba2f]">Approval-required · +{REWARD_BLUE} blue pending</p>
+            <p className="text-[11px] text-[#f3ba2f]">Record or type · +{REWARD_BLUE} blue pending</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-xl border border-white/20 px-3 py-1.5 text-sm text-white">
             Close
           </button>
         </div>
-        <div className="p-4 space-y-3 text-white">
+        <div className="p-4 space-y-3 text-white overflow-y-auto flex-1">
           {done ? (
             <div className="text-center space-y-2">
               <p className="font-extrabold">Report submitted</p>
@@ -82,24 +104,32 @@ export default function VoiceReportPopup({ onClose }: Props) {
                   ))}
                 </select>
               </label>
+
+              <VoiceRecordingPanel
+                label="Record your report"
+                recording={voiceBlob}
+                onRecordingChange={setVoiceBlob}
+                disabled={busy}
+              />
+
               <label className="block text-xs text-blue-100">
-                Voice report notes (what you would say)
+                Optional written summary
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  rows={4}
-                  placeholder="Summarise your spoken report…"
+                  rows={3}
+                  placeholder="Or summarise what you said in the recording…"
                   className="mt-1 w-full rounded-xl bg-[#121f35] border border-[#2a4168] px-3 py-2.5 text-sm resize-none"
                 />
               </label>
-              <p className="text-[10px] text-slate-400">In-app simulation — no URA website. Admin reviews blue pearl rewards.</p>
+              <p className="text-[10px] text-slate-400">Submit a voice recording, a written summary, or both. Admin reviews blue pearl rewards.</p>
               <button
                 type="button"
                 disabled={busy}
                 onClick={() => void submit()}
                 className="w-full rounded-xl bg-[#f3ba2f] py-2.5 text-sm font-extrabold text-[#123f78] disabled:opacity-50"
               >
-                {busy ? 'Submitting…' : 'Submit for approval'}
+                {busy ? 'Uploading…' : 'Submit for approval'}
               </button>
             </>
           )}

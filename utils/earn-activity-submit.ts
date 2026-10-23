@@ -4,6 +4,8 @@ export async function submitEarnPearlActivity(opts: {
   sourceLabel: string;
   amount: number;
   activityType: 'white' | 'blue';
+  /** Public URL of uploaded voice note, stored in activity label for admin review */
+  attachmentUrl?: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const res = await fetch('/api/pearls/activity', {
