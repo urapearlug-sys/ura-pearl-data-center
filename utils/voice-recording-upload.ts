@@ -3,7 +3,7 @@ import { normalizeAudioMime } from '@/utils/audio-mime';
 export async function uploadVoiceRecording(opts: {
   initData: string;
   blob: Blob;
-  purpose: 'voice_report' | 'whistle_blower';
+  purpose: 'voice_report' | 'whistle_blower' | 'earn_tenure';
 }): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
   if (!opts.blob.size) {
     return { ok: false, error: 'Recording is empty — please record again' };

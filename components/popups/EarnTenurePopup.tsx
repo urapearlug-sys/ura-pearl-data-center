@@ -6,6 +6,8 @@ import { useGameStore } from '@/utils/game-mechanics';
 import { useToast } from '@/contexts/ToastContext';
 import { notifyPearlBalancesRefresh } from '@/utils/pearl-balance-events';
 import { submitEarnPearlActivity } from '@/utils/earn-activity-submit';
+import { uploadVoiceRecording } from '@/utils/voice-recording-upload';
+import HeaderVoiceMicButton from '@/components/HeaderVoiceMicButton';
 import {
   TENURE_EVIDENCE_OPTIONS,
   TENURE_IMPORTANT_NOTES,
@@ -70,6 +72,7 @@ export default function EarnTenurePopup({ onClose }: Props) {
   const [evidenceDescription, setEvidenceDescription] = useState('');
 
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [voiceBlob, setVoiceBlob] = useState<Blob | null>(null);
   const [signature, setSignature] = useState('');
   const [declarationDate, setDeclarationDate] = useState(() => defaultTenureDate());
 
@@ -180,6 +183,7 @@ export default function EarnTenurePopup({ onClose }: Props) {
       `Reports: ${reportLabels.join('; ').slice(0, 100)}`,
       `Est. rent paid UGX: ${estimatedTotalRent}`,
       reportDescription.trim().slice(0, 80),
+      voiceBlob ? 'Voice note attached' : null,
     ]
       .filter(Boolean)
       .join(' · ');
@@ -191,12 +195,29 @@ export default function EarnTenurePopup({ onClose }: Props) {
       return;
     }
     setBusy(true);
+
+    let attachmentUrl: string | undefined;
+    if (voiceBlob && voiceBlob.size > 0) {
+      const up = await uploadVoiceRecording({
+        initData: userTelegramInitData,
+        blob: voiceBlob,
+        purpose: 'earn_tenure',
+      });
+      if (!up.ok) {
+        setBusy(false);
+        showToast(up.error, 'error');
+        return;
+      }
+      attachmentUrl = up.url;
+    }
+
     const res = await submitEarnPearlActivity({
       initData: userTelegramInitData,
       sourceKey: 'earn_your_tenure',
       sourceLabel: buildSourceLabel(),
       amount: REWARD_WHITE,
       activityType: 'white',
+      attachmentUrl,
     });
     setBusy(false);
     if (!res.ok) {
@@ -214,7 +235,14 @@ export default function EarnTenurePopup({ onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-4">
       <div className="w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl border border-[#f3ba2f]/40 border-t-[3px] border-t-[#f3ba2f] bg-[#0a1628] shadow-2xl overflow-hidden">
-        <Header step={step} progressPct={progressPct} onClose={onClose} />
+        <Header
+          step={step}
+          progressPct={progressPct}
+          onClose={onClose}
+          voiceBlob={voiceBlob}
+          onVoiceChange={setVoiceBlob}
+          voiceDisabled={busy || done}
+        />
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3 text-white">
           {done ? (
@@ -494,26 +522,48 @@ export default function EarnTenurePopup({ onClose }: Props) {
   );
 }
 
-function Header({ step, progressPct, onClose }: { step: number; progressPct: number; onClose: () => void }) {
+function Header({
+  step,
+  progressPct,
+  onClose,
+  voiceBlob,
+  onVoiceChange,
+  voiceDisabled,
+}: {
+  step: number;
+  progressPct: number;
+  onClose: () => void;
+  voiceBlob: Blob | null;
+  onVoiceChange: (b: Blob | null) => void;
+  voiceDisabled?: boolean;
+}) {
   return (
     <div className="shrink-0 bg-[#123f78] px-4 pt-3 pb-2">
       <div className="flex items-start justify-between gap-2">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm font-extrabold text-white">🤝 Earn your Tenure</p>
           <p className="text-[11px] text-[#f3ba2f]">
             Step {step + 1} · {TENURE_STEP_LABELS[step]}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            triggerHapticFeedback(window);
-            onClose();
-          }}
-          className="rounded-xl border border-white/20 px-3 py-1.5 text-sm text-white shrink-0"
-        >
-          Close
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <HeaderVoiceMicButton
+            recording={voiceBlob}
+            onRecordingChange={onVoiceChange}
+            disabled={voiceDisabled}
+            label="Record tenure voice note"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              triggerHapticFeedback(window);
+              onClose();
+            }}
+            className="rounded-xl border border-white/20 px-3 py-1.5 text-sm text-white"
+          >
+            Close
+          </button>
+        </div>
       </div>
       <div className="mt-2 h-1.5 rounded-full bg-[#0a1628]/60 overflow-hidden">
         <div className="h-full rounded-full bg-gradient-to-r from-[#f3ba2f] to-[#ffe08a] transition-all" style={{ width: `${progressPct}%` }} />
