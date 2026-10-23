@@ -36,10 +36,6 @@ export default function AdminMilestoneBannersPage() {
   const [editBody, setEditBody] = useState('');
   const [isSavingEdit, setIsSavingEdit] = useState(false);
 
-  useEffect(() => {
-    fetch('/api/admin/clear-item-session', { method: 'POST', credentials: 'include' }).catch(() => {});
-  }, []);
-
   const fetchBanners = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/milestone-banners', { credentials: 'include' });

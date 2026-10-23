@@ -41,11 +41,6 @@ export default function AdminNotificationsPage() {
   const [isSavingEdit, setIsSavingEdit] = useState(false);
   const [recallingId, setRecallingId] = useState<string | null>(null);
 
-  // When landing on notifications (leaving a protected section), clear item password so re-entry asks again
-  useEffect(() => {
-    fetch('/api/admin/clear-item-session', { method: 'POST', credentials: 'include' }).catch(() => {});
-  }, []);
-
   const fetchNotifications = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/notifications');

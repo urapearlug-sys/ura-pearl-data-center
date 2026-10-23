@@ -3,7 +3,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -21,10 +21,6 @@ export default function AdminTelegramBroadcastPage() {
   const [link3Text, setLink3Text] = useState('How to earn');
   const [link3Url, setLink3Url] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/admin/clear-item-session', { method: 'POST', credentials: 'include' }).catch(() => {});
-  }, []);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();

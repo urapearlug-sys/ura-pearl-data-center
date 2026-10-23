@@ -23,31 +23,9 @@ import {
   isItemGateEnabled,
 } from '@/utils/admin-session';
 import ItemPasswordGate from './ItemPasswordGate';
+import { isAdminItemProtectedPath } from '@/utils/admin-item-paths';
 
 export const dynamic = 'force-dynamic';
-
-const ITEM_PROTECTED_PATHS = [
-  '/admin/accounts',
-  '/admin/bot-users',
-  '/admin/tasks',
-  '/admin/daily-cipher',
-  '/admin/daily-combo',
-  '/admin/cards',
-  '/admin/weekly-event',
-  '/admin/onchain-tasks',
-  '/admin/export',
-  '/admin/fees-collection',
-  '/admin/staking-audit',
-  '/admin/league-management',
-  '/admin/global-tasks',
-  '/admin/quiz',
-  '/admin/daily-pattern',
-  '/admin/shop',
-];
-
-function isItemProtectedPath(pathname: string): boolean {
-  return ITEM_PROTECTED_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
-}
 
 export default async function RootLayout({
   children,
@@ -73,7 +51,7 @@ export default async function RootLayout({
     redirect('/admin/login');
   }
 
-  if (isAuthorized && isItemGateEnabled() && isItemProtectedPath(pathname)) {
+  if (isAuthorized && isItemGateEnabled() && isAdminItemProtectedPath(pathname)) {
     const itemCookie = cookieStore.get(ADMIN_ITEM_COOKIE_NAME)?.value;
     if (!verifyAdminItemSessionToken(itemCookie)) {
       return <ItemPasswordGate pathname={pathname} />;

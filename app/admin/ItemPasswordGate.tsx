@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
+import { unlockAdminSectionAction, type UnlockSectionState } from '@/app/admin/actions/unlock-section';
 
 const SECTION_LABELS: Record<string, string> = {
   '/admin/accounts': 'User accounts',
@@ -19,43 +20,26 @@ const SECTION_LABELS: Record<string, string> = {
   '/admin/quiz': 'Mitroplus Quiz',
   '/admin/daily-pattern': 'Daily Pattern',
   '/admin/shop': 'Shop (Match 2 Earn)',
+  '/admin/milestone-banners': 'Milestone Banners',
 };
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full bg-ura-gold text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {pending ? 'Checking…' : 'Continue'}
+    </button>
+  );
+}
+
 export default function ItemPasswordGate({ pathname }: { pathname: string }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [state, formAction] = useFormState<UnlockSectionState, FormData>(unlockAdminSectionAction, null);
 
   const sectionName = SECTION_LABELS[pathname] ?? pathname.replace('/admin/', '');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await fetch('/api/admin/verify-item-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, pathname }),
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        if (res.status === 501) {
-          setError('Item password not set on server. Add ADMIN_ITEM_PASSWORD in Vercel → Settings → Environment Variables, then redeploy.');
-        } else {
-          setError(data.error || 'Invalid password');
-        }
-        return;
-      }
-      // Full page navigation so the browser applies Set-Cookie before the next request (fixes deploy cookie issues)
-      window.location.href = pathname;
-    } catch {
-      setError('Request failed');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-ura-panel flex items-center justify-center p-6">
@@ -64,34 +48,28 @@ export default function ItemPasswordGate({ pathname }: { pathname: string }) {
         <p className="text-gray-400 text-sm mb-6 text-center">
           Enter the password to access <strong className="text-white">{sectionName}</strong>.
         </p>
-        <form onSubmit={handleSubmit} className="bg-ura-panel-2 rounded-xl p-6 space-y-4">
+        <form action={formAction} className="bg-ura-panel-2 rounded-xl p-6 space-y-4">
+          <input type="hidden" name="pathname" value={pathname} />
           <div>
             <label htmlFor="item-password" className="block text-sm text-gray-400 mb-1">
               Password
             </label>
             <input
               id="item-password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               placeholder="Section password"
               className="w-full bg-ura-panel border border-ura-border/75 rounded-lg px-3 py-2 text-white placeholder-gray-500"
               autoFocus
               required
-              disabled={loading}
             />
           </div>
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-ura-gold text-black font-medium py-2 rounded-lg hover:bg-[#e5a82a] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Checking…' : 'Continue'}
-          </button>
+          {state?.error && <p className="text-red-400 text-sm">{state.error}</p>}
+          <SubmitButton />
         </form>
-        <p className="text-gray-500 text-xs mt-4 text-center">
-          This is different from your admin login password.
+        <p className="text-gray-500 text-xs mt-4 text-center leading-relaxed">
+          This is <strong className="text-gray-400">ADMIN_ITEM_PASSWORD</strong> in Vercel — not your main admin login
+          password. After a successful unlock, sections stay open for 24 hours in this browser.
         </p>
       </div>
     </div>

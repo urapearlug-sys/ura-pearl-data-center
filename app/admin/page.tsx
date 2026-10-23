@@ -180,10 +180,6 @@ const AdminPanel = () => {
   }, []);
 
   useEffect(() => {
-    fetch('/api/admin/clear-item-session', { method: 'POST', credentials: 'include' }).catch(() => {});
-  }, []);
-
-  useEffect(() => {
     void loadDashboardStats();
   }, [loadDashboardStats]);
 

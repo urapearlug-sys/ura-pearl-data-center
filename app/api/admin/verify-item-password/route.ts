@@ -5,34 +5,11 @@
 
 import { NextResponse } from 'next/server';
 import { createAdminItemSessionToken, ADMIN_ITEM_COOKIE_NAME, isAdminAuthorized } from '@/utils/admin-session';
+import { isAdminItemProtectedPath } from '@/utils/admin-item-paths';
 
 export const dynamic = 'force-dynamic';
 
 const COOKIE_MAX_AGE = 24 * 60 * 60; // 24 hours
-
-const ALLOWED_PATHS = [
-  '/admin/accounts',
-  '/admin/bot-users',
-  '/admin/tasks',
-  '/admin/daily-cipher',
-  '/admin/daily-combo',
-  '/admin/cards',
-  '/admin/weekly-event',
-  '/admin/onchain-tasks',
-  '/admin/export',
-  '/admin/fees-collection',
-  '/admin/staking-audit',
-  '/admin/league-management',
-  '/admin/global-tasks',
-  '/admin/quiz',
-  '/admin/daily-pattern',
-  '/admin/shop',
-  '/admin/milestone-banners',
-];
-
-function isAllowedPath(pathname: string): boolean {
-  return ALLOWED_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
-}
 
 export async function POST(req: Request) {
   if (!isAdminAuthorized(req)) {
@@ -53,7 +30,7 @@ export async function POST(req: Request) {
     if (password !== expected) {
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
-    if (!pathname || !isAllowedPath(pathname)) {
+    if (!pathname || !isAdminItemProtectedPath(pathname)) {
       return NextResponse.json({ error: 'Invalid path' }, { status: 400 });
     }
 
